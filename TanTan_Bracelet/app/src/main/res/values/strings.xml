@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">TanTan</string>
+    <!--  首页  -->
+    <string name="home">主页</string>
+    <string name="exercise">运动</string>
+    <string name="equipment">设备</string>
+    <string name="mine">我的</string>
+    <!--  登陆  -->
+    <string name="regist">注册</string>
+    <string name="load">登陆</string>
+    <string name="registbyphone">手机注册</string>
+    <string name="registbyemail">邮箱注册</string>
+    <string name="forget_pwd">忘记密码？</string>
+    <string name="reset_pwdbyphone">通过手机重置密码</string>
+    <string name="reset_pwdbyemail">通过邮箱重置密码</string>
+    <string name="verifybyemail">邮箱验证</string>
+    <string name="verifybyphone">手机验证</string>
+    <string name="bindbyphone">手机绑定</string>
+    <string name="bindbyemail">手机号验证</string>
+    <string name="bind">绑定</string>
+    <string name="next">下一步</string>
+    <string name="change_pwd">修改密码</string>
+    <string name="name">用户昵称</string>
+
+    <!--设备 -->
+    <string name="ep_setup">设备</string>
+
+    <!--注册 -->
+    <string name="phone">请输入手机号码</string>
+    <string name="email">请输入邮箱号码</string>
+    <string name="new_pwd">输入新密码 </string>
+    <string name="firm_pwd">确认新密码</string>
+    <string name="ok">完成</string>
+
+    <string name="ep_search_btn"> 搜索设备</string>
+    <string name="dianliang">100%</string>
+    <!--我的 -->
+    <string name="active_day">活跃天数6 </string>
+    <string name="rate">达标率60% </string>
+    <string name="stepbyweek">本周步数 </string>
+    <string name="best_day">最佳日 </string>
+    <string name="best_week">最佳周 </string>
+    <string name="best_month">最佳月 </string>
+    <string name="bind_account">账号绑定 </string>
+    <string name="exit_account">账号登出 </string>
+
+
+
+
+
+
+</resources>

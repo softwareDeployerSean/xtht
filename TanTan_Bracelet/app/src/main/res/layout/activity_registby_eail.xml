@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
+    <include layout="@layout/include_title" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="25px"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="69px"
+        android:background="@null"
+        android:hint="@string/email"
+        android:maxLength="11"
+        android:textColorHint="@color/grey_BBBBBB"
+        android:textSize="@dimen/dimen_18px"
+        android:layout_marginBottom="@dimen/dimen_10px"
+        android:textColor="@color/black_444444"
+        />
+
+    <include
+        layout="@layout/line"
+        />
+
+
+    <include layout="@layout/line" />
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55px">
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_weight="3"
+            android:background="@null"
+            android:hint="请输入6-16位密码"
+            android:inputType="numberPassword"
+            android:maxLength="16"
+            android:textColorHint="#BBBBBB"
+            android:textSize="@dimen/dimen_18px"
+            android:textColor="@color/black_444444" />
+
+        <ImageView
+            android:id="@+id/iv_yanjin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30px"
+            android:src="@mipmap/xsmm" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <include layout="@layout/line" />
+    <Button
+        android:id="@+id/bt_regist"
+        android:layout_marginTop="93px"
+        android:layout_width="345px"
+        android:layout_height="45px"
+        android:text="@string/regist"
+        android:background="@drawable/btn_green_selector"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_18px"
+        android:gravity="center"
+        />
+
+
+</com.zhy.autolayout.AutoLinearLayout>

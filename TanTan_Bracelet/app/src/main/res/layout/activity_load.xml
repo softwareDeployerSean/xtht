@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/disetupian" />
+    <com.zhy.autolayout.AutoLinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/dimen_126px"
+            android:layout_height="@dimen/dimen_168px"
+            android:src="@mipmap/tantan" />
+
+        <Button
+            android:id="@+id/bt_regist"
+            android:layout_marginTop="312px"
+            android:layout_width="259px"
+            android:layout_height="44px"
+            android:text="@string/regist"
+            android:background="@drawable/btn_green_selector"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_18px"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/bt_load"
+            android:layout_marginTop="19px"
+            android:layout_width="259px"
+            android:layout_height="44px"
+            android:text="@string/load"
+            android:background="@drawable/btn_white_selector"
+            android:textColor="@color/black_444444"
+            android:textSize="@dimen/dimen_18px"
+            android:gravity="center"
+            />
+
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoRelativeLayout>

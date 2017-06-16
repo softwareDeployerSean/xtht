@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/all"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ep_list_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <com.walnutin.xtht.bracelet.mvp.ui.widget.DrawableCenterButton
+                android:id="@+id/ep_search_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+
+                android:layout_marginLeft="15px"
+                android:layout_marginRight="15px"
+                android:background="@drawable/btn_green_selector"
+                android:drawableLeft="@mipmap/sousuo"
+                android:includeFontPadding="false"
+                android:text="@string/ep_search_btn"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_18px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+    </com.zhy.autolayout.AutoRelativeLayout>
+</com.zhy.autolayout.AutoLinearLayout>

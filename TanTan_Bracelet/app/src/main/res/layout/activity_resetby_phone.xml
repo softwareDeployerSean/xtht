@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
+    <include layout="@layout/include_title" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="25px"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="69px"
+        android:background="@null"
+        android:hint="@string/phone"
+        android:maxLength="11"
+        android:textColorHint="@color/grey_BBBBBB"
+        android:textSize="@dimen/dimen_18px"
+        android:layout_marginBottom="@dimen/dimen_10px"
+        android:textColor="@color/black_444444"
+        />
+
+    <include
+        layout="@layout/line"
+        />
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55px"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_yanzhenma"
+            android:layout_width="117px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15px"
+            android:layout_weight="3"
+            android:background="@null"
+            android:hint="请输入验证码"
+            android:textColorHint="#BBBBBB"
+            android:textSize="@dimen/dimen_18px"
+            android:textColor="@color/black_444444"
+            />
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="26.5px"
+                android:background="#EDECEB"
+                />
+
+            <Button
+                android:id="@+id/bt_yanzhenma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15px"
+                android:layout_weight="1"
+                android:textColor="@color/grey_BBBBBB"
+                android:text="发送验证码"
+                android:textSize="@dimen/dimen_18px"
+                android:background="@null"
+                />
+        </com.zhy.autolayout.AutoLinearLayout>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+    <include layout="@layout/line" />
+    <Button
+        android:id="@+id/bt_next"
+        android:layout_marginTop="93px"
+        android:layout_width="345px"
+        android:layout_height="45px"
+        android:text="@string/next"
+        android:background="@drawable/btn_green_selector"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_18px"
+        android:gravity="center"
+        />
+
+
+</com.zhy.autolayout.AutoLinearLayout>

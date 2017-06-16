@@ -1,0 +1,67 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="dimen_2px">2px</dimen>
+    <dimen name="dimen_4px">4px</dimen>
+    <dimen name="dimen_6px">6px</dimen>
+    <dimen name="dimen_8px">8px</dimen>
+    <dimen name="dimen_10px">10px</dimen>
+    <dimen name="dimen_12px">12px</dimen>
+    <dimen name="dimen_14px">14px</dimen>
+    <dimen name="dimen_16px">16px</dimen>
+    <dimen name="dimen_18px">18px</dimen>
+    <dimen name="dimen_20px">20px</dimen>
+    <dimen name="dimen_22px">22px</dimen>
+    <dimen name="dimen_24px">24px</dimen>
+    <dimen name="dimen_26px">26px</dimen>
+    <dimen name="dimen_28px">28px</dimen>
+    <dimen name="dimen_30px">30px</dimen>
+    <dimen name="dimen_32px">32px</dimen>
+    <dimen name="dimen_34px">34px</dimen>
+    <dimen name="dimen_36px">36px</dimen>
+    <dimen name="dimen_38px">38px</dimen>
+    <dimen name="dimen_40px">40px</dimen>
+    <dimen name="dimen_42px">42px</dimen>
+    <dimen name="dimen_44px">44px</dimen>
+    <dimen name="dimen_46px">46px</dimen>
+    <dimen name="dimen_126px">126px</dimen>
+    <dimen name="dimen_168px">168px</dimen>
+    <dimen name="dimen_480px">480px</dimen>
+    <dimen name="dimen_margen">15px</dimen>
+
+
+    <!--主页-->
+    <item name="menuFromDegrees" format="float" type="dimen">90.0</item>
+    <item name="menuToDegrees" format="float" type="dimen">180.0</item>
+    <dimen name="menuChildSize">40dp</dimen>
+    <attr name="fromDegrees" format="float|reference" />
+    <attr name="toDegrees" format="float|reference" />
+    <attr name="childSize" format="dimension|reference" />
+
+
+    <!--标题文字大小-->
+    <dimen name="textSize_alert_title">22sp</dimen>
+    <dimen name="textSize_actionsheet_title">14sp</dimen>
+    <!--标题文字高度-->
+    <dimen name="height_alert_title">60dp</dimen>
+    <dimen name="height_actionsheet_title">40dp</dimen>
+    <!--消息文字大小-->
+    <dimen name="textSize_alert_msg">15sp</dimen>
+    <dimen name="textSize_actionsheet_msg">14sp</dimen>
+    <!--消息距离底部间距-->
+    <dimen name="marginBottom_alert_msg">25dp</dimen>
+    <dimen name="marginBottom_actionsheet_msg">14dp</dimen>
+    <!--窗口模式左右两边到屏幕的间距-->
+    <dimen name="margin_alert_left_right">40dp</dimen>
+    <dimen name="margin_actionsheet_left_right">10dp</dimen>
+    <!--线条粗细-->
+    <dimen name="size_divier">1dp</dimen>
+    <!--按钮的高度-->
+    <dimen name="height_alert_button">48dp</dimen>
+    <!--按钮文字大小-->
+    <dimen name="textSize_alert_button">16sp</dimen>
+    <!--圆角-->
+    <dimen name="radius_alertview">15px</dimen>
+
+</resources>

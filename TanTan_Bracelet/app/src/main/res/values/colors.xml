@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3FA862</color>
+    <color name="colorPrimaryDark">#3FA862</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="grey_D8D8D8">#D8D8D8 </color>
+    <color name="grey_BBBBBB">#BBBBBB </color>
+    <color name="grey_eeeeee">#eeeeee </color>
+
+    <!--  线  -->
+    <color name="line">#EDECEB </color>
+
+    <!--  增加 按钮 颜色值  -->
+    <color name="add">#7CBC30</color>
+    <!--  登陆  -->
+    <color name="green">#87C938</color>
+    <color name="black_444444">#444444</color>
+
+    <color name="greenBtnNormal">#7CBC30</color>
+    <color name="greenBtnPressed">#538814</color>
+    <!--EpList奇数颜色 -->
+    <color name="epListOdd">#D8D8D8</color>
+    <!--EpList偶数颜色 -->
+    <color name="epListEven">#EEEEEE</color>
+
+
+
+    <!--覆盖颜色-->
+    <color name="bgColor_overlay">#60000000</color>
+    <!--窗口背景颜色-->
+    <color name="bgColor_alertview_alert">#f8f8f8</color>
+    <color name="bgColor_alertview_alert_start">#f0f0f0</color>
+    <!--标题颜色-->
+    <color name="textColor_alert_title">#000000</color>
+    <color name="textColor_actionsheet_title">#8f8f8f</color>
+    <!--消息颜色-->
+    <color name="textColor_alert_msg">#000000</color>
+    <color name="textColor_actionsheet_msg">#8f8f8f</color>
+    <!--线条颜色-->
+    <color name="bgColor_divier">#d7d7db</color>
+    <!--取消按钮颜色-->
+    <color name="textColor_alert_button_cancel">#007aff</color>
+    <!--高亮按钮颜色-->
+    <color name="textColor_alert_button_destructive">#ff3b30</color>
+    <!--普通按钮文字颜色-->
+    <color name="textColor_alert_button_others">#444444</color>
+    <!--点击颜色-->
+    <color name="bgColor_alert_button_press">#EAEAEA</color>
+    <!--actionsheet模式的取消按钮背景颜色-->
+    <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
+
+
+
+
+</resources>

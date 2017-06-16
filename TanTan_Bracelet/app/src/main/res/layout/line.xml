@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:layout_marginLeft="15px"
+    android:layout_marginRight="15px"
+    android:background="@color/line">
+
+</com.zhy.autolayout.AutoLinearLayout>

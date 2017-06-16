@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ep_list_item_parent_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/ep_llist_item_imageview1"
+        android:layout_width="70px"
+        android:layout_height="70px"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15px"
+        android:layout_marginLeft="25px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:layout_weight="0.00"
+        android:background="@android:color/transparent"
+        android:src="@mipmap/shouhuan" />
+
+    <ImageView
+        android:id="@+id/ep_llist_item_imageview2"
+        android:layout_width="20px"
+        android:layout_height="20px"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="40px"
+        android:layout_marginRight="20px"
+        android:layout_marginTop="40px"
+        android:layout_weight="0.00"
+        android:background="@android:color/transparent"
+        android:src="@mipmap/qj" />
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/ep_list_item_midel_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ep_llist_item_imageview1"
+        android:layout_marginTop="15px"
+        android:layout_toEndOf="@+id/ep_llist_item_imageview1"
+        android:layout_toRightOf="@+id/ep_llist_item_imageview1"
+        android:background="@android:color/transparent"
+        android:gravity="left|center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ep_list_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_marginBottom="2px"
+            android:background="@android:color/transparent"
+            android:gravity="bottom"
+            android:text="XX手环"
+            android:textSize="@dimen/dimen_12px" />
+
+        <TextView
+            android:id="@+id/ep_list_item_status"
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_below="@id/ep_list_item_name"
+            android:layout_marginTop="2px"
+            android:background="@android:color/transparent"
+            android:text="未连接"
+            android:textSize="@dimen/dimen_12px" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+</com.zhy.autolayout.AutoRelativeLayout>
