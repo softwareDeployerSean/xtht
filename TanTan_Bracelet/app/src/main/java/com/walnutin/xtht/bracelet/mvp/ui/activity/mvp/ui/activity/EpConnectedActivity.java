@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
@@ -79,6 +80,7 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     @Override
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
+        LogUtils.debugInfo("have a test");
         UiUtils.startActivity(intent);
     }
 
