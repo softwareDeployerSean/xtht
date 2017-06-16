@@ -83,7 +83,6 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
         LogUtils.debugInfo("have a test");
         LogUtils.debugInfo("have a test");
         LogUtils.debugInfo("have a test");
-        LogUtils.debugInfo("have a test");
         UiUtils.startActivity(intent);
     }
 
