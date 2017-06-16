@@ -38,8 +38,20 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
 
     @Override
     public void onBindViewHolder(EpConnectedMenueAdapter.MenueViewHolder holder, int position) {
-//        holder.iv.setImageResource(R.id.);
-//        holder.tv.setText("来电识别")
+        holder.iv.setImageResource(R.mipmap.laidianshibie);
+        EpMenue epMenue = epMenues.get(position);
+        holder.tv.setText(epMenue.getName());
+        if(epMenue.getIcon().contains("laidianshibie.png")) {
+            holder.iv.setImageResource(R.mipmap.laidianshibie);
+        }else if(epMenue.getIcon().contains("richangnaozhong.png")) {
+            holder.iv.setImageResource(R.mipmap.richangnaozhong);
+        }else if(epMenue.getIcon().contains("xiaoxi.png")) {
+            holder.iv.setImageResource(R.mipmap.xiaoxi);
+        }else if(epMenue.getIcon().contains("wenti.png")) {
+            holder.iv.setImageResource(R.mipmap.wenti);
+        }else if(epMenue.getIcon().contains("gujiangengxin.png")) {
+            holder.iv.setImageResource(R.mipmap.gujiangengxin);
+        }
     }
 
     @Override
@@ -55,7 +67,7 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
         public MenueViewHolder(View view) {
             super(view);
             iv = (ImageView) view.findViewById(R.id.ep_menue_icon);
-            tv = (TextView) view.findViewById(R.id.ep_list_item_name);
+            tv = (TextView) view.findViewById(R.id.ep_menue_name);
         }
     }
 }

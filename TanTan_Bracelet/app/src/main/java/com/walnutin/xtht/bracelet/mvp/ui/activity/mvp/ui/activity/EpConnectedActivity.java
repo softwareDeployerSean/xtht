@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -12,15 +13,18 @@ import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerEpConnectedComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.EpConnectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.EpConnectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.EpConnectedPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpConnectedMenueAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomGridLayoutManager;
+import com.zhy.autolayout.AutoRelativeLayout;
 
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -52,8 +56,8 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
 
     @Override
     public void setAdapter(EpConnectedMenueAdapter adapter) {
-//        epMenue.setLayoutManager(new CustomGridLayoutManager(this, 3, false));
-//        epMenue.setAdapter(adapter);
+        epMenue.setLayoutManager(new CustomGridLayoutManager(this, 3, false));
+        epMenue.setAdapter(adapter);
     }
 
     @Override
@@ -80,9 +84,6 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     @Override
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
-        LogUtils.debugInfo("have a test");
-        LogUtils.debugInfo("have a test");
-        LogUtils.debugInfo("have a test");
         UiUtils.startActivity(intent);
     }
 
@@ -90,6 +91,19 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     public void killMyself() {
         finish();
     }
+
+
+
+    @OnClick({R.id.ep_connected_rl})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ep_connected_rl:
+                LogUtils.debugInfo("click");
+                break;
+        }
+    }
+
+
 
 
 }

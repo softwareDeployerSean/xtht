@@ -4,18 +4,20 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="20px"
+    android:padding="30px"
     android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginTop="30px"
         android:id="@+id/ep_menue_icon" />
 
     <TextView
         android:text="TextView"
         android:gravity="center"
+        android:layout_marginTop="15px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ep_menue_name" />

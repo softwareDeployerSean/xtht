@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import com.walnutin.xtht.bracelet.mvp.model.entity.EpMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.EpConnectedContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,6 +39,7 @@ public class EpConnectedModel extends BaseModel implements EpConnectedContract.M
     @Override
     public List<EpMenue> getMenues() {
         List<EpMenue> epMenues = null;
+        epMenues = new ArrayList<EpMenue>();
         EpMenue epMenue1 = new EpMenue(1, "laidianshibie.png", "来电识别");
         epMenues.add(epMenue1);
 
@@ -53,6 +55,6 @@ public class EpConnectedModel extends BaseModel implements EpConnectedContract.M
         EpMenue epMenue5 = new EpMenue(5, "gujiangengxin.png", "固件更新");
         epMenues.add(epMenue5);
 
-        return null;
+        return epMenues;
     }
 }

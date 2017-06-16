@@ -34,8 +34,8 @@ public class EpConnectedPresenter extends BasePresenter<EpConnectedContract.Mode
     }
 
     public void loadMenue() {
-//        EpConnectedMenueAdapter adapter = new EpConnectedMenueAdapter(mModel.getMenues(), mRootView.getContext());
-//        mRootView.setAdapter(adapter);
+        EpConnectedMenueAdapter adapter = new EpConnectedMenueAdapter(mModel.getMenues(), mRootView.getContext());
+        mRootView.setAdapter(adapter);
 
     }
 

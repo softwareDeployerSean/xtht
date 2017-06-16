@@ -1,25 +1,22 @@
 <com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/ep_connected_title"
-        android:layout_width="wrap_content"
-        android:layout_height="80px"
-        android:background="@color/white"
-        android:text="设备设置"/>
+
+    <include
+        android:id="@+id/ep_connected_titlebar"
+        layout="@layout/include_title" />
+
 
     <com.zhy.autolayout.AutoRelativeLayout
         android:id="@+id/ep_connected_rl"
-        android:layout_below="@id/ep_connected_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/ep_connected_titlebar"
+        android:layout_gravity="center"
+        android:background="@drawable/menu_item_selector">
 
         <ImageView
             android:id="@+id/ep_llist_item_imageview1"
@@ -31,7 +28,6 @@
             android:layout_marginRight="6px"
             android:layout_marginTop="30px"
             android:layout_weight="0.00"
-            android:background="@android:color/transparent"
             android:src="@mipmap/shouhuan" />
 
 
@@ -40,10 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/ep_llist_item_imageview1"
-
             android:layout_toEndOf="@+id/ep_llist_item_imageview1"
             android:layout_toRightOf="@+id/ep_llist_item_imageview1"
-            android:background="@android:color/transparent"
             android:gravity="left|center"
             android:orientation="vertical">
 
@@ -52,7 +46,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18px"
                 android:layout_marginTop="2px"
-                android:background="@android:color/transparent"
                 android:gravity="bottom"
                 android:text="XX手环"
                 android:textSize="@dimen/dimen_12px" />
@@ -63,23 +56,24 @@
                 android:layout_height="18px"
                 android:layout_below="@id/ep_connected_name"
                 android:layout_marginTop="2px"
-                android:background="@android:color/transparent"
                 android:text="未连接"
                 android:textSize="@dimen/dimen_12px" />
+
             <com.zhy.autolayout.AutoLinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="18px"
+                android:layout_below="@id/ep_connected_status"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_below="@id/ep_connected_status">
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/ep_connected_dianliang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginRight="2px"
-                    android:textSize="@dimen/dimen_12px"
-                    android:text="@string/dianliang"/>
+                    android:gravity="center"
+                    android:text="@string/dianliang"
+                    android:textSize="@dimen/dimen_12px" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -103,12 +97,19 @@
             android:src="@mipmap/qj" />
     </com.zhy.autolayout.AutoRelativeLayout>
 
+    <View
+        android:id="@+id/fengexian"
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ep_connected_rl"
+        android:background="?android:attr/listDivider" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ep_connected_menue"
-        android:layout_marginTop="10px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ep_connected_rl"
+        android:layout_below="@id/fengexian"
+        android:layout_marginTop="10px"
         android:divider="#ffff0000"
         android:dividerHeight="10dp" />
 
