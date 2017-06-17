@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_eeeeee"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:id="@+id/linear_bind"
+        android:layout_width="345px"
+        android:layout_height="58px"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="20px"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_bind"
+            android:layout_width="14px"
+            android:layout_height="25px"
+            android:layout_marginLeft="31px"
+            android:background="@mipmap/shouji" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15px"
+            android:text="@string/phone_number"
+            android:textColor="@color/black_444444"
+            android:textSize="12px" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="137px"
+            android:drawablePadding="50px"
+            android:drawableRight="@mipmap/qj"
+            android:gravity="center"
+            android:text="@string/goto_bind"
+            android:textColor="@color/black_444444"
+            android:textSize="12px" />
+
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoLinearLayout>

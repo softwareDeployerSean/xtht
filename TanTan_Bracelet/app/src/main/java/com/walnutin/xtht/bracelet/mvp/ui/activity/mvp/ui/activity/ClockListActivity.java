@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -28,6 +29,8 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
 
     @BindView(R.id.clock_list_recyclerview)
     public RecyclerView clockListRecyclerView;
+    @BindView(R.id.toolbar_right)
+    TextView toolbarRight;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -47,6 +50,7 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     @Override
     public void initData(Bundle savedInstanceState) {
         mPresenter.loadClockList();
+        toolbarRight.setText(getString(R.string.add));
     }
 
 

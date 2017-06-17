@@ -72,4 +72,5 @@ dependencies {
     testCompile rootProject.ext.dependencies["canary-release"]
     //卫星菜单
     compile project(':library')
+    compile 'com.contrarywind:Android-PickerView:3.2.5'
 }

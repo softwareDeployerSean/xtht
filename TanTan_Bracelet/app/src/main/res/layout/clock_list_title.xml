@@ -21,7 +21,7 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30px"
+            android:layout_marginLeft="15px"
             android:layout_marginRight="30px"
             android:layout_centerVertical="true"
             android:src="@mipmap/ic_arrow_back_white_24dp"/>
@@ -44,12 +44,15 @@
         android:gravity="right"
         >
 
-        <Button
+        <TextView
             android:id="@+id/iv_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_arrow_back_white_24dp"/>
+            android:text="添加"
+
+            android:textColor="#fff"
+            />
 
     </com.zhy.autolayout.AutoRelativeLayout>
 

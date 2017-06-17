@@ -366,11 +366,11 @@
     </com.zhy.autolayout.AutoLinearLayout>
 
     <TextView
+        android:background="@drawable/menu_item_selector"
         android:layout_marginTop="@dimen/dimen_16px"
         android:id="@+id/tv_bind_account"
         android:layout_width="match_parent"
         android:layout_height="40px"
-        android:background="@color/white"
         android:drawableRight="@mipmap/qj"
         android:gravity="center_vertical"
         android:paddingLeft="30px"
@@ -380,11 +380,11 @@
         android:textSize="14px" />
 
     <TextView
+        android:background="@drawable/menu_item_selector"
         android:layout_marginTop="1px"
         android:id="@+id/tv_exit"
         android:layout_width="match_parent"
         android:layout_height="40px"
-        android:background="@color/white"
         android:drawableRight="@mipmap/qj"
         android:gravity="center_vertical"
         android:paddingLeft="30px"

@@ -117,6 +117,24 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/ep_basic_settings"></activity>
+
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/bind_account"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.BindEndActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/bindbyphone"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.Personal_dataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/person_data"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

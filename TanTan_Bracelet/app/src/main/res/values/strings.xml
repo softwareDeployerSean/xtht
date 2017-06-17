@@ -35,6 +35,7 @@
     <string name="ep_question_contact">手机号码/邮箱号码</string>
     <string name="ep_question_contact_title">请留下您的联系方式</string>
     <string name="btn_submit">提交</string>
+    <string name="add">添加</string>
 
     <!--注册 -->
     <string name="phone">请输入手机号码</string>
@@ -55,5 +56,15 @@
     <string name="bind_account">账号绑定 </string>
     <string name="exit_account">账号登出 </string>
 
+    <string name="phone_number">手机账号</string>
+    <string name="email_number">邮箱账号</string>
+    <string name="goto_bind">去绑定</string>
+    <string name="person_data">设置个人资料</string>
+    <string name="local_photo">本地相册</string>
+    <string name="camera">相机</string>
+    <string name="hint">提示</string>
+    <string name="setting">去设置</string>
+    <string name="canecl">取消</string>
+    <string name="camelbypermisstion">为了您能使用照相功能，请开启相机权限！</string>
 
 </resources>

@@ -12,10 +12,16 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadingActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MinePresenter;
+
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -92,5 +98,26 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     public void killMyself() {
 
     }
+
+
+    @OnClick({R.id.tv_bind_account,R.id.check_head_photo})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_bind_account:
+                launchActivity(new Intent(getActivity(), BindbyPhoneActivity.class));
+                break;
+            case R.id.check_head_photo:
+                launchActivity(new Intent(getActivity(), Personal_dataActivity.class));
+                break;
+
+        }
+    }
+
+
+
+
+
+
+
 
 }

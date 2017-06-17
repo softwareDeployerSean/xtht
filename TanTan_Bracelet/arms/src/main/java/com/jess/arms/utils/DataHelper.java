@@ -24,6 +24,14 @@ public class DataHelper {
     private DataHelper() {
     }
 
+    public static SharedPreferences getSharedPerference(Context context) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        }
+        return mSharedPreferences;
+    }
+
+
     /**
      * 存储重要信息到sharedPreferences；
      *
@@ -179,6 +187,7 @@ public class DataHelper {
 
     /**
      * 获取自定义缓存文件地址
+     *
      * @param context
      * @return
      */
@@ -190,10 +199,11 @@ public class DataHelper {
 
     /**
      * 创建未存在的文件夹
+     *
      * @param file
      * @return
      */
-    public static File makeDirs(File file){
+    public static File makeDirs(File file) {
         if (!file.exists()) {
             file.mkdirs();
         }

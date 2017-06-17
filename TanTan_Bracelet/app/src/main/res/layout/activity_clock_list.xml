@@ -7,7 +7,7 @@
     android:background="@color/grey_D8D8D8">
     <include
         android:id="@+id/clock_list_titlebar"
-        layout="@layout/clock_list_title" />
+        layout="@layout/include_title" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_below="@id/clock_list_titlebar"
