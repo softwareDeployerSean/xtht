@@ -1,8 +1,11 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -13,12 +16,19 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBasicSettin
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.BasicSettingsModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BasicSettingsContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.BasicSettingsPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.BasicSettingsAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> implements BasicSettingsContract.View {
 
+    @BindView(R.id.basic_settings_recyclerview)
+    public RecyclerView basicSettingsRecylcerView;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -37,9 +47,16 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        mPresenter.loadBasicSettingsMenue();
     }
 
+    @Override
+    public void setAdapter(BasicSettingsAdapter adapter) {
+        basicSettingsRecylcerView.setLayoutManager(new LinearLayoutManager(this));
+        basicSettingsRecylcerView.addItemDecoration(new RecycleViewDivider(
+                this, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
+        basicSettingsRecylcerView.setAdapter(adapter);
+    }
 
     @Override
     public void showLoading() {
@@ -68,5 +85,8 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
         finish();
     }
 
-
+    @Override
+    public Context getContext() {
+        return this;
+    }
 }

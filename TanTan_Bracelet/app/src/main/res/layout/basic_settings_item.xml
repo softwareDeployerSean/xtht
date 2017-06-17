@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/basic_settings_item_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="8px"
+    android:paddingTop="8px">
+
+    <TextView
+        android:id="@+id/basic_settings_top_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:paddingLeft="15px"
+        android:paddingRight="15px"
+        android:text="TextView"
+        android:textSize="18px" />
+
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView
+        android:id="@+id/basic_settings_item_switchview"
+        android:layout_width="55px"
+        android:layout_height="33px"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20px"
+        android:layout_weight="1" />
+</com.zhy.autolayout.AutoRelativeLayout>

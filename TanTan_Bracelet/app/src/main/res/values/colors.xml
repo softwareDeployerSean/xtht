@@ -23,6 +23,7 @@
     <color name="epListOdd">#D8D8D8</color>
     <!--EpList偶数颜色 -->
     <color name="epListEven">#EEEEEE</color>
+    <color name="redFF1212">#FF1212</color>
 
 
 

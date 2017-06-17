@@ -16,7 +16,7 @@
         android:layout_below="@id/message_push_titlebar"
         android:gravity="center_vertical"
         android:text="@string/ep_msg_push_top"
-        android:textSize="12px"
+        android:textSize="14px"
         android:background="@color/grey_eeeeee"
         android:paddingLeft="23px"
         android:textColor="@color/darkgray"

@@ -8,6 +8,10 @@ public class MarginMenue extends Menue {
     private boolean isSetMargin;
     private int margin;
 
+    public MarginMenue() {
+
+    }
+
     public MarginMenue(int id, String name, String icon, boolean isSetMargin, int margin) {
         super(id, name, icon);
         this.isSetMargin = isSetMargin;
