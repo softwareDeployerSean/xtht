@@ -1,13 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgColor_actionsheet_cancel_nor"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/message_push_titlebar"
+        layout="@layout/include_title" />
+
     <TextView
-        android:text="问题诊断"
+        android:text="@string/ep_question_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView5" />
-</LinearLayout>
+        android:layout_marginLeft="20px"
+        android:layout_marginRight="20px"
+        android:layout_below="@+id/message_push_titlebar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:textSize="18px"
+        android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:layout_below="@+id/textView"
+        android:layout_marginRight="20px"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginTop="15px"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@color/epListEven"
+        android:id="@+id/qusuggestion_handler_suggestion_edittext" />
+
+    <TextView
+        android:text="@string/ep_question_contact_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18px"
+        android:layout_below="@+id/qusuggestion_handler_suggestion_edittext"
+        android:layout_alignLeft="@+id/qusuggestion_handler_suggestion_edittext"
+        android:layout_alignStart="@+id/qusuggestion_handler_suggestion_edittext"
+        android:layout_marginTop="15px"
+        android:id="@+id/textView2" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="45px"
+        android:gravity="left|center"
+        android:hint="@string/ep_question_contact"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:textSize="18px"
+        android:layout_marginTop="15px"
+        android:background="@color/epListEven"
+        android:id="@+id/qusuggestion_handler_contact" />
+
+    <Button
+        android:text="@string/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="45px"
+        android:layout_marginRight="20px"
+        android:gravity="center"
+        android:textSize="18px"
+        android:textColor="@color/bgColor_actionsheet_cancel_nor"
+        android:layout_below="@+id/qusuggestion_handler_contact"
+        android:layout_alignLeft="@+id/qusuggestion_handler_contact"
+        android:layout_alignStart="@+id/qusuggestion_handler_contact"
+        android:layout_marginTop="40px"
+        android:background="@drawable/btn_green_selector"
+        android:id="@+id/question_handler_b" />
+
+</com.zhy.autolayout.AutoRelativeLayout>
