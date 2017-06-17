@@ -19,6 +19,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.EpConnectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.EpConnectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.EpConnectedPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpConnectedMenueAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomGridLayoutManager;
 import com.zhy.autolayout.AutoRelativeLayout;
 
@@ -58,6 +59,34 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     public void setAdapter(EpConnectedMenueAdapter adapter) {
         epMenue.setLayoutManager(new CustomGridLayoutManager(this, 3, false));
         epMenue.setAdapter(adapter);
+
+        adapter.setmOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                switch (position) {
+                    case 0:
+                        Intent callIntent = new Intent(EpConnectedActivity.this, KnownCallActivity.class);
+                        startActivity(callIntent);
+                        break;
+                    case 1:
+                        Intent clockIntent = new Intent(EpConnectedActivity.this, ClockListActivity.class);
+                        startActivity(clockIntent);
+                        break;
+                    case 2:
+                        Intent messageIntent = new Intent(EpConnectedActivity.this, MessagePushActivity.class);
+                        startActivity(messageIntent);
+                        break;
+                    case 3:
+                        Intent questionIntent = new Intent(EpConnectedActivity.this, QuestionHandlerActivity.class);
+                        startActivity(questionIntent);
+                        break;
+                    case 4:
+                        Intent updateIntent = new Intent(EpConnectedActivity.this, HardUpdateActivity.class);
+                        startActivity(updateIntent);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -98,7 +127,8 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ep_connected_rl:
-                LogUtils.debugInfo("click");
+                Intent basicSettingsIntent = new Intent(this, BasicSettingsActivity.class);
+                startActivity(basicSettingsIntent);
                 break;
         }
     }

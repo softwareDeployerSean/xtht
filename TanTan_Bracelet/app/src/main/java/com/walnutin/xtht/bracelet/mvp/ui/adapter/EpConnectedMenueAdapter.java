@@ -46,6 +46,7 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
 
     @Override
     public void onBindViewHolder(EpConnectedMenueAdapter.MenueViewHolder holder, int position) {
+        holder.itemView.setTag(position);
         holder.iv.setImageResource(R.mipmap.laidianshibie);
         EpMenue epMenue = epMenues.get(position);
         holder.tv.setText(epMenue.getName());
@@ -70,17 +71,19 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
     @Override
     public void onClick(View view) {
         if(mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(view, (int) view.getTag());
+            mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
         }
     }
 
     class MenueViewHolder extends RecyclerView.ViewHolder {
         ImageView iv;
         TextView tv;
+        View itemView;
 
 
         public MenueViewHolder(View view) {
             super(view);
+            itemView = view;
             iv = (ImageView) view.findViewById(R.id.ep_menue_icon);
             tv = (TextView) view.findViewById(R.id.ep_menue_name);
         }
