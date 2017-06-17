@@ -20,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="13dp"
-        android:textSize="18px"
+        android:textSize="16px"
         android:id="@+id/textView" />
 
     <EditText
@@ -39,7 +39,7 @@
         android:text="@string/ep_question_contact_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18px"
+        android:textSize="16px"
         android:layout_below="@+id/qusuggestion_handler_suggestion_edittext"
         android:layout_alignLeft="@+id/qusuggestion_handler_suggestion_edittext"
         android:layout_alignStart="@+id/qusuggestion_handler_suggestion_edittext"
