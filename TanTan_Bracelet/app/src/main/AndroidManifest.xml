@@ -88,12 +88,12 @@
             android:label="@string/change_pwd"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.KnownCallActivity" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.ClockListActivity" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.MessagePushActivity" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.QuestionHandlerActivity" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.HardUpdateActivity" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity"></activity>
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.KnownCallActivity" android:label="@string/ep_known_call" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.ClockListActivity" android:label="@string/ep_clock_list"/>
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.MessagePushActivity" android:label="@string/ep_msg_push" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.QuestionHandlerActivity" android:label="@string/ep_question_handler"/>
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.HardUpdateActivity" android:label="@string/ep_hard_update"/>
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity" android:label="@string/ep_basic_settings"></activity>
     </application>
 
 </manifest>

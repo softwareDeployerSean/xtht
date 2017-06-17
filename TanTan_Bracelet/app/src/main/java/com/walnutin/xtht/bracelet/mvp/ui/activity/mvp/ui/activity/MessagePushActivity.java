@@ -1,8 +1,11 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -13,14 +16,19 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerMessagePush
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.MessagePushModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.MessagePushContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.MessagePushPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
 
 
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class MessagePushActivity extends BaseActivity<MessagePushPresenter> implements MessagePushContract.View {
 
+    @BindView(R.id.ep_messagepush_recyclerview)
+    RecyclerView messagePushRecyclerView;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -37,9 +45,24 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
         return R.layout.activity_message_push; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+
+
+    @Override
+    public void setAdapter(MessagePushAdapter adapter) {
+        CustomLinearLayoutManager mCustomLinearLayoutManager = new CustomLinearLayoutManager(this);
+        mCustomLinearLayoutManager.setScrollEnabled(false);
+        messagePushRecyclerView.setLayoutManager(mCustomLinearLayoutManager);
+        messagePushRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        mPresenter.loadMenue();
     }
 
 
@@ -69,6 +92,5 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
     public void killMyself() {
         finish();
     }
-
 
 }

@@ -24,6 +24,13 @@
 
     <!--设备 -->
     <string name="ep_setup">设备</string>
+    <string name="ep_msg_push">消息推送</string>
+    <string name="ep_known_call">来电识别</string>
+    <string name="ep_clock_list">日常闹钟</string>
+    <string name="ep_question_handler">问题诊断</string>
+    <string name="ep_hard_update">固件更新</string>
+    <string name="ep_basic_settings">基础设置</string>
+    <string name="ep_msg_push_top">请选择要推送的消息</string>
 
     <!--注册 -->
     <string name="phone">请输入手机号码</string>

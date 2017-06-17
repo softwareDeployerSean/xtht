@@ -50,6 +50,8 @@
     <!--actionsheet模式的取消按钮背景颜色-->
     <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
 
+    <color name="darkgray">#A9A9A9</color><!--暗灰色 -->
+
 
 
 

@@ -3,6 +3,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -15,12 +16,15 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ClockListPresenter;
 
 
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ClockListActivity extends BaseActivity<ClockListPresenter> implements ClockListContract.View {
 
+    @BindView(R.id.clock_list_recyclerview)
+    public RecyclerView clockListRecyclerView;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {

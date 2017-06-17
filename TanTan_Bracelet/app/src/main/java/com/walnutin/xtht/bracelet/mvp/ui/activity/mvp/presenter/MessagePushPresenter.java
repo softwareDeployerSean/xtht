@@ -12,6 +12,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.MessagePushContract;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
 
 
 @ActivityScope
@@ -30,6 +31,11 @@ public class MessagePushPresenter extends BasePresenter<MessagePushContract.Mode
         this.mApplication = application;
         this.mImageLoader = imageLoader;
         this.mAppManager = appManager;
+    }
+
+    public void loadMenue() {
+        MessagePushAdapter adapter = new MessagePushAdapter(mRootView.getContext(), mModel.getMenueData());
+        mRootView.setAdapter(adapter);
     }
 
     @Override

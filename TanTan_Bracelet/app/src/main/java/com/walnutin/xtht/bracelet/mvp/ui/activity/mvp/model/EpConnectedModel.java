@@ -40,19 +40,19 @@ public class EpConnectedModel extends BaseModel implements EpConnectedContract.M
     public List<EpMenue> getMenues() {
         List<EpMenue> epMenues = null;
         epMenues = new ArrayList<EpMenue>();
-        EpMenue epMenue1 = new EpMenue(1, "laidianshibie.png", "来电识别");
+        EpMenue epMenue1 = new EpMenue(1, "来电识别", "laidianshibie.png");
         epMenues.add(epMenue1);
 
-        EpMenue epMenue2 = new EpMenue(2, "richangnaozhong.png", "日常闹钟");
+        EpMenue epMenue2 = new EpMenue(2, "日常闹钟", "richangnaozhong.png");
         epMenues.add(epMenue2);
 
-        EpMenue epMenue3 = new EpMenue(3, "xiaoxi.png", "消息推送");
+        EpMenue epMenue3 = new EpMenue(3, "消息推送", "xiaoxi.png");
         epMenues.add(epMenue3);
 
-        EpMenue epMenue4 = new EpMenue(4, "wenti.png", "问题诊断");
+        EpMenue epMenue4 = new EpMenue(4, "问题诊断", "wenti.png");
         epMenues.add(epMenue4);
 
-        EpMenue epMenue5 = new EpMenue(5, "gujiangengxin.png", "固件更新");
+        EpMenue epMenue5 = new EpMenue(5, "固件更新", "gujiangengxin.png");
         epMenues.add(epMenue5);
 
         return epMenues;
