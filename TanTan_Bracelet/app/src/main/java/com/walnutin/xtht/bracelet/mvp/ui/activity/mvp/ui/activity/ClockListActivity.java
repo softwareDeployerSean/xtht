@@ -1,8 +1,10 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.base.BaseActivity;
@@ -14,6 +16,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerClockListCo
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ClockListModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ClockListPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.ClockListAdapter;
 
 
 import butterknife.BindView;
@@ -43,7 +46,14 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        mPresenter.loadClockList();
+    }
 
+
+    @Override
+    public void setAdapter(ClockListAdapter adapter) {
+        clockListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        clockListRecyclerView.setAdapter(adapter);
     }
 
 
@@ -74,5 +84,8 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
         finish();
     }
 
-
+    @Override
+    public Context getContext() {
+        return this;
+    }
 }

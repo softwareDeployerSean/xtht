@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/message_push_item_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/epListEven">
 
-    <TextView
-        android:text="来电识别"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView" />
-</LinearLayout>
+    <include
+        android:id="@+id/known_call_title"
+        layout="@layout/include_title" />
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_marginTop="30px"
+        android:layout_width="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="10px"
+        android:paddingBottom="10px"
+        android:layout_below="@id/known_call_title"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/known_call_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
+            android:layout_weight="1"
+            android:text="@string/ep_known_call"
+            android:textSize="18px" />
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView
+            android:id="@+id/known_call_sv"
+            android:layout_width="55px"
+            android:layout_height="33px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15px"
+            android:layout_weight="1" />
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+</com.zhy.autolayout.AutoRelativeLayout>

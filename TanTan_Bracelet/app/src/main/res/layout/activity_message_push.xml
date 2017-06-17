@@ -20,7 +20,7 @@
         android:background="@color/grey_eeeeee"
         android:paddingLeft="23px"
         android:textColor="@color/darkgray"
-        android:layout_height="28px" />
+        android:layout_height="30px" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_below="@id/message_push_top_textview"

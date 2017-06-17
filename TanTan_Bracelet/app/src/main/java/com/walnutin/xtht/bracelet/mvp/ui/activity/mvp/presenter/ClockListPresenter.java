@@ -11,7 +11,11 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.entity.Clock;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.ClockListAdapter;
+
+import java.util.List;
 
 
 @ActivityScope
@@ -30,6 +34,12 @@ public class ClockListPresenter extends BasePresenter<ClockListContract.Model, C
         this.mApplication = application;
         this.mImageLoader = imageLoader;
         this.mAppManager = appManager;
+    }
+
+    public void loadClockList() {
+        List<Clock> clockList = mModel.getClockList();
+        ClockListAdapter adapter = new ClockListAdapter(mRootView.getContext(), clockList);
+        mRootView.setAdapter(adapter);
     }
 
     @Override
