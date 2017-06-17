@@ -18,10 +18,16 @@ import java.util.List;
  * Created by Leiht on 2017/6/15.
  */
 
-public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMenueAdapter.MenueViewHolder> {
+public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMenueAdapter.MenueViewHolder> implements View.OnClickListener {
     List<EpMenue> epMenues = null;
 
     private Context mContext;
+
+    private OnItemClickListener mOnItemClickListener = null;
+
+    public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
 
     public EpConnectedMenueAdapter(List<EpMenue> epMenues, Context context) {
         this.epMenues = epMenues;
@@ -30,9 +36,11 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
 
     @Override
     public EpConnectedMenueAdapter.MenueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        EpConnectedMenueAdapter.MenueViewHolder holder = new EpConnectedMenueAdapter.MenueViewHolder(LayoutInflater.from(
+        View view = LayoutInflater.from(
                 mContext).inflate(R.layout.ep_menue_item, null,
-                false));
+                false);
+        EpConnectedMenueAdapter.MenueViewHolder holder = new EpConnectedMenueAdapter.MenueViewHolder(view);
+        view.setOnClickListener(this);
         return holder;
     }
 
@@ -57,6 +65,13 @@ public class EpConnectedMenueAdapter extends RecyclerView.Adapter<EpConnectedMen
     @Override
     public int getItemCount() {
         return epMenues.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(mOnItemClickListener != null) {
+            mOnItemClickListener.onItemClick(view, (int) view.getTag());
+        }
     }
 
     class MenueViewHolder extends RecyclerView.ViewHolder {

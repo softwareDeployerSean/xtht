@@ -34,7 +34,7 @@ public class EquipmentModel extends BaseModel implements EquipmentContract.Model
         List<Epuipment> epList = null;
         Epuipment ep = null;
         epList = new ArrayList<Epuipment>();
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 2; i++) {
             ep = new Epuipment();
             ep.setName("第" + (i + 1) + "个手环");
             epList.add(ep);

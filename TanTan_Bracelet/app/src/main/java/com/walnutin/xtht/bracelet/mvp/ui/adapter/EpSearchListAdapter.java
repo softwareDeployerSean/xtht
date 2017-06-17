@@ -84,8 +84,4 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
         }
     }
 
-    //define interface
-    public static interface OnItemClickListener {
-        void onItemClick(View view , int position);
-    }
 }

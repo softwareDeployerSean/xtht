@@ -9,17 +9,27 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/top"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        </com.zhy.autolayout.AutoLinearLayout>
 
         <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/center"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/bottom"
+            android:layout_below="@id/top"
             android:orientation="vertical">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ep_list_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:divider="#ffff0000"
+                android:dividerHeight="10dp" />
         </com.zhy.autolayout.AutoLinearLayout>
 
         <com.zhy.autolayout.AutoLinearLayout
@@ -33,16 +43,14 @@
                 android:id="@+id/ep_search_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-
-                android:layout_marginLeft="15px"
-                android:layout_marginRight="15px"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_green_selector"
                 android:drawableLeft="@mipmap/sousuo"
                 android:includeFontPadding="false"
-                android:text="@string/ep_search_btn"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dimen_18px" />
+                android:text=" 搜索设备"
+                android:textSize="20sp" />
         </com.zhy.autolayout.AutoLinearLayout>
     </com.zhy.autolayout.AutoRelativeLayout>
 </com.zhy.autolayout.AutoLinearLayout>

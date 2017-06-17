@@ -23,6 +23,7 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpSearchListAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerEquipmentComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.EquipmentModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
@@ -68,15 +69,15 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     @Override
     public void setStype(int epSize) {
-        int titleBarHeight = 80;
+        int titleBarHeight = 44;
         int epAllSize = 100 * epSize;
         int windowHeight = getWindowHeight();
         LogUtils.debugInfo("TAG windowHeight=" + windowHeight);;
-        int layoutHeiht = (windowHeight - titleBarHeight - epAllSize) / 2;
+        int layoutHeiht = (windowHeight - titleBarHeight - epAllSize);
 
-        LogUtils.debugInfo("TAG windowHeight * 0.25=" + windowHeight * 0.25);;
-        if(layoutHeiht <= windowHeight * 0.25) {
-            layoutHeiht = (int) (windowHeight * 0.23);
+        LogUtils.debugInfo("TAG windowHeight * 0.1=" + windowHeight * 0.1);
+        if(layoutHeiht <= windowHeight * 0.1 * 0.5 * 0.5) {
+            layoutHeiht = (int) (windowHeight * 0.1 * 0.5 * 0.5);
         }
         LogUtils.debugInfo("TAG layoutHeiht=" + layoutHeiht);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)epSearchBtn.getLayoutParams();
@@ -123,7 +124,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     public void setdApter(EpSearchListAdapter adapter) {
         ePListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ePListRecyclerView.setAdapter(adapter);
-        adapter.setmOnItemClickListener(new EpSearchListAdapter.OnItemClickListener() {
+        adapter.setmOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), EpConnectedActivity.class);

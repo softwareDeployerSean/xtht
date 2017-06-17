@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="30px"
+    android:background="@drawable/menu_item_selector"
     android:layout_height="match_parent">
 
     <ImageView

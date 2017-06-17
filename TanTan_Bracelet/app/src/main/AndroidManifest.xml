@@ -67,7 +67,7 @@
             android:label="@string/load"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.EpConnectedActivity" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.EpConnectedActivity" android:label="@string/ep_setup"/>
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.ResetbyEmailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
