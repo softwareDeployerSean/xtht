@@ -24,6 +24,8 @@
     <!--EpList偶数颜色 -->
     <color name="epListEven">#EEEEEE</color>
     <color name="redFF1212">#FF1212</color>
+    <color name="gray888888">#888888</color>
+
 
 
 
@@ -52,6 +54,7 @@
     <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
 
     <color name="darkgray">#A9A9A9</color><!--暗灰色 -->
+    <color name="yellowffaa33">#ffaa33</color>
 
 
 

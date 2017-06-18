@@ -1,0 +1,81 @@
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/clock_add_titlebar"
+        layout="@layout/include_title" />
+
+    <RelativeLayout
+        android:id="@+id/clock_add_picker_parent"
+        android:layout_width="match_parent"
+        android:layout_height="166px"
+        android:layout_below="@id/clock_add_titlebar"
+        android:layout_centerInParent="true"
+        android:background="@color/bgColor_actionsheet_cancel_nor"
+        android:gravity="center">
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
+            android:id="@+id/clock_add_hour_pv"
+            android:layout_width="80px"
+            android:layout_height="186px"
+            android:layout_marginBottom="15px"
+            android:layout_marginTop="15px" />
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/clock_add_al"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/clock_add_hour_pv"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/colon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text=" : "
+                android:textColor="@color/gray888888"
+                android:textSize="26px"
+                android:layout_marginTop="13px"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/colon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text=" : "
+                android:textColor="@color/black_444444"
+                android:textSize="26px"
+                android:layout_marginTop="13px"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/colon3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text=" : "
+                android:layout_marginTop="13px"
+                android:textColor="@color/gray888888"
+                android:textSize="26px"
+                android:textStyle="bold" />
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
+            android:id="@+id/clock_add_minute_pv"
+            android:layout_width="80px"
+            android:layout_height="186px"
+            android:layout_marginBottom="15px"
+            android:layout_marginTop="15px"
+            android:layout_toRightOf="@id/clock_add_al" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/clock_add_week_recyclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clock_add_picker_parent"></android.support.v7.widget.RecyclerView>
+
+</com.zhy.autolayout.AutoRelativeLayout>

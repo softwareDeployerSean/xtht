@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -21,6 +22,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.adapter.ClockListAdapter;
 
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -53,6 +55,15 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
         toolbarRight.setText(getString(R.string.add));
     }
 
+    @OnClick({R.id.toolbar_right})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_right:
+                Intent clockAddIntent = new Intent(this, ClockAddActivity.class);
+                startActivity(clockAddIntent);
+                break;
+        }
+    }
 
     @Override
     public void setAdapter(ClockListAdapter adapter) {
