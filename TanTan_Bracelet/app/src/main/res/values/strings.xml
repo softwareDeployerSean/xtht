@@ -36,6 +36,9 @@
     <string name="ep_question_contact_title">请留下您的联系方式</string>
     <string name="btn_submit">提交</string>
     <string name="add">添加</string>
+    <string name="ep_connected">已连接</string>
+    <string name="ep_not_connected">未连接</string>
+    <string name="default_ep_name">BL_default</string>
 
     <!--注册 -->
     <string name="phone">请输入手机号码</string>
@@ -44,7 +47,8 @@
     <string name="firm_pwd">确认新密码</string>
     <string name="ok">完成</string>
 
-    <string name="ep_search_btn"> 搜索设备</string>
+    <string name="ep_search_btn">  搜索设备</string>
+    <string name="ep_searching_btn">  搜索中...</string>
     <string name="dianliang">100%</string>
     <!--我的 -->
     <string name="active_day">活跃天数6 </string>
@@ -66,5 +70,6 @@
     <string name="setting">去设置</string>
     <string name="canecl">取消</string>
     <string name="camelbypermisstion">为了您能使用照相功能，请开启相机权限！</string>
+    <string name="locationbypermisstion">为了您能使用手环功能，请开启位置权限！</string>
 
 </resources>

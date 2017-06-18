@@ -1,5 +1,7 @@
 package com.walnutin.xtht.bracelet.mvp.model.entity;
 
+import com.inuker.bluetooth.library.search.SearchResult;
+
 /**
  * Created by Leiht on 2017/6/14.
  */
@@ -9,6 +11,15 @@ public class Epuipment {
     private int state;
     private String picName;
 
+    public SearchResult getSearchResult() {
+        return searchResult;
+    }
+
+    public void setSearchResult(SearchResult searchResult) {
+        this.searchResult = searchResult;
+    }
+
+    private SearchResult searchResult;
 
     public Epuipment() {
     }

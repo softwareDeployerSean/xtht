@@ -11,6 +11,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
+import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.MessagePushContract;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
 
@@ -33,8 +34,8 @@ public class MessagePushPresenter extends BasePresenter<MessagePushContract.Mode
         this.mAppManager = appManager;
     }
 
-    public void loadMenue() {
-        MessagePushAdapter adapter = new MessagePushAdapter(mRootView.getContext(), mModel.getMenueData());
+    public void loadMenue(FunctionSocailMsgData socailMsgData) {
+        MessagePushAdapter adapter = new MessagePushAdapter(mRootView.getContext(), mModel.getMenueData(socailMsgData));
         mRootView.setAdapter(adapter);
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.walnutin.xtht.bracelet.mvp.model.entity.MarginMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
 
@@ -19,6 +20,6 @@ public interface MessagePushContract {
 
     //Model层定义接口,外部只需关心model返回的数据,无需关心内部细节,及是否使用缓存
     interface Model extends IModel {
-        List<MarginMenue> getMenueData();
+        List<MarginMenue> getMenueData(FunctionSocailMsgData socailMsgData);
     }
 }

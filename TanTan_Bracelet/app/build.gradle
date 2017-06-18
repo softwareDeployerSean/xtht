@@ -73,4 +73,6 @@ dependencies {
     //卫星菜单
     compile project(':library')
     compile 'com.contrarywind:Android-PickerView:3.2.5'
+    compile files('libs/vpbluetooth_1.0.3.jar')
+    compile files('libs/vpprotocol_1.0.5.jar')
 }

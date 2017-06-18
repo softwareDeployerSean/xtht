@@ -1,5 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.MarginMenue;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView;
 
 import java.net.ConnectException;
 import java.util.List;
@@ -19,10 +22,17 @@ import java.util.List;
  * Created by Leiht on 2017/6/17.
  */
 
-public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.MyViewHolder> {
+public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.MyViewHolder> implements View.OnClickListener {
 
+    private static final String TAG = "[TAN][" + MessagePushAdapter.class.getSimpleName() + "]";
     private Context mContext;
     List<MarginMenue> msgMenues;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+    private OnItemClickListener mOnItemClickListener = null;
 
     public MessagePushAdapter(Context context, List<MarginMenue> msgMenues) {
         this.mContext = context;
@@ -31,9 +41,11 @@ public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MessagePushAdapter.MyViewHolder holder = new MessagePushAdapter.MyViewHolder(LayoutInflater.from(
+        View view = LayoutInflater.from(
                 mContext).inflate(R.layout.message_push_item, parent,
-                false));
+                false);
+        MessagePushAdapter.MyViewHolder holder = new MessagePushAdapter.MyViewHolder(view);
+        view.setOnClickListener(this);
         return holder;
     }
 
@@ -64,6 +76,21 @@ public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.
             params.setMargins(params.leftMargin, params.topMargin + msgMenux.getMargin(), params.rightMargin, params.bottomMargin);
             holder.parent.setLayoutParams(params);
         }
+
+        holder.sv.setmOnStateTriggerListener(new SwitchView.OnStateTriggerListener() {
+            @Override
+            public void triggerOn() {
+                LogUtils.debugInfo(TAG + " triggerOn ");
+            }
+
+            @Override
+            public void triggerOff() {
+                LogUtils.debugInfo(TAG + " triggerOff ");
+            }
+        });
+
+        holder.parent.setTag(position);
+        holder.itemView.setTag(position);
     }
 
     @Override
@@ -71,16 +98,25 @@ public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.
         return msgMenues.size();
     }
 
+    @Override
+    public void onClick(View view) {
+        if(mOnItemClickListener != null) {
+            mOnItemClickListener.onItemClick(view, (int) view.getTag());
+        }
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView iv;
         TextView tv;
+        SwitchView sv;
         RelativeLayout parent;
 
         public MyViewHolder(View view) {
             super(view);
             iv = (ImageView) view.findViewById(R.id.message_push_item_imageview);
             tv = (TextView) view.findViewById(R.id.message_push_item_textview);
+            sv = (SwitchView) view.findViewById(R.id.message_push_item_switchview);
             parent = (RelativeLayout) view.findViewById(R.id.message_push_item_parent);
         }
     }

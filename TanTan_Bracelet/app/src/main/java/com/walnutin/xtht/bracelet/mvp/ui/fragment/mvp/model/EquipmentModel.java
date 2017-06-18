@@ -3,6 +3,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.model;
 import android.app.Application;
 
 import com.google.gson.Gson;
+import com.inuker.bluetooth.library.search.SearchResult;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
@@ -30,15 +31,15 @@ public class EquipmentModel extends BaseModel implements EquipmentContract.Model
     }
 
     @Override
-    public List<Epuipment> searchEpList() {
-        List<Epuipment> epList = null;
-        Epuipment ep = null;
-        epList = new ArrayList<Epuipment>();
-        for(int i = 0; i < 2; i++) {
-            ep = new Epuipment();
-            ep.setName("第" + (i + 1) + "个手环");
-            epList.add(ep);
-        }
+    public List<SearchResult> searchEpList() {
+        List<SearchResult> epList = null;
+        SearchResult ep = null;
+        epList = new ArrayList<SearchResult>();
+//        for(int i = 0; i < 21; i++) {
+//            ep = new SearchResult();
+//            ep.setName("第" + (i + 1) + "个手环");
+//            epList.add(ep);
+//        }
         return epList;
     }
 

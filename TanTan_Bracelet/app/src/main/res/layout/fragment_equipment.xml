@@ -27,9 +27,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ep_list_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="#ffff0000"
-                android:dividerHeight="10dp" />
+                android:layout_height="wrap_content" />
         </com.zhy.autolayout.AutoLinearLayout>
 
         <com.zhy.autolayout.AutoLinearLayout
@@ -43,14 +41,15 @@
                 android:id="@+id/ep_search_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginLeft="15px"
+                android:layout_marginRight="15px"
+                android:layout_marginTop="30px"
                 android:background="@drawable/btn_green_selector"
                 android:drawableLeft="@mipmap/sousuo"
                 android:includeFontPadding="false"
-                android:text=" 搜索设备"
-                android:textSize="20sp" />
+                android:text="@string/ep_search_btn"
+                android:textColor="@color/bgColor_actionsheet_cancel_nor"
+                android:textSize="18px" />
         </com.zhy.autolayout.AutoLinearLayout>
     </com.zhy.autolayout.AutoRelativeLayout>
 </com.zhy.autolayout.AutoLinearLayout>

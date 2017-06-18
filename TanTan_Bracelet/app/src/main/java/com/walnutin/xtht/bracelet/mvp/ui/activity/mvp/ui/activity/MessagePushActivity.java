@@ -3,20 +3,33 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
+import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.base.IBleWriteResponse;
+import com.veepoo.protocol.listener.data.ISocialMsgDataListener;
+import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
+import com.veepoo.protocol.model.datas.PwdData;
+import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerMessagePushComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.MessagePushModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.MessagePushContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.MessagePushPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
 
 
@@ -27,8 +40,34 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class MessagePushActivity extends BaseActivity<MessagePushPresenter> implements MessagePushContract.View {
 
+    private static final String TAG = "[TAN][" + MessagePushActivity.class.getSimpleName() + "]";
+
     @BindView(R.id.ep_messagepush_recyclerview)
     RecyclerView messagePushRecyclerView;
+
+    VPOperateManager mVPOperateManager;
+
+    FunctionSocailMsgData socailMsgData = null;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case -1:
+                    mPresenter.loadMenue(socailMsgData);
+                    break;
+                default:
+                    LogUtils.debugInfo(TAG + "Does not match msg.what nothing todo...");
+            }
+        }
+    };
+
+    private void sendMsg(String message, int what) {
+        Message msg = Message.obtain();
+        msg.what = what;
+        msg.obj = message;
+        mHandler.sendMessage(msg);
+    }
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -46,11 +85,18 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
     }
 
 
-
     @Override
     public void setAdapter(MessagePushAdapter adapter) {
         CustomLinearLayoutManager mCustomLinearLayoutManager = new CustomLinearLayoutManager(this);
         mCustomLinearLayoutManager.setScrollEnabled(false);
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                LogUtils.debugInfo(TAG + "RecyclerView position click");
+            }
+        });
+
         messagePushRecyclerView.setLayoutManager(mCustomLinearLayoutManager);
         messagePushRecyclerView.setAdapter(adapter);
     }
@@ -62,7 +108,33 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        mPresenter.loadMenue();
+        socailMsgData = new FunctionSocailMsgData();
+        mVPOperateManager = VPOperateManager.getMangerInstance(BaseApplication.getAppContext());
+        mVPOperateManager.readSocialMsg(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "Read social message fialed...");
+            }
+        }, new ISocialMsgDataListener() {
+            @Override
+            public void onSocialMsgSupportDataChange(FunctionSocailMsgData functionSocailMsgData) {
+                String message = " 社交信息提醒-读取:\n" + functionSocailMsgData.toString();
+                LogUtils.debugInfo(TAG + "message");
+
+                socailMsgData.setPhone(functionSocailMsgData.getPhone());
+                socailMsgData.setMsg(functionSocailMsgData.getMsg());
+                socailMsgData.setWechat(functionSocailMsgData.getWechat());
+                socailMsgData.setQq(functionSocailMsgData.getQq());
+                socailMsgData.setFacebook(functionSocailMsgData.getFacebook());
+                socailMsgData.setTwitter(functionSocailMsgData.getTwitter());
+                socailMsgData.setWhats(functionSocailMsgData.getWhats());
+                socailMsgData.setSina(functionSocailMsgData.getSina());
+                socailMsgData.setFlickr(functionSocailMsgData.getFlickr());
+                socailMsgData.setLinkin(functionSocailMsgData.getLinkin());
+
+                sendMsg(message, -1);
+            }
+        });
     }
 
 

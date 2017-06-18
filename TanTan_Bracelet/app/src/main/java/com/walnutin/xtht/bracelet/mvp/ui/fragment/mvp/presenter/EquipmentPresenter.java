@@ -2,6 +2,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter;
 
 import android.app.Application;
 
+import com.inuker.bluetooth.library.search.SearchResult;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -11,7 +12,6 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
-import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpSearchListAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
 
@@ -25,6 +25,10 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
     private ImageLoader mImageLoader;
     private AppManager mAppManager;
 
+    private EpSearchListAdapter epSearchListAdapter;
+
+    private List<SearchResult> eps = null;
+
     @Inject
     public EquipmentPresenter(EquipmentContract.Model model, EquipmentContract.View rootView
             , RxErrorHandler handler, Application application
@@ -37,9 +41,18 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
     }
 
     public void searchEpList() {
-        List<Epuipment> eps = mModel.searchEpList();
-        mRootView.setdApter(new EpSearchListAdapter(eps, mRootView.getContext()));
-        mRootView.setStype(eps.size());
+        eps = mModel.searchEpList();
+        mRootView.setAdapter(eps);
+        mRootView.setStyle(eps.size());
+    }
+
+    public void onDataChanged(SearchResult searchResult) {
+//        if (!mListAddress.contains(device.getAddress())) {
+//            mListData.add(device);
+//            mListAddress.add(device.getAddress());
+//        }
+//        Collections.sort(mListData, new DeviceCompare());
+//        bleConnectAdatpter.notifyDataSetChanged();
     }
 
     @Override
@@ -49,6 +62,10 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    public RxErrorHandler getmErrorHandler() {
+        return mErrorHandler;
     }
 
 }

@@ -1,22 +1,20 @@
 package com.walnutin.xtht.bracelet.mvp.ui.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.inuker.bluetooth.library.search.SearchResult;
 import com.walnutin.xtht.bracelet.R;
-import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Leiht on 2017/6/14.
@@ -25,7 +23,7 @@ import butterknife.ButterKnife;
 public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapter.EpListViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<Epuipment> epList;
+    private List<SearchResult> epList;
 
     private OnItemClickListener mOnItemClickListener = null;
 
@@ -33,7 +31,7 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public EpSearchListAdapter(List<Epuipment> epList, Context context) {
+    public EpSearchListAdapter(List<SearchResult> epList, Context context) {
         this.epList = epList;
         this.mContext = context;
     }
@@ -50,6 +48,17 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
 
     @Override
     public void onBindViewHolder(EpListViewHolder holder, int position) {
+        SearchResult searchResult = epList.get(position);
+        holder.epNameTv.setText(searchResult.getName());
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("bracelet", MODE_PRIVATE);
+        String address = sharedPreferences.getString("connected_address", "null");
+        if(address.equals(searchResult.getAddress())) {
+            holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_connected));
+
+        }else {
+            holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_not_connected));
+        }
+
         if(position % 2 == 0) {
             holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListOdd));
         }else {
@@ -80,6 +89,8 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
 
         public EpListViewHolder(View view) {
             super(view);
+            epNameTv = (TextView) view.findViewById(R.id.ep_list_item_name);
+            epStatusTv = (TextView) view.findViewById(R.id.ep_list_item_status);
             parent = (AutoRelativeLayout) view.findViewById(R.id.ep_list_item_parent_ll);
         }
     }

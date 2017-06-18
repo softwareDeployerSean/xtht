@@ -371,15 +371,32 @@ public class SwitchView extends View {
 
         @Override public void toggleToOn() {
             toggleSwitch(STATE_SWITCH_ON);
+            if(mOnStateTriggerListener != null) {
+                mOnStateTriggerListener.triggerOn();
+            }
         }
 
         @Override public void toggleToOff() {
             toggleSwitch(STATE_SWITCH_OFF);
+            if(mOnStateTriggerListener != null) {
+                mOnStateTriggerListener.triggerOff();
+            }
         }
     };
 
     public void setOnStateChangedListener(OnStateChangedListener listener) {
         if (listener == null) throw new IllegalArgumentException("empty listener");
         this.listener = listener;
+    }
+
+    public void setmOnStateTriggerListener(OnStateTriggerListener mOnStateTriggerListener) {
+        this.mOnStateTriggerListener = mOnStateTriggerListener;
+    }
+
+    private OnStateTriggerListener mOnStateTriggerListener = null;
+
+    public interface OnStateTriggerListener {
+        void triggerOn();
+        void triggerOff();
     }
 }

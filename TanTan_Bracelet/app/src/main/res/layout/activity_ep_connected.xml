@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18px"
                 android:layout_below="@id/ep_connected_name"
-                android:layout_marginTop="2px"
+                android:layout_marginTop="6px"
                 android:text="未连接"
                 android:textSize="@dimen/dimen_12px" />
 
@@ -109,9 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/fengexian"
-        android:layout_marginTop="10px"
-        android:divider="#ffff0000"
-        android:dividerHeight="10dp" />
+        android:layout_marginTop="10px" />
 
 
 </com.zhy.autolayout.AutoRelativeLayout>
