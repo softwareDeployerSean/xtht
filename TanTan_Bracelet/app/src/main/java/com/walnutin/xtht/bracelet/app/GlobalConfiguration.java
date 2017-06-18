@@ -25,8 +25,6 @@ import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.mvp.model.api.Api;
 import com.walnutin.xtht.bracelet.mvp.model.api.cache.CommonCache;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +55,7 @@ import timber.log.Timber;
 public class GlobalConfiguration implements ConfigModule {
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
-        builder.baseurl(Api.APP_DOMAIN)
+        builder.baseurl(UserService.BASE_URL)
                 .globalHttpHandler(new GlobalHttpHandler() {// 这里可以提供一个全局处理Http请求和响应结果的处理类,
                     // 这里可以比客户端提前一步拿到服务器返回的结果,可以做一些操作,比如token超时,重新获取
                     @Override
@@ -153,8 +151,6 @@ public class GlobalConfiguration implements ConfigModule {
                 if (BuildConfig.LOG_DEBUG) {//Timber日志打印
                     Timber.plant(new Timber.DebugTree());
                 }
-                //leakCanary内存泄露检查
-                ((App) application).getAppComponent().extras().put(RefWatcher.class.getName(), BuildConfig.USE_CANARY ? LeakCanary.install(application) : RefWatcher.DISABLED);
             }
 
             @Override
@@ -239,7 +235,6 @@ public class GlobalConfiguration implements ConfigModule {
 
             @Override
             public void onFragmentDestroyed(FragmentManager fm, Fragment f) {
-                ((RefWatcher) ((App) f.getActivity().getApplication()).getAppComponent().extras().get(RefWatcher.class.getName())).watch(this);
             }
         });
     }

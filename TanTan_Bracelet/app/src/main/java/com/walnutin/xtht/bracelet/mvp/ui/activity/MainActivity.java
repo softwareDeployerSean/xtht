@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity {
     @BindView(R.id.bottom_sector_menu)
     SectorMenuButton bottom_sector_menu;
     //菜单
-    private static final int[] ITEM_DRAWABLES = {R.mipmap.tj, R.mipmap.paobu, R.mipmap.jianshen,
+    private static final int[] ITEM_DRAWABLES = {R.mipmap.jiahao, R.mipmap.paobu, R.mipmap.jianshen,
             R.mipmap.qixin, R.mipmap.tubu};
 
     public static final int TAB_HOME = 0;

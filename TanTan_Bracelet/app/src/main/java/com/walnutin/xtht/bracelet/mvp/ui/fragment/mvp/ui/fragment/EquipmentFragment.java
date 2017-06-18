@@ -44,6 +44,7 @@ import com.veepoo.protocol.listener.base.IABluetoothStateListener;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
@@ -144,7 +145,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
         requestLocationPermission();
 
-        mContext = BaseApplication.getAppContext();
+        mContext = MyApplication.getAppContext();
 
         epSearchBtn.setText(" " + mContext.getResources().getString(R.string.ep_search_btn));
 

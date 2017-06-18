@@ -10,6 +10,7 @@ import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
 
 /**
@@ -35,7 +36,7 @@ public class GuildActivity extends BaseActivity {
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        isload = DataHelper.getStringSF(BaseApplication.getAppContext(), "isload");
+        isload = DataHelper.getStringSF(MyApplication.getAppContext(), "isload");
 
         new Thread() {
             @Override

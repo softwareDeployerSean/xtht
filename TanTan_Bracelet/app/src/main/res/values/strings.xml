@@ -46,10 +46,12 @@
     <string name="new_pwd">输入新密码 </string>
     <string name="firm_pwd">确认新密码</string>
     <string name="ok">完成</string>
+    <string name="pwd">请输入6-16位密码</string>
 
     <string name="ep_search_btn">  搜索设备</string>
     <string name="ep_searching_btn">  搜索中...</string>
     <string name="dianliang">100%</string>
+
     <!--我的 -->
     <string name="active_day">活跃天数6 </string>
     <string name="rate">达标率60% </string>

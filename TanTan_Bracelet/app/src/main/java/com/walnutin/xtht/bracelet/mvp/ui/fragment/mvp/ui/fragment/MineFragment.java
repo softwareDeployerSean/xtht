@@ -7,27 +7,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
-
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
-import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
-import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadingActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MinePresenter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class MineFragment extends BaseFragment<MinePresenter> implements MineContract.View {
 
+
+    @BindView(R.id.refresh)
+    MaterialRefreshLayout refresh;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -53,6 +59,30 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     public void initData(Bundle savedInstanceState) {
 
     }
+
+    private void init_refresh() {
+        refresh.setLoadMore(true);
+        refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                refresh.finishRefresh();
+                refresh.finishRefreshLoadMore();
+            }
+
+            @Override
+            public void onfinish() {
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                refresh.finishRefresh();
+                refresh.finishRefreshLoadMore();
+            }
+        });
+        refresh.autoRefresh();
+    }
+
 
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,
@@ -100,7 +130,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     }
 
 
-    @OnClick({R.id.tv_bind_account,R.id.check_head_photo})
+    @OnClick({R.id.tv_bind_account, R.id.check_head_photo, R.id.linear_out})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_bind_account:
@@ -109,15 +139,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             case R.id.check_head_photo:
                 launchActivity(new Intent(getActivity(), Personal_dataActivity.class));
                 break;
+            case R.id.linear_out:
+                LogUtils.debugInfo("");
+                break;
 
         }
     }
-
-
-
-
-
-
 
 
 }

@@ -11,32 +11,6 @@ import com.walnutin.xtht.bracelet.mvp.model.api.Api;
  * Contact with jess.yan.effort@gmail.com
  */
 
-public class BaseJson<T> implements Serializable{
-    private T data;
-    private String code;
-    private String msg;
+public class BaseJson implements Serializable{
 
-    public T getData() {
-        return data;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 请求是否成功
-     * @return
-     */
-    public boolean isSuccess() {
-        if (code.equals(Api.RequestSuccess)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

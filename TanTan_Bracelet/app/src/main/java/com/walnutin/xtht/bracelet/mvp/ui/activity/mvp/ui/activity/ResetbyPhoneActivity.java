@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -18,6 +19,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ResetbyPhonePres
 
 
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -39,7 +42,6 @@ public class ResetbyPhoneActivity extends BaseActivity<ResetbyPhonePresenter> im
     public int initView(Bundle savedInstanceState) {
         return R.layout.activity_resetby_phone; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
-
     @Override
     public void initData(Bundle savedInstanceState) {
 

@@ -5,8 +5,11 @@ import com.walnutin.xtht.bracelet.mvp.model.entity.User;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -15,12 +18,20 @@ import retrofit2.http.Query;
  * contact with jess.yan.effort@gmail.com
  */
 public interface UserService {
+    String BASE_URL = "http://47.52.107.107:9000/";
+
 
     String HEADER_API_VERSION = "Accept: application/vnd.github.v3+json";
 
     @Headers({HEADER_API_VERSION})
     @GET("/users")
     Observable<List<User>> getUsers(@Query("since") int lastIdQueried, @Query("per_page") int perPage);
+
+/*
+    //登陆
+    @FormUrlEncoded
+    @POST("baseinfo/login")
+    Observable<List<Userbean>> login(@Field("data") String data);*/
 
 
 }

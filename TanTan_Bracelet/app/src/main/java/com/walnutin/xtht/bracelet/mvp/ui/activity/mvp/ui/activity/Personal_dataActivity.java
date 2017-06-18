@@ -29,6 +29,7 @@ import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.UiUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.PictureCutUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerPersonal_dataComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.Personal_dataModule;
@@ -75,7 +76,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     private RxPermissions mRxPermissions;
 
     private TimePickerView pvCustomTime;
-    private OptionsPickerView pvCustomOptions_height,pvCustomOptions_weight;
+    private OptionsPickerView pvCustomOptions_height, pvCustomOptions_weight;
 
     private ArrayList<String> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
@@ -139,7 +140,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         finish();
     }
 
-    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height,R.id.tv_weight})
+    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight,R.id.tv_sex})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.check_head_photo:
@@ -153,6 +154,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 break;
             case R.id.tv_weight:
                 pvCustomOptions_weight.show();
+                break;
+            case R.id.tv_sex:
+                Show_sex();
                 break;
         }
     }
@@ -224,7 +228,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     }
                     break;
                 case 2:
-                    PictureCutUtils.setImageToHeadView(data, DataHelper.getSharedPerference(BaseApplication.getAppContext()), check_head_photo);//设置图片框,并且保存
+                    PictureCutUtils.setImageToHeadView(data, DataHelper.getSharedPerference(MyApplication.getAppContext()), check_head_photo);//设置图片框,并且保存
                     break;
 
             }
@@ -374,6 +378,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         pvCustomOptions_height.setSelectOptions(110, 0);
 
     }
+
     private void initCustomOptionPicker_weight() {//条件选择器初始化，自定义布局
         /**
          * @description
@@ -444,6 +449,24 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             options2Items_weight.add(options2Items_02);
         }
 
+    }
+
+
+    private void Show_sex() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle("请选择性别");
+        //    指定下拉列表的显示数据
+        final String[] cities = {"男", "女"};
+        //    设置一个下拉的列表选择项
+        builder.setItems(cities, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tvSex.setText(cities[which]);
+            }
+        });
+        builder.show();
     }
 
 

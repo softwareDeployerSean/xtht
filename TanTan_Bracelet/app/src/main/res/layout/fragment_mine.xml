@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cjj.MaterialRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<com.zhy.autolayout.AutoLinearLayout
+    android:id="@+id/linear_out"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_eeeeee"
@@ -395,3 +404,4 @@
 
 
 </com.zhy.autolayout.AutoLinearLayout>
+</com.cjj.MaterialRefreshLayout>

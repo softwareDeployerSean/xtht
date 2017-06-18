@@ -37,7 +37,7 @@
             android:textColor="@color/black_444444"
             android:textSize="18px" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,7 +46,9 @@
             android:gravity="center"
             android:text="请输入昵称"
             android:textColor="@color/black_444444"
-            android:textSize="18px" />
+            android:textSize="18px"
+            android:background="@null"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -176,16 +178,19 @@
             android:textColor="@color/black_444444"
             android:textSize="18px" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_target"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="8000步"
+            android:text="8000"
             android:textColor="@color/black_444444"
-            android:textSize="18px" />
+            android:textSize="18px"
+            android:inputType="number"
+            android:background="@null"
+            />
     </LinearLayout>
 
 

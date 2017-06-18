@@ -21,7 +21,7 @@
         android:required="true" />
 
     <application
-        android:name="com.jess.arms.base.BaseApplication"
+        android:name="com.walnutin.xtht.bracelet.app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -72,6 +72,10 @@
         <meta-data
             android:name="com.walnutin.xtht.bracelet.app.GlobalConfiguration"
             android:value="ConfigModule" />
+
+        <!-- 通过AndroidManifest配置AppKey和AppSecret，如果你选择通过代码配置，则不需要配置以下meta-data -->
+        <meta-data android:name="Mob-AppKey" android:value="1e6bbf6fe27cc"/>
+        <meta-data android:name="Mob-AppSecret" android:value="a0153995befcf738e5f57a7db3f52bb2"/>
 
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.RegistbyEailActivity"
@@ -170,6 +174,13 @@
             android:label="@string/person_data"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
+
+
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
 
 </manifest>
