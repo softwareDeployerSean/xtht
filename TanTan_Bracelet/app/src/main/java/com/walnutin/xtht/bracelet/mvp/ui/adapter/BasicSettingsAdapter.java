@@ -52,6 +52,11 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
         if(!menue.isNeedCheckBox()) {
             holder.sv.setVisibility(View.INVISIBLE);
         }
+        if(menue.isChecked()) {
+            holder.sv.setState(true);
+        }else {
+            holder.sv.setState(false);
+        }
     }
 
     @Override

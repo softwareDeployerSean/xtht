@@ -44,8 +44,9 @@ public class BasicSettingsMenue extends MarginMenue {
         this.colorValue = colorValue;
     }
 
-    public BasicSettingsMenue(int id, String name, String icon, boolean isSetMargin, int margin, boolean isChangeTextColor, String color, int colorValue, boolean needCheckBox) {
-        super(id, name, icon, isSetMargin, margin, false);
+    public BasicSettingsMenue(int id, String name, String icon, boolean isSetMargin, int margin, boolean isChecked,
+                              boolean isChangeTextColor, String color, int colorValue, boolean needCheckBox) {
+        super(id, name, icon, isSetMargin, margin, isChecked);
         this.isChangeTextColor = isChangeTextColor;
         this.color = color;
         this.colorValue = colorValue;

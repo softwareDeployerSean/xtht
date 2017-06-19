@@ -10,6 +10,7 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BasicSettingsContract;
 
@@ -30,28 +31,29 @@ public class BasicSettingsModel extends BaseModel implements BasicSettingsContra
     }
 
     @Override
-    public List<BasicSettingsMenue> getBasicSettingsMenues() {
+    public List<BasicSettingsMenue> getBasicSettingsMenues(BasicItemSupport basicItemSupport) {
         List<BasicSettingsMenue> basicSettingsMenues = new ArrayList<>();
 
-        BasicSettingsMenue menue1 = new BasicSettingsMenue(1, "消息推送", "", true, 60, false, "", 0, true);
+        //int id, String name, String icon, boolean isSetMargin, int margin, boolean isChecked, boolean isChangeTextColor, String color, int colorValue, boolean needCheckBox
+        BasicSettingsMenue menue1 = new BasicSettingsMenue(0, "消息推送", "", true, 60, basicItemSupport.getMsgPush() == 0 ? true : false, false, "", 0, true );
         basicSettingsMenues.add(menue1);
 
-        BasicSettingsMenue menue2 = new BasicSettingsMenue(1, "翻腕模式", "", false, 0, false, "", 0, true);
+        BasicSettingsMenue menue2 = new BasicSettingsMenue(1, "翻腕模式", "", false, 0, basicItemSupport.getFanwanModel() == 0 ? true : false, false, "", 0, true);
         basicSettingsMenues.add(menue2);
 
-        BasicSettingsMenue menue3 = new BasicSettingsMenue(1, "久坐提醒", "", false, 0, false, "", 0, true);
+        BasicSettingsMenue menue3 = new BasicSettingsMenue(2, "久坐提醒", "", false, 0, basicItemSupport.getLongSeat() == 0 ? true : false, false, "", 0, true);
         basicSettingsMenues.add(menue3);
 
-        BasicSettingsMenue menue4 = new BasicSettingsMenue(1, "手机防遗失", "", false, 0, false, "", 0, true);
+        BasicSettingsMenue menue4 = new BasicSettingsMenue(3, "手机防遗失", "", false, 0, basicItemSupport.getFindDevice() == 0 ? true : false, false, "", 0, true);
         basicSettingsMenues.add(menue4);
 
-        BasicSettingsMenue menue5 = new BasicSettingsMenue(1, "重启设备", "", true, 150, true, "red", 0, false);
+        BasicSettingsMenue menue5 = new BasicSettingsMenue(4, "重启设备", "", true, 150, false, true, "red", 0, false);
         basicSettingsMenues.add(menue5);
 
-        BasicSettingsMenue menue6 = new BasicSettingsMenue(1, "恢复出厂设置", "", false, 0, true, "red", 0, false);
+        BasicSettingsMenue menue6 = new BasicSettingsMenue(5, "恢复出厂设置", "", false, 0, false, true, "red", 0, false);
         basicSettingsMenues.add(menue6);
 
-        BasicSettingsMenue menue7 = new BasicSettingsMenue(1, "解除绑定", "", false, 0, true, "red", 0, false);
+        BasicSettingsMenue menue7 = new BasicSettingsMenue(6, "解除绑定", "", false, 0, false, true, "red", 0, false);
         basicSettingsMenues.add(menue7);
 
         return basicSettingsMenues;

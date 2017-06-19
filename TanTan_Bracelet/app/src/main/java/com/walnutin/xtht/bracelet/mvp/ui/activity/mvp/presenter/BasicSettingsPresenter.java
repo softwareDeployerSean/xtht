@@ -11,6 +11,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BasicSettingsContract;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.BasicSettingsAdapter;
@@ -36,10 +37,10 @@ public class BasicSettingsPresenter extends BasePresenter<BasicSettingsContract.
         this.mAppManager = appManager;
     }
 
-    public void loadBasicSettingsMenue() {
-        List<BasicSettingsMenue> basicSettingsMenues = mModel.getBasicSettingsMenues();
-        BasicSettingsAdapter adapter = new BasicSettingsAdapter(mRootView.getContext(), basicSettingsMenues);
-        mRootView.setAdapter(adapter);
+    public void loadBasicSettingsMenue(BasicItemSupport basicItemSupport) {
+        List<BasicSettingsMenue> basicSettingsMenues = mModel.getBasicSettingsMenues(basicItemSupport);
+
+        mRootView.setAdapter(basicSettingsMenues);
     }
 
     @Override
