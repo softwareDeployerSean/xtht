@@ -27,6 +27,7 @@ import static com.jess.arms.integration.AppManager.APPMANAGER_MESSAGE;
 import static com.jess.arms.integration.AppManager.APP_EXIT;
 import static com.jess.arms.integration.AppManager.KILL_ALL;
 import static com.jess.arms.integration.AppManager.SHOW_SNACKBAR;
+import static com.jess.arms.integration.AppManager.SHOW_TOAST;
 import static com.jess.arms.integration.AppManager.START_ACTIVITY;
 
 /**
@@ -206,6 +207,18 @@ public class UiUtils {
     public static void SnackbarText(String text) {
         Message message = new Message();
         message.what = SHOW_SNACKBAR;
+        message.obj = text;
+        message.arg1 = 0;
+        EventBus.getDefault().post(message, APPMANAGER_MESSAGE);
+    }
+    /**
+     * toast
+     *
+     * @param text
+     */
+    public static void ToastText(String text) {
+        Message message = new Message();
+        message.what = SHOW_TOAST;
         message.obj = text;
         message.arg1 = 0;
         EventBus.getDefault().post(message, APPMANAGER_MESSAGE);

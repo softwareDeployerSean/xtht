@@ -49,7 +49,6 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
     Button btLoad;
     AlertView alertView;
 
-    EventHandler eventHandler;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -175,7 +174,7 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
                             intent.putExtra("phone", phone);
                             launchActivity(intent);
 
-                        }else{
+                        } else {
 
                         }
                     }
@@ -224,6 +223,7 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
         super.onDestroy();
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();
+
     }
 
     public boolean handleMessage(Message msg) {
@@ -248,4 +248,8 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
         }
         return false;
     }
+
+
+
+
 }

@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.walnutin.xtht.bracelet.R;
@@ -35,7 +36,7 @@ public class CustomProgressDialog {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.loading_dialog, null);// 得到加载view
-        LinearLayout layout = (LinearLayout) v.findViewById(R.id.dialog_view);// 加载布局
+        RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.dialog_view);// 加载布局
         // main.xml中的ImageView
         ImageView spaceshipImage = (ImageView) v.findViewById(R.id.img);
         TextView tipTextView = (TextView) v.findViewById(R.id.tipTextView);// 提示文字
@@ -56,9 +57,9 @@ public class CustomProgressDialog {
 
     }
 
-    public static void show(Context context, String msg) {
+    public static void show(Context context) {
         if (dialog == null) {
-            dialog = createLoadingDialog(context, msg);
+            dialog = createLoadingDialog(context,context.getString(R.string.loading) );
             dialog.show();
         } else {
             dialog.show();

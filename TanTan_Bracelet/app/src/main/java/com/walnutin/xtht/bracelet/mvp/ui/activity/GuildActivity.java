@@ -2,6 +2,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -56,5 +57,12 @@ public class GuildActivity extends BaseActivity {
                 }
             }
         }.start();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

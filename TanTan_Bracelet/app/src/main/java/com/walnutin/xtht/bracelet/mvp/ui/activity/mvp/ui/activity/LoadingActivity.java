@@ -3,31 +3,49 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.UiUtils;
-
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerLoadingComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.LoadingModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.LoadingContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.LoadingPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class LoadingActivity extends BaseActivity<LoadingPresenter> implements LoadingContract.View , OnItemClickListener {
+public class LoadingActivity extends BaseActivity<LoadingPresenter> implements LoadingContract.View, OnItemClickListener {
 
     AlertView alertView;
+    @BindView(R.id.et_name)
+    EditText etName;
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.cheques_check)
+    CheckBox cheques_check;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -46,18 +64,34 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        String username = DataHelper.getStringSF(MyApplication.getAppContext(), "username");
+        if (!username.equals("default")) {
+            etName.setText(username);
+        }
+        cheques_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                } else {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+                etPassword.setSelection(etPassword.getText().length());
+            }
+        });
+
 
     }
 
 
     @Override
     public void showLoading() {
-
+        CustomProgressDialog.show(this);
     }
 
     @Override
     public void hideLoading() {
-
+        CustomProgressDialog.dissmiss();
     }
 
     @Override
@@ -81,7 +115,16 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_load:
-                launchActivity(new Intent(LoadingActivity.this,MainActivity.class));
+                String username = etName.getText().toString().trim();
+                String pwd = etPassword.getText().toString().trim();
+                if (!ConmonUtils.checkEmail(username) && !ConmonUtils.isMobileNO(username)) {
+                    ToastUtils.showToast(getString(R.string.patten_username), this);
+                } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
+                    ToastUtils.showToast(getString(R.string.pwd), this);
+                } else {
+                    mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                }
+                launchActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.tv_froget_pwd://点击保存按钮
                 forgetpwd();
@@ -92,7 +135,7 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
     @Override
     public void forgetpwd() {
-        alertView= new AlertView(null, null, null, null, new String[]{getString(R.string.reset_pwdbyphone), getString(R.string.reset_pwdbyemail)}, this, AlertView.Style.ActionSheet, this);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.reset_pwdbyphone), getString(R.string.reset_pwdbyemail)}, this, AlertView.Style.ActionSheet, this);
         alertView.show();
     }
 
@@ -100,10 +143,10 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void onItemClick(Object o, int position) {
         switch (position) {
             case 0:
-                launchActivity(new Intent(LoadingActivity.this,ResetbyPhoneActivity.class));
+                launchActivity(new Intent(LoadingActivity.this, ResetbyPhoneActivity.class));
                 break;
             case 1:
-                launchActivity(new Intent(LoadingActivity.this,ResetbyEmailActivity.class));
+                launchActivity(new Intent(LoadingActivity.this, ResetbyEmailActivity.class));
                 break;
 
         }
@@ -111,9 +154,9 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction()==KeyEvent.ACTION_DOWN&&keyCode==KeyEvent.KEYCODE_BACK){
-            if(alertView!=null){
-                if (alertView.isShowing()){
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (alertView != null) {
+                if (alertView.isShowing()) {
                     alertView.dismiss();
                     return false;
                 }
@@ -121,6 +164,14 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void load_success() {
+        ToastUtils.showToast(getString(R.string.load_success), this);
+        launchActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
 }

@@ -10,10 +10,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.rance.library.ButtonData;
 import com.rance.library.ButtonEventListener;
 import com.rance.library.SectorMenuButton;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.FragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EquipmentFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.ExerciseFragment;
@@ -85,6 +87,7 @@ public class MainActivity extends FragmentActivity {
         ivBack.setVisibility(View.GONE);
         bottom_sector_menu.setButtonDatas(buttonDatas);
         setListener(bottom_sector_menu);
+        //DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
     }
 
     private void setListener(final SectorMenuButton button) {

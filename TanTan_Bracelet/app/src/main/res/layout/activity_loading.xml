@@ -10,15 +10,15 @@
     <include layout="@layout/include_title" />
 
     <EditText
-        android:id="@+id/et_phone"
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="25px"
         android:layout_marginLeft="15px"
         android:layout_marginRight="15px"
         android:layout_marginTop="69px"
         android:background="@null"
-        android:hint="@string/email"
-        android:maxLength="11"
+        android:hint="@string/load_text"
+        android:maxLength="20"
         android:textColorHint="@color/grey_BBBBBB"
         android:textSize="@dimen/dimen_18px"
         android:layout_marginBottom="@dimen/dimen_10px"
@@ -30,36 +30,39 @@
         />
 
 
-    <com.zhy.autolayout.AutoRelativeLayout
+    <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55px">
+        android:layout_height="55px"
+        android:gravity="center"
+        >
 
         <EditText
             android:id="@+id/et_password"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15px"
             android:layout_marginRight="15px"
-            android:layout_weight="3"
             android:background="@null"
             android:hint="请输入6-16位密码"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:maxLength="16"
             android:textColorHint="#BBBBBB"
             android:textSize="@dimen/dimen_18px"
             android:textColor="@color/black_444444" />
 
-        <ImageView
-            android:id="@+id/iv_yanjin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+        <CheckBox
+            android:padding="@dimen/dimen_10px"
+            android:checked="true"
+            android:button="@null"
+            android:id="@+id/cheques_check"
+            android:layout_width="18px"
+            android:layout_height="12px"
             android:layout_marginRight="30px"
-            android:src="@mipmap/xsmm" />
-    </com.zhy.autolayout.AutoRelativeLayout>
+            android:background="@drawable/checkbox_pwd"/>
+    </com.zhy.autolayout.AutoLinearLayout>
 
     <include layout="@layout/line" />
     

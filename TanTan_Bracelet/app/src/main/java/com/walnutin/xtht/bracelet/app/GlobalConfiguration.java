@@ -22,14 +22,17 @@ import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.RequestInterceptor;
 import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.integration.IRepositoryManager;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.mvp.model.api.Api;
 import com.walnutin.xtht.bracelet.mvp.model.api.cache.CommonCache;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import com.alibaba.fastjson.JSON;
+
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -39,9 +42,12 @@ import com.walnutin.xtht.bracelet.BuildConfig;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.api.service.CommonService;
 import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
+import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import timber.log.Timber;
 
@@ -59,22 +65,26 @@ public class GlobalConfiguration implements ConfigModule {
                 .globalHttpHandler(new GlobalHttpHandler() {// 这里可以提供一个全局处理Http请求和响应结果的处理类,
                     // 这里可以比客户端提前一步拿到服务器返回的结果,可以做一些操作,比如token超时,重新获取
                     @Override
-                    public Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response) {
+                    public Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response) throws IOException {
                         /* 这里可以先客户端一步拿到每一次http请求的结果,可以解析成json,做一些操作,如检测到token过期后
                            重新请求token,并重新执行请求 */
-                        try {
+
                             if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body())) {
-                                JSONArray array = new JSONArray(httpResult);
-                                JSONObject object = (JSONObject) array.get(0);
-                                String login = object.getString("login");
-                                String avatar_url = object.getString("avatar_url");
-                                Timber.w("Result ------> " + login + "    ||   Avatar_url------> " + avatar_url);
+                                BaseJson baseBean = JSON.parseObject(httpResult, BaseJson.class);
+                                if ("1".equals(baseBean.code)) {
+
+                                    if (!TextUtils.isEmpty(baseBean.msg.toString())) {
+                                        response = onSuccess(response, baseBean.msg.toString());
+                                        LogUtils.debugInfo("baseBean.msg.toString()进来了的==");
+                                    } else
+                                        throw new RuntimeException("获取结果为空");
+                                } else {
+                                    throw new RuntimeException(baseBean.msg.toString());
+                                }
+
                             }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            return response;
-                        }
+
 
 
                      /* 这里如果发现token过期,可以先请求最新的token,然后在拿新的token放入request里去重新请求
@@ -102,6 +112,7 @@ public class GlobalConfiguration implements ConfigModule {
                     }
                 })
                 .responseErrorListener((context1, t) -> {
+                    LogUtils.debugInfo("caonima  zenmeshuishi ");
                     /* 用来提供处理所有错误的监听
                        rxjava必要要使用ErrorHandleSubscriber(默认实现Subscriber的onError方法),此监听才生效 */
                     Timber.tag("Catch-Error").w(t.getMessage());
@@ -117,7 +128,7 @@ public class GlobalConfiguration implements ConfigModule {
                     } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException || t instanceof JsonIOException) {
                         msg = "数据解析错误";
                     }
-                    UiUtils.SnackbarText(msg);
+                    UiUtils.ToastText(t.getMessage());
                 })
                 .gsonConfiguration((context1, gsonBuilder) -> {//这里可以自己自定义配置Gson的参数
                     gsonBuilder
@@ -255,5 +266,12 @@ public class GlobalConfiguration implements ConfigModule {
         }
         return msg;
     }
+
+    private static Response onSuccess(Response originalResponse, String content) throws IOException {
+        return originalResponse.newBuilder().
+                body(ResponseBody.create(null, content)).
+                build();
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package com.jess.arms.http;
 
+import java.io.IOException;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,7 +11,7 @@ import okhttp3.Response;
  * Contact with jess.yan.effort@gmail.com
  */
 public interface GlobalHttpHandler {
-    Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response);
+    Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response) throws IOException;
 
     Request onHttpRequestBefore(Interceptor.Chain chain, Request request);
 

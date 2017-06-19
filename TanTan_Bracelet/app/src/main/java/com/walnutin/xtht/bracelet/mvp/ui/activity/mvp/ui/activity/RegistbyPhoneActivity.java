@@ -2,6 +2,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,14 +11,20 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerRegistbyPhoneComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.RegistbyPhoneModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RegistbyPhoneContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.RegistbyPhonePresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 
+
+import org.simple.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -50,21 +57,24 @@ public class RegistbyPhoneActivity extends BaseActivity<RegistbyPhonePresenter> 
         return R.layout.activity_registby_phone; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    String phone = "";
+
     @Override
     public void initData(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        tv_phone.setText(intent.getStringExtra("phone"));
+        phone = intent.getStringExtra("phone");
+        tv_phone.setText(phone);
     }
 
 
     @Override
     public void showLoading() {
-
+        CustomProgressDialog.show(this);
     }
 
     @Override
     public void hideLoading() {
-
+        CustomProgressDialog.dissmiss();
     }
 
     @Override
@@ -89,15 +99,25 @@ public class RegistbyPhoneActivity extends BaseActivity<RegistbyPhonePresenter> 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_regist:
-                String pwd = et_password.getText().toString();
+                String pwd = et_password.getText().toString().trim();
                 if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
                     ToastUtils.showToast(getString(R.string.pwd), this);
                 } else {
-
+                    mPresenter.regist(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
                 }
 
 
                 break;
         }
+    }
+
+    @Override
+    public void regist_success() {
+        ToastUtils.showToast(getString(R.string.regist_success), this);
+        launchActivity(new Intent(this, MainActivity.class));
+        finish();
+        Message message = new Message();
+        message.what = -1;
+        EventBus.getDefault().post(message);
     }
 }

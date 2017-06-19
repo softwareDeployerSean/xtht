@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.RequestInterceptor;
+import com.jess.arms.http.TWGsonConverterFactory;
 import com.jess.arms.utils.DataHelper;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class ClientModule {
                 .baseUrl(httpUrl)//域名
                 .client(client)//设置okhttp
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//使用rxjava
-                .addConverterFactory(GsonConverterFactory.create());//使用Gson
+                .addConverterFactory(TWGsonConverterFactory.create());//使用Gson
         if (configuration != null)
             configuration.configRetrofit(application, builder);
         return builder.build();

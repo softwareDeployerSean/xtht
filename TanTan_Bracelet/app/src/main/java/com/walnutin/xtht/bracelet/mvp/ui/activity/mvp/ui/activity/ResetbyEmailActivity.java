@@ -3,20 +3,24 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
-
 import com.walnutin.xtht.bracelet.R;
-import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerResetbyEmailComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ResetbyEmailModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ResetbyEmailContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ResetbyEmailPresenter;
 
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -24,6 +28,13 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> implements ResetbyEmailContract.View {
 
+
+    @BindView(R.id.et_phone)
+    EditText etPhone;
+    @BindView(R.id.et_yanzhenma)
+    EditText etYanzhenma;
+    @BindView(R.id.bt_yanzhenma)
+    Button btYanzhenma;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -74,16 +85,29 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
     }
 
 
-
-    @OnClick({R.id.bt_next})
+    @OnClick({R.id.bt_next, R.id.bt_yanzhenma})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_next:
-                launchActivity(new Intent(ResetbyEmailActivity.this,ResetpwdActivity.class));
+
+
+                launchActivity(new Intent(ResetbyEmailActivity.this, ResetpwdActivity.class));
                 break;
+            case R.id.bt_yanzhenma:
+                String email = etPhone.getText().toString().trim();
+                if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
+                    ToastUtils.showToast(getString(R.string.pattern_email), this);
+                } else {
+
+
+
+                }
+
+                break;
+
+
         }
     }
-
 
 
 }

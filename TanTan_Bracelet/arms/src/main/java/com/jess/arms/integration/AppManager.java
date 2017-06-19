@@ -7,7 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.jess.arms.R;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -38,6 +44,7 @@ public final class AppManager {
     public static final int SHOW_SNACKBAR = 1;
     public static final int KILL_ALL = 2;
     public static final int APP_EXIT = 3;
+    public static final int SHOW_TOAST = 4;
     private Application mApplication;
 
     //管理所有activity
@@ -74,6 +81,11 @@ public final class AppManager {
             case APP_EXIT:
                 appExit();
                 break;
+            case SHOW_TOAST:
+                if (message.obj == null)
+                    break;
+                showToast((String) message.obj);
+
             default:
                 Timber.tag(TAG).w("The message.what not match");
                 break;
@@ -307,5 +319,26 @@ public final class AppManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    //以下为自定义的一个Toast
+    private  Toast mToast2;
+    private  TextView mToastTv;
+
+    public  void showToast(String text) {
+
+
+        if (mToast2 == null) {
+            mToast2 = new Toast(getCurrentActivity());
+            LayoutInflater inflater = (LayoutInflater) getCurrentActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.define_toast, null);
+            mToast2.setView(view); //为Toast对象设置显示的视图
+            mToast2.setDuration(Toast.LENGTH_SHORT);
+            mToastTv = (TextView) view.findViewById(R.id.toastTv);
+            mToast2.setGravity(Gravity.CENTER, 0, 100); //0代表向x坐标右边偏移0像素
+        }
+        mToastTv.setText(text); //设置要显示的文本 注意这里不能掉用mToast2.setText方法
+        mToast2.show();
     }
 }

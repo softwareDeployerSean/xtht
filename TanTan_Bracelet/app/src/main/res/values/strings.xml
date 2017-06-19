@@ -21,6 +21,10 @@
     <string name="next">下一步</string>
     <string name="change_pwd">修改密码</string>
     <string name="name">用户昵称</string>
+    <string name="regist_success">注册成功</string>
+    <string name="load_success">登陆成功</string>
+    <string name="load_text">请输入手机号码/邮箱号码</string>
+    <string name="patten_username">请输入正确格式的用户名</string>
 
     <!--设备 -->
     <string name="ep_setup">设备</string>
@@ -47,6 +51,8 @@
     <string name="firm_pwd">确认新密码</string>
     <string name="ok">完成</string>
     <string name="pwd">请输入6-16位密码</string>
+    <string name="pattern_email">请输入正确邮箱格式</string>
+    <string name="loading">正在加载中</string>
 
     <string name="ep_search_btn">  搜索设备</string>
     <string name="ep_searching_btn">  搜索中...</string>

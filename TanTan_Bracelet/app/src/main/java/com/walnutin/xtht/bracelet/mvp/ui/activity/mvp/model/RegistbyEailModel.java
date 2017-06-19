@@ -10,7 +10,12 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RegistbyEailContract;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -23,6 +28,12 @@ public class RegistbyEailModel extends BaseModel implements RegistbyEailContract
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
+    }
+
+    @Override
+    public Observable<UserBean> get_registdata(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .regist(body);
     }
 
     @Override

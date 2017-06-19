@@ -42,7 +42,9 @@
             android:name=".mvp.ui.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            />
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.LoadActivity" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.RegistbyPhoneActivity"
