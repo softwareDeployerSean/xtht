@@ -90,7 +90,7 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
             }else {
                 epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
             }
-            VPOperateManager mVpoperateManager = VPOperateManager.getMangerInstance(BaseApplication.getAppContext());
+            VPOperateManager mVpoperateManager = VPOperateManager.getMangerInstance(this);
             mVpoperateManager.readBattery(new IBleWriteResponse(){
                 @Override
                 public void onResponse(int i) {

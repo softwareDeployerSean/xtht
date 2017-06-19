@@ -109,17 +109,17 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
     @Override
     public void initData(Bundle savedInstanceState) {
         socailMsgData = new FunctionSocailMsgData();
-        mVPOperateManager = VPOperateManager.getMangerInstance(BaseApplication.getAppContext());
+        mVPOperateManager = VPOperateManager.getMangerInstance(this);
         mVPOperateManager.readSocialMsg(new IBleWriteResponse() {
             @Override
             public void onResponse(int i) {
-                LogUtils.debugInfo(TAG + "Read social message fialed...");
+                LogUtils.debugInfo(TAG + "readSocialMsg onResponse i = " + i);
             }
         }, new ISocialMsgDataListener() {
             @Override
             public void onSocialMsgSupportDataChange(FunctionSocailMsgData functionSocailMsgData) {
                 String message = " 社交信息提醒-读取:\n" + functionSocailMsgData.toString();
-                LogUtils.debugInfo(TAG + "message");
+                LogUtils.debugInfo(TAG + message);
 
                 socailMsgData.setPhone(functionSocailMsgData.getPhone());
                 socailMsgData.setMsg(functionSocailMsgData.getMsg());
@@ -135,8 +135,26 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
                 sendMsg(message, -1);
             }
         });
+//        VPOperateManager.getMangerInstance(this).readSocialMsg(writeResponse, new ISocialMsgDataListener() {
+//            @Override
+//            public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+//                String message = " 社交信息提醒-读取:\n" + socailMsgData.toString();
+////                Logger.t(TAG).i(message);
+//                LogUtils.debugInfo(TAG + message);
+//                sendMsg(message, -1);
+//            }
+//        });
     }
+    WriteResponse writeResponse = new WriteResponse();
+    class WriteResponse implements IBleWriteResponse {
 
+        @Override
+        public void onResponse(int code) {
+//            Logger.t(TAG).i("write cmd status:" + code);
+            LogUtils.debugInfo(TAG + "readSocialMsg failed ");
+
+        }
+    }
 
     @Override
     public void showLoading() {
@@ -163,6 +181,42 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
     @Override
     public void killMyself() {
         finish();
+    }
+
+    public void updateSocailMsgData(int pos,  EFunctionStatus state) {
+        switch (pos) {
+            case 0:
+                socailMsgData.setFacebook(state);
+                break;
+            case 1:
+                socailMsgData.setTwitter(state);
+                break;
+            case 2:
+                socailMsgData.setQq(state);
+                break;
+            case 3:
+                socailMsgData.setWechat(state);
+                break;
+            case 4:
+                socailMsgData.setMsg(state);
+                break;
+            case 5:
+                //其它，暂时不知道对应哪一个
+                break;
+        }
+        LogUtils.debugInfo(TAG + "socailMsgData=" + socailMsgData);
+        mVPOperateManager.settingSocialMsg(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "settingSocialMsg onResponse i=" + i);
+            }
+        }, new ISocialMsgDataListener() {
+            @Override
+            public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+                String message = " 社交信息提醒-设置:\n" + socailMsgData.toString();
+                LogUtils.debugInfo(TAG + message);
+            }
+        }, socailMsgData);
     }
 
 }

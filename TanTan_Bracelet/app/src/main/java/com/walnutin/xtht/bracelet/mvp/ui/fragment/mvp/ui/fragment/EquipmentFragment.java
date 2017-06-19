@@ -70,7 +70,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implements EquipmentContract.View {
 
-    private static String TAG1 = "RAYHT";
+    private static String TAG1 = "[TAN][" + EquipmentFragment.class.getSimpleName() + "]";
 
     private String TANTAN = "TANTAN";
 
@@ -102,6 +102,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     @Override
     public void setupFragmentComponent(AppComponent appComponent) {
+
         DaggerEquipmentComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)

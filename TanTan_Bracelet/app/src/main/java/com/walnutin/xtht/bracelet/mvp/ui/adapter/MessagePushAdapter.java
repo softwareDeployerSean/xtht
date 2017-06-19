@@ -11,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.LogUtils;
+import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.MarginMenue;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.MessagePushActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView;
 
 import java.net.ConnectException;
@@ -77,15 +79,21 @@ public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.
             holder.parent.setLayoutParams(params);
         }
 
+        if(msgMenux.isChecked()) {
+            holder.sv.setState(true);
+        }
+
         holder.sv.setmOnStateTriggerListener(new SwitchView.OnStateTriggerListener() {
             @Override
             public void triggerOn() {
                 LogUtils.debugInfo(TAG + " triggerOn ");
+                ((MessagePushActivity)mContext).updateSocailMsgData(position, EFunctionStatus.SUPPORT);
             }
 
             @Override
             public void triggerOff() {
                 LogUtils.debugInfo(TAG + " triggerOff ");
+                ((MessagePushActivity)mContext).updateSocailMsgData(position, EFunctionStatus.SUPPORT_CLOSE);
             }
         });
 
