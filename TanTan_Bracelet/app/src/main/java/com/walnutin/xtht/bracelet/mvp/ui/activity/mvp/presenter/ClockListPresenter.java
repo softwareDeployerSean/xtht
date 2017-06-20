@@ -37,9 +37,9 @@ public class ClockListPresenter extends BasePresenter<ClockListContract.Model, C
     }
 
     public void loadClockList() {
-        List<Clock> clockList = mModel.getClockList();
-        ClockListAdapter adapter = new ClockListAdapter(mRootView.getContext(), clockList);
-        mRootView.setAdapter(adapter);
+//        List<Clock> clockList = mModel.getClockList();
+//        ClockListAdapter adapter = new ClockListAdapter(mRootView.getContext(), clockList);
+        mRootView.setAdapter();
     }
 
     @Override

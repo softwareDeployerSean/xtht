@@ -17,6 +17,7 @@ import com.jess.arms.utils.UiUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
+import com.veepoo.protocol.listener.data.IFindPhonelistener;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.model.datas.FindDeviceData;
@@ -24,6 +25,8 @@ import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.veepoo.protocol.model.datas.LongSeatData;
 import com.veepoo.protocol.model.datas.NightTurnWristeData;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
+import com.veepoo.protocol.model.settings.LongSeatSetting;
+import com.veepoo.protocol.operate.FindDeviceOperater;
 import com.veepoo.protocol.operate.LongSeatOperater;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
@@ -54,6 +57,8 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
 
     BasicSettingsAdapter adapter;
 
+    LongSeatData mLongSeat;
+
     private static final String TAG = "[TAN][" + BasicSettingsActivity.class.getSimpleName() + "]";
     VPOperateManager mVPOperateManager;
     FunctionSocailMsgData socailMsgData;
@@ -70,6 +75,7 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                 LogUtils.debugInfo(TAG + "------Don't handle all menue return");
                 return;
             }
+            LogUtils.debugInfo(TAG + "------update UI");
             mPresenter.loadBasicSettingsMenue(basicItemSupport);
         }
     };
@@ -135,32 +141,34 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
             @Override
             public void onLongSeatDataChange(LongSeatData longSeat) {
                 String message = "设置久坐-读取:\n" + longSeat.toString();
+
+                mLongSeat = longSeat;
                 LogUtils.debugInfo(TAG + message);
-                boolean isSupport = longSeat.getStatus() == LongSeatOperater.LSStatus.READ_SUCCESS;
+                boolean isSupport = longSeat.getStatus() == LongSeatOperater.LSStatus.OPEN_SUCCESS;
                 basicItemSupport.setLongSeat(isSupport ? 0 : 1);
                 sendMsg(null, 1);
             }
         });
 
-//        //手机该丢读取
-//        mVPOperateManager.readFindDevice(new IBleWriteResponse() {
-//            @Override
-//            public void onResponse(int i) {
-//                LogUtils.debugInfo(TAG + "手机该丢读取 onResponse=" + i);
-//            }
-//        } , new IFindDeviceDatalistener() {
-//            @Override
-//            public void onFindDevice(FindDeviceData findDeviceData) {
-//                String message = "防丢-读取:\n" + findDeviceData.toString();
-//                LogUtils.debugInfo(TAG + message);
-//                boolean isDeviceFound = false;
-//                if(findDeviceData != null) {
-//                    isDeviceFound  = true;
-//                }
-//                basicItemSupport.setFindDevice(isDeviceFound ? 0 : 1);
-//                sendMsg(null, 1);
-//            }
-//        });
+        //手机防丢失,默认给打开状态
+        mVPOperateManager.settingFindDevice(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "手机防丢失 onResponse=" + i);
+            }
+        }, new IFindDeviceDatalistener() {
+            @Override
+            public void onFindDevice(FindDeviceData findDeviceData) {
+                String message = "防丢-打开:\n" + findDeviceData.toString();
+                LogUtils.debugInfo(TAG + message);
+
+                LogUtils.debugInfo(TAG + "---------手机防丢失-----------" );
+                boolean isFdSupport = findDeviceData.getStatus() == FindDeviceOperater.FDStatus.OPEN_SUCCESS ? true : false;
+                basicItemSupport.setFindDevice(isFdSupport ? 0 : 1);
+                sendMsg(null, 1);
+            }
+        }, true);
+
     }
 
     @Override
@@ -175,12 +183,120 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
 
         adapter = new BasicSettingsAdapter(this, basicSettingsMenues);
 
+        adapter.setmOnSwitchButtonChanged(new BasicSettingsAdapter.OnSwitchButtonChanged() {
+            @Override
+            public void onSwitchOn(int position) {
+                if(position == 0) {  //消息推送
+                    setMsgPush(true);
+                }else if(position == 1) { //翻腕模式
+                    setFanWanModel(true);
+                }else if(position == 2) { //久坐提醒
+                    setLongSeat(true);
+                }else if(position == 3) { //手机防丢失
+                    setFindDevice(true);
+                }
+            }
+
+            @Override
+            public void onSwitchOff(int position) {
+                if(position == 0) {  //消息推送
+                    setMsgPush(true);
+                }else if(position == 1) { //翻腕模式
+                    setFanWanModel(false);
+                }else if(position == 2) { //久坐提醒
+                    setLongSeat(false);
+                }else if(position == 3) { //手机防丢失
+                    setFindDevice(false);
+                }
+            }
+        });
+
         basicSettingsRecylcerView.setLayoutManager(new LinearLayoutManager(this));
         basicSettingsRecylcerView.addItemDecoration(new RecycleViewDivider(
                 this, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
         basicSettingsRecylcerView.setAdapter(adapter);
 
 
+    }
+
+    private void setMsgPush(boolean b) {
+
+    }
+
+    private void setFanWanModel(boolean b) {
+        mVPOperateManager.settingNightTurnWriste(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "设置夜间转腕[也称抬手亮屏] onResponse i=" + i);
+            }
+        }, new INightTurnWristeDataListener() {
+            @Override
+            public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
+                String message = "夜间转腕-打开 or 关闭: b=" + b + "," + nightTurnWristeData.toString();
+                LogUtils.debugInfo(TAG + message);
+            }
+        }, b);
+    }
+
+    private void setLongSeat(boolean b) {
+        if(b) {
+            mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int i) {
+                    LogUtils.debugInfo(TAG + "设置久坐-打开 onResponse i=" + i);
+                }
+            }, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
+                @Override
+                public void onLongSeatDataChange(LongSeatData longSeat) {
+                    String message = "设置久坐-打开:\n" + longSeat.toString();
+                    LogUtils.debugInfo(TAG + message);
+                }
+            });
+        }else {
+            mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int i) {
+                    LogUtils.debugInfo(TAG + "设置久坐-关闭 onResponse i=" + i);
+                }
+            }, new LongSeatSetting(10, 40, 12, 40, 40, false), new ILongSeatDataListener() {
+
+                @Override
+                public void onLongSeatDataChange(LongSeatData longSeat) {
+                    String message = "设置久坐-关闭:\n" + longSeat.toString();
+                    LogUtils.debugInfo(TAG + message);
+                }
+            });
+        }
+    }
+
+    private void setFindDevice(boolean b) {
+        if(b) {
+            mVPOperateManager.settingFindDevice(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int i) {
+                    LogUtils.debugInfo(TAG + "防丢-打开 onResponse i=" + i);
+                }
+            }, new IFindDeviceDatalistener() {
+                @Override
+                public void onFindDevice(FindDeviceData findDeviceData) {
+                    String message = "防丢-打开:\n" + findDeviceData.toString();
+                    LogUtils.debugInfo(TAG + message);
+                }
+            }, true);
+        }else {
+            mVPOperateManager.settingFindDevice(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int i) {
+                    LogUtils.debugInfo(TAG + "防丢-关闭 onResponse i=" + i);
+                }
+            }, new IFindDeviceDatalistener() {
+                @Override
+                public void onFindDevice(FindDeviceData findDeviceData) {
+                    String message = "防丢-关闭:\n" + findDeviceData.toString();
+                    LogUtils.debugInfo(TAG + message);
+                }
+            }, false);
+        }
     }
 
     @Override

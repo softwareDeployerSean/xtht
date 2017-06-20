@@ -23,6 +23,12 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
     private Context mContext;
     private List<BasicSettingsMenue> settingsMenues;
 
+    public void setmOnSwitchButtonChanged(OnSwitchButtonChanged mOnSwitchButtonChanged) {
+        this.mOnSwitchButtonChanged = mOnSwitchButtonChanged;
+    }
+
+    OnSwitchButtonChanged mOnSwitchButtonChanged;
+
     public BasicSettingsAdapter(Context context, List<BasicSettingsMenue> settingsMenues) {
         this.mContext = context;
         this.settingsMenues = settingsMenues;
@@ -57,6 +63,21 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
         }else {
             holder.sv.setState(false);
         }
+
+        holder.sv.setmOnStateTriggerListener(new SwitchView.OnStateTriggerListener() {
+            @Override
+            public void triggerOn() {
+                if(mOnSwitchButtonChanged != null) {
+                    mOnSwitchButtonChanged.onSwitchOn(position);
+                }
+            }
+            @Override
+            public void triggerOff() {
+                if(mOnSwitchButtonChanged != null) {
+                    mOnSwitchButtonChanged.onSwitchOff(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -76,5 +97,10 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
             sv = (SwitchView) view.findViewById(R.id.basic_settings_item_switchview);
             parent = (RelativeLayout) view.findViewById(R.id.basic_settings_item_parent);
         }
+    }
+
+    public interface OnSwitchButtonChanged {
+        void onSwitchOn(int position);
+        void onSwitchOff(int position);
     }
 }

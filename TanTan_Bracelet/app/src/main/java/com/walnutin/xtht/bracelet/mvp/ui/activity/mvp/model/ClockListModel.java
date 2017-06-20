@@ -10,6 +10,7 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Clock;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract;
 
@@ -30,11 +31,9 @@ public class ClockListModel extends BaseModel implements ClockListContract.Model
     }
 
     @Override
-    public List<Clock> getClockList() {
-        List<Clock> clockList = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
-            clockList.add(new Clock());
-        }
+    public List<AlarmSetting> getClockList() {
+        List<AlarmSetting> clockList = new ArrayList<>();
+
         return clockList;
     }
     @Override
