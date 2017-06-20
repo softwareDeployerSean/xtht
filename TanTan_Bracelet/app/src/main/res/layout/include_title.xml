@@ -35,6 +35,8 @@
         tools:text="MVPArt" />
 
     <TextView
+        android:padding="@dimen/dimen_10px"
+        android:background="@drawable/toobar_right"
         android:id="@+id/toolbar_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

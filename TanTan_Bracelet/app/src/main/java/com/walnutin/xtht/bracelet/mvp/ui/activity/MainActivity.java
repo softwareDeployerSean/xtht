@@ -1,16 +1,20 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.rance.library.ButtonData;
 import com.rance.library.ButtonEventListener;
 import com.rance.library.SectorMenuButton;
@@ -23,7 +27,12 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.MainFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.MineFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.MyViewPager;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 import com.zhy.autolayout.AutoRelativeLayout;
+
+import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +41,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jess.arms.integration.AppManager.APPMANAGER_MESSAGE;
+import static com.jess.arms.integration.AppManager.SHOW_SNACKBAR;
+
 /**
  * Created by suns on 2017-06-13.
  */
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements OnItemClickListener, OnDismissListener {
     @BindView(R.id.viewpager)
     ContainerViewPager viewpager;
     @BindView(R.id.radio_main)
@@ -68,7 +80,7 @@ public class MainActivity extends FragmentActivity {
     RadioGroup radiogroup;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-
+    AlertView alertView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +99,7 @@ public class MainActivity extends FragmentActivity {
         ivBack.setVisibility(View.GONE);
         bottom_sector_menu.setButtonDatas(buttonDatas);
         setListener(bottom_sector_menu);
-        //DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
+        DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
     }
 
     private void setListener(final SectorMenuButton button) {
@@ -179,6 +191,46 @@ public class MainActivity extends FragmentActivity {
                 break;
         }
     }
+
+
+    @Override
+    public void onDismiss(Object o) {
+
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        switch (position){
+            case 0:
+                Message message = new Message();
+                message.what = AppManager.APP_EXIT;
+                message.arg1 = 0;
+                EventBus.getDefault().post(message, APPMANAGER_MESSAGE);
+                break;
+        }
+    }
+
+    public void exit() {
+        alertView = new AlertView(null, getString(R.string.exit), getString(R.string.canecl), new String[]{getString(R.string.confirm)}, null, this, AlertView.Style.Alert, this)
+                .setCancelable(true).setOnDismissListener(this);
+        alertView.show();
+    }
+
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
+
 
 
 }

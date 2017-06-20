@@ -18,7 +18,7 @@
         android:layout_marginTop="69px"
         android:background="@null"
         android:hint="@string/new_pwd"
-        android:maxLength="11"
+        android:maxLength="16"
         android:textColor="@color/black_444444"
         android:textColorHint="@color/grey_BBBBBB"
         android:textSize="@dimen/dimen_18px" />
@@ -35,7 +35,7 @@
         android:layout_marginTop="10px"
         android:background="@null"
         android:hint="@string/firm_pwd"
-        android:maxLength="11"
+        android:maxLength="16"
         android:textColor="@color/black_444444"
         android:textColorHint="@color/grey_BBBBBB"
         android:textSize="@dimen/dimen_18px" />

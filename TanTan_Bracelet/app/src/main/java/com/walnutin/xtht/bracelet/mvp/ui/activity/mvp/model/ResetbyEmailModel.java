@@ -10,6 +10,8 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
+import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ResetbyEmailContract;
 
@@ -29,10 +31,17 @@ public class ResetbyEmailModel extends BaseModel implements ResetbyEmailContract
         this.mApplication = application;
     }
 
+    @Override
+    public Observable<String> get_code(String email) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .sendcode(email);
+    }
+
 
     @Override
-    public Observable<UserBean> get_registdata(RequestBody body) {
-        return null;
+    public Observable<String> verify_code(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .validCode(body);
     }
 
     @Override

@@ -44,7 +44,7 @@
             android:layout_marginLeft="20px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="请输入昵称"
+            android:hint="请输入昵称"
             android:textColor="@color/black_444444"
             android:textSize="18px"
             android:background="@null"
@@ -129,7 +129,7 @@
             android:layout_marginLeft="20px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="170cm"
+            android:text="170[cm]"
             android:textColor="@color/black_444444"
             android:textSize="18px"
             android:background="@drawable/menu_item_selector" />
@@ -157,7 +157,7 @@
             android:layout_marginLeft="20px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="45kg"
+            android:text="45[kg]"
             android:textColor="@color/black_444444"
             android:textSize="18px"
             android:background="@drawable/menu_item_selector" />

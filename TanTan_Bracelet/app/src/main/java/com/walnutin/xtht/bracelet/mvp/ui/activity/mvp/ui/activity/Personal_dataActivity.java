@@ -3,6 +3,8 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,11 +32,15 @@ import com.jess.arms.utils.UiUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
+import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
 import com.walnutin.xtht.bracelet.app.utils.PictureCutUtils;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerPersonal_dataComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.Personal_dataModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.Personal_dataContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.Personal_dataPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
@@ -86,6 +92,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
      * 最终剪切后的结果
      **/
     private static final int CODE_RESULT_REQUEST = 2;
+    int change_img = 0;
+    SharedPreferences sharedPreferences=DataHelper.getSharedPerference(MyApplication.getAppContext());
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -103,9 +111,19 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         return R.layout.activity_personal_data; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private String user_photo_url;
+    private Bitmap bitmap;
     @Override
     public void initData(Bundle savedInstanceState) {
         toolbarRight.setText(getString(R.string.ok));
+        user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username",""),"");
+        if (!user_photo_url.equals("")){
+            bitmap = BitmapUtil.getScaleBitmap(user_photo_url,100,100);//图片压缩
+            if (bitmap != null){
+                check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));
+            }else
+                check_head_photo.setImageResource(R.mipmap.touxaing);
+        }
         initOptionData();
         initCustomTimePicker();
         initCustomOptionPicker_height();
@@ -115,18 +133,18 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     @Override
     public void showLoading() {
-
+        CustomProgressDialog.show(this);
     }
 
     @Override
     public void hideLoading() {
-
+        CustomProgressDialog.dissmiss();
     }
 
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        UiUtils.SnackbarText(message);
+        ToastUtils.showToast(message, this);
     }
 
     @Override
@@ -140,7 +158,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         finish();
     }
 
-    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight,R.id.tv_sex})
+    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.check_head_photo:
@@ -157,6 +175,26 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 break;
             case R.id.tv_sex:
                 Show_sex();
+                break;
+            case R.id.toolbar_right:
+                String name = tvName.getText().toString().trim();
+                String sex = tvSex.getText().toString().trim();
+                String birth = tvBirthday.getText().toString().trim();
+                String height = tvHeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
+                String weight = tvWeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
+                String dailyGoals = tvTarget.getText().toString().trim();
+                String weightOfUnit = tvWeight.getText().toString().trim().substring(tvWeight.getText().toString().length() - 3, tvWeight.getText().toString().length() - 1);
+                LogUtils.debugInfo("weight=" + weight + "weightOfUnit=" + weightOfUnit);
+                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), Integer.parseInt(height), weightOfUnit, Integer.parseInt(weight));
+
+                if (change_img==1){
+                    change_img=0;
+                    mPresenter.post_img();
+
+                }
+
+
+
                 break;
         }
     }
@@ -218,7 +256,6 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                             data.getData(), CODE_RESULT_REQUEST);
                     break;
                 case 1:
-                    LogUtils.debugInfo("huilai");
                     if (photoUri == null) {
                         LogUtils.debugInfo("photoUri=null");
                     } else {
@@ -228,7 +265,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     }
                     break;
                 case 2:
-                    PictureCutUtils.setImageToHeadView(data, DataHelper.getSharedPerference(MyApplication.getAppContext()), check_head_photo);//设置图片框,并且保存
+                    change_img = 1;
+                    PictureCutUtils.setImageToHeadView(data,sharedPreferences , check_head_photo);//设置图片框,并且保存
                     break;
 
             }
@@ -392,7 +430,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
                 String tx = options1Items_weight.get(options1) + options2Items_weight.get(options1);
-                tvHeight.setText(tx);
+                tvWeight.setText(tx);
             }
         })
                 .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {

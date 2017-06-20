@@ -18,7 +18,7 @@
         android:layout_marginTop="69px"
         android:background="@null"
         android:hint="@string/email"
-        android:maxLength="20"
+        android:maxLength="30"
         android:textColorHint="@color/grey_BBBBBB"
         android:textSize="@dimen/dimen_18px"
         android:layout_marginBottom="@dimen/dimen_10px"

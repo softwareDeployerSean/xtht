@@ -70,6 +70,7 @@ public class CustomProgressDialog {
     public static void dissmiss() {
         if (dialog != null) {
             dialog.dismiss();
+            dialog=null;
         }
     }
 

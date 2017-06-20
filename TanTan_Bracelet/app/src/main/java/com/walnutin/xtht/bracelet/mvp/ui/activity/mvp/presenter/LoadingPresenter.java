@@ -62,7 +62,8 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
                     public void onNext(UserBean users) {
                         mRootView.hideLoading();
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
-                        DataHelper.setStringSF(MyApplication.getAppContext(), "uesrname", name);
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "username", name);
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
                         mRootView.load_success();
                         //mRootView.hideLoading();
                     }

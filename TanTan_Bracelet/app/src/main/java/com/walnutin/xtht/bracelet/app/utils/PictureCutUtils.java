@@ -130,7 +130,7 @@ public class PictureCutUtils {
     public static void setImageToHeadView(Intent arg2, SharedPreferences sharedPreferences, ImageView check_head_photo) {
         Bitmap bitmap;
         Bundle extras = arg2.getExtras();
-        String user_photo = sharedPreferences.getString("user_phone","");//账户号——用户的唯一标识
+        String user_photo = sharedPreferences.getString("username","");//账户号——用户的唯一标识
         String filePath = buildPath(user_photo);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();

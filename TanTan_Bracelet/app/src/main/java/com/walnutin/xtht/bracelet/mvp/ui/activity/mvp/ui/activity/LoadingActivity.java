@@ -30,9 +30,14 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -124,7 +129,6 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                 } else {
                     mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
                 }
-                launchActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.tv_froget_pwd://点击保存按钮
                 forgetpwd();
@@ -143,7 +147,25 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void onItemClick(Object o, int position) {
         switch (position) {
             case 0:
-                launchActivity(new Intent(LoadingActivity.this, ResetbyPhoneActivity.class));
+
+                // 打开注册页面
+                RegisterPage registerPage = new RegisterPage();
+                registerPage.setRegisterCallback(new EventHandler() {
+                    public void afterEvent(int event, int result, Object data) {
+                        // 解析注册结果
+                        if (result == SMSSDK.RESULT_COMPLETE) {
+                            @SuppressWarnings("unchecked")
+                            HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                            String country = (String) phoneMap.get("country");
+                            String phone = (String) phoneMap.get("phone");
+                            Intent intent = new Intent(LoadingActivity.this, ResetpwdActivity.class);
+                            intent.putExtra("username", phone);
+                            launchActivity(intent);
+                        } else {
+                        }
+                    }
+                });
+                registerPage.show(this);
                 break;
             case 1:
                 launchActivity(new Intent(LoadingActivity.this, ResetbyEmailActivity.class));
@@ -170,8 +192,9 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     @Override
     public void load_success() {
         ToastUtils.showToast(getString(R.string.load_success), this);
-        launchActivity(new Intent(this, MainActivity.class));
-        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 }
