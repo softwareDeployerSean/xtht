@@ -12,6 +12,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         //lambda
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
+        classpath 'com.novoda:bintray-release:0.4.0'
     }
 }
 

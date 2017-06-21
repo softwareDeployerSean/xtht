@@ -53,7 +53,7 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
     }
 
 
-    public void change_data(String nickname, String sex, String birth, int height, int weight, String weightOfUnit, int dailyGoals) {
+    public void change_data(String nickname, String sex, String birth, int dailyGoals,double height,String weightOfUnit, double weight ) {
         HashMap hashMap = new HashMap();
         hashMap.put("nickname", nickname);
         hashMap.put("sex", sex);
@@ -96,15 +96,15 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
         SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
         String path = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
         File file = new File(path);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), file);
 
             LogUtils.debugInfo("数据是"+file.exists()+file.getName());
         // MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", "touxiang.jpg", requestFile);
 
 
 
-        mModel.post_img(RequestBody.create(null, token), filePart)
+        mModel.post_img(RequestBody.create(MediaType.parse("multipart/form-data"), token), filePart)
                 .subscribeOn(Schedulers.io()).doOnSubscribe(disposable -> {
             //mRootView.showLoading();//显示上拉刷新的进度条
         })

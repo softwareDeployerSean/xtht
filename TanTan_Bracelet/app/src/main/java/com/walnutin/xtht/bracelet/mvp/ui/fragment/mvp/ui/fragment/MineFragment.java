@@ -1,19 +1,26 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
+import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
@@ -34,6 +41,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     @BindView(R.id.refresh)
     MaterialRefreshLayout refresh;
+    @BindView(R.id.check_head_photo)
+    ImageView check_head_photo;
+    SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -55,9 +65,20 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
         return inflater.inflate(R.layout.fragment_mine, container, false);
     }
 
+    private String user_photo_url;
+    private Bitmap bitmap;
+
     @Override
     public void initData(Bundle savedInstanceState) {
 
+        user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
+        if (!user_photo_url.equals("")) {
+            bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
+            if (bitmap != null) {
+                check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));
+            } else
+                check_head_photo.setImageResource(R.mipmap.touxaing);
+        }
     }
 
     private void init_refresh() {

@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,7 +22,9 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.lib.WheelView;
 import com.bigkoo.pickerview.listener.CustomListener;
+import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.component.AppComponent;
@@ -44,6 +47,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,18 +86,32 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     private RxPermissions mRxPermissions;
 
     private TimePickerView pvCustomTime;
-    private OptionsPickerView pvCustomOptions_height, pvCustomOptions_weight;
+    private OptionsPickerView pvCustomOptions_height, pvCustomOptions_weight, pvCustomOptions_foot;
+    int tag = 0;
 
+    //单位是cm
     private ArrayList<String> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    //单位是ft
+    private ArrayList<String> options1Items_ft = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items_ft = new ArrayList<>();
+
+    //单位是kg
     private ArrayList<String> options1Items_weight = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items_weight = new ArrayList<>();
+    //单位是lb
+    private ArrayList<String> options1Items_weight_lb = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items_weight_lb = new ArrayList<>();
+
+
+    private ArrayList<String> options1Items_foot = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items_foot2 = new ArrayList<>();
     /**
      * 最终剪切后的结果
      **/
     private static final int CODE_RESULT_REQUEST = 2;
     int change_img = 0;
-    SharedPreferences sharedPreferences=DataHelper.getSharedPerference(MyApplication.getAppContext());
+    SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -113,21 +131,23 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     private String user_photo_url;
     private Bitmap bitmap;
+
     @Override
     public void initData(Bundle savedInstanceState) {
         toolbarRight.setText(getString(R.string.ok));
-        user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username",""),"");
-        if (!user_photo_url.equals("")){
-            bitmap = BitmapUtil.getScaleBitmap(user_photo_url,100,100);//图片压缩
-            if (bitmap != null){
+        user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
+        if (!user_photo_url.equals("")) {
+            bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
+            if (bitmap != null) {
                 check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));
-            }else
+            } else
                 check_head_photo.setImageResource(R.mipmap.touxaing);
         }
         initOptionData();
         initCustomTimePicker();
         initCustomOptionPicker_height();
         initCustomOptionPicker_weight();
+        initCustomOptionPicker_foot();
     }
 
 
@@ -158,7 +178,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         finish();
     }
 
-    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right})
+    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.check_head_photo:
@@ -182,25 +202,24 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 String birth = tvBirthday.getText().toString().trim();
                 String height = tvHeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
                 String weight = tvWeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
-                String dailyGoals = tvTarget.getText().toString().trim();
+                String dailyGoals = tvTarget.getText().toString().trim().substring(0, tvTarget.getText().toString().length() - 3);
                 String weightOfUnit = tvWeight.getText().toString().trim().substring(tvWeight.getText().toString().length() - 3, tvWeight.getText().toString().length() - 1);
                 LogUtils.debugInfo("weight=" + weight + "weightOfUnit=" + weightOfUnit);
-                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), Integer.parseInt(height), weightOfUnit, Integer.parseInt(weight));
-
-                if (change_img==1){
-                    change_img=0;
+                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), Double.parseDouble(height), weightOfUnit,  Double.parseDouble(weight));
+                if (change_img == 1) {
+                    change_img = 0;
                     mPresenter.post_img();
 
                 }
-
-
-
+                break;
+            case R.id.tv_target:
+                pvCustomOptions_foot.show();
                 break;
         }
     }
 
     private void checkphoto() {
-        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, this, AlertView.Style.ActionSheet, this);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, this, AlertView.Style.ActionSheet, this).setCancelable(true);
         alertView.show();
     }
 
@@ -266,7 +285,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     break;
                 case 2:
                     change_img = 1;
-                    PictureCutUtils.setImageToHeadView(data,sharedPreferences , check_head_photo);//设置图片框,并且保存
+                    PictureCutUtils.setImageToHeadView(data, sharedPreferences, check_head_photo);//设置图片框,并且保存
                     break;
 
             }
@@ -362,6 +381,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 .setType(new boolean[]{true, true, true, false, false, false})
                 .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
                 .setDividerColor(Color.WHITE)
+                .isDialog(true)
                 .build();
 
     }
@@ -371,6 +391,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         return format.format(date);
     }
 
+
+    //static int position1 = 110;
+
     private void initCustomOptionPicker_height() {//条件选择器初始化，自定义布局
         /**
          * @description
@@ -379,12 +402,24 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
          * 自定义布局中，id为 optionspicker 或者 timepicker 的布局以及其子控件必须要有，否则会报空指针。
          * 具体可参考demo 里面的两个自定义layout布局。
          */
+
         pvCustomOptions_height = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1) + options2Items.get(options1);
+                String tx = "";
+                if (option2 == 0) {
+                    tx = options1Items.get(options1) + options2Items.get(options1).get(option2);
+                } else if (option2 == 1) {
+                    tx = options1Items_ft.get(options1) + options2Items_ft.get(options1).get(option2);
+                }
+
                 tvHeight.setText(tx);
+            }
+        }, new OptionsPickerView.OnOptionsSmoothListener() {
+            @Override
+            public void onOptionsSmooth(int options1, int options2, int options3, View v) {
+                LogUtils.debugInfo("options1==" + options1);
             }
         })
                 .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
@@ -392,6 +427,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     public void customLayout(View v) {
                         final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
                         TextView ivCancel = (TextView) v.findViewById(R.id.iv_cancel);
+                        WheelView options2 = (WheelView) v.findViewById(R.id.options2);
+                        WheelView options1 = (WheelView) v.findViewById(R.id.options1);
                         tvSubmit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -399,6 +436,29 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                                 pvCustomOptions_height.dismiss();
                             }
                         });
+
+                        options1.setOnItemSelectedListener(new OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(int index) {
+                                //position1 = index;
+                            }
+                        });
+
+
+                        options2.setOnItemSelectedListener(new OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(int index) {
+                                tag = 1;
+                                if (index == 0) {
+                                    pvCustomOptions_height.setPicker(options1Items, options2Items);//添加数据
+                                    pvCustomOptions_height.setSelectOptions(110, 0);
+                                } else if (index == 1) {
+                                    pvCustomOptions_height.setPicker(options1Items_ft, options2Items_ft);//添加数据
+                                    pvCustomOptions_height.setSelectOptions(110, 1);
+                                }
+                            }
+                        });
+
 
                         ivCancel.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -429,7 +489,13 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                String tx = options1Items_weight.get(options1) + options2Items_weight.get(options1);
+                String tx = "";
+                if (option2 == 0) {
+                    tx = options1Items_weight.get(options1) + options2Items_weight.get(options1).get(option2);
+                } else if (option2 == 1) {
+                    tx = options1Items_weight_lb.get(options1) + options2Items_weight_lb.get(options1).get(option2);
+                }
+
                 tvWeight.setText(tx);
             }
         })
@@ -438,6 +504,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     public void customLayout(View v) {
                         final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
                         TextView ivCancel = (TextView) v.findViewById(R.id.iv_cancel);
+                        WheelView options2 = (WheelView) v.findViewById(R.id.options2);
+                        WheelView options1 = (WheelView) v.findViewById(R.id.options1);
                         tvSubmit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -445,6 +513,29 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                                 pvCustomOptions_weight.dismiss();
                             }
                         });
+
+                        options1.setOnItemSelectedListener(new OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(int index) {
+                                //position1 = index;
+                            }
+                        });
+
+
+                        options2.setOnItemSelectedListener(new OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(int index) {
+                                tag = 1;
+                                if (index == 0) {
+                                    pvCustomOptions_weight.setPicker(options1Items_weight, options2Items_weight);//添加数据
+                                    pvCustomOptions_weight.setSelectOptions(15, 0);
+                                } else if (index == 1) {
+                                    pvCustomOptions_weight.setPicker(options1Items_weight_lb, options2Items_weight_lb);//添加数据
+                                    pvCustomOptions_weight.setSelectOptions(15, 1);
+                                }
+                            }
+                        });
+
 
                         ivCancel.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -463,28 +554,111 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     }
 
-    void initOptionData() {
+    private void initCustomOptionPicker_foot() {//条件选择器初始化，自定义布局
+        /**
+         * @description
+         *
+         * 注意事项：
+         * 自定义布局中，id为 optionspicker 或者 timepicker 的布局以及其子控件必须要有，否则会报空指针。
+         * 具体可参考demo 里面的两个自定义layout布局。
+         */
+        pvCustomOptions_foot = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                String tx = options1Items_foot.get(options1) + options2Items_foot2.get(options1);
+                tvTarget.setText(tx);
+            }
+        })
+                .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+                    @Override
+                    public void customLayout(View v) {
+                        final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                        TextView ivCancel = (TextView) v.findViewById(R.id.iv_cancel);
+                        tvSubmit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                pvCustomOptions_foot.returnData();
+                                pvCustomOptions_foot.dismiss();
+                            }
+                        });
 
+                        ivCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                pvCustomOptions_foot.dismiss();
+                            }
+                        });
+
+                    }
+                })
+                .isDialog(true)
+                .build();
+
+        pvCustomOptions_foot.setPicker(options1Items_foot, options2Items_foot2);//添加数据
+        pvCustomOptions_foot.setSelectOptions(6, 0);
+
+    }
+
+
+    void initOptionData() {
+        DecimalFormat df = new DecimalFormat("######0.0000");
+
+        //身高是cm
         for (int i = 60; i < 240; i++) {
             options1Items.add(i + "");
         }
-
         //选项2
         ArrayList<String> options2Items_01 = new ArrayList<>();
         options2Items_01.add("cm");
+        options2Items_01.add("ft");
         for (int i = 0; i < options1Items.size(); i++) {
             options2Items.add(options2Items_01);
         }
+        //身高是英尺ft
+        for (int i = 60; i < 240; i++) {
+            options1Items_ft.add(df.format(i * 0.0328) + "");
+        }
+        //选项2
+        ArrayList<String> options2Items_01_ft = new ArrayList<>();
+        options2Items_01_ft.add("cm");
+        options2Items_01_ft.add("ft");
+        for (int i = 0; i < options1Items_ft.size(); i++) {
+            options2Items_ft.add(options2Items_01_ft);
+        }
 
+
+        //体重 单位kg
         for (int i = 30; i < 130; i++) {
             options1Items_weight.add(i + "");
         }
-
         //选项2
         ArrayList<String> options2Items_02 = new ArrayList<>();
         options2Items_02.add("kg");
+        options2Items_02.add("lb");
         for (int i = 0; i < options1Items_weight.size(); i++) {
             options2Items_weight.add(options2Items_02);
+        }
+        //体重 单位lb
+        for (int i = 30; i < 130; i++) {
+            options1Items_weight_lb.add(df.format(i * 2.2065) + "");
+        }
+
+        for (int i = 0; i < options1Items_weight_lb.size(); i++) {
+            options2Items_weight_lb.add(options2Items_02);
+        }
+
+
+        //目标
+        for (int i = 1; i < 30; i++) {
+            options1Items_foot.add(i * 1000 + "");
+        }
+
+        //选项2
+        ArrayList<String> options2Items_03 = new ArrayList<>();
+        options2Items_03.add("步");
+        for (int i = 0; i < options1Items_foot.size(); i++) {
+            options2Items_foot2.add(options2Items_03);
         }
 
     }

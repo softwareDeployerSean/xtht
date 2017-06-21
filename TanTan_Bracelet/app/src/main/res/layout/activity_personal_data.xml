@@ -49,33 +49,33 @@
             android:textSize="18px"
             android:background="@null"
             />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="53px"
-        android:layout_marginTop="1px"
-        android:background="@drawable/menu_item_selector"
-        android:gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1px"
+            android:background="@drawable/menu_item_selector"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:layout_width="100px"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20px"
-            android:text="性别："
-            android:textColor="@color/black_444444"
-            android:textSize="18px" />
+            <TextView
+                android:layout_width="100px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:text="性别："
+                android:textColor="@color/black_444444"
+                android:textSize="18px" />
 
-        <TextView
-            android:id="@+id/tv_sex"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20px"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="男"
-            android:textColor="@color/black_444444"
-            android:textSize="18px" />
+            <TextView
+                android:id="@+id/tv_sex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="男"
+                android:textColor="@color/black_444444"
+                android:textSize="18px" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -103,7 +103,6 @@
             android:text="1992年1月1日"
             android:textColor="@color/black_444444"
             android:textSize="18px"
-            android:background="@drawable/menu_item_selector"
             />
     </LinearLayout>
 
@@ -131,8 +130,7 @@
             android:gravity="center"
             android:text="170[cm]"
             android:textColor="@color/black_444444"
-            android:textSize="18px"
-            android:background="@drawable/menu_item_selector" />
+            android:textSize="18px"/>
     </LinearLayout>
 
     <LinearLayout
@@ -159,8 +157,7 @@
             android:gravity="center"
             android:text="45[kg]"
             android:textColor="@color/black_444444"
-            android:textSize="18px"
-            android:background="@drawable/menu_item_selector" />
+            android:textSize="18px"/>
     </LinearLayout>
 
     <LinearLayout
@@ -178,14 +175,14 @@
             android:textColor="@color/black_444444"
             android:textSize="18px" />
 
-        <EditText
+        <TextView
             android:id="@+id/tv_target"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="8000"
+            android:text="8000[步]"
             android:textColor="@color/black_444444"
             android:textSize="18px"
             android:inputType="number"

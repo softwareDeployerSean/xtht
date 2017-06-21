@@ -222,7 +222,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            exit();
+            if (alertView.isShowing()){
+                alertView.dismiss();
+            }else {
+                exit();
+            }
+
             return false;
         }
         return super.onKeyDown(keyCode, event);

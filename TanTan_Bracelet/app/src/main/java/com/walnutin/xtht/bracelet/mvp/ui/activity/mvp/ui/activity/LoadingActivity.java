@@ -139,7 +139,7 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
     @Override
     public void forgetpwd() {
-        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.reset_pwdbyphone), getString(R.string.reset_pwdbyemail)}, this, AlertView.Style.ActionSheet, this);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.reset_pwdbyphone), getString(R.string.reset_pwdbyemail)}, this, AlertView.Style.ActionSheet, this).setCancelable(true);
         alertView.show();
     }
 

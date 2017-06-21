@@ -25,7 +25,7 @@
         <item name="android:paddingBottom">6dp</item>
         <item name="android:button">@null</item>
         <item name="android:gravity">center_horizontal|bottom</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@drawable/radio_button_color</item>
         <item name="android:textSize">12sp</item>
     </style>
 

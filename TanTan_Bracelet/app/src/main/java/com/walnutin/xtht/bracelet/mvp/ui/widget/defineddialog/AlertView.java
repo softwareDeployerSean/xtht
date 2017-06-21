@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 
 import java.lang.ref.WeakReference;
@@ -394,8 +395,10 @@ public class AlertView {
     private final View.OnTouchListener onCancelableTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            LogUtils.debugInfo("小时吧。。。");
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 dismiss();
+                LogUtils.debugInfo("小时吧。。。");
             }
             return false;
         }

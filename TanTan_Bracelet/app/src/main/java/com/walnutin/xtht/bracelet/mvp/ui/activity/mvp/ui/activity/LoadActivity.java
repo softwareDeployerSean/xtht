@@ -83,7 +83,7 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
 
     @Override
     public void regist() {
-        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.registbyphone), getString(R.string.registbyemail)}, this, AlertView.Style.ActionSheet, this);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.registbyphone), getString(R.string.registbyemail)}, this, AlertView.Style.ActionSheet, this).setCancelable(true);
         alertView.show();
     }
 
