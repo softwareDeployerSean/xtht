@@ -8,8 +8,13 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -27,6 +32,9 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ClockListModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ClockListPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.ClockListAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
 
 import java.util.ArrayList;
@@ -47,10 +55,15 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     @BindView(R.id.toolbar_right)
     TextView toolbarRight;
 
+    PickerView hour_pv;
+    PickerView minute_pv;
+
     VPOperateManager mVPOperateManager;
 
     List<AlarmSetting> mAlarmSettingList = new ArrayList<AlarmSetting>();
     ClockListAdapter clockListAdapter;
+
+    AlertView mAlertView;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -119,10 +132,64 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_right:
-                Intent clockAddIntent = new Intent(this, ClockAddActivity.class);
-                startActivity(clockAddIntent);
+                showAddClockDialog();
                 break;
         }
+    }
+    private ViewGroup decorView;
+    private ViewGroup rootView;
+    private ViewGroup contentContainer;
+    View contentView;
+    private void showAddClockDialog() {
+        decorView = (ViewGroup) this.getWindow().getDecorView().findViewById(android.R.id.content);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
+        contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+
+        contentContainer.setLayoutParams(params);
+
+        contentView = layoutInflater.inflate(R.layout.clock_add_dialog, contentContainer, false);
+
+        hour_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_hour_pv);
+        minute_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_minute_pv);
+
+        List<String> hours = new ArrayList<String>();
+        List<String> minutes = new ArrayList<String>();
+
+        for (int i = 0; i < 24; i++) {
+            hours.add(i + "");
+        }
+        for (int i = 0; i < 60; i++) {
+            minutes.add(i < 10 ? "0" + i : "" + i);
+        }
+
+        hour_pv.setData(hours);
+        hour_pv.setOnSelectListener(new PickerView.onSelectListener() {
+
+            @Override
+            public void onSelect(String text) {
+                Toast.makeText(ClockListActivity.this, "选择了 " + text + " 秒",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        hour_pv.setSelected(0);
+
+        minute_pv.setData(minutes);
+        minute_pv.setOnSelectListener(new PickerView.onSelectListener() {
+
+            @Override
+            public void onSelect(String text) {
+                Toast.makeText(ClockListActivity.this, "选择了 " + text + " 分",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        contentContainer.addView(contentView);
+
+        decorView.addView(rootView);
     }
 
     @Override

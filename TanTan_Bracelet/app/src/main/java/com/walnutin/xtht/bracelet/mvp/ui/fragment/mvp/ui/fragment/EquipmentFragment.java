@@ -1,6 +1,7 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +15,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -45,6 +49,7 @@ import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
@@ -56,6 +61,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.EquipmentModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.EquipmentPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.DrawableCenterButton;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 
 
 import java.util.ArrayList;
@@ -79,6 +85,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     private final int REQUEST_CODE = 1;
 
+    AlertView alertView;
+
     private static final int BAIDU_READ_PHONE_STATE = 100;
 
     List<SearchResult> mListData = new ArrayList<>();
@@ -89,7 +97,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     private Context mContext;
 
     private boolean mIsOadModel;
-
     @BindView(R.id.ep_search_btn)
     public DrawableCenterButton epSearchBtn;
 
@@ -128,12 +135,60 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.debugInfo(TAG1 + "onItemClick click");
+
+//                alertView = new AlertView(null, "\n连接中...\n\n\n", null, null, null, getActivity(), AlertView.Style.Alert, new com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(Object o, int position) {
+//
+//                    }
+//                });
+//
+//                alertView.show();
+
+                showDialog();
+
                 connectDevice(mListData.get(position));
             }
         });
 
         ePListRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         ePListRecyclerView.setAdapter(epSearchListAdapter);
+    }
+
+    private ViewGroup decorView;
+    private ViewGroup rootView;
+    private ViewGroup contentContainer;
+    View contentView;
+
+
+    private void showDialog() {
+        decorView = (ViewGroup) getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
+        contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP);
+
+        contentContainer.setLayoutParams(params);
+
+        contentView = layoutInflater.inflate(R.layout.ep_connected_alert, contentContainer, false);
+        FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+        p.setMargins(p.leftMargin, p.topMargin + 350, p.rightMargin, p.bottomMargin);
+        contentView.setLayoutParams(p);
+
+        contentContainer.addView(contentView);
+
+        decorView.addView(rootView);
+    }
+
+    private void dimissDialog() {
+        LogUtils.debugInfo(TAG1 + "dimissDialog decorView=" + decorView);
+        if(decorView != null) {
+//            contentContainer.removeView(contentView);
+//            rootView.removeView(contentContainer);
+            decorView.removeView(rootView);
+        }
     }
 
     @Override
@@ -296,8 +351,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     editor.putString("connected_address", mac);
                     editor.commit();
 
-                    //蓝牙与设备的连接状态
-//                    Logger.t(TAG).i("监听成功-可进行其他操作");
+                    dimissDialog();
+
                     LogUtils.debugInfo(TAG1 + "监听成功-可进行其他操作");
                     Intent intent = new Intent(mContext, EpConnectedActivity.class);
                     intent.putExtra("isoadmodel", mIsOadModel);
@@ -306,6 +361,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     startActivity(intent);
                 } else {
 //                    Logger.t(TAG).i("监听失败，重新连接");
+                    dimissDialog();
+                    ToastUtils.showToast("连接失败", getActivity());
                     LogUtils.debugInfo(TAG1 + "监听失败，重新连接");
                 }
 

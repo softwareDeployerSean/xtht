@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:gravity="center"
+        android:background="@drawable/ep_alert_radius"
+        android:text="连接中..."
+        android:textSize="12px"
+        android:textColor="@color/textColor_alert_button_others"
+        android:layout_width="175px"
+        android:layout_height="66px" />
+
+</com.zhy.autolayout.AutoLinearLayout>

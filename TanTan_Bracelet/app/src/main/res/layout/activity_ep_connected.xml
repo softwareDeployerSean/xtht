@@ -72,7 +72,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2px"
                     android:gravity="center"
-                    android:text="@string/dianliang"
                     android:textSize="@dimen/dimen_12px" />
 
                 <ImageView
