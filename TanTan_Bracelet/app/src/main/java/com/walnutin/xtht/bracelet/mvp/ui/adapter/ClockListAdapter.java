@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.veepoo.protocol.model.settings.AlarmSetting;
@@ -46,11 +47,15 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         AlarmSetting alarmSetting = clockList.get(position);
-        holder.timeTv.setText(alarmSetting.getHour() + ":" + alarmSetting.getMinute());
+        holder.timeTv.setText(alarmSetting.getHour() + ":" + (alarmSetting.getMinute() < 10 ? "0" + alarmSetting.getMinute() : alarmSetting.getMinute()));
         if(alarmSetting.isOpen()) {
-            holder.sv.setState(true);
+            if(holder.sv.getState() == SwitchView.STATE_SWITCH_OFF) {
+                holder.sv.setState(true);
+            }
         }else {
-            holder.sv.setState(false);
+            if(holder.sv.getState() == SwitchView.STATE_SWITCH_ON) {
+                holder.sv.setState(false);
+            }
         }
 
         holder.sv.setmOnStateTriggerListener(new SwitchView.OnStateTriggerListener() {
@@ -68,6 +73,15 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
                 }
             }
         });
+
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnSwitchChangedListenerer != null) {
+                    mOnSwitchChangedListenerer.onDeleteBtnClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -77,18 +91,18 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView timeTv;
-        TextView weekTv;
-
+        Button btnDelete;
         SwitchView sv;
         public MyViewHolder(View view) {
             super(view);
             timeTv = (TextView) view.findViewById(R.id.clock_list_item_time);
-            weekTv = (TextView) view.findViewById(R.id.clock_list_item_week);
             sv = (SwitchView) view.findViewById(R.id.clock_list_item_sw);
+            btnDelete = (Button) view.findViewById(R.id.clock_list_item_btn_delete);
         }
     }
     public interface OnSwitchChangedListenerer {
         void onSwitchOn(int position);
         void onSwitchOff(int position);
+        void onDeleteBtnClick(int position);
     }
 }

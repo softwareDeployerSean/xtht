@@ -4,12 +4,13 @@
     <color name="colorPrimaryDark">#3FA862</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
-    <color name="grey_D8D8D8">#D8D8D8 </color>
-    <color name="grey_BBBBBB">#BBBBBB </color>
-    <color name="grey_eeeeee">#eeeeee </color>
+    <color name="translate_background">#E0FBFBFB</color>
+    <color name="grey_D8D8D8">#D8D8D8</color>
+    <color name="grey_BBBBBB">#BBBBBB</color>
+    <color name="grey_eeeeee">#eeeeee</color>
 
     <!--  线  -->
-    <color name="line">#EDECEB </color>
+    <color name="line">#EDECEB</color>
 
     <!--  增加 按钮 颜色值  -->
     <color name="add">#7CBC30</color>
@@ -27,8 +28,7 @@
     <color name="gray888888">#888888</color>
 
 
-
-
+    <color name="transparent">#00000000</color>
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#40000000</color>
     <!--窗口背景颜色-->
@@ -55,8 +55,6 @@
 
     <color name="darkgray">#A9A9A9</color><!--暗灰色 -->
     <color name="yellowffaa33">#ffaa33</color>
-
-
 
 
 </resources>
