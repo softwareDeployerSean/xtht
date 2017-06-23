@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -29,6 +30,7 @@ import com.veepoo.protocol.model.settings.LongSeatSetting;
 import com.veepoo.protocol.operate.FindDeviceOperater;
 import com.veepoo.protocol.operate.LongSeatOperater;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBasicSettingsComponent;
@@ -239,33 +241,38 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
     }
 
     private void setLongSeat(boolean b) {
-        if(b) {
-            mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
-                @Override
-                public void onResponse(int i) {
-                    LogUtils.debugInfo(TAG + "设置久坐-打开 onResponse i=" + i);
-                }
-            }, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
-                @Override
-                public void onLongSeatDataChange(LongSeatData longSeat) {
-                    String message = "设置久坐-打开:\n" + longSeat.toString();
-                    LogUtils.debugInfo(TAG + message);
-                }
-            });
-        }else {
-            mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
-                @Override
-                public void onResponse(int i) {
-                    LogUtils.debugInfo(TAG + "设置久坐-关闭 onResponse i=" + i);
-                }
-            }, new LongSeatSetting(10, 40, 12, 40, 40, false), new ILongSeatDataListener() {
+        LogUtils.debugInfo(TAG + mLongSeat.toString());
+        if(mLongSeat != null) {
+            if (b) {
+                mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
+                    @Override
+                    public void onResponse(int i) {
+                        LogUtils.debugInfo(TAG + "设置久坐-打开 onResponse i=" + i);
+                    }
+                }, new LongSeatSetting(mLongSeat.getStartHour(), mLongSeat.getStartMinute(), mLongSeat.getEndHour(), mLongSeat.getEndMinute(), mLongSeat.getThreshold(), true), new ILongSeatDataListener() {
+                    @Override
+                    public void onLongSeatDataChange(LongSeatData longSeat) {
+                        String message = "设置久坐-打开:\n" + longSeat.toString();
+                        LogUtils.debugInfo(TAG + message);
+                    }
+                });
+            } else {
+                mVPOperateManager.settingLongSeat(new IBleWriteResponse() {
+                    @Override
+                    public void onResponse(int i) {
+                        LogUtils.debugInfo(TAG + "设置久坐-关闭 onResponse i=" + i);
+                    }
+                }, new LongSeatSetting(mLongSeat.getStartHour(), mLongSeat.getStartMinute(), mLongSeat.getEndHour(), mLongSeat.getEndMinute(), mLongSeat.getThreshold(), false), new ILongSeatDataListener() {
 
-                @Override
-                public void onLongSeatDataChange(LongSeatData longSeat) {
-                    String message = "设置久坐-关闭:\n" + longSeat.toString();
-                    LogUtils.debugInfo(TAG + message);
-                }
-            });
+                    @Override
+                    public void onLongSeatDataChange(LongSeatData longSeat) {
+                        String message = "设置久坐-关闭:\n" + longSeat.toString();
+                        LogUtils.debugInfo(TAG + message);
+                    }
+                });
+            }
+        }else {
+            ToastUtils.showToast(getResources().getString(R.string.not_supported_longseat), this);
         }
     }
 

@@ -46,6 +46,7 @@
     <string name="ep_connected">已连接</string>
     <string name="ep_not_connected">未连接</string>
     <string name="default_ep_name">BL_default</string>
+    <string name="not_supported_longseat">暂不支持久坐模式，请升级后再尝试</string>
     <string name="max_clock">设备最多支持三个闹钟，请关闭后再添加！</string>
 
     <!--注册 -->

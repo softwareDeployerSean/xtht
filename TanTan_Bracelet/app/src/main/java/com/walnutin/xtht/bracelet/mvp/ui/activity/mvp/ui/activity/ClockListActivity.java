@@ -40,6 +40,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListene
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -80,18 +82,26 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    sortClock();
                     mPresenter.loadClockList();
                     break;
                 case 1:
-                    for(int i = 0; i < mAlarmSettingList.size(); i++) {
-                        if(mAlarmSettingList.get(i).getAlarmTime() > 0) {
-                        }
-                    }
+                    sortClock();
                     clockListAdapter.notifyDataSetChanged();
                     break;
             }
         }
     };
+
+    private void sortClock() {
+        Collections.sort(mAlarmSettingList, new Comparator<AlarmSetting>() {
+            @Override
+            public int compare(AlarmSetting a1, AlarmSetting a2) {
+                int c = a2.getAlarmTime() - a1.getAlarmTime();
+                return c;
+            }
+        });
+    }
 
     private void sendMsg(String message, int what) {
         if (message == null || message.equals("")) {
@@ -297,12 +307,46 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
 
             @Override
             public void onDeleteBtnClick(int position) {
-
+                deleteClock(position);
             }
         });
 
         clockListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         clockListRecyclerView.setAdapter(clockListAdapter);
+    }
+
+    private void deleteClock(int position) {
+
+        for (int i = 0; i < mAlarmSettingList.size(); i++) {
+            if (i == position) {
+                mAlarmSettingList.remove(i);
+                AlarmSetting as = new AlarmSetting(0, 0, false);
+                mAlarmSettingList.add(as);
+            }
+        }
+
+
+        mVPOperateManager.settingAlarm(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "删除闹钟 position=" + position + ",  onResponse i =" + i);
+            }
+        }, new IAlarmDataListener() {
+            @Override
+            public void onAlarmDataChangeListener(AlarmData alarmData) {
+                String message = "删除闹钟:\n" + alarmData.toString();
+                mAlarmSettingList.clear();
+
+                List<AlarmSetting> list = alarmData.getAlarmSettingList();
+
+                for(int i = 0; i < list.size(); i++) {
+                    mAlarmSettingList.add(list.get(i));
+                }
+
+                sendMsg(null, 1);
+                LogUtils.debugInfo(TAG + message);
+            }
+        }, mAlarmSettingList);
     }
 
     private void updateClock(int position, boolean isOpen) {
