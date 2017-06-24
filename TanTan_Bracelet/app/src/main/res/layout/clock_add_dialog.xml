@@ -1,106 +1,119 @@
 <com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/transtwhite"
     android:gravity="center">
 
-    <RelativeLayout
-        android:id="@+id/clock_add_picker_alert_parent"
+    <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="166px"
-        android:layout_below="@id/clock_add_titlebar"
-        android:layout_centerInParent="true"
-        android:background="@color/bgColor_actionsheet_cancel_nor"
-        android:gravity="center">
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
-        <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
-            android:id="@+id/clock_add_alert_hour_pv"
-            android:layout_width="40px"
-            android:layout_height="186px"
-            android:layout_marginBottom="15px"
-            android:layout_marginLeft="80px"
-            android:layout_marginTop="15px" />
+        <RelativeLayout
+            android:id="@+id/clock_add_picker_alert_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="166px"
+            android:layout_below="@id/clock_add_titlebar"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:gravity="center">
+
+            <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
+                android:id="@+id/clock_add_alert_hour_pv"
+                android:layout_width="40px"
+                android:layout_height="186px"
+                android:layout_marginBottom="15px"
+                android:layout_marginLeft="80px"
+                android:layout_marginTop="15px" />
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:id="@+id/clock_add_alert_al"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/clock_add_alert_hour_pv"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/colon1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="13px"
+                    android:text=" : "
+                    android:textColor="@color/gray888888"
+                    android:textSize="26px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/colon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="13px"
+                    android:text=" : "
+                    android:textColor="@color/black_444444"
+                    android:textSize="26px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/colon3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="13px"
+                    android:text=" : "
+                    android:textColor="@color/gray888888"
+                    android:textSize="26px"
+                    android:textStyle="bold" />
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
+                android:id="@+id/clock_add_alert_minute_pv"
+                android:layout_width="40px"
+                android:layout_height="186px"
+                android:layout_marginBottom="15px"
+                android:layout_marginRight="80px"
+                android:layout_marginTop="15px"
+                android:layout_toRightOf="@id/clock_add_alert_al" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/fengexian"
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/clock_add_picker_alert_parent"
+            android:layout_marginTop="20px"
+            android:background="?android:attr/listDivider" />
 
         <com.zhy.autolayout.AutoLinearLayout
-            android:id="@+id/clock_add_alert_al"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/clock_add_alert_hour_pv"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fengexian"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-            <TextView
-                android:id="@+id/colon1"
+            <Button
+                android:id="@+id/clock_add_cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="13px"
-                android:text=" : "
-                android:textColor="@color/gray888888"
-                android:textSize="26px"
-                android:textStyle="bold" />
+                android:background="@drawable/btn_clock_add_selector"
+                android:layout_weight="1"
+                android:textSize="18px"
+                android:text="取消" />
 
-            <TextView
-                android:id="@+id/colon2"
+            <Button
+                android:id="@+id/clock_add_ok_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="13px"
-                android:text=" : "
-                android:textColor="@color/black_444444"
-                android:textSize="26px"
-                android:textStyle="bold" />
+                android:layout_weight="1"
 
-            <TextView
-                android:id="@+id/colon3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="13px"
-                android:text=" : "
-                android:textColor="@color/gray888888"
-                android:textSize="26px"
-                android:textStyle="bold" />
+                android:background="@drawable/btn_clock_add_selector"
+                android:layout_toRightOf="@id/clock_add_cancel_btn"
+                android:text="确定" />
+
         </com.zhy.autolayout.AutoLinearLayout>
-
-        <com.walnutin.xtht.bracelet.mvp.ui.widget.PickerView
-            android:id="@+id/clock_add_alert_minute_pv"
-            android:layout_width="40px"
-            android:layout_height="186px"
-            android:layout_marginBottom="15px"
-            android:layout_marginRight="80px"
-            android:layout_marginTop="15px"
-            android:layout_toRightOf="@id/clock_add_alert_al" />
-
-    </RelativeLayout>
-
-    <!--<View-->
-        <!--android:id="@+id/fengexian"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="20px"-->
-        <!--android:layout_below="@id/clock_add_picker_alert_parent"-->
-        <!--android:layout_marginBottom="10px"-->
-        <!--android:layout_marginTop="10px"-->
-        <!--android:background="?android:attr/listDivider" />-->
-
-    <!--<com.zhy.autolayout.AutoRelativeLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_below="@id/fengexian">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/clock_add_cancel_btn"-->
-            <!--android:text="取消"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/clock_add_ok_btn"-->
-            <!--android:layout_toRightOf="@id/clock_add_cancel_btn"-->
-            <!--android:text="确定"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-
-    <!--</com.zhy.autolayout.AutoRelativeLayout>-->
+    </com.zhy.autolayout.AutoLinearLayout>
 
 </com.zhy.autolayout.AutoRelativeLayout>

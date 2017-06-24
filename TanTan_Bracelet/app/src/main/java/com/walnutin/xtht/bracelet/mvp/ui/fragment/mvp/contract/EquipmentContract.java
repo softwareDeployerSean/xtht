@@ -5,8 +5,14 @@ import android.content.Context;
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 
 public interface EquipmentContract {
@@ -21,5 +27,7 @@ public interface EquipmentContract {
     //Model层定义接口,外部只需关心model返回的数据,无需关心内部细节,及是否使用缓存
     interface Model extends IModel {
         List<SearchResult> searchEpList();
+
+        Observable<BaseJson> getBraceletObservable(RequestBody body);
     }
 }

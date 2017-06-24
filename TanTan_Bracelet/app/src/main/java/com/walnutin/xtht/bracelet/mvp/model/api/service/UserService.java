@@ -71,4 +71,8 @@ public interface UserService {
     //绑定账号
     @PUT("user/bindAccount")
     Observable<BaseJson> bindAccount(@Body RequestBody route);
+
+    //绑定手环
+    @POST("user/bindBracelet")
+    Observable<BaseJson> bindBracelet(@Body RequestBody route);
 }

@@ -23,6 +23,12 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
     private Context mContext;
     private List<BasicSettingsMenue> settingsMenues;
 
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
     public void setmOnSwitchButtonChanged(OnSwitchButtonChanged mOnSwitchButtonChanged) {
         this.mOnSwitchButtonChanged = mOnSwitchButtonChanged;
     }
@@ -36,9 +42,11 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BasicSettingsAdapter.MyViewHolder holder = new BasicSettingsAdapter.MyViewHolder(LayoutInflater.from(
+        View view = LayoutInflater.from(
                 mContext).inflate(R.layout.basic_settings_item, parent,
-                false));
+                false);
+        BasicSettingsAdapter.MyViewHolder holder = new BasicSettingsAdapter.MyViewHolder(view);
+
         return holder;
     }
 

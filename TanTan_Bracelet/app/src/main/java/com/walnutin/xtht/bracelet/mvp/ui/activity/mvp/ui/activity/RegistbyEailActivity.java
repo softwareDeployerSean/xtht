@@ -116,8 +116,6 @@ public class RegistbyEailActivity extends BaseActivity<RegistbyEailPresenter> im
                 } else {
                     mPresenter.regist(email, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
                 }
-
-
                 break;
         }
     }
@@ -125,7 +123,7 @@ public class RegistbyEailActivity extends BaseActivity<RegistbyEailPresenter> im
     @Override
     public void regist_success() {
         ToastUtils.showToast(getString(R.string.regist_success), this);
-        Intent intent = new Intent(this, Personal_dataActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
