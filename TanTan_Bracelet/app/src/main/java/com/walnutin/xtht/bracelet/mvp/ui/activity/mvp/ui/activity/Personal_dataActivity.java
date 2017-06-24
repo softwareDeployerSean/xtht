@@ -221,7 +221,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     AppManager appManager = new AppManager(MyApplication.bizApp);
 
-    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target, R.id.iv_back})
+    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target, R.id.toolbar_back_person_add})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.check_head_photo:
@@ -260,17 +260,23 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             case R.id.tv_target:
                 pvCustomOptions_foot.show();
                 break;
-            case R.id.iv_back:
+            case R.id.toolbar_back_person_add:
+                LogUtils.debugInfo("TAG back key click");
                 if (alertView != null && alertView.isShowing()) {
                     alertView.dismiss();
-                } else {
-                    finish();
-                   /* if (isload.equals("default")) {
+                    alertView = null;
+                }else {
+                    LogUtils.debugInfo("TAG,isload=" + isload);
+                    if (isload.equals("default")) {
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
-                    }*/
+                        LogUtils.debugInfo("TAG,第一次 啊");
+                    } else {
+                        LogUtils.debugInfo("TAG,不是第一次 啊");
+                        finish();
+                    }
                 }
                 break;
         }
@@ -378,23 +384,29 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (alertView != null && alertView.isShowing()) {
-                alertView.dismiss();
-                return false;
-            }/* else {
-                if (isload.equals("default")) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                    LogUtils.debugInfo("第一次 啊");
-                } else {
-                    LogUtils.debugInfo("不是第一次 啊");
-                    finish();
+                if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    LogUtils.debugInfo("TAG key down click");
+                    if (alertView != null && alertView.isShowing()) {
+                        alertView.dismiss();
+                        alertView = null;
+                        return false;
+                    }else {
+                        LogUtils.debugInfo("TAG,isload=" + isload);
+                        if (isload.equals("default")) {
+                            Intent intent = new Intent(this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                            LogUtils.debugInfo("TAG,第一次 啊");
+                        } else {
+                            LogUtils.debugInfo("TAG,不是第一次 啊");
+                            finish();
+                        }
                 }
-                return true;
-            }*/
+                return super.onKeyDown(keyCode, event);
+
+//                return true;
+
 
 
         }

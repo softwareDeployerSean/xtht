@@ -6,7 +6,7 @@
     android:background="@color/grey_eeeeee"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
+    <include layout="@layout/include_title_person_data" />
 
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
