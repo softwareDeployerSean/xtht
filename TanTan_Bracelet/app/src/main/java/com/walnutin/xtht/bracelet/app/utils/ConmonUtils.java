@@ -1,6 +1,11 @@
 package com.walnutin.xtht.bracelet.app.utils;
 
+import android.content.Context;
 import android.util.Base64;
+
+import com.jess.arms.utils.DeviceUtils;
+import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -88,6 +93,15 @@ public class ConmonUtils {
             return yingchi + "'" + str_yingcun + "”";
         }
 
+    }
+
+    public static boolean hasNetwork(Context context) {
+        if (DeviceUtils.getNetworkType(MyApplication.getAppContext()) == 0) {//没有网络
+            ToastUtils.showToast(context.getString(R.string.no_net), context);
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

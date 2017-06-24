@@ -11,16 +11,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
-import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
-import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -46,12 +41,6 @@ public class EquipmentModel extends BaseModel implements EquipmentContract.Model
 //            epList.add(ep);
 //        }
         return epList;
-    }
-
-    @Override
-    public Observable<BaseJson> getBraceletObservable(RequestBody body) {
-        return mRepositoryManager.obtainRetrofitService(UserService.class)
-                .bindBracelet(body);
     }
 
     @Override

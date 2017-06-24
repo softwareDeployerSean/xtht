@@ -3,35 +3,22 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
-import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerQuestionHandlerComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.QuestionHandlerModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.QuestionHandlerContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.QuestionHandlerPresenter;
-
-import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresenter> implements QuestionHandlerContract.View {
 
-    @BindView(R.id.question_handler_btn)
-    public Button handleBtn;
-
-    @BindView(R.id.qusuggestion_handler_suggestion_edittext)
-    public EditText contentEt;
-    @BindView(R.id.qusuggestion_handler_contact)
-    public EditText contactEt;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -50,26 +37,7 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        handleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String content = contentEt.getText().toString();
 
-                if(content == null || content.equals("") || content.length() == 0) {
-                    ToastUtils.showToast("请输入反馈内容", QuestionHandlerActivity.this);
-                    return;
-                }
-
-                String contact = contactEt.getText().toString();
-                if(contact == null || contact.equals("") || contact.length() == 0) {
-                    ToastUtils.showToast("请输入联系方式", QuestionHandlerActivity.this);
-                    return;
-                }
-
-                ToastUtils.showToast("输入正常，等待服务器接口", QuestionHandlerActivity.this);
-
-            }
-        });
     }
 
 

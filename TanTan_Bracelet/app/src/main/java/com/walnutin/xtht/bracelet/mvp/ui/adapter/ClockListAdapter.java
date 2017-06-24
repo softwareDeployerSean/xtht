@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.veepoo.protocol.model.settings.AlarmSetting;
@@ -47,38 +46,25 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         AlarmSetting alarmSetting = clockList.get(position);
-        holder.timeTv.setText(alarmSetting.getHour() + ":" + (alarmSetting.getMinute() < 10 ? "0" + alarmSetting.getMinute() : alarmSetting.getMinute()));
-        if (alarmSetting.isOpen()) {
-            if(holder.sv.getState() == SwitchView.STATE_SWITCH_OFF) {
-                holder.sv.setState(true);
-            }
-        } else {
-            if(holder.sv.getState() == SwitchView.STATE_SWITCH_ON) {
-                holder.sv.setState(false);
-            }
+        holder.timeTv.setText(alarmSetting.getHour() + ":" + alarmSetting.getMinute());
+        if(alarmSetting.isOpen()) {
+            holder.sv.setState(true);
+        }else {
+            holder.sv.setState(false);
         }
 
         holder.sv.setmOnStateTriggerListener(new SwitchView.OnStateTriggerListener() {
             @Override
             public void triggerOn() {
-                if (mOnSwitchChangedListenerer != null) {
+                if(mOnSwitchChangedListenerer != null) {
                     mOnSwitchChangedListenerer.onSwitchOn(position);
                 }
             }
 
             @Override
             public void triggerOff() {
-                if (mOnSwitchChangedListenerer != null) {
+                if(mOnSwitchChangedListenerer != null) {
                     mOnSwitchChangedListenerer.onSwitchOff(position);
-                }
-            }
-        });
-
-        holder.delBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mOnSwitchChangedListenerer != null) {
-                    mOnSwitchChangedListenerer.ondelClick(position);
                 }
             }
         });
@@ -91,23 +77,18 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView timeTv;
-        Button delBtn;
+        TextView weekTv;
 
         SwitchView sv;
-
         public MyViewHolder(View view) {
             super(view);
             timeTv = (TextView) view.findViewById(R.id.clock_list_item_time);
+            weekTv = (TextView) view.findViewById(R.id.clock_list_item_week);
             sv = (SwitchView) view.findViewById(R.id.clock_list_item_sw);
-            delBtn = (Button) view.findViewById(R.id.clock_list_item_del_btn);
         }
     }
-
     public interface OnSwitchChangedListenerer {
         void onSwitchOn(int position);
-
         void onSwitchOff(int position);
-
-        void ondelClick(int position);
     }
 }

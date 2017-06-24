@@ -134,18 +134,6 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LogUtils.debugInfo("穿件啊"+"Personal_dataActivity");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LogUtils.debugInfo("销毁啊"+"Personal_dataActivity");
-    }
-
-    @Override
     public int initView(Bundle savedInstanceState) {
         return R.layout.activity_personal_data; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
@@ -169,6 +157,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         initCustomOptionPicker_height();
         initCustomOptionPicker_weight();
         initCustomOptionPicker_foot();
+        LogUtils.debugInfo("默认值=="+userBean.getHeight() );
         if (!TextUtils.isEmpty(userBean.getNickname())) {
             tvName.setText(userBean.getNickname());
         }
@@ -178,10 +167,10 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         if (!TextUtils.isEmpty(userBean.getBirth())) {
             tvBirthday.setText(userBean.getBirth());
         }
-        if (!TextUtils.isEmpty(String.valueOf(userBean.getHeight()))) {
+        if (!TextUtils.isEmpty(userBean.getHeight())) {
             tvHeight.setText(userBean.getHeight() + "[" + userBean.getHeightOfUnit() + "]");
         }
-        if (!TextUtils.isEmpty(String.valueOf(userBean.getWeight()))) {
+        if (!TextUtils.isEmpty(userBean.getWeight())) {
             tvWeight.setText(userBean.getWeight() + "[" + userBean.getWeightOfUnit() + "]");
         }
         if (!TextUtils.isEmpty(String.valueOf(userBean.getDailyGoals()))) {
@@ -189,6 +178,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         }
 
         isload = DataHelper.getStringSF(MyApplication.getAppContext(), "isload");
+        //isload = "abc";
     }
 
 
@@ -219,8 +209,6 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         finish();
     }
 
-    AppManager appManager = new AppManager(MyApplication.bizApp);
-
     @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target, R.id.toolbar_back_person_add})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -240,41 +228,38 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 Show_sex();
                 break;
             case R.id.toolbar_right:
-                String name = tvName.getText().toString().trim();
-                String sex = tvSex.getText().toString().trim();
-                String birth = tvBirthday.getText().toString().trim();
-                String height = tvHeight.getText().toString().trim().substring(0, tvHeight.getText().toString().length() - 4);
-                String weight = tvWeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
-                String dailyGoals = tvTarget.getText().toString().trim().substring(0, tvTarget.getText().toString().length() - 3);
-                String weightOfUnit = tvWeight.getText().toString().trim().substring(tvWeight.getText().toString().length() - 3, tvWeight.getText().toString().length() - 1);
-                String heightOfUnit = tvHeight.getText().toString().trim().substring(tvHeight.getText().toString().length() - 3, tvHeight.getText().toString().length() - 1);
+                if (ConmonUtils.hasNetwork(this)) {
+                    String name = tvName.getText().toString().trim();
+                    String sex = tvSex.getText().toString().trim();
+                    String birth = tvBirthday.getText().toString().trim();
+                    String height = tvHeight.getText().toString().trim().substring(0, tvHeight.getText().toString().length() - 4);
+                    String weight = tvWeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
+                    String dailyGoals = tvTarget.getText().toString().trim().substring(0, tvTarget.getText().toString().length() - 3);
+                    String weightOfUnit = tvWeight.getText().toString().trim().substring(tvWeight.getText().toString().length() - 3, tvWeight.getText().toString().length() - 1);
+                    String heightOfUnit = tvHeight.getText().toString().trim().substring(tvHeight.getText().toString().length() - 3, tvHeight.getText().toString().length() - 1);
 
-                LogUtils.debugInfo("weight=" + weight + "weightOfUnit=" + weightOfUnit);
-                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), height, weightOfUnit, weight, heightOfUnit);
-                if (change_img == 1) {
-                    change_img = 0;
-                    mPresenter.post_img();
-
+                    LogUtils.debugInfo("weight=" + weight + "weightOfUnit=" + weightOfUnit);
+                    mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), height, weightOfUnit, weight, heightOfUnit);
+                    if (change_img == 1) {
+                        change_img = 0;
+                        mPresenter.post_img();
+                    }
                 }
                 break;
             case R.id.tv_target:
                 pvCustomOptions_foot.show();
                 break;
             case R.id.toolbar_back_person_add:
-                LogUtils.debugInfo("TAG back key click");
                 if (alertView != null && alertView.isShowing()) {
                     alertView.dismiss();
                     alertView = null;
-                }else {
-                    LogUtils.debugInfo("TAG,isload=" + isload);
+                } else {
                     if (isload.equals("default")) {
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
-                        LogUtils.debugInfo("TAG,第一次 啊");
                     } else {
-                        LogUtils.debugInfo("TAG,不是第一次 啊");
                         finish();
                     }
                 }
@@ -283,7 +268,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     }
 
     private void checkphoto() {
-        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, this, AlertView.Style.ActionSheet, this).setCancelable(true);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, MyApplication.getAppContext(), AlertView.Style.ActionSheet, this).setCancelable(true);
         alertView.show();
     }
 
@@ -307,7 +292,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
                     @Override
                     public void onRequestPermissionFailure() {
-                        new AlertDialog.Builder(Personal_dataActivity.this).setTitle(getString(R.string.hint)).setMessage(getString(R.string.camelbypermisstion)).setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(MyApplication.getAppContext()).setTitle(getString(R.string.hint)).setMessage(getString(R.string.camelbypermisstion)).setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent localIntent = new Intent();
@@ -384,35 +369,24 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    LogUtils.debugInfo("TAG key down click");
-                    if (alertView != null && alertView.isShowing()) {
-                        alertView.dismiss();
-                        alertView = null;
-                        return false;
-                    }else {
-                        LogUtils.debugInfo("TAG,isload=" + isload);
-                        if (isload.equals("default")) {
-                            Intent intent = new Intent(this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-                            LogUtils.debugInfo("TAG,第一次 啊");
-                        } else {
-                            LogUtils.debugInfo("TAG,不是第一次 啊");
-                            finish();
-                        }
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (alertView != null && alertView.isShowing()) {
+                alertView.dismiss();
+                alertView = null;
+            } else {
+                if (isload.equals("default")) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    finish();
                 }
-                return super.onKeyDown(keyCode, event);
-
-//                return true;
-
-
-
+            }
+            return false;
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
 
     private void initCustomTimePicker() {
@@ -734,7 +708,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
 
         //目标
-        for (int i = 1; i < 30; i++) {
+        for (int i = 1; i < 31; i++) {
             options1Items_foot.add(i * 1000 + "");
         }
 

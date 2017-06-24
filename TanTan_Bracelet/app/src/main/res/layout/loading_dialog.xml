@@ -11,18 +11,17 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_centerInParent="true"
         android:id="@+id/img"
         android:layout_width="150px"
         android:layout_height="150px"
-            android:background="@drawable/progressbar"
-        />
+        android:layout_centerInParent="true"
+        android:background="@drawable/progress_dialog" />
 
     <TextView
-        android:layout_centerInParent="true"
         android:id="@+id/tipTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginLeft="10dp"
         android:text="数据加载中……"
         android:textColor="@color/white"

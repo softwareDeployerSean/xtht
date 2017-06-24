@@ -77,9 +77,12 @@
     <string name="exit_account">账号登出 </string>
     <string name="img_success">头像修改成功 </string>
     <string name="relieve_bind">解除绑定 </string>
+    <string name="remove_ok">确定解除绑定吗? </string>
 
     <string name="phone_number">手机账号</string>
     <string name="email_number">邮箱账号</string>
+    <string name="bindbyphone_number">手机账号绑定</string>
+    <string name="bindbyemail_number">邮箱账号绑定</string>
     <string name="goto_bind">去绑定</string>
     <string name="person_data">设置个人资料</string>
     <string name="local_photo">本地相册</string>

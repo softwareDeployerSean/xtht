@@ -119,14 +119,16 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_load:
-                String username = etName.getText().toString().trim();
-                String pwd = etPassword.getText().toString().trim();
-                if (!ConmonUtils.checkEmail(username) && !ConmonUtils.isMobileNO(username)) {
-                    ToastUtils.showToast(getString(R.string.patten_username), this);
-                } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
-                    ToastUtils.showToast(getString(R.string.pwd), this);
-                } else {
-                    mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                if (ConmonUtils.hasNetwork(this)) {
+                    String username = etName.getText().toString().trim();
+                    String pwd = etPassword.getText().toString().trim();
+                    if (!ConmonUtils.checkEmail(username) && !ConmonUtils.isMobileNO(username)) {
+                        ToastUtils.showToast(getString(R.string.patten_username), this);
+                    } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
+                        ToastUtils.showToast(getString(R.string.pwd), this);
+                    } else {
+                        mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                    }
                 }
                 break;
             case R.id.tv_froget_pwd://点击保存按钮
@@ -146,28 +148,31 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void onItemClick(Object o, int position) {
         switch (position) {
             case 0:
-
-                // 打开注册页面
-                RegisterPage registerPage = new RegisterPage("reset");
-                registerPage.setRegisterCallback(new EventHandler() {
-                    public void afterEvent(int event, int result, Object data) {
-                        // 解析注册结果
-                        if (result == SMSSDK.RESULT_COMPLETE) {
-                            @SuppressWarnings("unchecked")
-                            HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                            String country = (String) phoneMap.get("country");
-                            String phone = (String) phoneMap.get("phone");
-                            Intent intent = new Intent(LoadingActivity.this, ResetpwdActivity.class);
-                            intent.putExtra("username", phone);
-                            launchActivity(intent);
-                        } else {
+                if (ConmonUtils.hasNetwork(this)) {
+                    // 打开注册页面
+                    RegisterPage registerPage = new RegisterPage("reset");
+                    registerPage.setRegisterCallback(new EventHandler() {
+                        public void afterEvent(int event, int result, Object data) {
+                            // 解析注册结果
+                            if (result == SMSSDK.RESULT_COMPLETE) {
+                                @SuppressWarnings("unchecked")
+                                HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                                String country = (String) phoneMap.get("country");
+                                String phone = (String) phoneMap.get("phone");
+                                Intent intent = new Intent(LoadingActivity.this, ResetpwdActivity.class);
+                                intent.putExtra("username", phone);
+                                launchActivity(intent);
+                            } else {
+                            }
                         }
-                    }
-                });
-                registerPage.show(this);
+                    });
+                    registerPage.show(this);
+                }
                 break;
             case 1:
-                launchActivity(new Intent(LoadingActivity.this, ResetbyEmailActivity.class));
+                if (ConmonUtils.hasNetwork(this)) {
+                    launchActivity(new Intent(LoadingActivity.this, ResetbyEmailActivity.class));
+                }
                 break;
 
         }

@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#3FA862</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
-    <color name="transtwhite">#E6FFFFFF</color>
     <color name="translate_background">#E0FBFBFB</color>
     <color name="grey_D8D8D8">#D8D8D8</color>
     <color name="grey_BBBBBB">#BBBBBB</color>
@@ -29,7 +28,7 @@
     <color name="redFF1212">#FF1212</color>
     <color name="gray888888">#888888</color>
 
-    <color name="transparent80">#E0000000</color>
+    <color name="transparent111">#00000000</color>
     <color name="transparent">#00000000</color>
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#40000000</color>
@@ -45,9 +44,9 @@
     <!--线条颜色-->
     <color name="bgColor_divier">#d7d7db</color>
     <!--取消按钮颜色-->
-    <color name="textColor_alert_button_cancel">#007aff</color>
+    <color name="textColor_alert_button_cancel">#4990E2</color>
     <!--高亮按钮颜色-->
-    <color name="textColor_alert_button_destructive">#ff3b30</color>
+    <color name="textColor_alert_button_destructive">#4990E2</color>
     <!--普通按钮文字颜色-->
     <color name="textColor_alert_button_others">#444444</color>
     <!--点击颜色-->

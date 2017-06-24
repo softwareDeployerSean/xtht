@@ -68,8 +68,9 @@ public class BindEndbyphonePresenter extends BasePresenter<BindEndbyphoneContrac
                     @Override
                     public void onNext(BaseJson users) {
                         mRootView.hideLoading();
-
                         mRootView.bind_success();
+                        DataHelper.setStringSF(mApplication, "bind_count", name);
+
                         //mRootView.hideLoading();
                     }
 

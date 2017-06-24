@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/clock_list_item_parent"
     android:layout_width="match_parent"
-    android:layout_height="250px"
+    android:layout_height="wrap_content"
     android:layout_marginTop="20px"
-    android:clickable="true">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/clock_list_item_parent"
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/clock_list_item_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/black_444444"
+            android:id="@+id/clock_list_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="25px"
+            android:paddingRight="15px"
+            android:text="08:50"
+            android:textSize="50px" />
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView
+            android:id="@+id/clock_list_item_sw"
+            android:layout_width="50px"
+            android:layout_height="30px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20px" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <TextView
+        android:id="@+id/clock_list_item_week"
         android:layout_width="match_parent"
-        android:layout_height="250px"
-        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clock_list_item_rl"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <com.zhy.autolayout.AutoRelativeLayout
-            android:id="@+id/clock_list_item_rl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/clock_list_item_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25px"
-                android:paddingRight="15px"
-                android:text="08:50"
-                android:textColor="@color/black_444444"
-                android:textSize="50px" />
-
-            <com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView
-                android:id="@+id/clock_list_item_sw"
-                android:layout_width="50px"
-                android:layout_height="30px"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20px"
-                android:layout_marginTop="15px" />
-        </com.zhy.autolayout.AutoRelativeLayout>
-    </com.zhy.autolayout.AutoLinearLayout>
-
-    <Button
-        android:id="@+id/clock_list_item_del_btn"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:background="@color/textColor_alert_button_destructive"
-        android:text="删除"
-        android:textColor="@android:color/white" />
-
-</com.mcxtzhang.swipemenulib.SwipeMenuLayout>
+        android:paddingBottom="10dp"
+        android:text="周一 周二 周三 周四 周五 周六 周日"
+        android:textSize="18px" />
+</com.zhy.autolayout.AutoLinearLayout>

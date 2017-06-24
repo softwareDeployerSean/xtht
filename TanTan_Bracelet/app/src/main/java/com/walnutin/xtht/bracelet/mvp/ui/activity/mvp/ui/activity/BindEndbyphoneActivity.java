@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBindEndbyphoneComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.BindEndbyphoneModule;
@@ -103,18 +106,20 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
 
     @OnClick(R.id.bt_load)
     public void onViewClicked() {
-        String pwd = etPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
-            ToastUtils.showToast(getString(R.string.pwd), this);
-        }else {
-            mPresenter.bind(phone,pwd);
+        if (ConmonUtils.hasNetwork(this)) {
+            String pwd = etPassword.getText().toString().trim();
+            if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
+                ToastUtils.showToast(getString(R.string.pwd), this);
+            } else {
+                mPresenter.bind(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+            }
         }
-
     }
 
 
     @Override
     public void bind_success() {
+        DataHelper.setStringSF(MyApplication.getAppContext(), "isbind", "true");
         finish();
     }
 }

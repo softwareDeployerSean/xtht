@@ -1,5 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -48,7 +49,7 @@ import static com.jess.arms.integration.AppManager.SHOW_SNACKBAR;
  * Created by suns on 2017-06-13.
  */
 
-public class MainActivity extends FragmentActivity implements OnItemClickListener, OnDismissListener {
+public class MainActivity extends FragmentActivity {
     @BindView(R.id.viewpager)
     ContainerViewPager viewpager;
     @BindView(R.id.radio_main)
@@ -80,7 +81,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     RadioGroup radiogroup;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    AlertView alertView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +100,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         ivBack.setVisibility(View.GONE);
         bottom_sector_menu.setButtonDatas(buttonDatas);
         setListener(bottom_sector_menu);
-       // DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
+        DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "true");
     }
 
     @Override
@@ -198,52 +199,19 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         }
     }
 
-
-    @Override
-    public void onDismiss(Object o) {
-
-    }
-
-    @Override
-    public void onItemClick(Object o, int position) {
-        switch (position){
-            case 0:
-                Message message = new Message();
-                message.what = AppManager.APP_EXIT;
-                message.arg1 = 0;
-                EventBus.getDefault().post(message, APPMANAGER_MESSAGE);
-                break;
-        }
-    }
-
-    public void exit() {
-        alertView = new AlertView(null, getString(R.string.exit), getString(R.string.canecl), new String[]{getString(R.string.confirm)}, null, this, AlertView.Style.Alert, this)
-                .setCancelable(true).setOnDismissListener(this);
-        alertView.show();
-    }
-
-
-
-
+    //点击返回键返回桌面而不是退出程序
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (alertView!=null&&alertView.isShowing()){
-                alertView.dismiss();
-                LogUtils.debugInfo("isShowing");
-            }else {
-                exit();
-                LogUtils.debugInfo("noisShowing");
-            }
 
-            return false;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
-
-
 
 
 }

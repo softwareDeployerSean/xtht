@@ -107,26 +107,28 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_next:
-                email = etPhone.getText().toString().trim();
-                code=etYanzhenma.getText().toString().trim();
-                if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
-                    ToastUtils.showToast(getString(R.string.pattern_email), this);
-                } else if (TextUtils.isEmpty(code)){
-                    ToastUtils.showToast(getString(R.string.no_code), this);
-                }
-                else {
-                    mPresenter.verifycode(email,code);
+                if (ConmonUtils.hasNetwork(this)) {
+                    email = etPhone.getText().toString().trim();
+                    code = etYanzhenma.getText().toString().trim();
+                    if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
+                        ToastUtils.showToast(getString(R.string.pattern_email), this);
+                    } else if (TextUtils.isEmpty(code)) {
+                        ToastUtils.showToast(getString(R.string.no_code), this);
+                    } else {
+                        mPresenter.verifycode(email, code);
+                    }
                 }
                 break;
             case R.id.bt_yanzhenma:
-                email = etPhone.getText().toString().trim();
-                if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
-                    ToastUtils.showToast(getString(R.string.pattern_email), this);
-                } else {
-                    mPresenter.getcode(email);
-                    timer.start();
+                if (ConmonUtils.hasNetwork(this)) {
+                    email = etPhone.getText().toString().trim();
+                    if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
+                        ToastUtils.showToast(getString(R.string.pattern_email), this);
+                    } else {
+                        mPresenter.getcode(email);
+                        timer.start();
+                    }
                 }
-
                 break;
 
 

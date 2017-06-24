@@ -10,8 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +37,6 @@ import com.jess.arms.base.BaseApplication;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.UiUtils;
@@ -58,6 +55,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsA
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpSearchListAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerEquipmentComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.EquipmentModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
@@ -104,20 +102,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     private EpSearchListAdapter epSearchListAdapter;
 
-    private String epMac;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
-                    mPresenter.bindBracelet(token, epMac);
-                break;
-            }
-        }
-    };
-
     public static EquipmentFragment newInstance() {
         EquipmentFragment fragment = new EquipmentFragment();
         return fragment;
@@ -147,17 +131,23 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
         }
         epSearchListAdapter = new EpSearchListAdapter(mListData, mContext);
 
-        epSearchListAdapter.setmOnItemClickListener(new EpSearchListAdapter.OnItemClickListener() {
+        epSearchListAdapter.setmOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.debugInfo(TAG1 + "onItemClick click");
+
+//                alertView = new AlertView(null, "\n连接中...\n\n\n", null, null, null, getActivity(), AlertView.Style.Alert, new com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(Object o, int position) {
+//
+//                    }
+//                });
+//
+//                alertView.show();
+
                 showDialog();
+
                 connectDevice(mListData.get(position));
-            }
-
-            @Override
-            public void onDelBtnClick(int position) {
-
             }
         });
 
@@ -266,11 +256,14 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     private final SearchResponse mSearchResponse = new SearchResponse() {
         @Override
         public void onSearchStarted() {
+//            Logger.t(TAG).i("onSearchStarted");
             LogUtils.debugInfo(TAG1 + "onSearchStarted");
         }
 
         @Override
         public void onDeviceFounded(final SearchResult device) {
+            //Logger.t(TAG).i(String.format("device for %s-%s-%d", device.getName(), device.getAddress(), device.rssi));
+
             LogUtils.debugInfo(TAG1 + String.format("device for %s-%s-%d", device.getName(), device.getAddress(), device.rssi));
 
             getActivity().runOnUiThread(new Runnable() {
@@ -346,7 +339,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                 } else {
 //                    Logger.t(TAG).i("连接失败");
                     LogUtils.debugInfo(TAG1 + "连接失败");
-                    dimissDialog();
                 }
             }
         }, new INotifyResponse() {
@@ -359,9 +351,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     editor.putString("connected_address", mac);
                     editor.commit();
 
-                    EquipmentFragment.this.epMac = mac;
-
-                    mHandler.sendEmptyMessage(0);
                     dimissDialog();
 
                     LogUtils.debugInfo(TAG1 + "监听成功-可进行其他操作");

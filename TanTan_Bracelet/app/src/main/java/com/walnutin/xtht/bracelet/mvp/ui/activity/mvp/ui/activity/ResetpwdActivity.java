@@ -87,16 +87,17 @@ public class ResetpwdActivity extends BaseActivity<ResetpwdPresenter> implements
 
     @OnClick(R.id.bt_ok)
     public void onViewClicked() {
-        String new_pwd = inputNewPwd.getText().toString().trim();
-        String firm_pwd = firmPwd.getText().toString().trim();
-        if (TextUtils.isEmpty(new_pwd) || new_pwd.length() < 6 || new_pwd.length() > 16) {
-            ToastUtils.showToast(getString(R.string.pwd), this);
-        } else if (!new_pwd.equals(firm_pwd)) {
-            ToastUtils.showToast(getString(R.string.wrong_password), this);
-        } else {
-            mPresenter.check_password(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(new_pwd)));
+        if (ConmonUtils.hasNetwork(this)) {
+            String new_pwd = inputNewPwd.getText().toString().trim();
+            String firm_pwd = firmPwd.getText().toString().trim();
+            if (TextUtils.isEmpty(new_pwd) || new_pwd.length() < 6 || new_pwd.length() > 16) {
+                ToastUtils.showToast(getString(R.string.pwd), this);
+            } else if (!new_pwd.equals(firm_pwd)) {
+                ToastUtils.showToast(getString(R.string.wrong_password), this);
+            } else {
+                mPresenter.check_password(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(new_pwd)));
+            }
         }
-
     }
 
     @Override

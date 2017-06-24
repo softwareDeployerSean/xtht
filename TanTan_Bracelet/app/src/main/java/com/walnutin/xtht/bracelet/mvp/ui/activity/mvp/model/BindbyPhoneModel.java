@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BindbyPhoneContract;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -23,6 +27,13 @@ public class BindbyPhoneModel extends BaseModel implements BindbyPhoneContract.M
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
+    }
+
+    @Override
+    public Observable<String> remove_bind(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .unbindAccount(body);
+
     }
 
     @Override

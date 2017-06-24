@@ -20,6 +20,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 import com.mob.MobSDK;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerLoadComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.LoadModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.LoadContract;
@@ -76,7 +77,9 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
                 regist();
                 break;
             case R.id.bt_load://登陆
-                startActivity(new Intent(LoadActivity.this, LoadingActivity.class));
+                if (ConmonUtils.hasNetwork(this)) {
+                    startActivity(new Intent(LoadActivity.this, LoadingActivity.class));
+                }
                 break;
         }
     }
@@ -160,29 +163,33 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
     public void onItemClick(Object o, int position) {
         switch (position) {
             case 0:
-                // 打开注册页面
-                RegisterPage registerPage = new RegisterPage("regist");
-                registerPage.setRegisterCallback(new EventHandler() {
-                    public void afterEvent(int event, int result, Object data) {
-                        // 解析注册结果
-                        if (result == SMSSDK.RESULT_COMPLETE) {
-                            @SuppressWarnings("unchecked")
-                            HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                            String country = (String) phoneMap.get("country");
-                            String phone = (String) phoneMap.get("phone");
-                            Intent intent = new Intent(LoadActivity.this, RegistbyPhoneActivity.class);
-                            intent.putExtra("phone", phone);
-                            launchActivity(intent);
+                if (ConmonUtils.hasNetwork(this)) {
+                    // 打开注册页面
+                    RegisterPage registerPage = new RegisterPage("regist");
+                    registerPage.setRegisterCallback(new EventHandler() {
+                        public void afterEvent(int event, int result, Object data) {
+                            // 解析注册结果
+                            if (result == SMSSDK.RESULT_COMPLETE) {
+                                @SuppressWarnings("unchecked")
+                                HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                                String country = (String) phoneMap.get("country");
+                                String phone = (String) phoneMap.get("phone");
+                                Intent intent = new Intent(LoadActivity.this, RegistbyPhoneActivity.class);
+                                intent.putExtra("phone", phone);
+                                launchActivity(intent);
 
-                        } else {
+                            } else {
 
+                            }
                         }
-                    }
-                });
-                registerPage.show(this);
+                    });
+                    registerPage.show(this);
+                }
                 break;
             case 1:
-                launchActivity(new Intent(LoadActivity.this, RegistbyEailActivity.class));
+                if (ConmonUtils.hasNetwork(this)) {
+                    launchActivity(new Intent(LoadActivity.this, RegistbyEailActivity.class));
+                }
                 break;
 
         }

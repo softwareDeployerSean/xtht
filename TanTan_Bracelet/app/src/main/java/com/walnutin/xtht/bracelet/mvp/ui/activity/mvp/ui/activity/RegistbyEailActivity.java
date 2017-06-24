@@ -107,15 +107,18 @@ public class RegistbyEailActivity extends BaseActivity<RegistbyEailPresenter> im
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_regist:
-                String email = et_mail.getText().toString().trim();
-                String pwd = et_password.getText().toString().trim();
-                if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
-                    ToastUtils.showToast(getString(R.string.pattern_email), this);
-                } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
-                    ToastUtils.showToast(getString(R.string.pwd), this);
-                } else {
-                    mPresenter.regist(email, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                if (ConmonUtils.hasNetwork(this)) {
+                    String email = et_mail.getText().toString().trim();
+                    String pwd = et_password.getText().toString().trim();
+                    if (TextUtils.isEmpty(email) || !ConmonUtils.checkEmail(email)) {
+                        ToastUtils.showToast(getString(R.string.pattern_email), this);
+                    } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
+                        ToastUtils.showToast(getString(R.string.pwd), this);
+                    } else {
+                        mPresenter.regist(email, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                    }
                 }
+
                 break;
         }
     }
@@ -123,7 +126,7 @@ public class RegistbyEailActivity extends BaseActivity<RegistbyEailPresenter> im
     @Override
     public void regist_success() {
         ToastUtils.showToast(getString(R.string.regist_success), this);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Personal_dataActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

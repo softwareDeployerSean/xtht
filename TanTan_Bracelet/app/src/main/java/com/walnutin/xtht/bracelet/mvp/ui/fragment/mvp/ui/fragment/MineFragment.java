@@ -28,6 +28,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineCompone
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MinePresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +72,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     private String user_photo_url;
     private Bitmap bitmap;
-    String is_bind = DataHelper.getStringSF(MyApplication.getAppContext(), "isbind");
+
     String load_tag = DataHelper.getStringSF(MyApplication.getAppContext(), "load_tag");
 
     @Override
@@ -84,13 +85,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             } else
                 check_head_photo.setImageResource(R.mipmap.touxaing);
         }
-        if (is_bind.equals("default")) {
-            tvBindAccount.setText(getString(R.string.bind_account));
-        } else {
-            tvBindAccount.setText(getString(R.string.relieve_bind));
-        }
-
-
     }
 
     private void init_refresh() {
@@ -163,32 +157,22 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     }
 
 
-    @OnClick({R.id.tv_bind_account, R.id.check_head_photo, R.id.linear_out})
+    @OnClick({R.id.tv_bind_account, R.id.check_head_photo})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_bind_account:
-                if (is_bind.equals("default")) {
-                    if (load_tag.equals("phone")) {
-                        Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
-                        intent.putExtra("tag", "email");
-                        launchActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
-                        intent.putExtra("tag", "phone");
-                        launchActivity(intent);
-                    }
-
+                if (load_tag.equals("phone")) {
+                    Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
+                    intent.putExtra("tag", "email");
+                    launchActivity(intent);
                 } else {
-                    tvBindAccount.setText(getString(R.string.relieve_bind));
+                    Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
+                    intent.putExtra("tag", "phone");
+                    launchActivity(intent);
                 }
-
-
                 break;
             case R.id.check_head_photo:
                 launchActivity(new Intent(getActivity(), Personal_dataActivity.class));
-                break;
-            case R.id.linear_out:
-                LogUtils.debugInfo("");
                 break;
 
         }
