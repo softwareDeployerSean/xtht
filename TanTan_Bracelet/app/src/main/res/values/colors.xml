@@ -28,7 +28,7 @@
     <color name="redFF1212">#FF1212</color>
     <color name="gray888888">#888888</color>
 
-
+    <color name="transparent111">#00000000</color>
     <color name="transparent">#00000000</color>
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#40000000</color>
