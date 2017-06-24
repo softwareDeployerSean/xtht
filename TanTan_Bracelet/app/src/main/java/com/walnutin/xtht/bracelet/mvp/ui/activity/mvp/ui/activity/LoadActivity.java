@@ -161,7 +161,7 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
         switch (position) {
             case 0:
                 // 打开注册页面
-                RegisterPage registerPage = new RegisterPage();
+                RegisterPage registerPage = new RegisterPage("regist");
                 registerPage.setRegisterCallback(new EventHandler() {
                     public void afterEvent(int event, int result, Object data) {
                         // 解析注册结果

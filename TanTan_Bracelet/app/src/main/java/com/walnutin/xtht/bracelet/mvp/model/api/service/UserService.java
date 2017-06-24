@@ -9,6 +9,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -20,6 +21,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * 存放关于用户的一些api
@@ -62,4 +64,11 @@ public interface UserService {
     @POST("user/updateAvatar")
     Observable<String> post_img(@Part("token") RequestBody token,@Part MultipartBody.Part file);
 
+    //下载头像
+    @GET
+    Observable<ResponseBody> downloadPicFromNet(@Url String fileUrl);
+
+    //绑定账号
+    @PUT("user/bindAccount")
+    Observable<BaseJson> bindAccount(@Body RequestBody route);
 }

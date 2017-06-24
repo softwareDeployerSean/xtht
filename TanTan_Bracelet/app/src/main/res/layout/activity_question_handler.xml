@@ -28,7 +28,6 @@
         android:layout_height="200px"
         android:layout_below="@+id/textView"
         android:layout_marginRight="20px"
-        android:gravity="start"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView"
         android:layout_marginTop="15px"

@@ -82,7 +82,4 @@ dependencies {
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
     compile 'com.alibaba:fastjson:1.2.17'
     compile project(':pickerview')
-
-    compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1'
 }
-

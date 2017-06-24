@@ -37,7 +37,7 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
     EditText etYanzhenma;
     @BindView(R.id.bt_yanzhenma)
     Button btYanzhenma;
-
+    String tag;
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerResetbyEmailComponent //如找不到该类,请编译一下项目
@@ -55,7 +55,7 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        tag=getIntent().getStringExtra("tag");
     }
 
 
@@ -136,9 +136,16 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
     @Override
     public void verify_success(String message) {
         showMessage(message);
-        Intent intent = new Intent(ResetbyEmailActivity.this, ResetpwdActivity.class);
-        intent.putExtra("username", email);
-        launchActivity(intent);
+        if (TextUtils.isEmpty(tag)){
+            Intent intent = new Intent(ResetbyEmailActivity.this, ResetpwdActivity.class);
+            intent.putExtra("username", email);
+            launchActivity(intent);
+        }else{
+            Intent intent = new Intent(ResetbyEmailActivity.this, BindEndbyphoneActivity.class);
+            intent.putExtra("phone", email);
+            launchActivity(intent);
+        }
+
     }
 
     @Override

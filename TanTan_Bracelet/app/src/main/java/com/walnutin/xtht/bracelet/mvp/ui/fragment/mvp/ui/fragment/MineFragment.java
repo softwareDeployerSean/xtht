@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
@@ -44,6 +45,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     @BindView(R.id.check_head_photo)
     ImageView check_head_photo;
     SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
+    @BindView(R.id.tv_bind_account)
+    TextView tvBindAccount;
+    Unbinder unbinder;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -67,10 +71,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     private String user_photo_url;
     private Bitmap bitmap;
+    String is_bind = DataHelper.getStringSF(MyApplication.getAppContext(), "isbind");
+    String load_tag = DataHelper.getStringSF(MyApplication.getAppContext(), "load_tag");
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
         user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
         if (!user_photo_url.equals("")) {
             bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
@@ -79,6 +84,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             } else
                 check_head_photo.setImageResource(R.mipmap.touxaing);
         }
+        if (is_bind.equals("default")) {
+            tvBindAccount.setText(getString(R.string.bind_account));
+        } else {
+            tvBindAccount.setText(getString(R.string.relieve_bind));
+        }
+
+
     }
 
     private void init_refresh() {
@@ -155,7 +167,22 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_bind_account:
-                launchActivity(new Intent(getActivity(), BindbyPhoneActivity.class));
+                if (is_bind.equals("default")) {
+                    if (load_tag.equals("phone")) {
+                        Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
+                        intent.putExtra("tag", "email");
+                        launchActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getActivity(), BindbyPhoneActivity.class);
+                        intent.putExtra("tag", "phone");
+                        launchActivity(intent);
+                    }
+
+                } else {
+                    tvBindAccount.setText(getString(R.string.relieve_bind));
+                }
+
+
                 break;
             case R.id.check_head_photo:
                 launchActivity(new Intent(getActivity(), Personal_dataActivity.class));

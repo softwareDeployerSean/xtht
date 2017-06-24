@@ -99,7 +99,13 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         ivBack.setVisibility(View.GONE);
         bottom_sector_menu.setButtonDatas(buttonDatas);
         setListener(bottom_sector_menu);
-        DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
+       // DataHelper.setStringSF(MyApplication.getAppContext(),"isload","true");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.debugInfo("onResume啊");
     }
 
     private void setListener(final SectorMenuButton button) {
@@ -222,10 +228,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (alertView.isShowing()){
+            if (alertView!=null&&alertView.isShowing()){
                 alertView.dismiss();
+                LogUtils.debugInfo("isShowing");
             }else {
                 exit();
+                LogUtils.debugInfo("noisShowing");
             }
 
             return false;

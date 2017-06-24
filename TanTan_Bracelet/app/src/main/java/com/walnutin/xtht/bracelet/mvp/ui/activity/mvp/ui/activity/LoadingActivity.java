@@ -51,7 +51,6 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     EditText etPassword;
     @BindView(R.id.cheques_check)
     CheckBox cheques_check;
-
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerLoadingComponent //如找不到该类,请编译一下项目
@@ -149,7 +148,7 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
             case 0:
 
                 // 打开注册页面
-                RegisterPage registerPage = new RegisterPage();
+                RegisterPage registerPage = new RegisterPage("reset");
                 registerPage.setRegisterCallback(new EventHandler() {
                     public void afterEvent(int event, int result, Object data) {
                         // 解析注册结果

@@ -4,8 +4,6 @@
     android:id="@+id/ep_list_item_parent_ll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ep_list_selector"
-    android:layout_marginBottom="1px"
     android:layout_gravity="center">
 
     <ImageView

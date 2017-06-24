@@ -59,11 +59,11 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
             holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_not_connected));
         }
 
-//        if(position % 2 == 0) {
-//            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListOdd));
-//        }else {
-//            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListEven));
-//        }
+        if(position % 2 == 0) {
+            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListOdd));
+        }else {
+            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListEven));
+        }
         holder.itemView.setTag(position);
     }
 

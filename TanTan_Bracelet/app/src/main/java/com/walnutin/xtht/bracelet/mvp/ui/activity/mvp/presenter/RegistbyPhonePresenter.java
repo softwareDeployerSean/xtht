@@ -46,7 +46,7 @@ public class RegistbyPhonePresenter extends BasePresenter<RegistbyPhoneContract.
     public void regist(String phone, String password) {
 
         HashMap hashMap = new HashMap();
-        hashMap.put("phone ", phone);
+        hashMap.put("phone", phone);
         hashMap.put("password", password);
         hashMap.put("platform", "Android");
         hashMap.put("userType", 1);
@@ -64,6 +64,7 @@ public class RegistbyPhonePresenter extends BasePresenter<RegistbyPhoneContract.
                         mRootView.hideLoading();
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(),"username",phone);
+                        DataHelper.setStringSF(MyApplication.getAppContext(),"load_tag","phone");
                         DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
                         mRootView.regist_success();
                         //mRootView.hideLoading();

@@ -27,6 +27,7 @@
             android:background="@mipmap/shouji" />
 
         <TextView
+            android:id="@+id/tv_bind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15px"

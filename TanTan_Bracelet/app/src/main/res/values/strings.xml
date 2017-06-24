@@ -75,6 +75,8 @@
     <string name="best_month">最佳月 </string>
     <string name="bind_account">账号绑定 </string>
     <string name="exit_account">账号登出 </string>
+    <string name="img_success">头像修改成功 </string>
+    <string name="relieve_bind">解除绑定 </string>
 
     <string name="phone_number">手机账号</string>
     <string name="email_number">邮箱账号</string>

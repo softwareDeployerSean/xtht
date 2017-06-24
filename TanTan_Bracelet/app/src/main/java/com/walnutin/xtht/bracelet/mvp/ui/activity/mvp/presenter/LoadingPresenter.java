@@ -19,6 +19,7 @@ import okhttp3.RequestBody;
 import javax.inject.Inject;
 
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.LoadingContract;
 
@@ -63,6 +64,11 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
                         mRootView.hideLoading();
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "username", name);
+                        if (ConmonUtils.checkEmail(name)) {
+                            DataHelper.setStringSF(MyApplication.getAppContext(), "load_tag", "email");
+                        } else {
+                            DataHelper.setStringSF(MyApplication.getAppContext(), "load_tag", "phone");
+                        }
                         DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
                         mRootView.load_success();
                         //mRootView.hideLoading();
@@ -78,11 +84,6 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
                 });
 
     }
-
-
-
-
-
 
 
     @Override

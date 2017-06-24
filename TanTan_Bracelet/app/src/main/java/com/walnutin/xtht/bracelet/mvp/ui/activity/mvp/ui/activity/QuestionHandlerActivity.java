@@ -3,20 +3,16 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
-import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerQuestionHandlerComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.QuestionHandlerModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.QuestionHandlerContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.QuestionHandlerPresenter;
-
-import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -44,14 +40,6 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
 
     }
 
-    @OnClick({R.id.question_handler_b})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.question_handler_b:
-                ToastUtils.showToast("正在提交，等待接口...", this);
-                break;
-        }
-    }
 
     @Override
     public void showLoading() {

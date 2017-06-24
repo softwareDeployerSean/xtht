@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,6 +30,7 @@ import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.PermissionUtil;
@@ -37,8 +40,11 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
 import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.PictureCutUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerPersonal_dataComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.Personal_dataModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.Personal_dataContract;
@@ -112,6 +118,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     private static final int CODE_RESULT_REQUEST = 2;
     int change_img = 0;
     SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
+    UserBean userBean = DataHelper.getDeviceData(MyApplication.getAppContext(), "UserBean");
+
+    String isload = "";
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -122,6 +131,18 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 .personal_dataModule(new Personal_dataModule(this))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LogUtils.debugInfo("穿件啊"+"Personal_dataActivity");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.debugInfo("销毁啊"+"Personal_dataActivity");
     }
 
     @Override
@@ -148,6 +169,26 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         initCustomOptionPicker_height();
         initCustomOptionPicker_weight();
         initCustomOptionPicker_foot();
+        if (!TextUtils.isEmpty(userBean.getNickname())) {
+            tvName.setText(userBean.getNickname());
+        }
+        if (!TextUtils.isEmpty(userBean.getSex())) {
+            tvSex.setText(userBean.getSex());
+        }
+        if (!TextUtils.isEmpty(userBean.getBirth())) {
+            tvBirthday.setText(userBean.getBirth());
+        }
+        if (!TextUtils.isEmpty(String.valueOf(userBean.getHeight()))) {
+            tvHeight.setText(userBean.getHeight() + "[" + userBean.getHeightOfUnit() + "]");
+        }
+        if (!TextUtils.isEmpty(String.valueOf(userBean.getWeight()))) {
+            tvWeight.setText(userBean.getWeight() + "[" + userBean.getWeightOfUnit() + "]");
+        }
+        if (!TextUtils.isEmpty(String.valueOf(userBean.getDailyGoals()))) {
+            tvTarget.setText(userBean.getDailyGoals() + "[步]");
+        }
+
+        isload = DataHelper.getStringSF(MyApplication.getAppContext(), "isload");
     }
 
 
@@ -178,7 +219,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         finish();
     }
 
-    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target})
+    AppManager appManager = new AppManager(MyApplication.bizApp);
+
+    @OnClick({R.id.check_head_photo, R.id.tv_birthday, R.id.tv_height, R.id.tv_weight, R.id.tv_sex, R.id.toolbar_right, R.id.tv_target, R.id.iv_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.check_head_photo:
@@ -200,12 +243,14 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 String name = tvName.getText().toString().trim();
                 String sex = tvSex.getText().toString().trim();
                 String birth = tvBirthday.getText().toString().trim();
-                String height = tvHeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
+                String height = tvHeight.getText().toString().trim().substring(0, tvHeight.getText().toString().length() - 4);
                 String weight = tvWeight.getText().toString().trim().substring(0, tvWeight.getText().toString().length() - 4);
                 String dailyGoals = tvTarget.getText().toString().trim().substring(0, tvTarget.getText().toString().length() - 3);
                 String weightOfUnit = tvWeight.getText().toString().trim().substring(tvWeight.getText().toString().length() - 3, tvWeight.getText().toString().length() - 1);
+                String heightOfUnit = tvHeight.getText().toString().trim().substring(tvHeight.getText().toString().length() - 3, tvHeight.getText().toString().length() - 1);
+
                 LogUtils.debugInfo("weight=" + weight + "weightOfUnit=" + weightOfUnit);
-                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), Double.parseDouble(height), weightOfUnit,  Double.parseDouble(weight));
+                mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), height, weightOfUnit, weight, heightOfUnit);
                 if (change_img == 1) {
                     change_img = 0;
                     mPresenter.post_img();
@@ -214,6 +259,19 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 break;
             case R.id.tv_target:
                 pvCustomOptions_foot.show();
+                break;
+            case R.id.iv_back:
+                if (alertView != null && alertView.isShowing()) {
+                    alertView.dismiss();
+                } else {
+                    finish();
+                   /* if (isload.equals("default")) {
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }*/
+                }
                 break;
         }
     }
@@ -321,15 +379,29 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (alertView != null) {
-                if (alertView.isShowing()) {
-                    alertView.dismiss();
-                    return false;
+            if (alertView != null && alertView.isShowing()) {
+                alertView.dismiss();
+                return false;
+            }/* else {
+                if (isload.equals("default")) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                    LogUtils.debugInfo("第一次 啊");
+                } else {
+                    LogUtils.debugInfo("不是第一次 啊");
+                    finish();
                 }
-            }
+                return true;
+            }*/
+
+
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 
     private void initCustomTimePicker() {
 
@@ -617,7 +689,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         }
         //身高是英尺ft
         for (int i = 60; i < 240; i++) {
-            options1Items_ft.add(df.format(i * 0.0328) + "");
+            options1Items_ft.add(ConmonUtils.getYingCun(i * 0.0328));
         }
         //选项2
         ArrayList<String> options2Items_01_ft = new ArrayList<>();

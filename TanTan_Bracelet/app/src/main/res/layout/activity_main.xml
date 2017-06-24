@@ -22,9 +22,10 @@
         android:id="@+id/radiogroup"
         android:layout_width="fill_parent"
         android:layout_height="55px"
-        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
 
         <RadioButton
             android:id="@+id/radio_main"
@@ -33,6 +34,7 @@
             android:drawableTop="@drawable/selector_main_bottom_tab_home"
             android:paddingLeft="0dp"
             android:text="@string/home"
+            android:drawablePadding="5px"
             />
 
         <RadioButton
@@ -41,7 +43,9 @@
             android:checked="false"
             android:drawableTop="@drawable/selector_main_bottom_tab_exercise"
             android:paddingLeft="0dp"
-            android:text="@string/exercise" />
+            android:text="@string/exercise"
+            android:drawablePadding="5px"
+            />
 
         <com.rance.library.SectorMenuButton
             android:layout_marginTop="@dimen/dimen_6px"
@@ -70,7 +74,8 @@
             android:checked="false"
             android:drawableTop="@drawable/selector_main_bottom_tab_equipment"
             android:paddingLeft="0dp"
-            android:text="@string/equipment" />
+            android:text="@string/equipment"
+            android:drawablePadding="5px" />
 
         <RadioButton
             android:id="@+id/radio_mine"
@@ -78,7 +83,8 @@
             android:checked="false"
             android:drawableTop="@drawable/selector_main_bottom_tab_mine"
             android:paddingLeft="0dp"
-            android:text="@string/mine" />
+            android:text="@string/mine"
+            android:drawablePadding="5px" />
     </RadioGroup>
 
 

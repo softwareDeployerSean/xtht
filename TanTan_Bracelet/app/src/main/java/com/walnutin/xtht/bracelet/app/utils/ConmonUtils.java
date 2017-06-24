@@ -5,6 +5,7 @@ import android.util.Base64;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,13 +70,25 @@ public class ConmonUtils {
     }
 
     public static boolean isMobileNO(String mobiles) {
-
         Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-
         Matcher m = p.matcher(mobiles);
-
-
         return m.matches();
+    }
+
+    public static String getYingCun(Double a) {
+        int yingchi = (int) (a / 12);
+        if (a % 12 == 0) {
+            return yingchi + "'";
+        } else {
+            double yingcun = a - yingchi * 12;
+
+            DecimalFormat df = new DecimalFormat("0.00");
+            String str_yingcun = df.format(yingcun);
+
+            return yingchi + "'" + str_yingcun + "”";
+        }
 
     }
+
+
 }

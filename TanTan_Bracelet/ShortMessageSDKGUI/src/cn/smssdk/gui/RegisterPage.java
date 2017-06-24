@@ -64,6 +64,11 @@ public class RegisterPage extends FakeActivity implements OnClickListener,
 	private EventHandler handler;
 	private Dialog pd;
 	private OnSendMessageHandler osmHandler;
+	private String tag;
+
+	public RegisterPage(String tag) {
+		this.tag = tag;
+	}
 
 	public void setRegisterCallback(EventHandler callback) {
 		this.callback = callback;
@@ -87,7 +92,15 @@ public class RegisterPage extends FakeActivity implements OnClickListener,
 
 			View llBack = activity.findViewById(ResHelper.getIdRes(activity, "ll_back"));
 			TextView tv = (TextView) activity.findViewById(ResHelper.getIdRes(activity, "tv_title"));
-			int resId = ResHelper.getStringRes(activity, "smssdk_regist");
+			int resId=0;
+			if (tag.equals("regist")){
+				 resId = ResHelper.getStringRes(activity, "smssdk_regist");
+			}else if (tag.equals("reset")){
+				 resId = ResHelper.getStringRes(activity, "smssdk_reset");
+			}else if (tag.equals("bind")){
+				resId = ResHelper.getStringRes(activity, "smssdk_bind");
+			}
+
 			if (resId > 0) {
 				tv.setText(resId);
 			}

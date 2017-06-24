@@ -108,7 +108,7 @@
             <ImageView
                 android:id="@+id/iv_day"
                 android:layout_width="33px"
-                android:layout_height="26px"
+                android:layout_height="33px"
                 android:layout_marginLeft="31px"
                 android:layout_marginTop="30px"
                 android:background="@mipmap/zuijiari" />
@@ -167,8 +167,8 @@
 
             <ImageView
                 android:id="@+id/iv_week"
-                android:layout_width="19px"
-                android:layout_height="26px"
+                android:layout_width="33px"
+                android:layout_height="33px"
                 android:layout_marginLeft="31px"
                 android:layout_marginTop="30px"
                 android:background="@mipmap/zuijiazhou" />
@@ -249,7 +249,7 @@
             <ImageView
                 android:id="@+id/iv_month"
                 android:layout_width="33px"
-                android:layout_height="26px"
+                android:layout_height="33px"
                 android:layout_marginLeft="31px"
                 android:layout_marginTop="30px"
                 android:background="@mipmap/zuijiayue" />
@@ -308,8 +308,8 @@
 
             <ImageView
                 android:id="@+id/iv_goin"
-                android:layout_width="19px"
-                android:layout_height="26px"
+                android:layout_width="33px"
+                android:layout_height="33px"
                 android:layout_marginLeft="31px"
                 android:layout_marginTop="30px"
                 android:background="@mipmap/dabiaolv" />

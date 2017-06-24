@@ -69,6 +69,7 @@ public class RegistbyEailPresenter extends BasePresenter<RegistbyEailContract.Mo
                         mRootView.hideLoading();
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "username", email);
+                        DataHelper.setStringSF(MyApplication.getAppContext(),"load_tag","email");
                         DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
                         mRootView.regist_success();
                         //mRootView.hideLoading();

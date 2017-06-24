@@ -3,11 +3,9 @@
     package="com.walnutin.xtht.bracelet">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -15,24 +13,26 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
     <application
-        android:name="com.walnutin.xtht.bracelet.app.MyApplication"
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--蓝牙服务-->
+        <!-- 蓝牙服务 -->
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
 
-        <activity android:name=".mvp.ui.activity.GuildActivity">
+        <activity
+            android:name=".mvp.ui.activity.GuildActivity"
+            android:theme="@style/Theme.AppStartLoadTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,10 +42,9 @@
         <activity
             android:name=".mvp.ui.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.LoadActivity" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.RegistbyPhoneActivity"
@@ -77,8 +76,12 @@
             android:value="ConfigModule" />
 
         <!-- 通过AndroidManifest配置AppKey和AppSecret，如果你选择通过代码配置，则不需要配置以下meta-data -->
-        <meta-data android:name="Mob-AppKey" android:value="1e6bbf6fe27cc"/>
-        <meta-data android:name="Mob-AppSecret" android:value="a0153995befcf738e5f57a7db3f52bb2"/>
+        <meta-data
+            android:name="Mob-AppKey"
+            android:value="1e6bbf6fe27cc" />
+        <meta-data
+            android:name="Mob-AppSecret"
+            android:value="a0153995befcf738e5f57a7db3f52bb2" />
 
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.RegistbyEailActivity"
@@ -151,8 +154,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/ep_basic_settings"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -170,20 +172,26 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/person_data"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.ClockAddActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/person_data"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
-
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+
+            />
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.BindEndbyphoneActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/bind"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

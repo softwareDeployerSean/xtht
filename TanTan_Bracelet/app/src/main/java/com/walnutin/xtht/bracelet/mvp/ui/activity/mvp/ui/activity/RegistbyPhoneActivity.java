@@ -114,7 +114,7 @@ public class RegistbyPhoneActivity extends BaseActivity<RegistbyPhonePresenter> 
     @Override
     public void regist_success() {
         ToastUtils.showToast(getString(R.string.regist_success), this);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Personal_dataActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

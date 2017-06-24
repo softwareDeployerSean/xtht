@@ -17,7 +17,10 @@ public class MyApplication  extends MobApplication implements App {
 
     private AppDelegate mAppDelegate;
 
-    private static MyApplication bizApp;//单列模式
+    public static MyApplication bizApp;//单列模式
+
+
+
 
     @Override
     public void onCreate() {

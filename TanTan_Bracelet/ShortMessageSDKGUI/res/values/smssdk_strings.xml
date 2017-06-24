@@ -1,6 +1,8 @@
 <resources>
     <string name="smssdk_back">返回 </string>
     <string name="smssdk_regist">使用手机号码注册</string>
+    <string name="smssdk_reset">使用手机号码找回</string>
+    <string name="smssdk_bind">使用手机号码绑定</string>
     <string name="smssdk_make_sure_country_mobile">请确认你的国家或地区并输入手机号码</string>
     <string name="smssdk_country">国家和地区</string>
     <string name="smssdk_next">下一步</string>

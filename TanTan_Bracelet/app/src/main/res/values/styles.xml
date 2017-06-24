@@ -9,6 +9,12 @@
         <item name="android:windowAnimationStyle">@style/AnimaActivity</item>
     </style>
 
+    <style name="Theme.AppStartLoadTranslucent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
     <style name="AnimaActivity">
         <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>
         <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>
@@ -19,16 +25,14 @@
     <!-- 底部导航按钮的样式 -->
     <style name="navigation_style">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
         <item name="android:button">@null</item>
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:textColor">@drawable/radio_button_color</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:background">@null</item>
     </style>
-
 
 
     <style name="AlertActivity_AlertStyle" parent="android:Theme.Dialog">
@@ -54,7 +58,6 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
 
 
 </resources>

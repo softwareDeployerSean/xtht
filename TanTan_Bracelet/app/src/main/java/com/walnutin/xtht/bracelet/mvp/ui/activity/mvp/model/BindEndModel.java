@@ -10,7 +10,10 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BindEndContract;
+
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -23,6 +26,12 @@ public class BindEndModel extends BaseModel implements BindEndContract.Model {
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
+    }
+
+    @Override
+    public Observable<String> get_code(String email) {
+          return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .sendcode(email);
     }
 
     @Override
