@@ -59,10 +59,10 @@ public interface UserService {
     @PUT("user/updateUserInfo")
     Observable<String> change_data(@Body RequestBody route);
 
-   //上传头像
+    //上传头像
     @Multipart
     @POST("user/updateAvatar")
-    Observable<String> post_img(@Part("token") RequestBody token,@Part MultipartBody.Part file);
+    Observable<String> post_img(@Part("token") RequestBody token, @Part MultipartBody.Part file);
 
     //下载头像
     @GET
@@ -70,7 +70,8 @@ public interface UserService {
 
     //绑定账号
     @PUT("user/bindAccount")
-    Observable<BaseJson> bindAccount(@Body RequestBody route);
+    Observable<String> bindAccount(@Body RequestBody route);
+
     //解绑账号
     @PUT("user/unbindAccount")
     Observable<String> unbindAccount(@Body RequestBody route);

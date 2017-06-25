@@ -64,11 +64,12 @@ public class BindEndbyphonePresenter extends BasePresenter<BindEndbyphoneContrac
         })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ErrorHandleSubscriber<BaseJson>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseJson users) {
+                    public void onNext(String users) {
                         mRootView.hideLoading();
                         mRootView.bind_success();
+                        mRootView.showMessage(users);
                         DataHelper.setStringSF(mApplication, "bind_count", name);
 
                         //mRootView.hideLoading();

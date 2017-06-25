@@ -17,6 +17,7 @@ import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBindbyPhoneComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.BindbyPhoneModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BindbyPhoneContract;
@@ -114,7 +115,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        UiUtils.SnackbarText(message);
+        ToastUtils.showToast(message,this);
     }
 
     @Override

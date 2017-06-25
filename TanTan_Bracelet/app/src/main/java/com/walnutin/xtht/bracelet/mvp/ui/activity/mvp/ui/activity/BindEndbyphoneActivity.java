@@ -89,7 +89,7 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        UiUtils.SnackbarText(message);
+        ToastUtils.showToast(message,this);
     }
 
     @Override

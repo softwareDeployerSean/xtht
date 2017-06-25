@@ -45,13 +45,13 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
 
     public void unbind(String tag) {
         HashMap hashMap = new HashMap();
-        String name=DataHelper.getStringSF(mApplication,"bind_count");
-        if (tag.equals("phone")){
+        String name = DataHelper.getStringSF(mApplication, "bind_count");
+        if (tag.equals("phone")) {
             hashMap.put("phone", name);
-        }else if (tag.equals("email")){
+        } else if (tag.equals("email")) {
             hashMap.put("email", name);
         }
-        hashMap.put("token", DataHelper.getStringSF(mApplication,"token"));
+        hashMap.put("token", DataHelper.getStringSF(mApplication, "token"));
         String jsonStr = JSONObject.toJSONString(hashMap);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
         mModel.remove_bind(body)
@@ -64,6 +64,7 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
                     @Override
                     public void onNext(String users) {
                         mRootView.hideLoading();
+                        mRootView.showMessage(users);
                         DataHelper.setStringSF(mApplication, "isbind", "default");
                         //mRootView.hideLoading();
                     }
@@ -78,7 +79,6 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
                 });
 
     }
-
 
 
     @Override

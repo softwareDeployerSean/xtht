@@ -31,7 +31,7 @@ public class BindEndbyphoneModel extends BaseModel implements BindEndbyphoneCont
     }
 
     @Override
-    public Observable<BaseJson> get_binddata(RequestBody body) {
+    public Observable<String> get_binddata(RequestBody body) {
         return  mRepositoryManager.obtainRetrofitService(UserService.class)
                 .bindAccount(body);
     }
