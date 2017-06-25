@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.*;
+
 
 import java.util.List;
 
@@ -29,6 +32,12 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
 
     OnSwitchButtonChanged mOnSwitchButtonChanged;
 
+    public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
     public BasicSettingsAdapter(Context context, List<BasicSettingsMenue> settingsMenues) {
         this.mContext = context;
         this.settingsMenues = settingsMenues;
@@ -36,9 +45,10 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BasicSettingsAdapter.MyViewHolder holder = new BasicSettingsAdapter.MyViewHolder(LayoutInflater.from(
+        View view = LayoutInflater.from(
                 mContext).inflate(R.layout.basic_settings_item, parent,
-                false));
+                false);
+        BasicSettingsAdapter.MyViewHolder holder = new BasicSettingsAdapter.MyViewHolder(view);
         return holder;
     }
 
@@ -49,6 +59,15 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
         if(menue.isChangeTextColor()) {
             //这里没有判断颜色，直接设置为红色
             holder.tv.setTextColor(mContext.getResources().getColor(R.color.redFF1212));
+
+            holder.parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(holder.itemView, position);
+                    }
+                }
+            });
         }
         if(menue.isSetMargin()) {
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.parent.getLayoutParams();
@@ -78,6 +97,7 @@ public class BasicSettingsAdapter extends RecyclerView.Adapter<BasicSettingsAdap
                 }
             }
         });
+
     }
 
     @Override

@@ -197,11 +197,11 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
-            @Override
-            public void onResponse(int i) {
-                LogUtils.debugInfo(TAG + "断开连接 onResponse i = " + i);
-            }
-        });
+//        mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
+//            @Override
+//            public void onResponse(int i) {
+//                LogUtils.debugInfo(TAG + "断开连接 onResponse i = " + i);
+//            }
+//        });
     }
 }

@@ -78,4 +78,8 @@ public interface UserService {
     //绑定手环
     @POST("user/bindBracelet")
     Observable<BaseJson> bindBracelet(@Body RequestBody route);
+
+    //解绑手环
+    @POST("user/unbindBracelet")
+    Observable<BaseJson> unbindBracelet(@Part("token") RequestBody token);
 }

@@ -10,12 +10,17 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
+import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BasicSettingsContract;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -57,6 +62,12 @@ public class BasicSettingsModel extends BaseModel implements BasicSettingsContra
         basicSettingsMenues.add(menue7);
 
         return basicSettingsMenues;
+    }
+
+    @Override
+    public Observable<BaseJson> getUnBindBraceletObservable(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .unbindBracelet(body);
     }
 
     @Override

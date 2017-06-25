@@ -8,9 +8,11 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
@@ -29,6 +31,7 @@ import com.veepoo.protocol.model.settings.LongSeatSetting;
 import com.veepoo.protocol.operate.FindDeviceOperater;
 import com.veepoo.protocol.operate.LongSeatOperater;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBasicSettingsComponent;
@@ -36,6 +39,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.BasicSettingsModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BasicSettingsContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.BasicSettingsPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.BasicSettingsAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView;
@@ -207,6 +211,19 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                     setLongSeat(false);
                 }else if(position == 3) { //手机防丢失
                     setFindDevice(false);
+                }
+            }
+        });
+
+        adapter.setmOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                BasicSettingsMenue bm = basicSettingsMenues.get(position);
+                LogUtils.debugInfo(TAG +"onItemClick click");
+                if(bm.getName().equals("解除绑定")) {
+                    String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
+                    LogUtils.debugInfo(TAG +"token=" + token);
+                    mPresenter.unbindBracelet(token);
                 }
             }
         });

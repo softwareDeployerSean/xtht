@@ -4,11 +4,15 @@ import android.content.Context;
 
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.BasicSettingsAdapter;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 public interface BasicSettingsContract {
@@ -21,5 +25,7 @@ public interface BasicSettingsContract {
     //Model层定义接口,外部只需关心model返回的数据,无需关心内部细节,及是否使用缓存
     interface Model extends IModel {
         List<BasicSettingsMenue> getBasicSettingsMenues(BasicItemSupport basicItemSupport);
+
+        Observable<BaseJson> getUnBindBraceletObservable(RequestBody body);
     }
 }
