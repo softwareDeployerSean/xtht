@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,17 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
 import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadingActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MinePresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +43,7 @@ import butterknife.Unbinder;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MineFragment extends BaseFragment<MinePresenter> implements MineContract.View {
+public class MineFragment extends BaseFragment<MinePresenter> implements MineContract.View, OnItemClickListener, OnDismissListener {
 
 
     @BindView(R.id.refresh)
@@ -49,6 +54,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     @BindView(R.id.tv_bind_account)
     TextView tvBindAccount;
     Unbinder unbinder;
+    AlertView alertView_exit;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -156,8 +162,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     }
 
+    public void exit() {
+        alertView_exit = new AlertView(null, getString(R.string.exit_ok), getString(R.string.canecl), new String[]{getString(R.string.confirm)}, null, getActivity(), AlertView.Style.Alert, this)
+                .setCancelable(true).setOnDismissListener(this);
+        alertView_exit.show();
+    }
 
-    @OnClick({R.id.tv_bind_account, R.id.check_head_photo})
+    @OnClick({R.id.tv_bind_account, R.id.check_head_photo, R.id.tv_exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_bind_account:
@@ -174,7 +185,25 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             case R.id.check_head_photo:
                 launchActivity(new Intent(getActivity(), Personal_dataActivity.class));
                 break;
+            case R.id.tv_exit:
+                exit();
+                break;
 
+        }
+    }
+
+    @Override
+    public void onDismiss(Object o) {
+
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        switch (position) {
+            case 0:
+                launchActivity(new Intent(getActivity(), LoadingActivity.class));
+                getActivity().finish();
+                break;
         }
     }
 

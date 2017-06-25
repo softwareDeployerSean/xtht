@@ -157,7 +157,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         initCustomOptionPicker_height();
         initCustomOptionPicker_weight();
         initCustomOptionPicker_foot();
-        LogUtils.debugInfo("默认值=="+userBean.getHeight() );
+        LogUtils.debugInfo("默认值==" + userBean.getHeight() + "部署=" + userBean.getDailyGoals());
         if (!TextUtils.isEmpty(userBean.getNickname())) {
             tvName.setText(userBean.getNickname());
         }
@@ -173,7 +173,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         if (!TextUtils.isEmpty(userBean.getWeight())) {
             tvWeight.setText(userBean.getWeight() + "[" + userBean.getWeightOfUnit() + "]");
         }
-        if (!TextUtils.isEmpty(String.valueOf(userBean.getDailyGoals()))) {
+        if (userBean.getDailyGoals() != 0) {
             tvTarget.setText(userBean.getDailyGoals() + "[步]");
         }
 
@@ -660,7 +660,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
 
     void initOptionData() {
-        DecimalFormat df = new DecimalFormat("######0.0000");
+        DecimalFormat df = new DecimalFormat("######0.00");
 
         //身高是cm
         for (int i = 60; i < 240; i++) {

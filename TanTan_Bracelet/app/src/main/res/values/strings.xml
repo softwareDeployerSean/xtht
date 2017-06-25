@@ -79,6 +79,9 @@
     <string name="img_success">头像修改成功 </string>
     <string name="relieve_bind">解除绑定 </string>
     <string name="remove_ok">确定解除绑定吗? </string>
+    <string name="exit_ok">确定账号登出吗? </string>
+    <string name="ceshi">确定账号登出吗? </string>
+
 
     <string name="phone_number">手机账号</string>
     <string name="email_number">邮箱账号</string>
