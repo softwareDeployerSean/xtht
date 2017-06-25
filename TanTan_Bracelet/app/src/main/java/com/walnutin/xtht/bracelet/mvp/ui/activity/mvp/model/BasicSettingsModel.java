@@ -65,7 +65,7 @@ public class BasicSettingsModel extends BaseModel implements BasicSettingsContra
     }
 
     @Override
-    public Observable<BaseJson> getUnBindBraceletObservable(RequestBody body) {
+    public Observable<String> getUnBindBraceletObservable(String body) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .unbindBracelet(body);
     }

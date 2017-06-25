@@ -21,8 +21,10 @@ import javax.inject.Inject;
 
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpSearchListAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
 
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
 
     private EpSearchListAdapter epSearchListAdapter;
 
-    private List<SearchResult> eps = null;
+    private List<Device> eps = null;
 
     @Inject
     public EquipmentPresenter(EquipmentContract.Model model, EquipmentContract.View rootView
@@ -52,6 +54,36 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
         this.mApplication = application;
         this.mImageLoader = imageLoader;
         this.mAppManager = appManager;
+    }
+
+    public void hasBound(String mac) {
+
+        mModel.hasBoundObservable(mac)
+                .subscribeOn(Schedulers.io()).doOnSubscribe(disposable -> {
+            //mRootView.showLoading();//显示上拉刷新的进度条
+        })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
+                    @Override
+                    public void onNext(String baseJson) {
+//                        mRootView.hideLoading();
+                        LogUtils.debugInfo(TAG + "查询hasBound 成功");
+                        LogUtils.debugInfo(TAG + baseJson);
+
+                        mRootView.unBoundBracelet();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+//                        mRootView.hideLoading();
+//                        super.onError(e);
+                        LogUtils.debugInfo(TAG + "查询hasBound失败");
+                        mRootView.hasBound(e.getMessage());
+                    }
+
+
+                });
     }
 
     public void searchEpList() {
@@ -95,10 +127,10 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
         })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ErrorHandleSubscriber<BaseJson>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseJson baseJson) {
-                        mRootView.hideLoading();
+                    public void onNext(String baseJson) {
+                        //mRootView.hideLoading();
                         LogUtils.debugInfo(TAG + baseJson);
                     }
 

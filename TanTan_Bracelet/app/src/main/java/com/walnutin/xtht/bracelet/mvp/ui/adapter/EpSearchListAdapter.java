@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapter.EpListViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<SearchResult> epList;
+    private List<Device> epList;
 
     private OnItemClickListener mOnItemClickListener = null;
 
@@ -32,7 +33,7 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public EpSearchListAdapter(List<SearchResult> epList, Context context) {
+    public EpSearchListAdapter(List<Device> epList, Context context) {
         this.epList = epList;
         this.mContext = context;
     }
@@ -49,11 +50,11 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
 
     @Override
     public void onBindViewHolder(EpListViewHolder holder, int position) {
-        SearchResult searchResult = epList.get(position);
-        holder.epNameTv.setText(searchResult.getName());
+        Device device = epList.get(position);
+        holder.epNameTv.setText(device.getName());
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("bracelet", MODE_PRIVATE);
         String address = sharedPreferences.getString("connected_address", "null");
-        if(address.equals(searchResult.getAddress())) {
+        if(address.equals(device.getMac())) {
             holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_connected));
 
         }else {

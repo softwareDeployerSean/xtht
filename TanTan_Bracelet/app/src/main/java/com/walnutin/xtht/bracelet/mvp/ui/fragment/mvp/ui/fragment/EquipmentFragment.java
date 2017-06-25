@@ -53,6 +53,7 @@ import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
@@ -91,12 +92,14 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     private static final int BAIDU_READ_PHONE_STATE = 100;
 
-    List<SearchResult> mListData = new ArrayList<>();
+    List<Device> mListData = new ArrayList<>();
     List<String> mListAddress = new ArrayList<>();
 
     VPOperateManager mVpoperateManager;
 
     private Context mContext;
+
+    private int operaterPosition;
 
     private boolean mIsOadModel;
     @BindView(R.id.ep_search_btn)
@@ -113,7 +116,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                 case 0:
                     String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
                     mPresenter.bindBracelet(token, epMac);
-                break;
+                    break;
             }
         }
     };
@@ -141,8 +144,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
 
     @Override
-    public void setAdapter(List<SearchResult> epList) {
-        for (SearchResult result : epList) {
+    public void setAdapter(List<Device> epList) {
+        for (Device result : epList) {
             mListData.add(result);
         }
         epSearchListAdapter = new EpSearchListAdapter(mListData, mContext);
@@ -152,7 +155,9 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             public void onItemClick(View view, int position) {
                 LogUtils.debugInfo(TAG1 + "onItemClick click");
                 showDialog();
-                connectDevice(mListData.get(position));
+                setOperaterPosition(position);
+                hasBound(mListData.get(position));
+                //connectDevice(mListData.get(position));
             }
 
             @Override
@@ -171,6 +176,9 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     private ViewGroup contentContainer;
     View contentView;
 
+    private void hasBound(Device device) {
+        mPresenter.hasBound(device.getMac());
+    }
 
     private void showDialog() {
         decorView = (ViewGroup) getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
@@ -195,7 +203,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     private void dimissDialog() {
         LogUtils.debugInfo(TAG1 + "dimissDialog decorView=" + decorView);
-        if(decorView != null) {
+        if (decorView != null) {
 //            contentContainer.removeView(contentView);
 //            rootView.removeView(contentContainer);
             decorView.removeView(rootView);
@@ -221,8 +229,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
         mVpoperateManager = VPOperateManager.getMangerInstance(getActivity());
 
         LogUtils.debugInfo("[TAN]" + mVpoperateManager);
-
-        registerBluetoothStateListener();
     }
 
     /**
@@ -256,6 +262,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             Toast.makeText(mContext, "蓝牙没有开启", Toast.LENGTH_SHORT).show();
             return true;
         }
+
+        requestLocationPermission();
         LogUtils.debugInfo(TAG1 + " startDevice Start scan device");
         mVpoperateManager.startScanDevice(mSearchResponse);
         return false;
@@ -278,7 +286,10 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                 @Override
                 public void run() {
                     if (!mListAddress.contains(device.getAddress())) {
-                        mListData.add(device);
+                        Device d = new Device();
+                        d.setName(device.getName());
+                        d.setMac(device.getAddress());
+                        mListData.add(d);
                         mListAddress.add(device.getAddress());
                     }
                 }
@@ -293,7 +304,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     epSearchBtn.setText(" " + mContext.getResources().getString(R.string.ep_search_btn));
                     epSearchBtn.setEnabled(true);
 
-                    Collections.sort(mListData, new DeviceCompare());
+//                    Collections.sort(mListData, new DeviceCompare());
                     setStyle(mListData.size());
                     epSearchListAdapter.notifyDataSetChanged();
                 }
@@ -328,8 +339,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     }
 
 
-    private void connectDevice(SearchResult searchResult) {
-        String mac = searchResult.getAddress();
+    private void connectDevice(Device device) {
+        String mac = device.getMac();
 
         mVpoperateManager.registerConnectStatusListener(mac, mBleConnectStatusListener);
 
@@ -344,11 +355,14 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 //                    Logger.t(TAG).i("是否是固件升级模式=" + isoadModel);
                     LogUtils.debugInfo(TAG1 + "是否是固件升级模式=" + isoadModel);
                     mIsOadModel = isoadModel;
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "2"); //连接成功
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "ep_name", device.getName());
                 } else {
 //                    Logger.t(TAG).i("连接失败");
                     LogUtils.debugInfo(TAG1 + "连接失败");
                     ToastUtils.showToast(getActivity().getResources().getString(R.string.connected_failed), getActivity());
                     dimissDialog();
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
                 }
             }
         }, new INotifyResponse() {
@@ -361,7 +375,11 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     editor.putString("connected_address", mac);
                     editor.commit();
 
-                    EquipmentFragment.this.epMac = mac;
+                    DataHelper.setStringSF(getActivity(), "mac", mac);
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "3"); //连接监听
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "ep_name", device.getName()); //连接监听
+
+                    EquipmentFragment.this.epMac = mac;;
 
                     mHandler.sendEmptyMessage(0);
                     dimissDialog();
@@ -369,11 +387,12 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     LogUtils.debugInfo(TAG1 + "监听成功-可进行其他操作");
                     Intent intent = new Intent(mContext, EpConnectedActivity.class);
                     intent.putExtra("isoadmodel", mIsOadModel);
-                    intent.putExtra("deviceaddress", mac);
-                    intent.putExtra("searchResult", searchResult);
+                    intent.putExtra("mac", device.getMac());
+                    intent.putExtra("name", device.getName());
                     startActivity(intent);
                 } else {
 //                    Logger.t(TAG).i("监听失败，重新连接");
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "1"); //连接监听
                     dimissDialog();
                     ToastUtils.showToast("连接失败", getActivity());
                     LogUtils.debugInfo(TAG1 + "监听失败，重新连接");
@@ -449,7 +468,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        UiUtils.SnackbarText(message);
+//        UiUtils.SnackbarText(message);
+        ToastUtils.showToast(message, getActivity());
     }
 
     @Override
@@ -489,6 +509,19 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     }
 
+    @Override
+    public void hasBound(String message) {
+        if (message.equals("该手环已被绑定过")) {
+            ToastUtils.showToast(message, getActivity());
+        }
+        dimissDialog();
+    }
+
+    @Override
+    public void unBoundBracelet() {
+        connectDevice(mListData.get(getOperaterPosition()));
+    }
+
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
@@ -524,6 +557,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             public void onRequestPermissionSuccess() {
                 //selectPicFromCamera();
             }
+
             @Override
             public void onRequestPermissionFailure() {
                 new AlertDialog.Builder(mContext).setTitle(getString(R.string.hint)).setMessage(getString(R.string.locationbypermisstion)).setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
@@ -537,6 +571,9 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                 }).setNegativeButton(getString(R.string.canecl), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        epSearchBtn.setText(" " + mContext.getResources().getString(R.string.ep_search_btn));
+                        epSearchBtn.setEnabled(true);
+                        ToastUtils.showToast("请打开位置权限否则无法定位您的设备", getActivity());
                     }
                 }).show();
             }
@@ -559,4 +596,11 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
         }
     }
 
+    public int getOperaterPosition() {
+        return operaterPosition;
+    }
+
+    public void setOperaterPosition(int operaterPosition) {
+        this.operaterPosition = operaterPosition;
+    }
 }

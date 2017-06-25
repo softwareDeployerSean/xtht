@@ -24,6 +24,7 @@ import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IBatteryDataListener;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerEpConnectedComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.EpConnectedModule;
@@ -54,7 +55,7 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
 
     VPOperateManager mVpoperateManager;
 
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             String message = (String) msg.obj;
@@ -83,36 +84,38 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
         mPresenter.loadMenue();
 
         Intent intent = getIntent();
-        SearchResult searchResult = intent.getParcelableExtra("searchResult");
-        if(searchResult != null) {
-            epNameTextView.setText(searchResult.getName());
-            SharedPreferences sharedPreferences = getSharedPreferences("bracelet", MODE_PRIVATE);
-            String address = sharedPreferences.getString("connected_address", "null");
-            if(address.equals(searchResult.getAddress())) {
-                epStateTextView.setText(getResources().getString(R.string.ep_connected));
-            }else {
-                epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
-            }
-            VPOperateManager mVpoperateManager = VPOperateManager.getMangerInstance(this);
-            mVpoperateManager.readBattery(new IBleWriteResponse(){
-                @Override
-                public void onResponse(int i) {
 
-                }
-            }, new IBatteryDataListener() {
-                @Override
-                public void onDataChange(BatteryData batteryData) {
-                    String message = batteryData.getBatteryLevel() * 25 + "%";
-                    Message msg = Message.obtain();
-                    msg.what = 0;
-                    msg.obj = message;
-                    mHandler.sendMessage(msg);
-                }
-            });
-        }else {
-            epNameTextView.setText(getResources().getString(R.string.default_ep_name));
-            epStateTextView.setText(getResources().getString(R.string.ep_connected));
+        String name = intent.getStringExtra("name");
+        if (name == null || name.equals("") || name.length() == 0) {
+            name = getResources().getString(R.string.default_ep_name);
         }
+
+        String mac = intent.getStringExtra("mac");
+
+        epNameTextView.setText(name);
+        SharedPreferences sharedPreferences = getSharedPreferences("bracelet", MODE_PRIVATE);
+        String address = sharedPreferences.getString("connected_address", "null");
+        if (address.equals(mac)) {
+            epStateTextView.setText(getResources().getString(R.string.ep_connected));
+        } else {
+            epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
+        }
+        VPOperateManager mVpoperateManager = VPOperateManager.getMangerInstance(this);
+        mVpoperateManager.readBattery(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+
+            }
+        }, new IBatteryDataListener() {
+            @Override
+            public void onDataChange(BatteryData batteryData) {
+                String message = batteryData.getBatteryLevel() * 25 + "%";
+                Message msg = Message.obtain();
+                msg.what = 0;
+                msg.obj = message;
+                mHandler.sendMessage(msg);
+            }
+        });
 
     }
 
@@ -181,7 +184,6 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     public void killMyself() {
         finish();
     }
-
 
 
     @OnClick({R.id.ep_connected_rl})

@@ -32,6 +32,7 @@ import com.veepoo.protocol.operate.FindDeviceOperater;
 import com.veepoo.protocol.operate.LongSeatOperater;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBasicSettingsComponent;
@@ -346,5 +347,10 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void unBindSuccess() {
+        ToastUtils.showToast("功能未完善", this);
     }
 }

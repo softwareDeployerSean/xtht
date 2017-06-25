@@ -20,12 +20,13 @@ public interface BasicSettingsContract {
     interface View extends IView {
         void setAdapter(List<BasicSettingsMenue> settingsMenues);
         Context getContext();
+        void unBindSuccess();
     }
 
     //Model层定义接口,外部只需关心model返回的数据,无需关心内部细节,及是否使用缓存
     interface Model extends IModel {
         List<BasicSettingsMenue> getBasicSettingsMenues(BasicItemSupport basicItemSupport);
 
-        Observable<BaseJson> getUnBindBraceletObservable(RequestBody body);
+        Observable<String> getUnBindBraceletObservable(String body);
     }
 }

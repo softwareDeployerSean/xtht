@@ -1,17 +1,32 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.inuker.bluetooth.library.Code;
+import com.inuker.bluetooth.library.Constants;
+import com.inuker.bluetooth.library.model.BleGattProfile;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 
+import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
+import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
+import com.veepoo.protocol.listener.base.IConnectResponse;
+import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMainComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MainModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MainContract;
@@ -23,6 +38,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class MainFragment extends BaseFragment<MainPresenter> implements MainContract.View {
 
+    VPOperateManager mVpoperateManager;
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -46,7 +62,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
     }
 
     /**

@@ -32,6 +32,10 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mAppManager = appManager;
     }
 
+    public RxErrorHandler getmErrorHandler() {
+        return mErrorHandler;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

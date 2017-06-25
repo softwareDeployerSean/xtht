@@ -18,6 +18,7 @@ import okhttp3.RequestBody;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicItemSupport;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BasicSettingsMenue;
@@ -51,18 +52,21 @@ public class BasicSettingsPresenter extends BasePresenter<BasicSettingsContract.
         hashMap.put("token", token);
 //        String jsonStr = JSONObject.toJSONString(hashMap);
 //        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
-//        String jsonStr = JSONObject.toJSONString(hashMap);
-//        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
-        mModel.getUnBindBraceletObservable(RequestBody.create(MediaType.parse("multipart/form-data"), token))
+        String jsonStr = JSONObject.toJSONString(token);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
+        LogUtils.debugInfo(TAG + "------------token=" + token);
+        mModel.getUnBindBraceletObservable(token)
                 .subscribeOn(Schedulers.io()).doOnSubscribe(disposable -> {
             //mRootView.showLoading();//显示上拉刷新的进度条
         }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ErrorHandleSubscriber<BaseJson>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseJson baseJson) {
+                    public void onNext(String baseJson) {
                         //mRootView.hideLoading();
+                        LogUtils.debugInfo(TAG + "解绑手环成功");
                         LogUtils.debugInfo(TAG + baseJson);
+                        mRootView.unBindSuccess();
                     }
 
                     @Override

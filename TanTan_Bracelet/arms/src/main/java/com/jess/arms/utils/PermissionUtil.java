@@ -30,7 +30,10 @@ public class PermissionUtil {
     }
 
 
-    public static void requestPermission(final RequestPermission requestPermission, RxPermissions rxPermissions, RxErrorHandler errorHandler, String... permissions) {
+    public static void requestPermission(final RequestPermission requestPermission,
+                                         RxPermissions rxPermissions,
+                                         RxErrorHandler errorHandler,
+                                         String... permissions) {
         if (permissions == null || permissions.length == 0) return;
 
         List<String> needRequest = new ArrayList<>();

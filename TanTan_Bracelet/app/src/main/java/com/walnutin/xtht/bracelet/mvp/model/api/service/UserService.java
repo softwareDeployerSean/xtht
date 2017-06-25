@@ -78,9 +78,13 @@ public interface UserService {
 
     //绑定手环
     @POST("user/bindBracelet")
-    Observable<BaseJson> bindBracelet(@Body RequestBody route);
+    Observable<String> bindBracelet(@Body RequestBody route);
 
     //解绑手环
     @POST("user/unbindBracelet")
-    Observable<BaseJson> unbindBracelet(@Part("token") RequestBody token);
+    Observable<String> unbindBracelet(@Query("token") String body);
+
+    //查询是否绑定
+    @GET("user/hasBound")
+    Observable<String> hasBound(@Query("mac") String mac);
 }

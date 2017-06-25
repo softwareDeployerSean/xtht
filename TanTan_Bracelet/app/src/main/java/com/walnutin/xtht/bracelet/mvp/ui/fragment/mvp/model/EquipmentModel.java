@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
+import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.EquipmentContract;
 
@@ -36,10 +37,9 @@ public class EquipmentModel extends BaseModel implements EquipmentContract.Model
     }
 
     @Override
-    public List<SearchResult> searchEpList() {
-        List<SearchResult> epList = null;
-        SearchResult ep = null;
-        epList = new ArrayList<SearchResult>();
+    public List<Device> searchEpList() {
+        List<Device> epList = null;
+        epList = new ArrayList<Device>();
 //        for(int i = 0; i < 21; i++) {
 //            ep = new SearchResult();
 //            ep.setName("第" + (i + 1) + "个手环");
@@ -49,9 +49,15 @@ public class EquipmentModel extends BaseModel implements EquipmentContract.Model
     }
 
     @Override
-    public Observable<BaseJson> getBraceletObservable(RequestBody body) {
+    public Observable<String> getBraceletObservable(RequestBody body) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .bindBracelet(body);
+    }
+
+    @Override
+    public Observable<String> hasBoundObservable(String mac) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .hasBound(mac);
     }
 
     @Override
