@@ -347,6 +347,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                 } else {
 //                    Logger.t(TAG).i("连接失败");
                     LogUtils.debugInfo(TAG1 + "连接失败");
+                    ToastUtils.showToast(getActivity().getResources().getString(R.string.connected_failed), getActivity());
                     dimissDialog();
                 }
             }
