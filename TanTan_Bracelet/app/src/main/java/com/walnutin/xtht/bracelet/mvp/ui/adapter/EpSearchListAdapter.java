@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.inuker.bluetooth.library.search.SearchResult;
@@ -37,12 +38,12 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
     }
 
     @Override
-    public EpSearchListAdapter.EpListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EpListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(
                 mContext).inflate(R.layout.ep_list_item, parent,
                 false);
         EpListViewHolder holder = new EpListViewHolder(view);
-        view.setOnClickListener(this);
+//        view.setOnClickListener(this);
         return holder;
     }
 
@@ -59,12 +60,25 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
             holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_not_connected));
         }
 
-        if(position % 2 == 0) {
-            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListOdd));
-        }else {
-            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListEven));
-        }
-        holder.itemView.setTag(position);
+        holder.parent.setOnClickListener(this);
+
+//        if(position % 2 == 0) {
+//            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListOdd));
+//        }else {
+//            holder.parent.setBackgroundColor(mContext.getResources().getColor(R.color.epListEven));
+//        }
+
+        holder.epDelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnItemClickListener != null) {
+                    mOnItemClickListener.onDelBtnClick(position);
+                }
+            }
+        });
+
+//        holder.itemView.setTag(position);
+        holder.parent.setTag(position);
     }
 
     @Override
@@ -87,12 +101,20 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
 
         AutoRelativeLayout parent;
 
+        Button epDelBtn;
         public EpListViewHolder(View view) {
             super(view);
             epNameTv = (TextView) view.findViewById(R.id.ep_list_item_name);
             epStatusTv = (TextView) view.findViewById(R.id.ep_list_item_status);
             parent = (AutoRelativeLayout) view.findViewById(R.id.ep_list_item_parent_ll);
+            epDelBtn = (Button) view.findViewById(R.id.ep_search_del_btn);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onDelBtnClick(int position);
+
     }
 
 }

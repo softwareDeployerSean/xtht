@@ -74,4 +74,8 @@ public interface UserService {
     //解绑账号
     @PUT("user/unbindAccount")
     Observable<String> unbindAccount(@Body RequestBody route);
+
+    //绑定手环
+    @POST("user/bindBracelet")
+    Observable<BaseJson> bindBracelet(@Body RequestBody route);
 }

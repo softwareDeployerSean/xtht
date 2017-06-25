@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="200px"
         android:layout_below="@+id/textView"
+        android:gravity="start"
         android:layout_marginRight="20px"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView"
@@ -73,6 +74,6 @@
         android:layout_alignStart="@+id/qusuggestion_handler_contact"
         android:layout_marginTop="40px"
         android:background="@drawable/btn_green_selector"
-        android:id="@+id/question_handler_b" />
+        android:id="@+id/question_handler_btn" />
 
 </com.zhy.autolayout.AutoRelativeLayout>

@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +26,10 @@ import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
 import com.veepoo.protocol.model.datas.AlarmData;
+import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerClockListComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ClockListModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ClockListContract;
@@ -38,6 +41,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListene
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,16 +70,44 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
 
     AlertView mAlertView;
 
+    Button cancleBtn;
+    Button okBtn;
+
+    private int selectedHour;
+    private int selectedMin;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    sortClock();
                     mPresenter.loadClockList();
+                    break;
+                case 1:
+                    sortClock();
+                    clockListAdapter.notifyDataSetChanged();
                     break;
             }
         }
     };
+
+    private void sortClock() {
+        Collections.sort(mAlarmSettingList, new Comparator<AlarmSetting>() {
+
+            @Override
+            public int compare(AlarmSetting a1, AlarmSetting a2) {
+                if(!a1.isOpen()) {
+                    return -1;
+                }
+                int i = a1.getAlarmTime() - a2.getAlarmTime();
+                if (i == 0) {
+                    return 1;
+                }
+                return i;
+            }
+        });
+    }
 
     private void sendMsg(String message, int what) {
         if (message == null || message.equals("")) {
@@ -136,60 +169,129 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
                 break;
         }
     }
+
     private ViewGroup decorView;
     private ViewGroup rootView;
     private ViewGroup contentContainer;
     View contentView;
+
     private void showAddClockDialog() {
-        decorView = (ViewGroup) this.getWindow().getDecorView().findViewById(android.R.id.content);
+        if (decorView == null) {
+            decorView = (ViewGroup) this.getWindow().getDecorView().findViewById(android.R.id.content);
+        }
+
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
-        contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
-
-        contentContainer.setLayoutParams(params);
-
-        contentView = layoutInflater.inflate(R.layout.clock_add_dialog, contentContainer, false);
-
-        hour_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_hour_pv);
-        minute_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_minute_pv);
-
-        List<String> hours = new ArrayList<String>();
-        List<String> minutes = new ArrayList<String>();
-
-        for (int i = 0; i < 24; i++) {
-            hours.add(i + "");
-        }
-        for (int i = 0; i < 60; i++) {
-            minutes.add(i < 10 ? "0" + i : "" + i);
+        if (rootView == null) {
+            rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
         }
 
-        hour_pv.setData(hours);
+        if (contentContainer == null) {
+            contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+            contentContainer.setLayoutParams(params);
+            contentView = layoutInflater.inflate(R.layout.clock_add_dialog, contentContainer, false);
+            contentContainer.addView(contentView);
+        }
+
+        if (hour_pv == null) {
+            hour_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_hour_pv);
+
+            List<String> hours = new ArrayList<String>();
+            for (int i = 0; i < 24; i++) {
+                hours.add(i + "");
+            }
+            hour_pv.setData(hours);
+            hour_pv.setSelected(0);
+        }
+
+        if(minute_pv == null) {
+            minute_pv = (PickerView) contentView.findViewById(R.id.clock_add_alert_minute_pv);
+            List<String> minutes = new ArrayList<String>();
+            for (int i = 0; i < 60; i++) {
+                minutes.add(i < 10 ? "0" + i : "" + i);
+            }
+            minute_pv.setData(minutes);
+            minute_pv.setSelected(0);
+        }
+
+
         hour_pv.setOnSelectListener(new PickerView.onSelectListener() {
-
             @Override
             public void onSelect(String text) {
-                Toast.makeText(ClockListActivity.this, "选择了 " + text + " 秒",
-                        Toast.LENGTH_SHORT).show();
+                setSelectedHour(Integer.parseInt(text));
             }
         });
-        hour_pv.setSelected(0);
-
-        minute_pv.setData(minutes);
         minute_pv.setOnSelectListener(new PickerView.onSelectListener() {
 
             @Override
             public void onSelect(String text) {
-                Toast.makeText(ClockListActivity.this, "选择了 " + text + " 分",
-                        Toast.LENGTH_SHORT).show();
+                setSelectedMin(Integer.parseInt(text));
             }
         });
 
-        contentContainer.addView(contentView);
+        if(cancleBtn == null) {
+            cancleBtn = (Button) contentView.findViewById(R.id.clock_add_cancel_btn);
+            cancleBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    disMissDialog();
+                }
+            });
+        }
+
+        if(okBtn == null) {
+            okBtn = (Button) contentView.findViewById(R.id.clock_add_ok_btn);
+            okBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean isSupportAdd = false;
+                    for(int i = 0; i < mAlarmSettingList.size(); i ++) {
+                        AlarmSetting as = mAlarmSettingList.get(i);
+                        if(as.getAlarmTime() == 0 && as.isOpen() == false) {
+                            mAlarmSettingList.remove(i);
+                            isSupportAdd = true;
+                            break;
+                        }
+                    }
+                    if(!isSupportAdd) {
+                        ToastUtils.showToast("设备最多支持三个闹钟，请删除后再添加", ClockListActivity.this);
+                        return;
+                    }
+
+                    AlarmSetting addClock = new AlarmSetting(selectedHour, selectedMin, true);
+                    mAlarmSettingList.add(addClock);
+                    mVPOperateManager.settingAlarm(new IBleWriteResponse() {
+                        @Override
+                        public void onResponse(int i) {
+                            LogUtils.debugInfo(TAG + "添加闹钟 onResponse i =" + i);
+                        }
+                    }, new IAlarmDataListener() {
+                        @Override
+                        public void onAlarmDataChangeListener(AlarmData alarmData) {
+                            String message = "设置闹钟:\n" + alarmData.toString();
+                            LogUtils.debugInfo(TAG + message);
+
+                            mAlarmSettingList.clear();
+
+                            for(int i = 0; i < alarmData.getAlarmSettingList().size(); i++) {
+                                mAlarmSettingList.add(alarmData.getAlarmSettingList().get(i));
+                            }
+
+                            sendMsg(null, 1);
+                            disMissDialog();
+                        }
+                    }, mAlarmSettingList);
+
+                }
+            });
+        }
 
         decorView.addView(rootView);
+    }
+
+    private void disMissDialog() {
+        decorView.removeView(rootView);
     }
 
     @Override
@@ -206,43 +308,26 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
             public void onSwitchOff(int position) {
                 updateClock(position, false);
             }
+
+            @Override
+            public void ondelClick(int position) {
+                deleteClock(position);
+            }
         });
 
         clockListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         clockListRecyclerView.setAdapter(clockListAdapter);
     }
 
-    private void updateClock(int position, boolean isOpen) {
-        AlarmSetting alarmSetting = new AlarmSetting(4, 40, true);
-//        alarmSetting.setOpen(isOpen);
-//        alarmSetting.setAlarmTime(5 * 60 + 30);
-//        List<AlarmSetting> list = new ArrayList<>();
-//        list.add(alarmSetting);
-//        LogUtils.debugInfo(TAG + "list=" + list);
-//        mVPOperateManager.settingAlarm(new IBleWriteResponse() {
-//            @Override
-//            public void onResponse(int i) {
-//                LogUtils.debugInfo(TAG + "更新闹钟 position=" + position  + ",  onResponse i =" + i);
-//            }
-//        }, new IAlarmDataListener() {
-//            @Override
-//            public void onAlarmDataChangeListener(AlarmData alarmData) {
-//                String message = "设置闹钟:\n" + alarmData.toString();
-//                LogUtils.debugInfo(TAG + message);
-//            }
-//        }, list);
-        if (position == 0) {
-            List<AlarmSetting> alarmSettingList = new ArrayList<>(3);
-
-            AlarmSetting alarmSetting1 = new AlarmSetting(14, 10, true);
-            AlarmSetting alarmSetting2 = new AlarmSetting(15, 20, true);
-            AlarmSetting alarmSetting3 = new AlarmSetting(16, 30, true);
-
-            alarmSettingList.add(alarmSetting1);
-            alarmSettingList.add(alarmSetting2);
-            alarmSettingList.add(alarmSetting3);
-
-
+    private void deleteClock(int position) {
+        for (int i = 0; i < mAlarmSettingList.size(); i++) {
+            if (position == i) {
+                AlarmSetting as = mAlarmSettingList.get(i);
+                mAlarmSettingList.remove(i);
+                as.setAlarmTime(0);
+                as.setOpen(false);
+                mAlarmSettingList.add(as);
+            }
             mVPOperateManager.settingAlarm(new IBleWriteResponse() {
                 @Override
                 public void onResponse(int i) {
@@ -253,32 +338,36 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
                 public void onAlarmDataChangeListener(AlarmData alarmData) {
                     String message = "设置闹钟:\n" + alarmData.toString();
                     LogUtils.debugInfo(TAG + message);
-//                sendMsg(message, 1);
+                    sendMsg(message, 1);
                 }
-            }, alarmSettingList);
-        }else {
-            List<AlarmSetting> alarmSettingList = new ArrayList<>(1);
-
-            AlarmSetting alarmSetting1 = new AlarmSetting(1, 10, true);
-
-
-            alarmSettingList.add(alarmSetting1);
-
-
-            mVPOperateManager.settingAlarm(new IBleWriteResponse() {
-                @Override
-                public void onResponse(int i) {
-                    LogUtils.debugInfo(TAG + "更新闹钟 position=" + position + ",  onResponse i =" + i);
-                }
-            }, new IAlarmDataListener() {
-                @Override
-                public void onAlarmDataChangeListener(AlarmData alarmData) {
-                    String message = "设置闹钟:\n" + alarmData.toString();
-                    LogUtils.debugInfo(TAG + message);
-//                sendMsg(message, 1);
-                }
-            }, alarmSettingList);
+            }, mAlarmSettingList);
         }
+    }
+
+    private void updateClock(int position, boolean isOpen) {
+
+        for (int i = 0; i < mAlarmSettingList.size(); i++) {
+            if (position == i) {
+                AlarmSetting as = mAlarmSettingList.get(i);
+                mAlarmSettingList.remove(i);
+                as.setOpen(isOpen);
+                mAlarmSettingList.add(as);
+            }
+        }
+
+        mVPOperateManager.settingAlarm(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "更新闹钟 position=" + position + ",  onResponse i =" + i);
+            }
+        }, new IAlarmDataListener() {
+            @Override
+            public void onAlarmDataChangeListener(AlarmData alarmData) {
+                String message = "设置闹钟:\n" + alarmData.toString();
+                LogUtils.debugInfo(TAG + message);
+                sendMsg(message, 1);
+            }
+        }, mAlarmSettingList);
 
     }
 
@@ -313,5 +402,22 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     @Override
     public Context getContext() {
         return this;
+    }
+
+
+    public int getSelectedMin() {
+        return selectedMin;
+    }
+
+    public void setSelectedMin(int selectedMin) {
+        this.selectedMin = selectedMin;
+    }
+
+    public int getSelectedHour() {
+        return selectedHour;
+    }
+
+    public void setSelectedHour(int selectedHour) {
+        this.selectedHour = selectedHour;
     }
 }
