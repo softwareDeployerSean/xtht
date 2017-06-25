@@ -66,6 +66,7 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
                         mRootView.hideLoading();
                         mRootView.showMessage(users);
                         DataHelper.setStringSF(mApplication, "isbind", "default");
+                        mRootView.bind_success();
                         //mRootView.hideLoading();
                     }
 

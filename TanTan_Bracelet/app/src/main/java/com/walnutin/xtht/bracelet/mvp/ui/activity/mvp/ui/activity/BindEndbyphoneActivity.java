@@ -89,7 +89,7 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        ToastUtils.showToast(message,this);
+        ToastUtils.showToast(message, this);
     }
 
     @Override
@@ -121,5 +121,8 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
     public void bind_success() {
         DataHelper.setStringSF(MyApplication.getAppContext(), "isbind", "true");
         finish();
+        if (ResetbyEmailActivity.resetbyEmailActivity != null) {
+            ResetbyEmailActivity.resetbyEmailActivity.finish();
+        }
     }
 }

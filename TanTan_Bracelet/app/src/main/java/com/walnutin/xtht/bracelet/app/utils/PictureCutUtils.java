@@ -32,12 +32,13 @@ import java.util.UUID;
 
 /**
  * Created by john on 2016/9/23.
- *
+ * <p>
  * 图片剪切工具
  */
 public class PictureCutUtils {
     /***
      * 剪切图片
+     *
      * @param context
      */
     public static void cropRaWPhoto(final Activity context, Uri mImageCaptureUri, final int CODE_RESULT_REQUEST) {
@@ -106,7 +107,7 @@ public class PictureCutUtils {
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        Toast.makeText(context,"取消", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "取消", Toast.LENGTH_SHORT).show();
 //                        if (mImageCaptureUri != null) {
 //                            context.getContentResolver().delete(mImageCaptureUri, null,
 //                                    null);
@@ -124,49 +125,51 @@ public class PictureCutUtils {
 
 
     /**
-     * 设置图片框---提取保存剪切后的图片数据，并设置头像部分的View　
+     * 设置图片框---提取保存剪切后的图片数据，并设置头像部分的View
+     *
      * @param arg2
      */
-    public static void setImageToHeadView(Intent arg2, SharedPreferences sharedPreferences, ImageView check_head_photo) {
+    public static void setImageToHeadView(Intent arg2, SharedPreferences sharedPreferences, ImageView check_head_photo, String tag) {
         Bitmap bitmap;
         Bundle extras = arg2.getExtras();
-        String user_photo = sharedPreferences.getString("username","");//账户号——用户的唯一标识
+        String user_photo = sharedPreferences.getString("username", "");//账户号——用户的唯一标识
         String filePath = buildPath(user_photo);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(user_photo,filePath);
-        editor.commit();
-        if (extras != null){
+        if (tag.equals("save")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(user_photo, filePath);
+            editor.commit();
+        }
+        if (extras != null) {
             bitmap = extras.getParcelable("data");
             check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));//设置圆形图片
             int quality = 100;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,quality,baos);
-            while (baos.toByteArray().length >10*1024){
-                quality -=5;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            while (baos.toByteArray().length > 10 * 1024) {
+                quality -= 5;
                 baos.reset();//清空字节
-                bitmap.compress(Bitmap.CompressFormat.JPEG,quality,baos);
-                if(quality == 10){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+                if (quality == 10) {
                     break;
                 }
             }
             File f = new File(filePath);
-            if (!f.getParentFile().exists()){
+            if (!f.getParentFile().exists()) {
                 f.getParentFile().mkdirs();
             }
-            Log.e("CODE_RESULT_REQUEST1111",filePath);
+            Log.e("CODE_RESULT_REQUEST1111", filePath);
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(f);
                 fos.write(baos.toByteArray());
                 fos.flush();
-                Log.e("CODE_RESULT_REQUEST2222",filePath);
+                Log.e("CODE_RESULT_REQUEST2222", filePath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
-                if (fos != null){
+            } finally {
+                if (fos != null) {
                     try {
                         fos.close();
                     } catch (IOException e) {
@@ -177,14 +180,14 @@ public class PictureCutUtils {
         }
     }
 
-    static String PICTURE_URI= Environment.getExternalStorageDirectory()+"/TanTan/picture";
+    static String PICTURE_URI = Environment.getExternalStorageDirectory() + "/TanTan/picture";
 
     /**
      * 构建存储路径
      *
      * @return
      */
-    public  static String buildPath(String user_photo) {
+    public static String buildPath(String user_photo) {
 
         File dir = new File(PICTURE_URI);
         if (!dir.exists())
@@ -192,48 +195,49 @@ public class PictureCutUtils {
         UUID uuid = UUID.randomUUID();
         String sysid = uuid.toString().replaceAll("-", "");
         String fileName = sysid;
-        File file = new File(dir, fileName + user_photo+".jpg");
+        File file = new File(dir, fileName + user_photo + ".jpg");
         return file.getPath();
     }
 
     /**
-     * 设置图片框---提取保存剪切后的图片数据，并设置头像部分的View　
+     * 设置图片框---提取保存剪切后的图片数据，并设置头像部分的View
+     *
      * @param arg2
      */
     public static String setImageToHeadView(Intent arg2, Context context) {
         Bitmap bitmap;
         Bundle extras = arg2.getExtras();
-        String user_photo ="Tantan";//账户号——用户的唯一标识
+        String user_photo = "Tantan";//账户号——用户的唯一标识
         String filePath = buildPath(user_photo);
 
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
 //        editor.putString(user_photo,filePath);
 //        editor.commit();
-        if (extras != null){
+        if (extras != null) {
             bitmap = extras.getParcelable("data");
 //            check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));//设置圆形图片
             int quality = 100;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,quality,baos);
-            while (baos.toByteArray().length >10*1024){
-                quality -=5;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            while (baos.toByteArray().length > 10 * 1024) {
+                quality -= 5;
                 baos.reset();//清空字节
-                bitmap.compress(Bitmap.CompressFormat.JPEG,quality,baos);
-                if(quality == 10){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+                if (quality == 10) {
                     break;
                 }
             }
             File f = new File(filePath);
-            if (!f.getParentFile().exists()){
+            if (!f.getParentFile().exists()) {
                 f.getParentFile().mkdirs();
             }
-            Log.e("CODE_RESULT_REQUEST1111",filePath);
+            Log.e("CODE_RESULT_REQUEST1111", filePath);
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(f);
                 fos.write(baos.toByteArray());
                 fos.flush();
-                Log.e("CODE_RESULT_REQUEST2222",filePath);
+                Log.e("CODE_RESULT_REQUEST2222", filePath);
                 return filePath;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -241,8 +245,8 @@ public class PictureCutUtils {
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
-            }finally {
-                if (fos != null){
+            } finally {
+                if (fos != null) {
                     try {
                         fos.close();
                     } catch (IOException e) {

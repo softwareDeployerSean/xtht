@@ -38,6 +38,7 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
     @BindView(R.id.bt_yanzhenma)
     Button btYanzhenma;
     String tag;
+    public static ResetbyEmailActivity resetbyEmailActivity;
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerResetbyEmailComponent //如找不到该类,请编译一下项目
@@ -50,6 +51,7 @@ public class ResetbyEmailActivity extends BaseActivity<ResetbyEmailPresenter> im
 
     @Override
     public int initView(Bundle savedInstanceState) {
+        resetbyEmailActivity=this;
         return R.layout.activity_resetby_email; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 

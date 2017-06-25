@@ -66,6 +66,7 @@ public class RegistbyPhonePresenter extends BasePresenter<RegistbyPhoneContract.
                         DataHelper.setStringSF(MyApplication.getAppContext(),"username",phone);
                         DataHelper.setStringSF(MyApplication.getAppContext(),"load_tag","phone");
                         DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "default");
                         mRootView.regist_success();
                         //mRootView.hideLoading();
                     }

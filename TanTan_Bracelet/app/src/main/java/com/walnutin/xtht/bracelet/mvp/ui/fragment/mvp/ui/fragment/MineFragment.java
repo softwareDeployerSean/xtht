@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +25,16 @@ import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
 import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadingActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MinePresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
@@ -84,13 +88,29 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     @Override
     public void initData(Bundle savedInstanceState) {
         user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
+        UserBean userBean = DataHelper.getDeviceData(MyApplication.getAppContext(), "UserBean");
         if (!user_photo_url.equals("")) {
             bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
             if (bitmap != null) {
                 check_head_photo.setImageBitmap(BitmapHandler.createCircleBitmap(bitmap));
-            } else
-                check_head_photo.setImageResource(R.mipmap.touxaing);
+            } else {
+                mPresenter.download_img(userBean.getAvatar());
+                LogUtils.debugInfo("下载1");
+            }
+        } else if (!TextUtils.isEmpty(userBean.getAvatar())) {
+            LogUtils.debugInfo("下载2");
+            mPresenter.download_img(userBean.getAvatar());
+        } else {
+            check_head_photo.setImageResource(R.mipmap.touxaing);
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle bundle = new Bundle();
+        initData(bundle);
     }
 
     private void init_refresh() {
@@ -137,12 +157,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     @Override
     public void showLoading() {
-
+        CustomProgressDialog.show(getActivity());
     }
 
     @Override
     public void hideLoading() {
-
+        CustomProgressDialog.dissmiss();
     }
 
     @Override
@@ -201,11 +221,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     public void onItemClick(Object o, int position) {
         switch (position) {
             case 0:
-                launchActivity(new Intent(getActivity(), LoadingActivity.class));
+                launchActivity(new Intent(getActivity(), LoadActivity.class));
                 getActivity().finish();
                 break;
         }
     }
 
-
+    @Override
+    public void down_success() {
+        onResume();
+    }
 }

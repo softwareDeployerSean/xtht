@@ -13,6 +13,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
@@ -50,7 +51,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     TextView tvBind;
     @BindView(R.id.tv_remove)
     TextView tv_remove;
-    String is_bind = DataHelper.getStringSF(MyApplication.getAppContext(), "isbind");
+    String is_bind ="";
 
     AlertView alertView_remove;
 
@@ -74,8 +75,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     @Override
     public void initData(Bundle savedInstanceState) {
         tag = getIntent().getStringExtra("tag");
-
-
+        is_bind= DataHelper.getStringSF(MyApplication.getAppContext(), "isbind");
         if (is_bind.equals("default")) {
             tv_remove.setText(getString(R.string.bind_account));
             if (tag.equals("phone")) {
@@ -97,8 +97,14 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
 
 
         }
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle bundle=new Bundle();
+        initData(bundle);
+        LogUtils.debugInfo("设备onResume");
     }
 
 
@@ -207,4 +213,8 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void bind_success() {
+        onResume();
+    }
 }

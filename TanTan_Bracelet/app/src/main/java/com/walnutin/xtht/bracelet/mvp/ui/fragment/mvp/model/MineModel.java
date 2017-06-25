@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MineContract;
+
+import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 
 
 @ActivityScope
@@ -23,6 +27,12 @@ public class MineModel extends BaseModel implements MineContract.Model {
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
+    }
+
+    @Override
+    public Observable<ResponseBody> download(String path) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .downloadPicFromNet(path);
     }
 
     @Override

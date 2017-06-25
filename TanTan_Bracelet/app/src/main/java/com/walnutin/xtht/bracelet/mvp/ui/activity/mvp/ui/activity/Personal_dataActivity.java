@@ -145,6 +145,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     public void initData(Bundle savedInstanceState) {
         toolbarRight.setText(getString(R.string.ok));
         user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
+        LogUtils.debugInfo("user_photo_url="+user_photo_url);
         if (!user_photo_url.equals("")) {
             bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
             if (bitmap != null) {
@@ -242,6 +243,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     mPresenter.change_data(name, sex, birth, Integer.parseInt(dailyGoals), height, weightOfUnit, weight, heightOfUnit);
                     if (change_img == 1) {
                         change_img = 0;
+                        PictureCutUtils.setImageToHeadView(img_intent, sharedPreferences, check_head_photo, "save");//设置图片框,并且保存
                         mPresenter.post_img();
                     }
                 }
@@ -268,7 +270,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     }
 
     private void checkphoto() {
-        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, MyApplication.getAppContext(), AlertView.Style.ActionSheet, this).setCancelable(true);
+        alertView = new AlertView(null, null, null, null, new String[]{getString(R.string.local_photo), getString(R.string.camera)}, this, AlertView.Style.ActionSheet, this).setCancelable(true);
         alertView.show();
     }
 
@@ -282,7 +284,6 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 startActivityForResult(intent, 0);//本地相册
                 break;
             case 1:
-
                 //请求外部存储权限用于适配android6.0的权限管理机制
                 PermissionUtil.launchCamera(new PermissionUtil.RequestPermission() {
                     @Override
@@ -292,7 +293,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
 
                     @Override
                     public void onRequestPermissionFailure() {
-                        new AlertDialog.Builder(MyApplication.getAppContext()).setTitle(getString(R.string.hint)).setMessage(getString(R.string.camelbypermisstion)).setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(Personal_dataActivity.this).setTitle(getString(R.string.hint)).setMessage(getString(R.string.camelbypermisstion)).setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent localIntent = new Intent();
@@ -312,6 +313,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         }
     }
 
+    Intent img_intent;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -334,7 +336,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                     break;
                 case 2:
                     change_img = 1;
-                    PictureCutUtils.setImageToHeadView(data, sharedPreferences, check_head_photo);//设置图片框,并且保存
+                    img_intent = data;
+                    PictureCutUtils.setImageToHeadView(data, sharedPreferences, check_head_photo, "");//设置图片框,并且保存
                     break;
 
             }
@@ -467,9 +470,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 //返回的分别是三个级别的选中位置
                 String tx = "";
                 if (option2 == 0) {
-                    tx = options1Items.get(options1) + options2Items.get(options1).get(option2);
+                    tx = options1Items.get(options1) + "["+options2Items.get(options1).get(option2)+"]";
                 } else if (option2 == 1) {
-                    tx = options1Items_ft.get(options1) + options2Items_ft.get(options1).get(option2);
+                    tx = options1Items_ft.get(options1) +  "["+options2Items_ft.get(options1).get(option2)+"]";
                 }
 
                 tvHeight.setText(tx);
@@ -549,9 +552,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 //返回的分别是三个级别的选中位置
                 String tx = "";
                 if (option2 == 0) {
-                    tx = options1Items_weight.get(options1) + options2Items_weight.get(options1).get(option2);
+                    tx = options1Items_weight.get(options1) +"["+ options2Items_weight.get(options1).get(option2)+"]";
                 } else if (option2 == 1) {
-                    tx = options1Items_weight_lb.get(options1) + options2Items_weight_lb.get(options1).get(option2);
+                    tx = options1Items_weight_lb.get(options1) +"["+ options2Items_weight_lb.get(options1).get(option2)+"]";
                 }
 
                 tvWeight.setText(tx);
