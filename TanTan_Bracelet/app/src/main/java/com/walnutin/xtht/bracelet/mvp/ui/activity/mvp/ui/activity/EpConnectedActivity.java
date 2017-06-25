@@ -52,6 +52,8 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
     @BindView(R.id.ep_connected_dianliang)
     public TextView epPower;
 
+    VPOperateManager mVpoperateManager;
+
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -77,6 +79,7 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        mVpoperateManager = VPOperateManager.getMangerInstance(this);
         mPresenter.loadMenue();
 
         Intent intent = getIntent();
@@ -191,7 +194,14 @@ public class EpConnectedActivity extends BaseActivity<EpConnectedPresenter> impl
         }
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "断开连接 onResponse i = " + i);
+            }
+        });
+    }
 }
