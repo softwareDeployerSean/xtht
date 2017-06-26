@@ -43,6 +43,7 @@ import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.MyFragmentViewPagerAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.FragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EpConnectedFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EquipmentFragment;
@@ -162,6 +163,18 @@ public class MainActivity extends FragmentActivity {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
+                switch (index){
+                    case 1:
+                        startActivity(new Intent(MainActivity.this, RunningOutsideActivity.class));
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+
+                        break;
+                }
 
             }
 

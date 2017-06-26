@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:arc="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:arc="http://schemas.android.com/tools"
     android:background="@color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <include layout="@layout/include_title" />
+
     <com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
-    <View android:layout_width="match_parent"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line"></View>
 
@@ -23,36 +25,31 @@
         android:layout_width="fill_parent"
         android:layout_height="55px"
         android:background="@color/white"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/radio_main"
             style="@style/navigation_style"
             android:checked="true"
+            android:drawablePadding="5px"
             android:drawableTop="@drawable/selector_main_bottom_tab_home"
             android:paddingLeft="0dp"
-            android:text="@string/home"
-            android:drawablePadding="5px"
-            />
+            android:text="@string/home" />
 
         <RadioButton
             android:id="@+id/radio_exerse"
             style="@style/navigation_style"
             android:checked="false"
+            android:drawablePadding="5px"
             android:drawableTop="@drawable/selector_main_bottom_tab_exercise"
             android:paddingLeft="0dp"
-            android:text="@string/exercise"
-            android:drawablePadding="5px"
-            />
+            android:text="@string/exercise" />
 
         <com.rance.library.SectorMenuButton
-            android:layout_marginTop="@dimen/dimen_6px"
             android:id="@+id/bottom_sector_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             app:aebAnimDurationMillis="150"
             app:aebBlurBackground="true"
@@ -72,19 +69,19 @@
             android:id="@+id/radio_equipment"
             style="@style/navigation_style"
             android:checked="false"
+            android:drawablePadding="5px"
             android:drawableTop="@drawable/selector_main_bottom_tab_equipment"
             android:paddingLeft="0dp"
-            android:text="@string/equipment"
-            android:drawablePadding="5px" />
+            android:text="@string/equipment" />
 
         <RadioButton
             android:id="@+id/radio_mine"
             style="@style/navigation_style"
             android:checked="false"
+            android:drawablePadding="5px"
             android:drawableTop="@drawable/selector_main_bottom_tab_mine"
             android:paddingLeft="0dp"
-            android:text="@string/mine"
-            android:drawablePadding="5px" />
+            android:text="@string/mine" />
     </RadioGroup>
 
 

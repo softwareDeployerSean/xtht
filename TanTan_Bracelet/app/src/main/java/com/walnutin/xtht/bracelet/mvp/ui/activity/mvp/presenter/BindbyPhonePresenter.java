@@ -43,13 +43,12 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
         this.mAppManager = appManager;
     }
 
-    public void unbind(String tag) {
+    public void unbind(String number) {
         HashMap hashMap = new HashMap();
-        String name = DataHelper.getStringSF(mApplication, "bind_count");
-        if (tag.equals("phone")) {
-            hashMap.put("phone", name);
-        } else if (tag.equals("email")) {
-            hashMap.put("email", name);
+        if (ConmonUtils.isMobileNO(number)) {
+            hashMap.put("phone", number);
+        } else if (ConmonUtils.checkEmail(number)) {
+            hashMap.put("email", number);
         }
         hashMap.put("token", DataHelper.getStringSF(mApplication, "token"));
         String jsonStr = JSONObject.toJSONString(hashMap);
@@ -65,7 +64,13 @@ public class BindbyPhonePresenter extends BasePresenter<BindbyPhoneContract.Mode
                     public void onNext(String users) {
                         mRootView.hideLoading();
                         mRootView.showMessage(users);
-                        DataHelper.setStringSF(mApplication, "isbind", "default");
+                        UserBean userBean = DataHelper.getDeviceData(mApplication.getBaseContext(), "UserBean");
+                        if (ConmonUtils.isMobileNO(number)) {
+                            userBean.setPhone("");
+                        } else if (ConmonUtils.checkEmail(number)) {
+                            userBean.setEmail("");
+                        }
+                        DataHelper.saveDeviceData(mApplication.getBaseContext(), "UserBean", userBean);
                         mRootView.bind_success();
                         //mRootView.hideLoading();
                     }

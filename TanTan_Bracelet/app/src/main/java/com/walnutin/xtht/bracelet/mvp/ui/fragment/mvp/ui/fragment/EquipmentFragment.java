@@ -220,7 +220,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
         requestLocationPermission();
 
-        mContext = MyApplication.getAppContext();
+        mContext =getActivity();
 
         epSearchBtn.setText(" " + mContext.getResources().getString(R.string.ep_search_btn));
 

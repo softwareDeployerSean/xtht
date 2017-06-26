@@ -119,7 +119,6 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
 
     @Override
     public void bind_success() {
-        DataHelper.setStringSF(MyApplication.getAppContext(), "isbind", "true");
         finish();
         if (ResetbyEmailActivity.resetbyEmailActivity != null) {
             ResetbyEmailActivity.resetbyEmailActivity.finish();

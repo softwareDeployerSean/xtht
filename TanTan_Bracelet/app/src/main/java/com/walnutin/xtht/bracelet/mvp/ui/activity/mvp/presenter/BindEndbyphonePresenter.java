@@ -70,7 +70,15 @@ public class BindEndbyphonePresenter extends BasePresenter<BindEndbyphoneContrac
                         mRootView.hideLoading();
                         mRootView.bind_success();
                         mRootView.showMessage(users);
-                        DataHelper.setStringSF(mApplication, "bind_count", name);
+
+                        UserBean userBean = DataHelper.getDeviceData(mApplication.getBaseContext(), "UserBean");
+                        if (ConmonUtils.checkEmail(name)) {
+                            userBean.setEmail(name);
+                        } else {
+                            userBean.setPhone(name);
+                        }
+                        DataHelper.saveDeviceData(mApplication.getBaseContext(), "UserBean", userBean);
+
 
                         //mRootView.hideLoading();
                     }

@@ -514,8 +514,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                                     pvCustomOptions_height.setPicker(options1Items, options2Items);//添加数据
                                     pvCustomOptions_height.setSelectOptions(110, 0);
                                 } else if (index == 1) {
+                                    pvCustomOptions_height.setSelectOptions(60, 1);
                                     pvCustomOptions_height.setPicker(options1Items_ft, options2Items_ft);//添加数据
-                                    pvCustomOptions_height.setSelectOptions(110, 1);
                                 }
                             }
                         });
@@ -588,11 +588,11 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                             public void onItemSelected(int index) {
                                 tag = 1;
                                 if (index == 0) {
-                                    pvCustomOptions_weight.setPicker(options1Items_weight, options2Items_weight);//添加数据
                                     pvCustomOptions_weight.setSelectOptions(15, 0);
+                                    pvCustomOptions_weight.setPicker(options1Items_weight, options2Items_weight);//添加数据
                                 } else if (index == 1) {
                                     pvCustomOptions_weight.setPicker(options1Items_weight_lb, options2Items_weight_lb);//添加数据
-                                    pvCustomOptions_weight.setSelectOptions(15, 1);
+                                    pvCustomOptions_weight.setSelectOptions(50, 1);
                                 }
                             }
                         });
@@ -677,8 +677,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             options2Items.add(options2Items_01);
         }
         //身高是英尺ft
-        for (int i = 60; i < 240; i++) {
-            options1Items_ft.add(ConmonUtils.getYingCun(i * 0.0328));
+        for (int i = 12; i < 97; i++) {
+            options1Items_ft.add(ConmonUtils.getYingCun(i ));
         }
         //选项2
         ArrayList<String> options2Items_01_ft = new ArrayList<>();
@@ -701,8 +701,8 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
             options2Items_weight.add(options2Items_02);
         }
         //体重 单位lb
-        for (int i = 30; i < 130; i++) {
-            options1Items_weight_lb.add(df.format(i * 2.2065) + "");
+        for (int i = 50; i < 351; i++) {
+            options1Items_weight_lb.add(i+ "");
         }
 
         for (int i = 0; i < options1Items_weight_lb.size(); i++) {
@@ -742,5 +742,15 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         builder.show();
     }
 
-
+    @Override
+    public void setsuccess() {
+        if (isload.equals("default")) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        } else {
+            finish();
+        }
+    }
 }

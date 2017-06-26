@@ -173,7 +173,7 @@
             android:label="@string/person_data"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-            <!--android:launchMode="singleInstance"-->
+        <!-- android:launchMode="singleInstance" -->
 
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.ClockAddActivity"
@@ -185,15 +185,14 @@
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.BindEndbyphoneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/bind"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity"></activity>
     </application>
 
 </manifest>

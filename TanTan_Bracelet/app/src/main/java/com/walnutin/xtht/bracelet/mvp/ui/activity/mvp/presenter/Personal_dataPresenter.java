@@ -54,7 +54,7 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
     }
 
 
-    public void change_data(String nickname, String sex, String birth, int dailyGoals, String height, String weightOfUnit, String weight,String heightofunit) {
+    public void change_data(String nickname, String sex, String birth, int dailyGoals, String height, String weightOfUnit, String weight, String heightofunit) {
         HashMap hashMap = new HashMap();
         hashMap.put("nickname", nickname);
         hashMap.put("sex", sex);
@@ -63,7 +63,7 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
         hashMap.put("height", height);
         hashMap.put("weightOfUnit", weightOfUnit);
         hashMap.put("weight", weight);
-        hashMap.put("heightOfUnit",heightofunit);
+        hashMap.put("heightOfUnit", heightofunit);
         hashMap.put("token", DataHelper.getStringSF(MyApplication.getAppContext(), "token"));
         String jsonStr = JSONObject.toJSONString(hashMap);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
@@ -88,6 +88,7 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
                         userBean.setWeight(weight);
                         userBean.setWeightOfUnit(weightOfUnit);
                         DataHelper.saveDeviceData(mApplication.getBaseContext(), "UserBean", userBean);
+                        mRootView.setsuccess();
                         //mRootView.hideLoading();
                     }
 

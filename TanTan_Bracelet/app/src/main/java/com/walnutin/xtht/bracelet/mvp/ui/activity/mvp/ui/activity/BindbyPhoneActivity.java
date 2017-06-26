@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerBindbyPhoneComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.BindbyPhoneModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.BindbyPhoneContract;
@@ -51,8 +53,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     TextView tvBind;
     @BindView(R.id.tv_remove)
     TextView tv_remove;
-    String is_bind ="";
-
+    UserBean userBean;
     AlertView alertView_remove;
 
     @Override
@@ -75,34 +76,34 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     @Override
     public void initData(Bundle savedInstanceState) {
         tag = getIntent().getStringExtra("tag");
-        is_bind= DataHelper.getStringSF(MyApplication.getAppContext(), "isbind");
-        if (is_bind.equals("default")) {
-            tv_remove.setText(getString(R.string.bind_account));
-            if (tag.equals("phone")) {
-                tvBind.setText(getString(R.string.phone_number));
-                ivBind.setImageResource(R.mipmap.shouji);
-            } else if (tag.equals("email")) {
+        userBean = DataHelper.getDeviceData(MyApplication.getAppContext(), "UserBean");
+        if (tag.equals("email")) {
+            if (!TextUtils.isEmpty(userBean.getEmail())) {
+                tv_remove.setText(getString(R.string.relieve_bind));
+                tvBind.setText(getString(R.string.email_number)+"\n"+userBean.getEmail());
+                ivBind.setImageResource(R.mipmap.youjian);
+            } else {
+                tv_remove.setText(getString(R.string.bind_account));
                 tvBind.setText(getString(R.string.email_number));
                 ivBind.setImageResource(R.mipmap.youjian);
             }
-        } else {
-            tv_remove.setText(getString(R.string.relieve_bind));
-            if (tag.equals("phone")) {
-                tvBind.setText(getString(R.string.bindbyphone_number));
+        } else if (tag.equals("phone")) {
+            if (!TextUtils.isEmpty(userBean.getPhone())) {
+                tv_remove.setText(getString(R.string.relieve_bind));
+                tvBind.setText(getString(R.string.phone_number)+"\n"+userBean.getPhone());
                 ivBind.setImageResource(R.mipmap.shouji);
-            } else if (tag.equals("email")) {
-                tvBind.setText(getString(R.string.bindbyemail_number));
-                ivBind.setImageResource(R.mipmap.youjian);
+            } else {
+                tv_remove.setText(getString(R.string.bind_account));
+                tvBind.setText(getString(R.string.phone_number));
+                ivBind.setImageResource(R.mipmap.shouji);
             }
-
-
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         initData(bundle);
         LogUtils.debugInfo("设备onResume");
     }
@@ -121,7 +122,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        ToastUtils.showToast(message,this);
+        ToastUtils.showToast(message, this);
     }
 
     @Override
@@ -141,47 +142,59 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
         alertView_remove.show();
     }
 
+    String number;
 
     @OnClick({R.id.linear_bind})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.linear_bind:
                 if (ConmonUtils.hasNetwork(this)) {
-                    if (is_bind.equals("default")) {
-                        if (tag.equals("phone")) {
-                            // 打开注册页面
-                            RegisterPage registerPage = new RegisterPage("bind");
-                            registerPage.setRegisterCallback(new EventHandler() {
-                                public void afterEvent(int event, int result, Object data) {
-                                    // 解析注册结果
-                                    if (result == SMSSDK.RESULT_COMPLETE) {
-                                        @SuppressWarnings("unchecked")
-                                        HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                                        String country = (String) phoneMap.get("country");
-                                        String phone = (String) phoneMap.get("phone");
-                                        Intent intent = new Intent(BindbyPhoneActivity.this, BindEndbyphoneActivity.class);
-                                        intent.putExtra("phone", phone);
-                                        launchActivity(intent);
-
-                                    } else {
-
-                                    }
-                                }
-                            });
-                            registerPage.show(this);
-
-                        } else if (tag.equals("email")) {
+                    if (tag.equals("phone")) {
+                        if (!TextUtils.isEmpty(userBean.getPhone())) {
+                            number = userBean.getPhone();
+                            remove();
+                        } else {
+                            phone_code();
+                        }
+                    } else if (tag.equals("email")) {
+                        if (!TextUtils.isEmpty(userBean.getEmail())) {
+                            number = userBean.getEmail();
+                            remove();
+                        } else {
                             Intent intent = new Intent(this, ResetbyEmailActivity.class);
                             intent.putExtra("tag", "bind");
                             launchActivity(intent);
                         }
-                    } else {
-                        remove();
                     }
                 }
                 break;
         }
     }
+
+    public void phone_code() {
+        // 打开注册页面
+        RegisterPage registerPage = new RegisterPage("bind");
+        registerPage.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                // 解析注册结果
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                    String country = (String) phoneMap.get("country");
+                    String phone = (String) phoneMap.get("phone");
+                    Intent intent = new Intent(BindbyPhoneActivity.this, BindEndbyphoneActivity.class);
+                    intent.putExtra("phone", phone);
+                    launchActivity(intent);
+
+                } else {
+
+                }
+            }
+        });
+        registerPage.show(this);
+
+    }
+
 
     @Override
     public void onDismiss(Object o) {
@@ -193,7 +206,7 @@ public class BindbyPhoneActivity extends BaseActivity<BindbyPhonePresenter> impl
         switch (position) {
             case 0:
                 if (ConmonUtils.hasNetwork(this)) {
-                    mPresenter.unbind(tag);
+                    mPresenter.unbind(number);
                 }
                 break;
         }

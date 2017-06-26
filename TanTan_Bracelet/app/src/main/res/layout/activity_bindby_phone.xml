@@ -27,8 +27,9 @@
             android:background="@mipmap/shouji" />
 
         <TextView
+            android:layout_weight="1"
             android:id="@+id/tv_bind"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15px"
             android:text="@string/phone_number"
@@ -40,13 +41,14 @@
             android:id="@+id/tv_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="137px"
             android:drawablePadding="50px"
             android:drawableRight="@mipmap/qj"
             android:gravity="center"
             android:text="@string/goto_bind"
             android:textColor="@color/black_444444"
-            android:textSize="12px" />
+            android:textSize="12px"
+            android:layout_gravity="right|center_vertical"
+            />
 
 
     </com.zhy.autolayout.AutoLinearLayout>
