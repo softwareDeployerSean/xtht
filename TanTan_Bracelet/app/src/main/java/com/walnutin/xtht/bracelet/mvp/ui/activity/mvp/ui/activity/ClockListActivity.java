@@ -93,8 +93,20 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     };
 
     private void sortClock() {
-        Collections.sort(mAlarmSettingList, new Comparator<AlarmSetting>() {
 
+        boolean isZeroAndClose = false;
+        for(int i = 0; i < mAlarmSettingList.size(); i++) {
+            AlarmSetting a = mAlarmSettingList.get(i);
+            if(a.getAlarmTime() == 0 && !a.isOpen()) {
+                isZeroAndClose = true;
+                continue;
+            }
+            if(isZeroAndClose) {
+                mAlarmSettingList.remove(i);
+            }
+        }
+
+        Collections.sort(mAlarmSettingList, new Comparator<AlarmSetting>() {
             @Override
             public int compare(AlarmSetting a1, AlarmSetting a2) {
                 if(!a1.isOpen()) {
@@ -148,6 +160,7 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
             @Override
             public void onAlarmDataChangeListener(AlarmData alarmData) {
                 String message = "读取闹钟:\n" + alarmData.toString();
+                mAlarmSettingList.clear();
                 LogUtils.debugInfo(TAG + message);
                 if (alarmData != null && alarmData.getAlarmSettingList() != null && alarmData.getAlarmSettingList().size() > 0) {
                     for (int i = 0; i < alarmData.getAlarmSettingList().size(); i++) {
@@ -320,6 +333,29 @@ public class ClockListActivity extends BaseActivity<ClockListPresenter> implemen
     }
 
     private void deleteClock(int position) {
+//        for (int i = 0; i < mAlarmSettingList.size(); i++) {
+//            if (position == i) {
+//                AlarmSetting as = mAlarmSettingList.get(i);
+//                mAlarmSettingList.remove(i);
+//                as.setAlarmTime(0);
+//                as.setOpen(false);
+//                mAlarmSettingList.add(as);
+//            }
+//            mVPOperateManager.settingAlarm(new IBleWriteResponse() {
+//                @Override
+//                public void onResponse(int i) {
+//                    LogUtils.debugInfo(TAG + "更新闹钟 position=" + position + ",  onResponse i =" + i);
+//                }
+//            }, new IAlarmDataListener() {
+//                @Override
+//                public void onAlarmDataChangeListener(AlarmData alarmData) {
+//                    String message = "设置闹钟:\n" + alarmData.toString();
+//                    LogUtils.debugInfo(TAG + message);
+//                    sendMsg(message, 1);
+//                }
+//            }, mAlarmSettingList);
+//        }
+
         for (int i = 0; i < mAlarmSettingList.size(); i++) {
             if (position == i) {
                 AlarmSetting as = mAlarmSettingList.get(i);

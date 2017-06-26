@@ -25,6 +25,7 @@ import com.veepoo.protocol.listener.data.IBatteryDataListener;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ClockListActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
@@ -95,8 +96,6 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         mPresenter.loadMenue();
 
         String name = DataHelper.getStringSF(MyApplication.getAppContext(), "ep_name");
-
-        LogUtils.debugInfo(TAG + "-------------name=" + name);
 
         if (name == null || name.equals("") || name.length() == 0) {
             name = getResources().getString(R.string.default_ep_name);

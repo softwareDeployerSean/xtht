@@ -83,4 +83,8 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.17'
     compile project(':pickerview')
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.2'
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/commons-email-1.2.jar')
+    compile files('libs/mail.jar')
 }

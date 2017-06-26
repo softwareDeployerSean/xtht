@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -119,13 +120,25 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TAG = "[TAN][" + MainActivity.class.getSimpleName() + "]";
 
+    private int selected = 0;
+    private int thirdItem = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LogUtils.debugInfo("-----------oncreate------------------");
+
+        Intent intent = getIntent();
+
+        selected = intent.getIntExtra("selected", 0);
+        thirdItem = intent.getIntExtra("thirdItem", 0);
+        LogUtils.debugInfo(TAG + "-----------selected = " + selected + ", thirdItem = " + thirdItem);
+
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
         registerBluetoothStateListener();
 
-        if(checkBLE()) {
+        if (checkBLE()) {
             connectDevice();
         }
 
@@ -156,7 +169,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtils.debugInfo("onResume啊");
+        LogUtils.debugInfo("-------------------------onResume_____________________-");
     }
 
     private void setListener(final SectorMenuButton button) {
@@ -214,13 +227,55 @@ public class MainActivity extends FragmentActivity {
         equipmentFragment = EquipmentFragment.newInstance();
         fragments.add(mainfragment);
         fragments.add(exerciseFragment);
-        fragments.add(equipmentFragment);
+        if(thirdItem == 0) {
+            fragments.add(equipmentFragment);
+        }else {
+            fragments.add(epConnectedFragment);
+        }
+
         fragments.add(mineFragment);
         this.viewpager.setOffscreenPageLimit(0);
         MyFragmentViewPagerAdapter adapter = new MyFragmentViewPagerAdapter(this.getSupportFragmentManager(), viewpager, fragments);
-//        adapter = new MyViewPagerAdapter(this.getSupportFragmentManager(), viewpager, fragments);
+
+        viewpager.setCurrentItem(selected, false);
+        switch (selected) {
+            case TAB_HOME:
+                radioMain.setChecked(true);
+                break;
+            case TAB_EXERCISE:
+                radioExerse.setChecked(true);
+                break;
+            case TAB_EQUIPMENT:
+                radioEquipment.setChecked(true);
+                break;
+            case TAB_MINE:
+                radioMine.setChecked(true);
+                break;
+        }
     }
 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            fragments.set(2, epConnectedFragment);
+            finish();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            intent.putExtra("thirdItem", 1);
+            intent.putExtra("selected", 2);
+            startActivity(intent);
+        }
+    };
+
+    public void connecteSuccess() {
+//        LogUtils.debugInfo(TAG + "connecteSuccess----------------------");
+//        fragments.set(2, epConnectedFragment);
+//
+//        viewpager.setCurrentItem(TAB_EQUIPMENT-1, false);
+//        viewpager.setCurrentItem(TAB_EQUIPMENT, false);
+//
+//        toolbarTitle.setText(getString(R.string.ep_setup));
+        mHandler.sendEmptyMessage(0);
+    }
 
     private void connectDevice() {
 
@@ -231,7 +286,7 @@ public class MainActivity extends FragmentActivity {
 
         String mac = DataHelper.getStringSF(this, "mac");
         LogUtils.debugInfo(TAG + ",mac=" + mac);
-        if(mac != null && !mac.equals("") && !mac.equals("default")) {
+        if (mac != null && !mac.equals("") && !mac.equals("default")) {
             mVpoperateManager.registerConnectStatusListener(mac, mBleConnectStatusListener);
             mVpoperateManager.connectDevice(mac, new IConnectResponse() {
                 @Override
@@ -331,7 +386,7 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case TAB_EQUIPMENT:
                         String state = DataHelper.getStringSF(MainActivity.this, "connect_state");
-                        LogUtils.debugInfo(TAG+"-------------------state=" + state);
+                        LogUtils.debugInfo(TAG + "-------------------state=" + state);
                         radioEquipment.setChecked(true);
                         break;
                     case TAB_MINE:
@@ -368,7 +423,7 @@ public class MainActivity extends FragmentActivity {
                 String connect_state = DataHelper.getStringSF(this, "connect_state");
                 LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
                 LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
-                if(connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
+                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
                     fragments.set(2, epConnectedFragment);
 //                    adapter.updateList(fragments);
                 }

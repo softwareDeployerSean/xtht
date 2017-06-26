@@ -55,6 +55,7 @@ import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Epuipment;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.EpConnectedActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
@@ -385,11 +386,14 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     dimissDialog();
 
                     LogUtils.debugInfo(TAG1 + "监听成功-可进行其他操作");
-                    Intent intent = new Intent(mContext, EpConnectedActivity.class);
-                    intent.putExtra("isoadmodel", mIsOadModel);
-                    intent.putExtra("mac", device.getMac());
-                    intent.putExtra("name", device.getName());
-                    startActivity(intent);
+//                    Intent intent = new Intent(mContext, EpConnectedActivity.class);
+//                    intent.putExtra("isoadmodel", mIsOadModel);
+//                    intent.putExtra("mac", device.getMac());
+//                    intent.putExtra("name", device.getName());
+//                    startActivity(intent);
+
+                    ((MainActivity)getActivity()).connecteSuccess();
+
                 } else {
 //                    Logger.t(TAG).i("监听失败，重新连接");
                     DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "1"); //连接监听
@@ -496,7 +500,9 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
         int windowHeight = getWindowHeight();
         LogUtils.debugInfo("TAG windowHeight=" + windowHeight);
         ;
-        int layoutHeiht = (windowHeight - titleBarHeight - epAllSize);
+        int layoutHeiht = (windowHeight - titleBarHeight - epAllSize) + 60;
+
+        LogUtils.debugInfo("--------------layoutHeiht=" + layoutHeiht);
 
         LogUtils.debugInfo("TAG windowHeight * 0.1=" + windowHeight * 0.1);
         if (layoutHeiht <= 80) {
