@@ -4,19 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/tantan"
-        />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#e0000000"
 
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.amap.api.maps.MapView>
+
+   <!-- <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0.4"
         >
 
-    </FrameLayout>
+    </FrameLayout>-->
 
 
 </com.zhy.autolayout.AutoRelativeLayout>

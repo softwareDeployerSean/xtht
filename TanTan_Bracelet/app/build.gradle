@@ -87,4 +87,9 @@ dependencies {
     compile files('libs/additionnal.jar')
     compile files('libs/commons-email-1.2.jar')
     compile files('libs/mail.jar')
+    //高德地图
+    compile 'com.amap.api:3dmap:latest.integration'
+    compile 'com.amap.api:map2d:latest.integration'
+    compile 'com.amap.api:search:latest.integration'
+    compile 'com.amap.api:location:latest.integration'
 }
