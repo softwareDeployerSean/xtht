@@ -203,11 +203,20 @@
             android:label="@string/bind"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity"></activity>
         <!-- 高德地图-->
         <service android:name="com.amap.api.location.APSService"></service>
         <meta-data android:name="com.amap.api.v2.apikey" android:value="ad8185f62a0d3cfaa5d9b81366ac9304">
         </meta-data>
+
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity" />
+
+        <service
+            android:name=".mvp.ui.fragment.mvp.ui.fragment.DfuService"
+            android:enabled="true"
+            android:exported="true"></service>
+
     </application>
 
 </manifest>

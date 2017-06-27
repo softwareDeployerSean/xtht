@@ -355,6 +355,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     LogUtils.debugInfo(TAG1 + "是否是固件升级模式=" + isoadModel);
                     mIsOadModel = isoadModel;
                     DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "2"); //连接成功
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "isoadModel", isoadModel + ""); //连接成功
                     DataHelper.setStringSF(MyApplication.getAppContext(), "ep_name", device.getName());
                 } else {
 //                    Logger.t(TAG).i("连接失败");

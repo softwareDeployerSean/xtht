@@ -39,7 +39,6 @@ import com.rance.library.SectorMenuButton;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
 import com.veepoo.protocol.listener.base.IABluetoothStateListener;
-import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
@@ -365,7 +364,6 @@ public class MainActivity extends FragmentActivity {
             } else if (status == Constants.STATUS_DISCONNECTED) {
 //                Logger.t(TAG).i("STATUS_DISCONNECTED");
                 LogUtils.debugInfo(TAG + "STATUS_DISCONNECTED");
-                DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
             }
         }
     };
@@ -385,14 +383,6 @@ public class MainActivity extends FragmentActivity {
         public void onBluetoothStateChanged(boolean openOrClosed) {
 //            Log.d(TAG).i("open=" + openOrClosed);
             LogUtils.debugInfo("open=" + openOrClosed);
-            if(!openOrClosed) {
-                mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
-                    @Override
-                    public void onResponse(int i) {
-                        DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
-                    }
-                });
-            }
         }
     };
 
@@ -447,10 +437,10 @@ public class MainActivity extends FragmentActivity {
                 String connect_state = DataHelper.getStringSF(this, "connect_state");
                 LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
                 LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
-//                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
-//                    fragments.set(2, epConnectedFragment);
-////                    adapter.updateList(fragments);
-//                }
+                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
+                    fragments.set(2, epConnectedFragment);
+//                    adapter.updateList(fragments);
+                }
 
                 viewpager.setCurrentItem(TAB_EQUIPMENT, false);
                 toolbarTitle.setText(getString(R.string.ep_setup));
