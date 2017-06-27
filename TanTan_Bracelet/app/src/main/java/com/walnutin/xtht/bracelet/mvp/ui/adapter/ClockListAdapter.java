@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.veepoo.protocol.model.settings.AlarmSetting;
@@ -24,6 +25,8 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
     private Context mContext;
 
     private List<AlarmSetting> clockList;
+
+
 
     public void setmOnSwitchChangedListenerer(OnSwitchChangedListenerer mOnSwitchChangedListenerer) {
         this.mOnSwitchChangedListenerer = mOnSwitchChangedListenerer;
@@ -82,6 +85,15 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
                 }
             }
         });
+
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnSwitchChangedListenerer != null) {
+                    mOnSwitchChangedListenerer.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -92,14 +104,14 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView timeTv;
         Button delBtn;
-
         SwitchView sv;
-
+        LinearLayout parent;
         public MyViewHolder(View view) {
             super(view);
             timeTv = (TextView) view.findViewById(R.id.clock_list_item_time);
             sv = (SwitchView) view.findViewById(R.id.clock_list_item_sw);
             delBtn = (Button) view.findViewById(R.id.clock_list_item_del_btn);
+            parent = (LinearLayout) view.findViewById(R.id.clock_list_item_parent);
         }
     }
 
@@ -109,5 +121,7 @@ public class ClockListAdapter extends RecyclerView.Adapter<ClockListAdapter.MyVi
         void onSwitchOff(int position);
 
         void ondelClick(int position);
+
+        void onItemClick(int position);
     }
 }

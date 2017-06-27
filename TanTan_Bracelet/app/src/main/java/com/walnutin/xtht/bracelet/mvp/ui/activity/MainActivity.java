@@ -39,6 +39,7 @@ import com.rance.library.SectorMenuButton;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
 import com.veepoo.protocol.listener.base.IABluetoothStateListener;
+import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
@@ -138,8 +139,12 @@ public class MainActivity extends FragmentActivity {
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
         registerBluetoothStateListener();
 
-        if (checkBLE()) {
-            connectDevice();
+        String mac = DataHelper.getStringSF(this, "mac");
+
+        if(mac != null && !mac.equals("") && !mac.equals("default")) {
+            if (checkBLE()) {
+                connectDevice();
+            }
         }
 
         setContentView(R.layout.activity_main);
@@ -247,6 +252,7 @@ public class MainActivity extends FragmentActivity {
                 break;
             case TAB_EQUIPMENT:
                 radioEquipment.setChecked(true);
+                toolbarTitle.setText(getString(R.string.ep_setup));
                 break;
             case TAB_MINE:
                 radioMine.setChecked(true);
@@ -257,24 +263,33 @@ public class MainActivity extends FragmentActivity {
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            fragments.set(2, epConnectedFragment);
-            finish();
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-            intent.putExtra("thirdItem", 1);
-            intent.putExtra("selected", 2);
-            startActivity(intent);
+            switch (msg.what) {
+                case 0:
+//                    fragments.set(2, epConnectedFragment);
+                    finish();
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    intent.putExtra("thirdItem", 1);
+                    intent.putExtra("selected", 2);
+                    startActivity(intent);
+                    break;
+                case 1:
+//                    fragments.set(2, epConnectedFragment);
+                    finish();
+                    Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
+                    intent1.putExtra("thirdItem", 0);
+                    intent1.putExtra("selected", 2);
+                    startActivity(intent1);
+                    break;
+            }
         }
     };
 
     public void connecteSuccess() {
-//        LogUtils.debugInfo(TAG + "connecteSuccess----------------------");
-//        fragments.set(2, epConnectedFragment);
-//
-//        viewpager.setCurrentItem(TAB_EQUIPMENT-1, false);
-//        viewpager.setCurrentItem(TAB_EQUIPMENT, false);
-//
-//        toolbarTitle.setText(getString(R.string.ep_setup));
         mHandler.sendEmptyMessage(0);
+    }
+
+    public void disConnecte() {
+        mHandler.sendEmptyMessage(1);
     }
 
     private void connectDevice() {
@@ -350,6 +365,7 @@ public class MainActivity extends FragmentActivity {
             } else if (status == Constants.STATUS_DISCONNECTED) {
 //                Logger.t(TAG).i("STATUS_DISCONNECTED");
                 LogUtils.debugInfo(TAG + "STATUS_DISCONNECTED");
+                DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
             }
         }
     };
@@ -369,6 +385,14 @@ public class MainActivity extends FragmentActivity {
         public void onBluetoothStateChanged(boolean openOrClosed) {
 //            Log.d(TAG).i("open=" + openOrClosed);
             LogUtils.debugInfo("open=" + openOrClosed);
+            if(!openOrClosed) {
+                mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
+                    @Override
+                    public void onResponse(int i) {
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
+                    }
+                });
+            }
         }
     };
 
@@ -423,10 +447,10 @@ public class MainActivity extends FragmentActivity {
                 String connect_state = DataHelper.getStringSF(this, "connect_state");
                 LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
                 LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
-                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
-                    fragments.set(2, epConnectedFragment);
-//                    adapter.updateList(fragments);
-                }
+//                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
+//                    fragments.set(2, epConnectedFragment);
+////                    adapter.updateList(fragments);
+//                }
 
                 viewpager.setCurrentItem(TAB_EQUIPMENT, false);
                 toolbarTitle.setText(getString(R.string.ep_setup));

@@ -49,6 +49,8 @@
     <string name="not_supported_longseat">暂不支持久坐模式，请升级后再尝试</string>
     <string name="max_clock">设备最多支持三个闹钟，请关闭后再添加！</string>
     <string name="connected_failed">连接设备失败，请重新尝试！</string>
+    <string name="question_failed">反馈信息发送失败，请重新尝试！</string>
+    <string name="question_ok">反馈意见发送成功，谢谢您的参与！</string>
 
     <!--注册 -->
     <string name="phone">请输入手机号码</string>

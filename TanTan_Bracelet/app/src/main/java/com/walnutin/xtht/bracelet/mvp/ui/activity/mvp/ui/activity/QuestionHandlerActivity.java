@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,18 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.QuestionHandlerP
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import butterknife.BindView;
 
@@ -68,10 +81,6 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
                 }
 
                 String contact = contactEt.getText().toString();
-//                if(contact == null || contact.equals("") || contact.length() == 0) {
-//                    ToastUtils.showToast("请输入联系方式", QuestionHandlerActivity.this);
-//                    return;
-//                }
 
                 if(!isNetworkConnected(QuestionHandlerActivity.this)) {
                     ToastUtils.showToast("网络连接断开，请检查后再试", QuestionHandlerActivity.this);
@@ -82,22 +91,7 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
                     @Override
                     public void run() {
                         try {
-                            //创建HtmlEmail类
-                            HtmlEmail email = new HtmlEmail();
-                            //填写邮件的主机明
-                            email.setHostName("walnutin.com");
-                            email.setTLS(true);
-                            email.setSSL(true);
-                            //设置字符编码格式，防止中文乱码
-                            email.setCharset("gbk");
-                            //设置收件人的邮箱
-                            email.addTo("suggest_gxd@walnutin.com");
-                            //设置发件人的邮箱
-                            email.setFrom("suggest_gxd@walnutin.com");
-                            //填写发件人的用户名和密码
-                            email.setAuthentication("suggest_gxd@walnutin.com", "walnutinzhou");
-                            //填写邮件主题
-                            email.setSubject("用户建议");
+                           String subject = "用户建议";
 
                             String emailContent = "用户反馈意见：" + content + "\n";
                             if(contact != null && !contact.equals("")) {
@@ -107,20 +101,24 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
                             emailContent += "android系统版本号" + android.os.Build.VERSION.RELEASE + "\n";
                             emailContent += "机型：" + android.os.Build.MODEL;
 
-
-                            //填写邮件内容
-                            email.setMsg(emailContent);
-                            //发送邮件
-                            email.send();
+                            sendEmail(subject, emailContent);
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ToastUtils.showToast("感谢您的反馈", QuestionHandlerActivity.this);
+                                    ToastUtils.showToast(getResources().getString(R.string.question_ok), QuestionHandlerActivity.this);
+                                    contentEt.setText("");
+                                    contactEt.setText("");
                                 }
                             });
-                        } catch (EmailException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtils.showToast(getResources().getString(R.string.question_failed), QuestionHandlerActivity.this);
+                                }
+                            });
                         }
                     }
                 }.start();
@@ -139,6 +137,44 @@ public class QuestionHandlerActivity extends BaseActivity<QuestionHandlerPresent
             }
         }
         return false;
+    }
+
+    public void sendEmail(String subject, String content) throws Exception {
+        Multipart multiPart;
+        String finalString = "";
+
+        Properties props = System.getProperties();
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.ym.163.com");
+        props.put("mail.smtp.user", "suggest_gxd@walnutin.com");
+        props.put("mail.smtp.password", "walnutinzhou");
+        props.put("mail.smtp.port", "25");
+        props.put("mail.smtp.auth", "true");
+        Log.i("Check", "done pops");
+        Session session = Session.getDefaultInstance(props, null);
+        DataHandler handler = new DataHandler(new ByteArrayDataSource(finalString.getBytes(), "text/plain"));
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("suggest_gxd@walnutin.com"));
+        message.setDataHandler(handler);
+        Log.i("Check", "done sessions");
+
+        multiPart = new MimeMultipart();
+        InternetAddress toAddress;
+        toAddress = new InternetAddress("suggest_gxd@walnutin.com");
+        message.addRecipient(Message.RecipientType.TO, toAddress);
+        Log.i("Check", "added recipient");
+        message.setSubject(subject);
+        message.setContent(multiPart);
+        message.setText(content);
+
+        Log.i("check", "transport");
+        Transport transport = session.getTransport("smtp");
+        Log.i("check", "connecting");
+        transport.connect("smtp.ym.163.com", "suggest_gxd@walnutin.com", "walnutinzhou");
+        Log.i("check", "wana send");
+        transport.sendMessage(message, message.getAllRecipients());
+        transport.close();
+        Log.i("check", "sent");
     }
 
     @Override

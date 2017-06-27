@@ -176,8 +176,18 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         switch (view.getId()) {
             case R.id.ep_connected_rl:
                 Intent basicSettingsIntent = new Intent(getActivity(), BasicSettingsActivity.class);
-                startActivity(basicSettingsIntent);
+//                startActivity(basicSettingsIntent);
+                startActivityForResult(basicSettingsIntent, 100);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 100 && resultCode == 101) {
+            LogUtils.debugInfo("---------------------------------------------------");
+
+            ((MainActivity)getActivity()).disConnecte();
         }
     }
 

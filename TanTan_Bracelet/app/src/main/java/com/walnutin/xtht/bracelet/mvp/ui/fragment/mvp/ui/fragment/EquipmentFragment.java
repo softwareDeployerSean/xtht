@@ -343,8 +343,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
     private void connectDevice(Device device) {
         String mac = device.getMac();
 
-        mVpoperateManager.registerConnectStatusListener(mac, mBleConnectStatusListener);
-
         mVpoperateManager.connectDevice(mac, new IConnectResponse() {
 
             @Override
@@ -405,41 +403,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             }
         });
     }
-
-    /**
-     * 监听系统蓝牙的打开和关闭的回调状态
-     */
-    private final IABleConnectStatusListener mBleConnectStatusListener = new IABleConnectStatusListener() {
-
-        @Override
-        public void onConnectStatusChanged(String mac, int status) {
-            if (status == Constants.STATUS_CONNECTED) {
-//                Logger.t(TAG).i("STATUS_CONNECTED");
-                LogUtils.debugInfo(TANTAN + "STATUS_CONNECTED");
-            } else if (status == Constants.STATUS_DISCONNECTED) {
-//                Logger.t(TAG).i("STATUS_DISCONNECTED");
-                LogUtils.debugInfo(TANTAN + "STATUS_DISCONNECTED");
-            }
-        }
-    };
-
-    /**
-     * 蓝牙打开or关闭状态
-     */
-    private void registerBluetoothStateListener() {
-        mVpoperateManager.registerBluetoothStateListener(mBluetoothStateListener);
-    }
-
-    /**
-     * 监听蓝牙与设备间的回调状态
-     */
-    private final IABluetoothStateListener mBluetoothStateListener = new IABluetoothStateListener() {
-        @Override
-        public void onBluetoothStateChanged(boolean openOrClosed) {
-//            Log.d(TAG).i("open=" + openOrClosed);
-            LogUtils.debugInfo("open=" + openOrClosed);
-        }
-    };
 
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,

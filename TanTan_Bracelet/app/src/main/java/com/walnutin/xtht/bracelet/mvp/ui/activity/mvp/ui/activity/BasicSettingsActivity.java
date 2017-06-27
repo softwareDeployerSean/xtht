@@ -351,6 +351,17 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
 
     @Override
     public void unBindSuccess() {
-        ToastUtils.showToast("功能未完善", this);
+        DataHelper.setStringSF(MyApplication.getAppContext(), "mac", "default");
+
+        mVPOperateManager.disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "disconnect watch onResponse i=" + i);
+                DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
+            }
+        });
+
+        setResult(101);
+        finish();
     }
 }
