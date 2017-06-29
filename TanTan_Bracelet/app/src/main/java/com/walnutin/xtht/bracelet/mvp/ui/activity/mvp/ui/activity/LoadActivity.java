@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.UiUtils;
 import com.mob.MobSDK;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerLoadComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.LoadModule;
@@ -92,6 +94,8 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
+        DataHelper.setStringSF(MyApplication.getAppContext(), "connected_address", "null");
         if (Build.VERSION.SDK_INT >= 23) {
             int readPhone = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
             int receiveSms = checkSelfPermission(Manifest.permission.RECEIVE_SMS);

@@ -45,9 +45,19 @@ public class KnownCallActivity extends BaseActivity<KnownCallPresenter> implemen
             EFunctionStatus phone = socailMsgData.getPhone();
             LogUtils.debugInfo(TAG + "phone ==" + phone);
             if(phone == EFunctionStatus.SUPPORT || phone == EFunctionStatus.SUPPORT_OPEN) {
-                phoneSW.setState(true);
+                if(phoneSW != null) {
+                    if(phoneSW.getState() != SwitchView.STATE_SWITCH_ON) {
+                        phoneSW.setState(true);
+                    }
+                }
+
+
             }else {
-                phoneSW.setState(false);
+                if(phoneSW != null) {
+                    if (phoneSW.getState() != SwitchView.STATE_SWITCH_OFF) {
+                        phoneSW.setState(false);
+                    }
+                }
             }
         }
     };

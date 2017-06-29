@@ -2,10 +2,12 @@ package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,9 +18,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,6 +101,11 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
     private boolean isFindOadDevice = false;
     private final static int MAX_ALLOW_FAIL_COUNT = 5;
 
+    private ViewGroup decorView;
+    private ViewGroup rootView;
+    private ViewGroup contentContainer;
+    View contentView;
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -108,6 +117,17 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                 case 1:
                     startUpgrade();
 
+                    break;
+                case 2:
+                    String address = DataHelper.getStringSF(MyApplication.getAppContext(), "connected_address");
+                    String mac = DataHelper.getStringSF(MyApplication.getAppContext(), "mac");
+                    if (address.equals(mac)) {
+                        epStateTextView.setText(getResources().getString(R.string.ep_connected));
+                    } else {
+                        epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
+                        epPower.setText("  0% ");
+                        ToastUtils.showToast("连接断开，请重新连接设备", getActivity());
+                    }
                     break;
             }
         }
@@ -169,22 +189,47 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
              */
             @Override
             public void onCheckFail(int endState) {
+                dimissDialog();
                 switch (endState) {
                     case OadErrorState.UNCONNECT_NETWORK:
                         LogUtils.debugInfo(TAG + "网络出错");
-                        ToastUtils.showToast("网络连接错误，请检查网络", getActivity());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showToast("网络连接错误，请检查网络", getActivity());
+                            }
+                        });
+
                         break;
                     case OadErrorState.UNCONNECT_SERVER:
                         LogUtils.debugInfo(TAG + "服务器连接不上");
-                        ToastUtils.showToast("网络连接错误，请检查网络", getActivity());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showToast("网络连接错误，请检查网络", getActivity());
+                            }
+                        });
+
                         break;
                     case OadErrorState.SERVER_NOT_HAVE_NEW:
                         LogUtils.debugInfo(TAG + "服务器无此版本");
-                        ToastUtils.showToast("设备是最新版本", getActivity());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showToast("设备是最新版本", getActivity());
+                            }
+                        });
+
                         break;
                     case OadErrorState.DEVICE_IS_NEW:
                         LogUtils.debugInfo(TAG + "设备是最新版本");
-                        ToastUtils.showToast("设备是最新版本", getActivity());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showToast("设备是最新版本", getActivity());
+                            }
+                        });
+
                         break;
                     case OadErrorState.OAD_FILE_UNEXITS:
                         LogUtils.debugInfo(TAG + "文件不存在");
@@ -249,6 +294,7 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
      */
     private void oadSuccess() {
         isFindOadDevice = false;
+        dimissDialog();
         Toast.makeText(getActivity(), "升级成功", Toast.LENGTH_SHORT).show();
         LogUtils.debugInfo(TAG + "升级成功");
     }
@@ -464,6 +510,12 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(EpConnecteService.STATA_CHANGE_ACTION);
+        getActivity().registerReceiver(uiReceiver, filter);
+
+
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
         mPresenter.loadMenue();
 
@@ -477,8 +529,8 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         LogUtils.debugInfo(TAG + "-------------mac=" + mac);
 
         epNameTextView.setText(name);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("bracelet", MODE_PRIVATE);
-        String address = sharedPreferences.getString("connected_address", "null");
+
+        String address = DataHelper.getStringSF(MyApplication.getAppContext(), "connected_address");
         if (address.equals(mac)) {
             epStateTextView.setText(getResources().getString(R.string.ep_connected));
         } else {
@@ -488,12 +540,13 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         mVpoperateManager.readBattery(new IBleWriteResponse() {
             @Override
             public void onResponse(int i) {
-                LogUtils.debugInfo(TAG + "读取电晕 onResponse i=" + i);
+                LogUtils.debugInfo(TAG + "读取电量 onResponse i=" + i);
             }
         }, new IBatteryDataListener() {
             @Override
             public void onDataChange(BatteryData batteryData) {
                 String message = batteryData.getBatteryLevel() * 25 + "%";
+                LogUtils.debugInfo("-----------读取电量 message=" + message);
                 Message msg = Message.obtain();
                 msg.what = 0;
                 msg.obj = message;
@@ -502,6 +555,42 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         });
 
     }
+
+    @Override
+    public void onResume() {
+        String address = DataHelper.getStringSF(MyApplication.getAppContext(), "connected_address");
+        String mac = DataHelper.getStringSF(MyApplication.getAppContext(), "mac");
+        if (address.equals(mac)) {
+            epStateTextView.setText(getResources().getString(R.string.ep_connected));
+        } else {
+            epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
+        }
+
+        mVpoperateManager.readBattery(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG + "读取电量 onResponse i=" + i);
+            }
+        }, new IBatteryDataListener() {
+            @Override
+            public void onDataChange(BatteryData batteryData) {
+                String message = batteryData.getBatteryLevel() * 25 + "%";
+                LogUtils.debugInfo("-----------读取电量 message=" + message);
+                Message msg = Message.obtain();
+                msg.what = 0;
+                msg.obj = message;
+                mHandler.sendMessage(msg);
+            }
+        });
+        super.onResume();
+    }
+
+    private BroadcastReceiver uiReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mHandler.sendEmptyMessage(2);
+        }
+    };
 
     private int deviceNumber = 1;
     private String deviceVersion;
@@ -517,6 +606,18 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         adapter.setmOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
+                String state = DataHelper.getStringSF(MyApplication.getAppContext(), "connect_state");
+                if (!state.equals("3")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showToast(getActivity().getResources().getString(R.string.pre_connecte), getActivity());
+                        }
+                    });
+                    return;
+                }
+
                 switch (position) {
                     case 0:
                         Intent callIntent = new Intent(getActivity(), KnownCallActivity.class);
@@ -536,16 +637,19 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                         break;
                     case 4:
                         LogUtils.debugInfo(TAG + ", deviceNumber=" + deviceNumber);
-
+                        showDialog();
                         oadSetting = getIntData();
                         registerListener();
 
-                        if(deviceNumber < 0) {
+                        if (deviceNumber < 0) {
                             boolean is24Hourmodel = false;
                             mVpoperateManager.confirmDevicePwd(new IBleWriteResponse() {
                                 @Override
                                 public void onResponse(int i) {
                                     LogUtils.debugInfo(TAG + "固件升级查询版本号 confirmDevicePwd onResponse i=" + i);
+                                    if (i != 0) {
+                                        dimissDialog();
+                                    }
                                 }
                             }, new IPwdDataListener() {
                                 @Override
@@ -579,7 +683,7 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                                     //sendMsg(message, 3);
                                 }
                             }, "0000", is24Hourmodel);
-                        }else {
+                        } else {
                             startUpgrade();
                         }
 
@@ -588,6 +692,44 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                 }
             }
         });
+    }
+
+    private void showDialog() {
+        decorView = (ViewGroup) getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_alertview, decorView, false);
+        contentContainer = (ViewGroup) rootView.findViewById(R.id.content_container);
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP);
+
+        contentContainer.setLayoutParams(params);
+
+        contentView = layoutInflater.inflate(R.layout.ep_connected_alert, contentContainer, false);
+        TextView textTV = (TextView) contentView.findViewById(R.id.text_tv);
+        textTV.setText("正在升级中，请耐心等候...");
+        FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+        p.setMargins(p.leftMargin, p.topMargin + 450, p.rightMargin, p.bottomMargin);
+        contentView.setLayoutParams(p);
+
+        contentContainer.addView(contentView);
+
+        decorView.addView(rootView);
+    }
+
+    private void dimissDialog() {
+        LogUtils.debugInfo(TAG + "dimissDialog decorView=" + decorView);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (decorView != null) {
+//            contentContainer.removeView(contentView);
+//            rootView.removeView(contentContainer);
+                    decorView.removeView(rootView);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -599,6 +741,17 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ep_connected_rl:
+                String state = DataHelper.getStringSF(MyApplication.getAppContext(), "connect_state");
+                if (!state.equals("3")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showToast(getActivity().getResources().getString(R.string.pre_connecte), getActivity());
+                        }
+                    });
+                    return;
+                }
+
                 Intent basicSettingsIntent = new Intent(getActivity(), BasicSettingsActivity.class);
 //                startActivity(basicSettingsIntent);
                 startActivityForResult(basicSettingsIntent, 100);

@@ -9,6 +9,7 @@
         android:background="@drawable/ep_alert_radius"
         android:text="连接中..."
         android:textSize="12px"
+        android:id="@+id/text_tv"
         android:textColor="@color/textColor_alert_button_others"
         android:layout_width="175px"
         android:layout_height="66px" />

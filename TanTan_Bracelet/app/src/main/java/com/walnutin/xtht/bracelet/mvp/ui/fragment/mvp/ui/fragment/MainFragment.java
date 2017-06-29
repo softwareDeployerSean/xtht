@@ -63,6 +63,8 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     @Override
     public void initData(Bundle savedInstanceState) {
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
+        String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
+        mPresenter.getBindBracelet(token);
     }
 
     /**

@@ -79,7 +79,15 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
 //                        mRootView.hideLoading();
 //                        super.onError(e);
                         LogUtils.debugInfo(TAG + "查询hasBound失败");
+
+                        String netMac = DataHelper.getStringSF(MyApplication.getAppContext(), "mac");
+                        if(netMac.equals(mac)) {
+                            mRootView.unBoundBracelet();
+                            return;
+                        }
                         mRootView.hasBound(e.getMessage());
+
+
                     }
 
 
@@ -137,7 +145,7 @@ public class EquipmentPresenter extends BasePresenter<EquipmentContract.Model, E
                     @Override
                     public void onError(Throwable e) {
 //                        mRootView.hideLoading();
-                        super.onError(e);
+//                        super.onError(e);
                         LogUtils.debugInfo(TAG + "绑定手环失败");
                     }
 

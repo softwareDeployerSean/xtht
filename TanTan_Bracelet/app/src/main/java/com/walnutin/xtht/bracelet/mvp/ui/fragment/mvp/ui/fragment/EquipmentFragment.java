@@ -342,7 +342,6 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 
     private void connectDevice(Device device) {
         String mac = device.getMac();
-
         mVpoperateManager.connectDevice(mac, new IConnectResponse() {
 
             @Override
@@ -358,6 +357,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
                     DataHelper.setStringSF(MyApplication.getAppContext(), "isoadModel", isoadModel + ""); //连接成功
                     DataHelper.setStringSF(MyApplication.getAppContext(), "ep_name", device.getName());
                 } else {
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connected_address", null);
 //                    Logger.t(TAG).i("连接失败");
                     LogUtils.debugInfo(TAG1 + "连接失败");
                     ToastUtils.showToast(getActivity().getResources().getString(R.string.connected_failed), getActivity());
@@ -370,10 +370,7 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
             public void notifyState(int state) {
                 if (state == Code.REQUEST_SUCCESS) {
 
-                    SharedPreferences sharedPreferences = mContext.getSharedPreferences("bracelet", Context.MODE_PRIVATE); //私有数据
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("connected_address", mac);
-                    editor.commit();
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connected_address", mac);
 
                     DataHelper.setStringSF(getActivity(), "mac", mac);
                     DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "3"); //连接监听
@@ -390,12 +387,17 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
 //                    intent.putExtra("mac", device.getMac());
 //                    intent.putExtra("name", device.getName());
 //                    startActivity(intent);
+                    //监听连接状态
+                    Intent intent = new Intent(EpConnecteService.EP_CONNECTED_STATE_ACTION);
+                    intent.putExtra("mac", mac);
+                    MyApplication.getAppContext().sendBroadcast(intent);
 
                     ((MainActivity)getActivity()).connecteSuccess();
 
                 } else {
 //                    Logger.t(TAG).i("监听失败，重新连接");
                     DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "1"); //连接监听
+                    DataHelper.setStringSF(MyApplication.getAppContext(), "connected_address", "null");
                     dimissDialog();
                     ToastUtils.showToast("连接失败", getActivity());
                     LogUtils.debugInfo(TAG1 + "监听失败，重新连接");

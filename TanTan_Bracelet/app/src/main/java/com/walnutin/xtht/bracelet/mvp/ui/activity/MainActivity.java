@@ -2,11 +2,15 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,6 +50,7 @@ import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.MyFragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.FragmentViewPagerAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EpConnecteService;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EpConnectedFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EquipmentFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.ExerciseFragment;
@@ -114,9 +119,10 @@ public class MainActivity extends FragmentActivity {
     RadioGroup radiogroup;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    MyViewPagerAdapter adapter;
 
     VPOperateManager mVpoperateManager;
+
+    EpConnecteService epConnecteService;
 
     private static final String TAG = "[TAN][" + MainActivity.class.getSimpleName() + "]";
 
@@ -128,6 +134,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         LogUtils.debugInfo("-----------oncreate------------------");
+        mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
+        checkBLE();
+
+        Intent serviceIntent = new Intent(this, EpConnecteService.class);
+        startService(serviceIntent);
 
         Intent intent = getIntent();
 
@@ -135,16 +146,10 @@ public class MainActivity extends FragmentActivity {
         thirdItem = intent.getIntExtra("thirdItem", 0);
         LogUtils.debugInfo(TAG + "-----------selected = " + selected + ", thirdItem = " + thirdItem);
 
-        mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
+
         registerBluetoothStateListener();
 
         String mac = DataHelper.getStringSF(this, "mac");
-
-        if(mac != null && !mac.equals("") && !mac.equals("default")) {
-            if (checkBLE()) {
-                connectDevice();
-            }
-        }
 
         setContentView(R.layout.activity_main);
 
@@ -180,7 +185,7 @@ public class MainActivity extends FragmentActivity {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
-                switch (index){
+                switch (index) {
                     case 1:
                         startActivity(new Intent(MainActivity.this, RunningOutsideActivity.class));
                         break;
@@ -231,9 +236,9 @@ public class MainActivity extends FragmentActivity {
         equipmentFragment = EquipmentFragment.newInstance();
         fragments.add(mainfragment);
         fragments.add(exerciseFragment);
-        if(thirdItem == 0) {
+        if (thirdItem == 0) {
             fragments.add(equipmentFragment);
-        }else {
+        } else {
             fragments.add(epConnectedFragment);
         }
 
@@ -259,7 +264,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -278,6 +283,12 @@ public class MainActivity extends FragmentActivity {
                     intent1.putExtra("thirdItem", 0);
                     intent1.putExtra("selected", 2);
                     startActivity(intent1);
+                    break;
+                case 3:
+                    String connecteState = DataHelper.getStringSF(MyApplication.getAppContext(), "connect_state");
+                    if(!connecteState.equals("3")) {
+                        fragments.set(2, equipmentFragment);
+                    }
                     break;
             }
         }
@@ -471,45 +482,16 @@ public class MainActivity extends FragmentActivity {
                 (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
     }
 
-    class MyViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        private List<Fragment> fragments; // 每个Fragment对应一个Page
-        private FragmentManager fragmentManager;
-        private ContainerViewPager viewPager; // viewPager对象
-
-        public MyViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public MyViewPagerAdapter(FragmentManager fragmentManager, ContainerViewPager viewPager, List<Fragment> fragments) {
-            super(fragmentManager);
-            this.fragments = fragments;
-            this.fragmentManager = fragmentManager;
-            this.viewPager = viewPager;
-            this.viewPager.setAdapter(this);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return PagerAdapter.POSITION_NONE;
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        public void updateList(List<Fragment> arrayList) {
-            this.fragments.clear();
-            this.fragments.addAll(arrayList);
-
-            notifyDataSetChanged();
-        }
+    public void queryBindBracelet() {
+        String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
     }
+
+
+    private BroadcastReceiver stateChangeListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mHandler.sendEmptyMessage(3);
+        }
+    };
 
 }

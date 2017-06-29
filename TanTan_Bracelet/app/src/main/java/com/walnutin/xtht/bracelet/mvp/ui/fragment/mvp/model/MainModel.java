@@ -10,7 +10,10 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MainContract;
+
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -32,4 +35,9 @@ public class MainModel extends BaseModel implements MainContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<String> getBindBraceletObservable(String token) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getBIndBracelet(token);
+    }
 }

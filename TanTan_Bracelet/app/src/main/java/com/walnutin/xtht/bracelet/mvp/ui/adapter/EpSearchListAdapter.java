@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.inuker.bluetooth.library.search.SearchResult;
+import com.jess.arms.utils.DataHelper;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.Device;
 import com.zhy.autolayout.AutoRelativeLayout;
 
@@ -52,12 +54,11 @@ public class EpSearchListAdapter extends RecyclerView.Adapter<EpSearchListAdapte
     public void onBindViewHolder(EpListViewHolder holder, int position) {
         Device device = epList.get(position);
         holder.epNameTv.setText(device.getName());
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("bracelet", MODE_PRIVATE);
-        String address = sharedPreferences.getString("connected_address", "null");
-        if(address.equals(device.getMac())) {
+        String address = DataHelper.getStringSF(MyApplication.getAppContext(), "connected_address");
+        String mac = DataHelper.getStringSF(MyApplication.getAppContext(), "mac");
+        if (address.equals(mac)) {
             holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_connected));
-
-        }else {
+        } else {
             holder.epStatusTv.setText(mContext.getResources().getString(R.string.ep_not_connected));
         }
 

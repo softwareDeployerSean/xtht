@@ -1,5 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.model.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.walnutin.xtht.bracelet.mvp.model.entity.BaseJson;
 import com.walnutin.xtht.bracelet.mvp.model.entity.User;
 import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
@@ -87,4 +88,9 @@ public interface UserService {
     //查询是否绑定
     @GET("user/hasBound")
     Observable<String> hasBound(@Query("mac") String mac);
+
+    //查看当前绑定的手环
+    @GET("user/bindBracelet")
+    Observable<String> getBIndBracelet(@Query("token") String token);
+
 }
