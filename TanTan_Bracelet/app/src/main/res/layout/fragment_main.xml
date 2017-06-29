@@ -1,16 +1,338 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.cjj.MaterialRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refresh"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/transparent"
+    android:orientation="vertical">
 
-
-    <Button
-        android:text="第一个"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical">
 
-</com.cjj.MaterialRefreshLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25px">
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3px"
+                android:text="23"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/iv_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="15px"
+                android:src="@mipmap/shju" />
+
+        </RelativeLayout>
+
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView
+            android:id="@+id/arc_view"
+            android:layout_width="match_parent"
+            android:layout_height="400px" />
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView
+            android:id="@+id/cylinder_view"
+            android:layout_width="match_parent"
+            android:layout_height="200px"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/home_fragment_style1"
+                android:text="大卡" />
+
+            <TextView
+                style="@style/home_fragment_style1"
+                android:text="心率" />
+
+            <TextView
+                style="@style/home_fragment_style1"
+                android:text="公里" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_calorie"
+                style="@style/home_fragment_style2"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_heart_rate"
+                style="@style/home_fragment_style2"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_kilometre"
+                style="@style/home_fragment_style2"
+                android:text="0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_heart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10px"
+            android:paddingLeft="15px"
+            android:paddingRight="15px"
+            android:paddingTop="15px">
+
+            <TextView
+                android:id="@+id/tv_heart_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10px"
+                android:drawableTop="@mipmap/xinlv"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9sp" />
+
+            <TextView
+                style="@style/home_fragment_style3"
+                android:layout_marginLeft="50px"
+                android:text="心率" />
+
+            <TextView
+                android:id="@+id/tv_heart_rate_range"
+                style="@style/home_fragment_style3"
+                android:text="60-70BPM"
+                android:textColor="#FF6466"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="10px"
+                android:drawableRight="@mipmap/fanhuijianhs"
+                android:gravity="center_vertical|right"
+                android:text="查看"
+                android:textColor="#FF6466"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <include layout="@layout/home_fragment_cut_off_rule" />
+        <!--血压-->
+        <LinearLayout
+            android:id="@+id/ll_blood_oxygen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="10px">
+
+            <TextView
+                android:id="@+id/tv_blood_oxygen_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10px"
+                android:drawableTop="@mipmap/xueya"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9sp" />
+
+            <TextView
+                style="@style/home_fragment_style3"
+                android:text="血压" />
+
+            <TextView
+                android:id="@+id/tv_blood_pressure_range"
+                style="@style/home_fragment_style3"
+                android:text="110min"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="10px"
+                android:drawableRight="@mipmap/qj"
+                android:gravity="center_vertical|right"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <!--低运动量-->
+        <RelativeLayout
+            android:id="@+id/rl_jiuzuo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="10px"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10px"
+                android:drawableTop="@mipmap/jiuzuo"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/tv_jiuzuo1"
+                style="@style/home_fragment_style4"
+                android:layout_toRightOf="@+id/tv_jiuzuo_time"
+                android:text="低运动量" />
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_step"
+                style="@style/home_fragment_style4"
+                android:layout_below="@+id/tv_jiuzuo1"
+                android:layout_toRightOf="@+id/tv_jiuzuo_time"
+                android:text="12步" />
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_minute"
+                style="@style/home_fragment_style4"
+                android:layout_toRightOf="@+id/tv_jiuzuo1"
+                android:text="0 min" />
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_calorie"
+                style="@style/home_fragment_style4"
+                android:layout_below="@+id/tv_jiuzuo_minute"
+                android:layout_toRightOf="@+id/tv_jiuzuo1"
+                android:text="00大卡" />
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_km"
+                style="@style/home_fragment_style4"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="0公里" />
+        </RelativeLayout>
+
+        <include layout="@layout/home_fragment_cut_off_rule" />
+
+        <LinearLayout
+            android:id="@+id/ll_blood_pressure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="20px">
+
+            <TextView
+                android:id="@+id/tv_blood_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5px"
+                android:drawableTop="@mipmap/xueyang"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9sp" />
+
+            <TextView
+                style="@style/home_fragment_style3"
+                android:text="血氧" />
+
+            <TextView
+                android:id="@+id/tv_blood_oxygen_range"
+                style="@style/home_fragment_style3"
+                android:text="90%"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="10px"
+                android:drawableRight="@mipmap/qj"
+                android:gravity="center_vertical|right"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_sanbu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="10px"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_sanbu_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10px"
+                android:drawableTop="@mipmap/walk"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/tv_sanbu1"
+                style="@style/home_fragment_style4"
+                android:layout_toRightOf="@+id/tv_sanbu_time"
+                android:text="低运动量" />
+
+            <TextView
+                android:id="@+id/tv_sanbu_step"
+                style="@style/home_fragment_style4"
+                android:layout_below="@+id/tv_sanbu1"
+                android:layout_toRightOf="@+id/tv_sanbu_time"
+                android:text="12步" />
+
+            <TextView
+                android:id="@+id/tv_sanbu_minute"
+                style="@style/home_fragment_style4"
+                android:layout_toRightOf="@+id/tv_sanbu1"
+                android:text="0 min" />
+
+            <TextView
+                android:id="@+id/tv_sanbu_calorie"
+                style="@style/home_fragment_style4"
+                android:layout_below="@+id/tv_sanbu_minute"
+                android:layout_toRightOf="@+id/tv_sanbu1"
+                android:text="00大卡" />
+
+            <TextView
+                android:id="@+id/tv_sanbu_km"
+                style="@style/home_fragment_style4"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="0公里" />
+        </RelativeLayout>
+
+        <include layout="@layout/home_fragment_cut_off_rule" />
+    </LinearLayout>
+
+
+</ScrollView>

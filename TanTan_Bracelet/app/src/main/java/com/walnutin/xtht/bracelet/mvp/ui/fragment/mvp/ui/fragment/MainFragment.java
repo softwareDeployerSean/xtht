@@ -31,7 +31,10 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMainCompone
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MainModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MainContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MainPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView;
 
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -39,6 +42,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class MainFragment extends BaseFragment<MainPresenter> implements MainContract.View {
 
     VPOperateManager mVpoperateManager;
+
+    @BindView(R.id.cylinder_view)
+    StepArcView sv;
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -65,6 +71,9 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
         String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
         mPresenter.getBindBracelet(token);
+
+        sv.setCurrentCount(7000, 6000);
+
     }
 
     /**

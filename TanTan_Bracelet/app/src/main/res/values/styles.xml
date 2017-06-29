@@ -59,5 +59,41 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="home_fragment_style1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_444444</item>
+        <item name="android:textSize">16px</item>
+    </style>
+
+    <style name="home_fragment_style2">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_444444</item>
+        <item name="android:textSize">36px</item>
+    </style>
+
+    <style name="home_fragment_style3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">50px</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_444444</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="home_fragment_style4">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">35px</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_444444</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 
 </resources>
