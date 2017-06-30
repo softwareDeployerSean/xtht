@@ -209,12 +209,9 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="ad8185f62a0d3cfaa5d9b81366ac9304"></meta-data>
+            android:value="ad8185f62a0d3cfaa5d9b81366ac9304" />
 
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.CountdownActivity" />
-
-
-
 
         <service
             android:name=".mvp.ui.fragment.mvp.ui.fragment.DfuService"
@@ -223,9 +220,12 @@
         <service
             android:name=".mvp.ui.fragment.mvp.ui.fragment.EpConnecteService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningIndoorActivity"></activity>
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningIndoorActivity" />
+        <activity
+            android:theme="@style/NoTitleTranslucentTheme"
+            android:name=".mvp.ui.activity.mvp.ui.activity.OperationbyRunmapActivity"></activity>
     </application>
 
 </manifest>

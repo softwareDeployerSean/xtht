@@ -13,7 +13,19 @@
         android:layout_marginTop="40px"
         android:text="室内跑"
         android:textColor="@color/white"
-        android:textSize="15px" />
+        android:textSize="15px"
+        android:layout_weight="1"
+        />
+
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        >
+
+
+    </com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
 
 
 </com.zhy.autolayout.AutoLinearLayout>

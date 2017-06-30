@@ -10,14 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></com.amap.api.maps.MapView>
 
-   <!-- <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:alpha="0.4"
-        >
+    <ImageButton
+        android:id="@+id/ib_location"
+        android:layout_width="64px"
+        android:layout_height="64px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50px"
+        android:layout_marginLeft="90px"
+        android:background="@mipmap/dingwei" />
 
-    </FrameLayout>-->
+    <ImageButton
+        android:id="@+id/ib_close"
+        android:layout_width="64px"
+        android:layout_height="64px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50px"
+        android:layout_marginRight="90px"
+        android:background="@mipmap/guanbi" />
 
 
 </com.zhy.autolayout.AutoRelativeLayout>

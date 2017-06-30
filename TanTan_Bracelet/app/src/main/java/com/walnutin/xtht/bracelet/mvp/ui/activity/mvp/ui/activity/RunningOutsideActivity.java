@@ -5,32 +5,27 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.trace.LBSTraceClient;
-import com.amap.api.trace.TraceListener;
-import com.amap.api.trace.TraceLocation;
-import com.amap.api.trace.TraceStatusListener;
-import com.inuker.bluetooth.library.Constants;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerRunningOutsideComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.RunningOutsideModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RunningOutsideContract;
@@ -38,11 +33,10 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.RunningOutsidePr
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.internal.Utils;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -57,7 +51,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     Boolean isFirstLatLng = true;
     //以前的定位点
     private LatLng oldLatLng;
-    LBSTraceClient lbsTraceClient;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -74,13 +67,81 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         return R.layout.activity_running_outside; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        UiUtils.SnackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        UiUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+        destroyLocation();
+        /*List<LatLng> latLngs1 = new ArrayList<>();
+        ConmonUtils.deleteArray(MyApplication.getAppContext());*/
+    }
+
     @Override
     public void initData(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         //初始化定位
         initLocation();
-
     }
 
     /**
@@ -122,6 +183,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色*/
                     //aMap.setMyLocationStyle(myLocationStyle);
                     LatLng newLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    List<LatLng> latLngs = new ArrayList<>();
+                    latLngs.add(newLatLng);
+                    latLngs.add(newLatLng);
                     if (isFirstLatLng) {
                         //记录第一次的定位信息
                         oldLatLng = newLatLng;
@@ -131,6 +195,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     if (oldLatLng != newLatLng) {
                         //setUpMap(oldLatLng, newLatLng);
                         oldLatLng = newLatLng;
+                        List<LatLng> latLngs1 = ConmonUtils.loadArray(MyApplication.getAppContext());
+                        latLngs1.add(newLatLng);
+                        ConmonUtils.saveArray(MyApplication.getAppContext(), latLngs1);
+                        setUpMap();
                     }
                     //set_beginmark();
                 } else {
@@ -149,20 +217,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
     };
 
-    List<LatLng> ceshi = new ArrayList<>();
-    TraceStatusListener traceListener = new TraceStatusListener() {
-        @Override
-        public void onTraceStatus(List<TraceLocation> list, List<LatLng> list1, String s) {
-            ceshi.addAll(list1);
-            List<LatLng> latLngs = DataHelper.getDataList(MyApplication.getAppContext(), "latlng");
-            latLngs.addAll(list1);
-            DataHelper.setDataList(MyApplication.getAppContext(), "latlng", latLngs);
-            LogUtils.debugInfo("怎么回事" + DataHelper.getDataList(MyApplication.getAppContext(), "latlng").size());
-            setUpMap();
-            LogUtils.debugInfo("获取到的数据" + latLngs.size() + "详情" + latLngs.toString());
-        }
-    };
-
 
     private void initLocation() {
         //初始化client
@@ -172,7 +226,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         locationClient.setLocationOption(locationOption);
         // 设置定位监听
         locationClient.setLocationListener(locationListener);
-
         startLocation();
     }
 
@@ -206,7 +259,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
         aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
         aMap.setMyLocationEnabled(true);
-        lbsTraceClient = LBSTraceClient.getInstance(this);
     }
 
 
@@ -221,7 +273,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         locationClient.setLocationOption(locationOption);
         // 启动定位
         locationClient.startLocation();
-        lbsTraceClient.startTrace(traceListener); //开始采集,需要传入一个状态回调监听。
     }
 
 
@@ -233,7 +284,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
      */
     private void stopLocation() {
         // 停止定位
-        locationClient.stopLocation();
+        if (locationClient != null) {
+            locationClient.stopLocation();
+        }
+
     }
 
     /**
@@ -248,80 +302,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
              * 如果AMapLocationClient是在当前Activity实例化的，
              * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
              */
+            stopLocation();
             locationClient.onDestroy();
             locationClient = null;
             locationOption = null;
         }
-        lbsTraceClient.stopTrace();//在不需要轨迹纠偏时（如行程结束），可调用此接口结束纠偏
-    }
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-
-    }
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-
-    }
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mapView != null) {
-            mapView.onDestroy();
-        }
-        destroyLocation();
-    }
-
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(@NonNull String message) {
-        checkNotNull(message);
-        UiUtils.SnackbarText(message);
-    }
-
-    @Override
-    public void launchActivity(@NonNull Intent intent) {
-        checkNotNull(intent);
-        UiUtils.startActivity(intent);
-    }
-
-    @Override
-    public void killMyself() {
-        finish();
     }
 
 
@@ -333,15 +318,14 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
        /* aMap.addPolyline((new PolylineOptions())
                 .add(oldData, newData)
                 .geodesic(true).color(Color.GREEN));*/
-
-        List<LatLng> latLngs = DataHelper.getDataList(MyApplication.getAppContext(), "latlng");
-
+        List<LatLng> latLngs = new ArrayList<>();
+        latLngs = ConmonUtils.loadArray(MyApplication.getAppContext());
         aMap.addPolyline(new PolylineOptions() //setCustomTextureList(bitmapDescriptors)
 //				.setCustomTextureIndex(texIndexList)
-                .addAll(ceshi)
+                .addAll(latLngs)
                 .useGradient(true)
                 .width(18).color(Color.BLUE));
-        LogUtils.debugInfo("获取到的数据第二" + latLngs.size() + "详情" + latLngs.toString());
+        LogUtils.debugInfo("获取到的数据第二" + latLngs.size());
     }
 
     public void set_beginmark() {
@@ -352,8 +336,17 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.read_circle));
         markerOptions.icon(bitmapDescriptor);
         aMap.addMarker(markerOptions);
-
     }
 
 
+    @OnClick({R.id.ib_location, R.id.ib_close})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ib_location:
+                break;
+            case R.id.ib_close:
+                launchActivity(new Intent(RunningOutsideActivity.this, OperationbyRunmapActivity.class));
+                break;
+        }
+    }
 }

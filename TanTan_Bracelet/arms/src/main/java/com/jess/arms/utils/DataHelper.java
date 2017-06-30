@@ -3,6 +3,7 @@ package com.jess.arms.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import com.google.gson.Gson;
@@ -17,6 +18,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by zhiyicx on 2016/3/15.
@@ -278,48 +281,8 @@ public class DataHelper {
         return result;
     }
 
-    /**
-     * 保存List
-     *
-     * @param tag
-     * @param datalist
-     */
-    public  static <T> void setDataList(Context context,String tag, List<T> datalist) {
-        if (mSharedPreferences == null) {
-            mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-        }
-        if (null == datalist || datalist.size() <= 0)
-            return;
 
-        Gson gson = new Gson();
-        //转换成json数据，再保存
-        String strJson = gson.toJson(datalist);
-        mSharedPreferences.edit().clear();
-        mSharedPreferences.edit().putString(tag, strJson);
-        mSharedPreferences.edit().commit();
-    }
 
-    /**
-     * 获取List
-     *
-     * @param tag
-     * @return
-     */
-    public static   <T> List<T> getDataList(Context context,String tag) {
-        if (mSharedPreferences == null) {
-            mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-        }
-        List<T> datalist = new ArrayList<T>();
-        String strJson = mSharedPreferences.getString(tag, null);
-        if (null == strJson) {
-            return datalist;
-        }
-        Gson gson = new Gson();
-        datalist = gson.fromJson(strJson, new TypeToken<List<T>>() {
-        }.getType());
-        return datalist;
-
-    }
 
 
 }

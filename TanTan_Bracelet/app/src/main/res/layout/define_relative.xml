@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_suo"
+        android:layout_width="18px"
+        android:layout_height="24px"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/suo" />
+
+    <ImageView
+        android:id="@+id/iv_jiantou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_suo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22px"
+        android:background="@mipmap/xiahua" />
+
+    <TextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下滑解锁"
+        android:layout_below="@+id/iv_jiantou"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12px"
+        android:textColor="@color/white"
+        android:textSize="18px"
+        />
+
+
+</com.zhy.autolayout.AutoRelativeLayout>
