@@ -48,6 +48,7 @@ import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.MyFragmentViewPagerAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.CountdownActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.FragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EpConnecteService;
@@ -187,9 +188,14 @@ public class MainActivity extends FragmentActivity {
             public void onButtonClicked(int index) {
                 switch (index) {
                     case 1:
-                        startActivity(new Intent(MainActivity.this, RunningOutsideActivity.class));
+                        Intent intent=new Intent(MainActivity.this, CountdownActivity.class);
+                        intent.putExtra("tag","running_out");
+                        startActivity(intent);
                         break;
                     case 2:
+                        Intent intent_door=new Intent(MainActivity.this, CountdownActivity.class);
+                        intent_door.putExtra("tag","running_indoor");
+                        startActivity(intent_door);
                         break;
                     case 3:
                         break;

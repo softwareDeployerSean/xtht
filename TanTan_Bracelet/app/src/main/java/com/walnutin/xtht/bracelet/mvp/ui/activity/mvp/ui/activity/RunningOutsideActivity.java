@@ -19,12 +19,18 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.trace.LBSTraceClient;
+import com.amap.api.trace.TraceListener;
+import com.amap.api.trace.TraceLocation;
+import com.amap.api.trace.TraceStatusListener;
 import com.inuker.bluetooth.library.Constants;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerRunningOutsideComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.RunningOutsideModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RunningOutsideContract;
@@ -51,6 +57,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     Boolean isFirstLatLng = true;
     //以前的定位点
     private LatLng oldLatLng;
+    LBSTraceClient lbsTraceClient;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -122,10 +129,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     }
                     //位置有变化
                     if (oldLatLng != newLatLng) {
-                        setUpMap(oldLatLng, newLatLng);
+                        //setUpMap(oldLatLng, newLatLng);
                         oldLatLng = newLatLng;
                     }
-                    set_beginmark();
+                    //set_beginmark();
                 } else {
                     //定位失败
                     sb.append("定位失败" + "\n");
@@ -136,11 +143,26 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
 
                 //解析定位结果，
                 String result = sb.toString();
-                LogUtils.debugInfo(result);
+                //LogUtils.debugInfo(result);
             } else {
             }
         }
     };
+
+    List<LatLng> ceshi = new ArrayList<>();
+    TraceStatusListener traceListener = new TraceStatusListener() {
+        @Override
+        public void onTraceStatus(List<TraceLocation> list, List<LatLng> list1, String s) {
+            ceshi.addAll(list1);
+            List<LatLng> latLngs = DataHelper.getDataList(MyApplication.getAppContext(), "latlng");
+            latLngs.addAll(list1);
+            DataHelper.setDataList(MyApplication.getAppContext(), "latlng", latLngs);
+            LogUtils.debugInfo("怎么回事" + DataHelper.getDataList(MyApplication.getAppContext(), "latlng").size());
+            setUpMap();
+            LogUtils.debugInfo("获取到的数据" + latLngs.size() + "详情" + latLngs.toString());
+        }
+    };
+
 
     private void initLocation() {
         //初始化client
@@ -164,7 +186,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
         mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setInterval(1000);//可选，设置定位间隔。默认为2秒
         mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
         mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
         mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
@@ -184,6 +206,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
         aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
         aMap.setMyLocationEnabled(true);
+        lbsTraceClient = LBSTraceClient.getInstance(this);
     }
 
 
@@ -198,6 +221,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         locationClient.setLocationOption(locationOption);
         // 启动定位
         locationClient.startLocation();
+        lbsTraceClient.startTrace(traceListener); //开始采集,需要传入一个状态回调监听。
     }
 
 
@@ -228,6 +252,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             locationClient = null;
             locationOption = null;
         }
+        lbsTraceClient.stopTrace();//在不需要轨迹纠偏时（如行程结束），可调用此接口结束纠偏
     }
 
     /**
@@ -303,14 +328,23 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     /**
      * 绘制两个坐标点之间的线段,从以前位置到现在位置
      */
-    private void setUpMap(LatLng oldData, LatLng newData) {
+    private void setUpMap() {
         // 绘制一个大地曲线
-        aMap.addPolyline((new PolylineOptions())
+       /* aMap.addPolyline((new PolylineOptions())
                 .add(oldData, newData)
-                .geodesic(true).color(Color.GREEN));
+                .geodesic(true).color(Color.GREEN));*/
 
+        List<LatLng> latLngs = DataHelper.getDataList(MyApplication.getAppContext(), "latlng");
+
+        aMap.addPolyline(new PolylineOptions() //setCustomTextureList(bitmapDescriptors)
+//				.setCustomTextureIndex(texIndexList)
+                .addAll(ceshi)
+                .useGradient(true)
+                .width(18).color(Color.BLUE));
+        LogUtils.debugInfo("获取到的数据第二" + latLngs.size() + "详情" + latLngs.toString());
     }
-    public void set_beginmark(){
+
+    public void set_beginmark() {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(oldLatLng);
         markerOptions.title("当前位置");
@@ -320,8 +354,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         aMap.addMarker(markerOptions);
 
     }
-
-
 
 
 }

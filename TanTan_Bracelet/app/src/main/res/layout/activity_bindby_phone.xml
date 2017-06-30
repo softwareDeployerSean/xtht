@@ -48,6 +48,7 @@
             android:textColor="@color/black_444444"
             android:textSize="12px"
             android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="25px"
             />
 
 
