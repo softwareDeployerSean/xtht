@@ -51,7 +51,7 @@ public class CustomerRelativeLayout extends RelativeLayout {
      */
     private int viewHeight;
 
-    private boolean isSilding_down;
+    private boolean isSilding;
 
     private OnFinishListener onFinishListener;
     private boolean isFinish;
@@ -59,6 +59,13 @@ public class CustomerRelativeLayout extends RelativeLayout {
     private ImageView iv_suo;
     private ImageView iv_tag;
     private TextView tv_tag;
+
+    /**
+     * 向上或者向下
+     * fasle:向下
+     * true: 向上
+     */
+    boolean isUpOrDown = false;
 
     public CustomerRelativeLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -90,9 +97,16 @@ public class CustomerRelativeLayout extends RelativeLayout {
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) ev.getRawY();
                 // 满足此条件屏蔽touch事件
-                if (Math.abs(moveY - downY) > mTouchSlop
-                        && Math.abs((int) ev.getRawX() - downX) < mTouchSlop) {
-                    return true;
+                if (isUpOrDown) {
+                    if (Math.abs(downY - moveY) > mTouchSlop
+                            && Math.abs((int) ev.getRawX() - downX) < mTouchSlop) {
+                        return true;
+                    }
+                } else {
+                    if (Math.abs(moveY - downY) > mTouchSlop
+                            && Math.abs((int) ev.getRawX() - downX) < mTouchSlop) {
+                        return true;
+                    }
                 }
                 break;
         }
@@ -103,50 +117,40 @@ public class CustomerRelativeLayout extends RelativeLayout {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
-                int deltaY;
-                if (tv_tag.getText().equals("上滑锁定")) {
-                    deltaY = moveY - tempY;
+                if (isUpOrDown) {
 
+
+                    int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
+                    int deltaY = moveY - tempY;
+                    tempY = moveY;
+                    if (Math.abs(downY - moveY) > mTouchSlop
+                            && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
+                        isSilding = true;
+                    }
+
+                    if (downY - moveY >= 0 && isSilding) {
+                        mParentView.scrollBy(0, -deltaY);
+                    }
                 } else {
-                    deltaY = tempY - moveY;
-                }
+                    int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
+                    int deltaY = tempY - moveY;
+                    tempY = moveY;
+                    if (Math.abs(moveY - downY) > mTouchSlop
+                            && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
+                        isSilding = true;
+                    }
 
-                tempY = moveY;
-                if (Math.abs(moveY - downY) > mTouchSlop
-                        && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
-                    if (tv_tag.getText().equals("上滑锁定")) {
-                        isSilding_down = false;
-                    } else {
-                        isSilding_down = true;
+                    if (moveY - downY >= 0 && isSilding) {
+                        mParentView.scrollBy(0, deltaY);
                     }
                 }
-
-                if (moveY - downY >= 0 && isSilding_down) {
-                    mParentView.scrollBy(0, deltaY);
-                    LogUtils.debugInfo("距离111=" + deltaY);
-                    if (deltaY < -40) {
-                        isSilding_down = false;
-                        tv_tag.setText("上滑锁定");
-                    }
-                }
-                if (downY - moveY >= 0 && !isSilding_down) {
-                    mParentView.scrollBy(0, -deltaY);
-                    LogUtils.debugInfo("距离222=" + deltaY);
-                    if (-deltaY > 40) {
-                        isSilding_down = true;
-                        tv_tag.setText("下滑解锁");
-                    }
-                }
-
-
                 break;
             case MotionEvent.ACTION_UP:
-                isSilding_down = false;
-                if (mParentView.getScrollY() <= -viewHeight / 3) {
+                isSilding = false;
+                if (mParentView.getScrollY() <= -viewHeight / 5) {
                     isFinish = true;
                     scrollBottom();
-                } else if (mParentView.getScrollY() >= viewHeight / 3) {
+                } else if (mParentView.getScrollY() >= viewHeight / 5) {
                     isFinish = true;
                     scrollTop();
                 } else {
@@ -180,8 +184,16 @@ public class CustomerRelativeLayout extends RelativeLayout {
      * 滚动出下界面
      */
     private void scrollBottom() {
-        final int delta = (viewHeight + mParentView.getScrollY());
-        mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta + 1,
+//        final int delta = (viewHeight + mParentView.getScrollY());
+//        mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta + 1,
+//                Math.abs(delta));
+
+        tv_tag.setText("上滑锁定");
+        iv_tag.setImageResource(R.mipmap.shanghua);
+        iv_suo.setImageResource(R.mipmap.suo);
+
+        int delta = mParentView.getScrollY();
+        mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
                 Math.abs(delta));
         postInvalidate();
     }
@@ -190,9 +202,17 @@ public class CustomerRelativeLayout extends RelativeLayout {
      * 滚动出上界面
      */
     private void scrollTop() {
-        final int delta = (viewHeight - mParentView.getScrollY());
-        mScroller.startScroll(0, mParentView.getScrollY(), 0, delta - 1,
+//        final int delta = (viewHeight - mParentView.getScrollY());
+//        mScroller.startScroll(0, mParentView.getScrollY(), 0, delta - 1,
+//                Math.abs(delta));
+
+        tv_tag.setText("下滑解锁");
+        iv_tag.setImageResource(R.mipmap.xiahua);
+        iv_suo.setImageResource(R.mipmap.weisuo);
+        int delta = mParentView.getScrollY();
+        mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
                 Math.abs(delta));
+
         postInvalidate();
     }
 
@@ -202,8 +222,10 @@ public class CustomerRelativeLayout extends RelativeLayout {
      */
     private void scrollOrigin() {
         int delta = mParentView.getScrollY();
+
         mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
                 Math.abs(delta));
+
         postInvalidate();
     }
 
@@ -215,7 +237,8 @@ public class CustomerRelativeLayout extends RelativeLayout {
 
             if (mScroller.isFinished() && isFinish) {
                 if (onFinishListener != null) {
-                    onFinishListener.onFinish();
+                    onFinishListener.onFinish(isUpOrDown);
+                    isUpOrDown = !isUpOrDown;
                 } else {
                     // 没有设置OnSildingFinishListener，让其滚动到其实位置
                     scrollOrigin();
@@ -226,6 +249,6 @@ public class CustomerRelativeLayout extends RelativeLayout {
     }
 
     public interface OnFinishListener {
-        public void onFinish();
+        public void onFinish(boolean isUpOrDown);
     }
 }

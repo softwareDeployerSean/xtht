@@ -58,6 +58,8 @@
 
     <color name="darkgray">#A9A9A9</color><!--暗灰色 -->
     <color name="yellowffaa33">#ffaa33</color>
-
+    <color name="limegreen">#32CD32</color><!--橙绿色 -->
+    <color name="gray_EBEBEB">#EBEBEB</color><!--灰色8f -->
+    <color name="mediumslateblue">#7B68EE</color><!--中暗蓝色 -->
 
 </resources>

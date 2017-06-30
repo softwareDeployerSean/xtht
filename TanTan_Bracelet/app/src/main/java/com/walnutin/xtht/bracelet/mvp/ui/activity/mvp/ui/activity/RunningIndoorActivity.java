@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
@@ -13,14 +14,18 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerRunningIndo
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.RunningIndoorModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RunningIndoorContract;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.RunningIndoorPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout;
 
 
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> implements RunningIndoorContract.View {
 
+    @BindView(R.id.layout)
+    public CustomerRelativeLayout mCustomerRelativeLayout;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -39,7 +44,12 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        mCustomerRelativeLayout.setOnFinishListener(new CustomerRelativeLayout.OnFinishListener() {
+            @Override
+            public void onFinish(boolean isUpOrDown) {
+                LogUtils.debugInfo("---------------------Activity回调isUpOrDown=" + isUpOrDown);
+            }
+        });
     }
 
 

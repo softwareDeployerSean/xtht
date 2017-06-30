@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jess.arms.widget.autolayout.AutoScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="25px">
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="20px">
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3px"
                 android:text="23"
-                android:textSize="18sp" />
+                android:textSize="18px" />
 
             <ImageView
                 android:id="@+id/iv_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:padding="15px"
                 android:src="@mipmap/shju" />
 
-        </RelativeLayout>
+        </com.zhy.autolayout.AutoRelativeLayout>
 
 
         <com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView
             android:id="@+id/arc_view"
             android:layout_width="match_parent"
-            android:layout_height="400px" />
+            android:layout_height="250px"
+            android:layout_gravity="center" />
 
-        <com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView
-            android:id="@+id/cylinder_view"
-            android:layout_width="match_parent"
-            android:layout_height="200px"
-            android:visibility="gone" />
-
-        <LinearLayout
+        <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
@@ -54,49 +51,55 @@
 
             <TextView
                 style="@style/home_fragment_style1"
-                android:text="大卡" />
+                android:text="大卡"
+                android:textSize="18px" />
 
             <TextView
                 style="@style/home_fragment_style1"
-                android:text="心率" />
+                android:text="心率"
+                android:textSize="18px" />
 
             <TextView
                 style="@style/home_fragment_style1"
-                android:text="公里" />
-        </LinearLayout>
+                android:text="公里"
+                android:textSize="18px" />
+        </com.zhy.autolayout.AutoLinearLayout>
 
-        <LinearLayout
+        <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20px"
+            android:layout_marginTop="10px"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_calorie"
                 style="@style/home_fragment_style2"
-                android:text="0" />
+                android:text="0"
+                android:textSize="36px" />
 
             <TextView
                 android:id="@+id/tv_heart_rate"
                 style="@style/home_fragment_style2"
-                android:text="0" />
+                android:text="0"
+                android:textSize="36px" />
 
             <TextView
                 android:id="@+id/tv_kilometre"
                 style="@style/home_fragment_style2"
-                android:text="0" />
-        </LinearLayout>
-
-        <LinearLayout
+                android:text="0"
+                android:textSize="36px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+        <!--心率 -->
+        <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/ll_heart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="10px"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="10px"
-            android:paddingLeft="15px"
-            android:paddingRight="15px"
-            android:paddingTop="15px">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_heart_time"
@@ -107,7 +110,7 @@
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/black_444444"
-                android:textSize="9sp" />
+                android:textSize="9px" />
 
             <TextView
                 style="@style/home_fragment_style3"
@@ -128,23 +131,28 @@
                 android:drawablePadding="10px"
                 android:drawableRight="@mipmap/fanhuijianhs"
                 android:gravity="center_vertical|right"
-                android:text="查看"
+                android:text="查看  "
                 android:textColor="#FF6466"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <include layout="@layout/home_fragment_cut_off_rule" />
+                android:textSize="12px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
         <!--血压-->
-        <LinearLayout
+        <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/ll_blood_oxygen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="15px"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="10px"
-            android:paddingLeft="20px"
-            android:paddingRight="20px"
-            android:paddingTop="10px">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_blood_oxygen_time"
@@ -155,17 +163,72 @@
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/black_444444"
-                android:textSize="9sp" />
+                android:textSize="9px" />
 
             <TextView
                 style="@style/home_fragment_style3"
                 android:text="血压" />
 
-            <TextView
-                android:id="@+id/tv_blood_pressure_range"
-                style="@style/home_fragment_style3"
-                android:text="110min"
-                android:textSize="18sp" />
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15px">
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:id="@+id/xuayahight_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5px">
+
+                    <TextView
+                        android:id="@+id/xueyahight_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="高压"
+                        android:textColor="@color/black_444444"
+                        android:textSize="15px" />
+
+                    <TextView
+                        android:id="@+id/hight_xueya_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5px"
+                        android:layout_toRightOf="@id/xueyahight_tv"
+                        android:text="110 mmhg"
+                        android:textColor="@color/black_444444"
+                        android:textSize="15px" />
+
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:id="@+id/xueyalow_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/xuayahight_rl">
+
+                    <TextView
+                        android:id="@+id/xueyalow_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="低压"
+                        android:textColor="@color/black_444444"
+                        android:textSize="15px" />
+
+                    <TextView
+                        android:id="@+id/low_xueya_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5px"
+                        android:layout_toRightOf="@id/xueyalow_tv"
+                        android:text="90 mmhg"
+                        android:textColor="@color/black_444444"
+                        android:textSize="15px" />
+
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
 
             <TextView
                 android:layout_width="0dp"
@@ -174,67 +237,17 @@
                 android:drawablePadding="10px"
                 android:drawableRight="@mipmap/qj"
                 android:gravity="center_vertical|right"
-                android:textSize="18sp" />
-        </LinearLayout>
-        <!--低运动量-->
-        <RelativeLayout
-            android:id="@+id/rl_jiuzuo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10px"
-            android:paddingLeft="20px"
-            android:paddingRight="20px"
-            android:paddingTop="10px"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_jiuzuo_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10px"
-                android:drawableTop="@mipmap/jiuzuo"
-                android:gravity="center"
-                android:text="00:00"
-                android:textColor="@color/black_444444"
-                android:textSize="9sp" />
-
-            <TextView
-                android:id="@+id/tv_jiuzuo1"
-                style="@style/home_fragment_style4"
-                android:layout_toRightOf="@+id/tv_jiuzuo_time"
-                android:text="低运动量" />
-
-            <TextView
-                android:id="@+id/tv_jiuzuo_step"
-                style="@style/home_fragment_style4"
-                android:layout_below="@+id/tv_jiuzuo1"
-                android:layout_toRightOf="@+id/tv_jiuzuo_time"
-                android:text="12步" />
-
-            <TextView
-                android:id="@+id/tv_jiuzuo_minute"
-                style="@style/home_fragment_style4"
-                android:layout_toRightOf="@+id/tv_jiuzuo1"
-                android:text="0 min" />
-
-            <TextView
-                android:id="@+id/tv_jiuzuo_calorie"
-                style="@style/home_fragment_style4"
-                android:layout_below="@+id/tv_jiuzuo_minute"
-                android:layout_toRightOf="@+id/tv_jiuzuo1"
-                android:text="00大卡" />
-
-            <TextView
-                android:id="@+id/tv_jiuzuo_km"
-                style="@style/home_fragment_style4"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:text="0公里" />
-        </RelativeLayout>
-
-        <include layout="@layout/home_fragment_cut_off_rule" />
-
-        <LinearLayout
+                android:textSize="12px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
+        <!--血氧 -->
+        <com.zhy.autolayout.AutoLinearLayout
             android:id="@+id/ll_blood_pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -254,7 +267,7 @@
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/black_444444"
-                android:textSize="9sp" />
+                android:textSize="9px" />
 
             <TextView
                 style="@style/home_fragment_style3"
@@ -274,9 +287,85 @@
                 android:drawableRight="@mipmap/qj"
                 android:gravity="center_vertical|right"
                 android:textSize="18sp" />
-        </LinearLayout>
+        </com.zhy.autolayout.AutoLinearLayout>
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
+        <!--低运动量-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:id="@+id/rl_jiuzuo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginBottom="5px"
+            android:layout_marginTop="15px">
 
-        <RelativeLayout
+            <TextView
+                android:id="@+id/tv_jiuzuo_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/jiuzuo"
+                android:drawablePadding="5px"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9px" />
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/diliangyundong_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35px"
+                android:layout_toRightOf="@+id/tv_jiuzuo_time">
+
+                <TextView
+                    android:id="@+id/tv_jiuzuo1"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginLeft="0px"
+                    android:text="低运动量" />
+
+                <TextView
+                    android:id="@+id/tv_jiuzuo_step"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_jiuzuo1"
+                    android:layout_marginBottom="10px"
+                    android:layout_marginLeft="0px"
+                    android:text="12步" />
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:layout_toRightOf="@+id/diliangyundong_rl">
+
+                <TextView
+                    android:id="@+id/tv_jiuzuo_minute"
+                    style="@style/home_fragment_style4"
+                    android:text="0 min" />
+
+                <TextView
+                    android:id="@+id/tv_jiuzuo_calorie"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_jiuzuo_minute"
+                    android:text="00大卡" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_jiuzuo_km"
+                style="@style/home_fragment_style4"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="0公里" />
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
             android:id="@+id/rl_sanbu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -329,10 +418,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:text="0公里" />
-        </RelativeLayout>
+        </com.zhy.autolayout.AutoRelativeLayout>
 
-        <include layout="@layout/home_fragment_cut_off_rule" />
-    </LinearLayout>
+    </com.zhy.autolayout.AutoLinearLayout>
 
 
-</ScrollView>
+</com.jess.arms.widget.autolayout.AutoScrollView>

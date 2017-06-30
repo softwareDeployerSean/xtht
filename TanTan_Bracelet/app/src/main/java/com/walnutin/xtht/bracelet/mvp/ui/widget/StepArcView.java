@@ -1,8 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.ui.widget;
 
 import android.animation.ValueAnimator;
-
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,7 +27,7 @@ public class StepArcView extends View {
     /**
      * 画步数的数值的字体大小
      */
-    private float numberTextSize = 18;
+    private float numberTextSize = 0;
     /**
      * 步数
      */
@@ -37,11 +35,11 @@ public class StepArcView extends View {
     /**
      * 开始绘制圆弧的角度140
      */
-    private float startAngle = 0;
+    private float startAngle = 140;
     /**
      * 终点对应的角度和起始点对应的角度的夹角260
      */
-    private float angleLength = 90;
+    private float angleLength = 260;
     /**
      * 所要绘制的当前步数的红色圆弧终点到起点的夹角
      */
@@ -74,7 +72,13 @@ public class StepArcView extends View {
         /**中心点的x坐标*/
         float centerX = (getWidth()) / 2;
         /**指定圆弧的外轮廓矩形区域*/
-        RectF rectF = new RectF(0 + borderWidth, borderWidth, 2 * centerX - borderWidth, 2 * centerX - borderWidth);
+        RectF rectF;
+        if (getWidth() > getHeight()) {
+            int distance = (getWidth() / 2) - (getHeight() / 2);
+            rectF = new RectF(0 + borderWidth + distance, borderWidth, 2 * centerX - borderWidth - distance, getHeight() - borderWidth);
+        } else {
+            rectF = new RectF(0 + borderWidth, borderWidth, 2 * centerX - borderWidth, 2 * centerX - borderWidth);
+        }
 
         /**【第一步】绘制整体的黄色圆弧*/
         drawArcButtom(canvas, rectF);
@@ -95,7 +99,7 @@ public class StepArcView extends View {
     private void drawArcButtom(Canvas canvas, RectF rectF) {
         Paint paint = new Paint();
         /** 默认画笔颜色，黄色 */
-        paint.setColor(getResources().getColor(R.color.grey_D8D8D8));
+        paint.setColor(getResources().getColor(R.color.gray_EBEBEB));
         /** 结合处为圆弧*/
         paint.setStrokeJoin(Paint.Join.ROUND);
         /** 设置画笔的样式 Paint.Cap.Round ,Cap.SQUARE等分别为圆形、方形*/
@@ -129,12 +133,12 @@ public class StepArcView extends View {
         paintCurrent.setStyle(Paint.Style.STROKE);//设置填充样式
         paintCurrent.setAntiAlias(true);//抗锯齿功能
         paintCurrent.setStrokeWidth(borderWidth);//设置画笔宽度
-        paintCurrent.setColor(getResources().getColor(R.color.greenBtnNormal));//设置画笔颜色
+        paintCurrent.setColor(getResources().getColor(R.color.limegreen));//设置画笔颜色
 
 //        LinearGradient linearGradient = new LinearGradient();
         //环形颜色填充
         SweepGradient sweepGradient =
-                new SweepGradient((getWidth()) / 2 / 2, getHeight() / 2, gradientColorArray, null);
+                new SweepGradient(getWidth() / 2 - borderWidth, getHeight() / 2 + borderWidth, gradientColorArray, null);
         paintCurrent.setShader(sweepGradient);
         canvas.drawArc(rectF, startAngle, currentAngleLength, false, paintCurrent);
     }
@@ -164,7 +168,7 @@ public class StepArcView extends View {
         vTextPaint.setTextSize(dipToPx(20));
         vTextPaint.setTextAlign(Paint.Align.CENTER);
         vTextPaint.setAntiAlias(true);//抗锯齿功能
-        vTextPaint.setColor(getResources().getColor(R.color.black_444444));
+        vTextPaint.setColor(getResources().getColor(R.color.mediumslateblue));
         String stepString = "目标：" + totalNum;
         Rect bounds = new Rect();
         vTextPaint.getTextBounds(stepString, 0, stepString.length(), bounds);
@@ -266,4 +270,3 @@ public class StepArcView extends View {
     }
 
 }
-

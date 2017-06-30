@@ -19,6 +19,7 @@
 
     <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
         android:id="@+id/layout"
+        android:paddingBottom="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
