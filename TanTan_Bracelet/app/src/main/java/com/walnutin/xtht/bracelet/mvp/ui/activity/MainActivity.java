@@ -96,8 +96,8 @@ public class MainActivity extends FragmentActivity {
     @BindView(R.id.bottom_sector_menu)
     SectorMenuButton bottom_sector_menu;
     //菜单
-    private static final int[] ITEM_DRAWABLES = {R.mipmap.jiahao, R.mipmap.paobu, R.mipmap.jianshen,
-            R.mipmap.qixin, R.mipmap.tubu};
+    private static final int[] ITEM_DRAWABLES = {R.mipmap.jiahao, R.mipmap.qixin, R.mipmap.tubu,
+            R.mipmap.jianshen, R.mipmap.paobu};
 
     public static final int TAB_HOME = 0;
     public static final int TAB_EXERCISE = 1;
@@ -188,19 +188,24 @@ public class MainActivity extends FragmentActivity {
             public void onButtonClicked(int index) {
                 switch (index) {
                     case 1:
-                        Intent intent=new Intent(MainActivity.this, CountdownActivity.class);
-                        intent.putExtra("tag","running_out");
-                        startActivity(intent);
+                        //骑行
+
                         break;
                     case 2:
-                        Intent intent_door=new Intent(MainActivity.this, CountdownActivity.class);
-                        intent_door.putExtra("tag","running_indoor");
-                        startActivity(intent_door);
+                        //登山
+
                         break;
                     case 3:
+                        //健身
+                        Intent intent_door = new Intent(MainActivity.this, CountdownActivity.class);
+                        intent_door.putExtra("tag", "running_indoor");
+                        startActivity(intent_door);
                         break;
                     case 4:
-
+                        //跑步
+                        Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                        intent.putExtra("tag", "running_out");
+                        startActivity(intent);
                         break;
                 }
 
@@ -292,7 +297,7 @@ public class MainActivity extends FragmentActivity {
                     break;
                 case 3:
                     String connecteState = DataHelper.getStringSF(MyApplication.getAppContext(), "connect_state");
-                    if(!connecteState.equals("3")) {
+                    if (!connecteState.equals("3")) {
                         fragments.set(2, equipmentFragment);
                     }
                     break;

@@ -62,10 +62,10 @@ public class CustomerRelativeLayout extends RelativeLayout {
 
     /**
      * 向上或者向下
-     * fasle:向下
-     * true: 向上
+     * fasle:向下，不可点击
+     * true: 向上,可点击
      */
-    boolean isUpOrDown = false;
+    boolean isUpOrDown = true;
 
     public CustomerRelativeLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -206,7 +206,7 @@ public class CustomerRelativeLayout extends RelativeLayout {
 
         tv_tag.setText("下滑解锁");
         iv_tag.setImageResource(R.mipmap.xiahua);
-        iv_suo.setImageResource(R.mipmap.weisuo);
+        iv_suo.setImageResource(R.mipmap.suo);
         int delta = mParentView.getScrollY();
         mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
                 Math.abs(delta));
@@ -249,4 +249,6 @@ public class CustomerRelativeLayout extends RelativeLayout {
     public interface OnFinishListener {
         public void onFinish(boolean isUpOrDown);
     }
+
+
 }

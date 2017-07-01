@@ -37,8 +37,8 @@ public class CountdownActivity extends BaseActivity {
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        String tag =getIntent().getStringExtra("tag");
-        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000, btnCountTimer,tag, this);
+        String tag = getIntent().getStringExtra("tag");
+        MyCountTimer myCountTimer = new MyCountTimer(4000, 1000, btnCountTimer, tag, this);
         myCountTimer.start();
     }
 

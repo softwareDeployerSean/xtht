@@ -1,11 +1,13 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -14,6 +16,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -45,13 +48,15 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
 
     @BindView(R.id.map)
     MapView mapView;
+    @BindView(R.id.frame_map)
+    FrameLayout frameMap;
     private AMap aMap;
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     Boolean isFirstLatLng = true;
     //以前的定位点
     private LatLng oldLatLng;
-
+    UiSettings uiSettings;
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerRunningOutsideComponent //如找不到该类,请编译一下项目
@@ -128,10 +133,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        destroyLocation();
         if (mapView != null) {
             mapView.onDestroy();
         }
-        destroyLocation();
+
         /*List<LatLng> latLngs1 = new ArrayList<>();
         ConmonUtils.deleteArray(MyApplication.getAppContext());*/
     }
@@ -142,6 +148,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         init();
         //初始化定位
         initLocation();
+
+
+
+
     }
 
     /**
@@ -178,14 +188,15 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 29));
                     //定位完成的时间
                     sb.append("定位时间: ");
+                    LatLng newLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                   /*  myLocationStyle = new MyLocationStyle();
                     myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
                     myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色*/
                     //aMap.setMyLocationStyle(myLocationStyle);
-                    LatLng newLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                   /* LatLng newLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     List<LatLng> latLngs = new ArrayList<>();
                     latLngs.add(newLatLng);
-                    latLngs.add(newLatLng);
+                    latLngs.add(newLatLng);*/
                     if (isFirstLatLng) {
                         //记录第一次的定位信息
                         oldLatLng = newLatLng;
@@ -193,12 +204,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     }
                     //位置有变化
                     if (oldLatLng != newLatLng) {
-                        //setUpMap(oldLatLng, newLatLng);
+                        setUpMap(oldLatLng, newLatLng);
                         oldLatLng = newLatLng;
-                        List<LatLng> latLngs1 = ConmonUtils.loadArray(MyApplication.getAppContext());
-                        latLngs1.add(newLatLng);
-                        ConmonUtils.saveArray(MyApplication.getAppContext(), latLngs1);
-                        setUpMap();
                     }
                     //set_beginmark();
                 } else {
@@ -259,6 +266,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
         aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
         aMap.setMyLocationEnabled(true);
+        uiSettings=aMap.getUiSettings();
+        uiSettings.setScrollGesturesEnabled(false);
+        uiSettings.setAllGesturesEnabled(false);
     }
 
 
@@ -313,19 +323,19 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     /**
      * 绘制两个坐标点之间的线段,从以前位置到现在位置
      */
-    private void setUpMap() {
+    private void setUpMap(LatLng oldData, LatLng newData) {
         // 绘制一个大地曲线
-       /* aMap.addPolyline((new PolylineOptions())
+        aMap.addPolyline((new PolylineOptions())
                 .add(oldData, newData)
-                .geodesic(true).color(Color.GREEN));*/
+                .geodesic(true).color(Color.GREEN).width(18));/*
         List<LatLng> latLngs = new ArrayList<>();
         latLngs = ConmonUtils.loadArray(MyApplication.getAppContext());
         aMap.addPolyline(new PolylineOptions() //setCustomTextureList(bitmapDescriptors)
 //				.setCustomTextureIndex(texIndexList)
                 .addAll(latLngs)
                 .useGradient(true)
-                .width(18).color(Color.BLUE));
-        LogUtils.debugInfo("获取到的数据第二" + latLngs.size());
+                .width(18).color(Color.BLUE));*/
+        //LogUtils.debugInfo("获取到的数据第二" + latLngs.size());
     }
 
     public void set_beginmark() {
@@ -345,7 +355,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             case R.id.ib_location:
                 break;
             case R.id.ib_close:
-                launchActivity(new Intent(RunningOutsideActivity.this, OperationbyRunmapActivity.class));
+                frameMap.setVisibility(View.VISIBLE);
                 break;
         }
     }

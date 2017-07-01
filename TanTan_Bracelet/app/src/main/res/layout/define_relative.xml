@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/suo" />
+        android:src="@mipmap/shanghua" />
 
     <ImageView
         android:id="@+id/iv_jiantou"
@@ -16,19 +16,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_suo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22px"
-        android:src="@mipmap/xiahua" />
+        android:layout_marginTop="10px"
+        android:src="@mipmap/weisuo" />
 
     <TextView
         android:id="@+id/tv_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="下滑解锁"
+        android:text="上滑锁定"
         android:layout_below="@+id/iv_jiantou"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12px"
         android:textColor="@color/white"
-        android:textSize="18px"
+        android:textSize="12px"
         />
 
 
