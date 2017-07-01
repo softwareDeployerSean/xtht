@@ -18,18 +18,28 @@
             android:layout_marginBottom="10px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
-            android:layout_marginTop="20px">
+            android:layout_marginTop="10px"
+            android:gravity="center">
 
             <TextView
-                android:drawableLeft="@drawable/line"
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23"
-                android:textSize="18px"
-                android:drawableRight="@drawable/line"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/line"
                 android:drawablePadding="8px"
-                />
+                android:drawableRight="@drawable/line"
+                android:text="23"
+                android:textSize="16px" />
+
+            <TextView
+                android:id="@+id/tianshu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="今天"
+                android:textColor="@color/black_444444"
+                android:textSize="18px" />
 
             <ImageView
                 android:id="@+id/iv_data"
@@ -39,7 +49,6 @@
                 android:src="@mipmap/shju" />
 
         </com.zhy.autolayout.AutoRelativeLayout>
-
 
         <com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView
             android:id="@+id/arc_view"
@@ -304,17 +313,17 @@
             android:id="@+id/rl_jiuzuo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
-            android:layout_marginBottom="5px"
-            android:layout_marginTop="15px">
+            android:layout_marginTop="20px">
 
             <TextView
                 android:id="@+id/tv_jiuzuo_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/jiuzuo"
                 android:drawablePadding="5px"
+                android:drawableTop="@mipmap/jiuzuo"
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/black_444444"
@@ -324,40 +333,50 @@
                 android:id="@+id/diliangyundong_rl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35px"
-                android:layout_toRightOf="@+id/tv_jiuzuo_time">
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="40px"
+                android:layout_toRightOf="@+id/tv_jiuzuo_time"
+                android:paddingBottom="0px">
 
                 <TextView
                     android:id="@+id/tv_jiuzuo1"
                     style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
                     android:layout_marginLeft="0px"
+                    android:paddingBottom="0px"
                     android:text="低运动量" />
 
                 <TextView
                     android:id="@+id/tv_jiuzuo_step"
                     style="@style/home_fragment_style4"
                     android:layout_below="@+id/tv_jiuzuo1"
-                    android:layout_marginBottom="10px"
+                    android:layout_marginBottom="0px"
                     android:layout_marginLeft="0px"
+                    android:paddingBottom="0px"
                     android:text="12步" />
-
             </com.zhy.autolayout.AutoRelativeLayout>
 
             <com.zhy.autolayout.AutoRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20px"
-                android:layout_toRightOf="@+id/diliangyundong_rl">
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="5px"
+                android:layout_toRightOf="@+id/diliangyundong_rl"
+                android:paddingBottom="0px">
 
                 <TextView
                     android:id="@+id/tv_jiuzuo_minute"
                     style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
                     android:text="0 min" />
 
                 <TextView
                     android:id="@+id/tv_jiuzuo_calorie"
                     style="@style/home_fragment_style4"
                     android:layout_below="@+id/tv_jiuzuo_minute"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
                     android:text="00大卡" />
             </com.zhy.autolayout.AutoRelativeLayout>
 
@@ -368,53 +387,84 @@
                 android:layout_alignParentRight="true"
                 android:text="0公里" />
         </com.zhy.autolayout.AutoRelativeLayout>
-
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
+        <!--散步-->
         <com.zhy.autolayout.AutoRelativeLayout
             android:id="@+id/rl_sanbu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10px"
-            android:paddingLeft="20px"
-            android:paddingRight="20px"
-            android:paddingTop="10px"
-            android:visibility="gone">
+            android:layout_marginBottom="5px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="20px">
 
             <TextView
                 android:id="@+id/tv_sanbu_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="10px"
+                android:drawablePadding="5px"
                 android:drawableTop="@mipmap/walk"
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/black_444444"
-                android:textSize="9sp" />
+                android:textSize="9px" />
 
-            <TextView
-                android:id="@+id/tv_sanbu1"
-                style="@style/home_fragment_style4"
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/sanbu_shuliang_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="50px"
                 android:layout_toRightOf="@+id/tv_sanbu_time"
-                android:text="低运动量" />
+                android:paddingBottom="0px">
 
-            <TextView
-                android:id="@+id/tv_sanbu_step"
-                style="@style/home_fragment_style4"
-                android:layout_below="@+id/tv_sanbu1"
-                android:layout_toRightOf="@+id/tv_sanbu_time"
-                android:text="12步" />
+                <TextView
+                    android:id="@+id/tv_sanbu_text"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="1px"
+                    android:paddingBottom="0px"
+                    android:text="散步" />
 
-            <TextView
-                android:id="@+id/tv_sanbu_minute"
-                style="@style/home_fragment_style4"
-                android:layout_toRightOf="@+id/tv_sanbu1"
-                android:text="0 min" />
+                <TextView
+                    android:id="@+id/tv_sanbu_shuliang"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_sanbu_text"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="0px"
+                    android:paddingBottom="0px"
+                    android:text="12步" />
+            </com.zhy.autolayout.AutoRelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_sanbu_calorie"
-                style="@style/home_fragment_style4"
-                android:layout_below="@+id/tv_sanbu_minute"
-                android:layout_toRightOf="@+id/tv_sanbu1"
-                android:text="00大卡" />
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="20px"
+                android:layout_toRightOf="@+id/sanbu_shuliang_rl"
+                android:paddingBottom="0px">
+
+                <TextView
+                    android:id="@+id/tv_sanbu_time_minutes"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="0 min" />
+
+                <TextView
+                    android:id="@+id/tv_sanbu_calorie"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_sanbu_time_minutes"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="00大卡" />
+            </com.zhy.autolayout.AutoRelativeLayout>
 
             <TextView
                 android:id="@+id/tv_sanbu_km"
@@ -422,6 +472,178 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:text="0公里" />
+        </com.zhy.autolayout.AutoRelativeLayout>
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
+        <!--跑步-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:id="@+id/rl_paobu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="20px">
+
+            <TextView
+                android:id="@+id/tv_paobu_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5px"
+                android:drawableTop="@mipmap/run"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9px" />
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/paobu_shuliang_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="50px"
+                android:layout_toRightOf="@+id/tv_paobu_time"
+                android:paddingBottom="0px">
+
+                <TextView
+                    android:id="@+id/tv_paobu_text"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="1px"
+                    android:paddingBottom="0px"
+                    android:text="跑步" />
+
+                <TextView
+                    android:id="@+id/tv_paobu_shuliang"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_paobu_text"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="0px"
+                    android:paddingBottom="0px"
+                    android:text="12步" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="20px"
+                android:layout_toRightOf="@+id/paobu_shuliang_rl"
+                android:paddingBottom="0px">
+
+                <TextView
+                    android:id="@+id/tv_paobu_time_minutes"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="0 min" />
+
+                <TextView
+                    android:id="@+id/tv_paobu_calorie"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_paobu_time_minutes"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="00大卡" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_paobu_km"
+                style="@style/home_fragment_style4"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="0公里" />
+        </com.zhy.autolayout.AutoRelativeLayout>
+        <!--分割线 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:background="?android:attr/listDivider" />
+        <!--睡眠-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:id="@+id/rl_shuimian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="20px">
+
+            <TextView
+                android:id="@+id/tv_shuimian_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5px"
+                android:drawableTop="@mipmap/run"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/black_444444"
+                android:textSize="9px" />
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/shuimian_shuliang_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="50px"
+                android:layout_toRightOf="@+id/tv_shuimian_time"
+                android:paddingBottom="0px">
+
+                <TextView
+                    android:id="@+id/tv_shuimian_text"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="1px"
+                    android:paddingBottom="0px"
+                    android:text="跑步" />
+
+                <TextView
+                    android:id="@+id/tv_shuimian_shuliang"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_shuimian_text"
+                    android:layout_marginBottom="0px"
+                    android:layout_marginLeft="0px"
+                    android:paddingBottom="0px"
+                    android:text="" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0px"
+                android:layout_marginLeft="20px"
+                android:layout_toRightOf="@+id/shuimian_shuliang_rl"
+                android:paddingBottom="0px">
+
+                <TextView
+                    android:id="@+id/tv_shuimian_time_hour_min"
+                    style="@style/home_fragment_style4"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="5h 20min" />
+
+                <TextView
+                    android:id="@+id/tv_shuimian_state"
+                    style="@style/home_fragment_style4"
+                    android:layout_below="@+id/tv_shuimian_time_hour_min"
+                    android:layout_marginBottom="0px"
+                    android:paddingBottom="0px"
+                    android:text="良好" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_shuimian_right"
+                style="@style/home_fragment_style4"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="" />
         </com.zhy.autolayout.AutoRelativeLayout>
 
     </com.zhy.autolayout.AutoLinearLayout>

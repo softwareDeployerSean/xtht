@@ -194,6 +194,11 @@ public class CustomerRelativeLayout extends RelativeLayout {
         mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
                 Math.abs(delta));
         postInvalidate();
+
+        if (onFinishListener != null) {
+            onFinishListener.onFinish(isUpOrDown);
+        }
+        isUpOrDown = !isUpOrDown;
     }
 
     /**
@@ -212,6 +217,10 @@ public class CustomerRelativeLayout extends RelativeLayout {
                 Math.abs(delta));
 
         postInvalidate();
+        if (onFinishListener != null) {
+            onFinishListener.onFinish(isUpOrDown);
+        }
+        isUpOrDown = !isUpOrDown;
     }
 
 
@@ -235,8 +244,8 @@ public class CustomerRelativeLayout extends RelativeLayout {
 
             if (mScroller.isFinished() && isFinish) {
                 if (onFinishListener != null) {
-                    onFinishListener.onFinish(isUpOrDown);
-                    isUpOrDown = !isUpOrDown;
+//                    onFinishListener.onFinish(isUpOrDown);
+//                    isUpOrDown = !isUpOrDown;
                 } else {
                     // 没有设置OnSildingFinishListener，让其滚动到其实位置
                     scrollOrigin();
