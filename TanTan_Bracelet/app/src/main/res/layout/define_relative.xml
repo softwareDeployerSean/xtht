@@ -5,10 +5,10 @@
 
     <ImageView
         android:id="@+id/iv_suo"
-        android:layout_width="18px"
-        android:layout_height="24px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@mipmap/suo" />
+        android:src="@mipmap/suo" />
 
     <ImageView
         android:id="@+id/iv_jiantou"
@@ -17,7 +17,7 @@
         android:layout_below="@+id/iv_suo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22px"
-        android:background="@mipmap/xiahua" />
+        android:src="@mipmap/xiahua" />
 
     <TextView
         android:id="@+id/tv_tag"

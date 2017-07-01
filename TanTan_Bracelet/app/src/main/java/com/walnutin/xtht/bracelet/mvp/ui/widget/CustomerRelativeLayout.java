@@ -118,8 +118,6 @@ public class CustomerRelativeLayout extends RelativeLayout {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 if (isUpOrDown) {
-
-
                     int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
                     int deltaY = moveY - tempY;
                     tempY = moveY;
@@ -189,8 +187,8 @@ public class CustomerRelativeLayout extends RelativeLayout {
 //                Math.abs(delta));
 
         tv_tag.setText("上滑锁定");
-        iv_tag.setImageResource(R.mipmap.shanghua);
-        iv_suo.setImageResource(R.mipmap.suo);
+        iv_tag.setImageResource(R.mipmap.weisuo);
+        iv_suo.setImageResource(R.mipmap.shanghua);
 
         int delta = mParentView.getScrollY();
         mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta,
