@@ -49,11 +49,13 @@ public class MyCountTimer extends CountDownTimer {
      */
     @Override
     public void onFinish() {
-        if (endStrRid.equals("running_out")) {
-            activity.startActivity(new Intent(activity, RunningOutsideActivity.class));
-            activity.finish();
-        } else if (endStrRid.equals("running_indoor")) {
+        if (endStrRid.equals("running_indoor")) {
             activity.startActivity(new Intent(activity, RunningIndoorActivity.class));
+            activity.finish();
+        } else {
+            Intent intent = new Intent(activity, RunningOutsideActivity.class);
+            intent.putExtra("tag", endStrRid);
+            activity.startActivity(intent);
             activity.finish();
         }
     }

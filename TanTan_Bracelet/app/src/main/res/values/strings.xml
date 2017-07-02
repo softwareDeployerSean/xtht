@@ -5,6 +5,7 @@
     <string name="exercise">运动</string>
     <string name="equipment">设备</string>
     <string name="mine">我的</string>
+    <string name="gps">请开启GPS</string>
     <!--  登陆  -->
     <string name="regist">注册</string>
     <string name="load">登陆</string>
@@ -100,4 +101,11 @@
     <string name="camelbypermisstion">为了您能使用照相功能，请开启相机权限！</string>
     <string name="locationbypermisstion">为了您能使用手环功能，请开启位置权限！</string>
 
+    <!--  运动  -->
+    <string name="click_end">请点击结束后退出！</string>
+    <string name="short_distance">运动距离太少,是否继续</string>
+    <string name="save_map">是否结束并保存此次运动</string>
+    <string name="tuichu">退出</string>
+    <string name="goin">继续</string>
+    <string name="no_path">没有记录到路径</string>
 </resources>

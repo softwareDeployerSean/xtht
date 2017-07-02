@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,8 +34,8 @@
         android:id="@+id/frame_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
+
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,18 +47,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tv_gps"
+                <com.zhy.autolayout.AutoLinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12px"
                     android:layout_marginTop="38px"
                     android:background="@drawable/btn_white_bg_normal"
-                    android:drawableRight="@mipmap/xhliangge"
-                    android:padding="5px"
-                    android:text="GPS"
-                    android:textColor="@color/black_444444"
-                    />I
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_gps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5px"
+                        android:text="GPS"
+                        android:textColor="@color/black_444444"
+                        android:textSize="9px" />I
+
+                    <com.adam.gpsstatus.GpsStatusImageView
+                        android:id="@+id/gpsImage"
+                        android:layout_width="10px"
+                        android:layout_height="10px"
+                        android:layout_marginRight="7px"
+                        app:drawable0="@mipmap/xhmeiyou"
+                        app:drawable1="@mipmap/xhyige"
+                        app:drawable2="@mipmap/xhliangge"
+                        app:drawable3="@mipmap/xhmange"
+                        app:thr_1_2="4"
+                        app:thr_2_3="7" />
+
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="565"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="32px" />
 
@@ -101,19 +122,30 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="565"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tv_time"
+                    android:id="@+id/timer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:format="00:00:00"
                     android:gravity="center"
-                    android:text="565"
                     android:textColor="@color/white"
                     android:textSize="32px" />
+
+                <!--
+                  <TextView
+                      android:id="@+id/tv_time"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="center"
+                      android:text="565"
+                      android:textColor="@color/white"
+                      android:textSize="32px" />-->
 
             </com.zhy.autolayout.AutoLinearLayout>
 
@@ -163,7 +195,7 @@
                     android:id="@+id/tv_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="565"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="72px" />
 
@@ -177,38 +209,83 @@
 
             </com.zhy.autolayout.AutoLinearLayout>
 
-            <CheckBox
-                android:button="@null"
-                android:layout_width="107px"
-                android:layout_height="107px"
-                android:layout_gravity="center"
-                android:layout_marginTop="50px"
-                android:background="@drawable/map_selctor" />
 
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10px"
-                android:text="暂停"
-                android:textColor="@color/white"
-                android:textSize="15px" />
+                android:layout_marginTop="50px"
+                android:gravity="center">
 
+                <ImageView
+                    android:id="@+id/iv_jiesu"
+                    android:layout_width="107px"
+                    android:layout_height="107px"
+                    android:layout_weight="1"
+                    android:src="@mipmap/jieshu" />
+
+                <ImageView
+                    android:id="@+id/iv_stop"
+                    android:layout_width="107px"
+                    android:layout_height="107px"
+                    android:layout_weight="1"
+                    android:src="@mipmap/zanting" />
+                <ImageView
+                    android:id="@+id/iv_goin"
+                    android:layout_width="107px"
+                    android:layout_height="107px"
+                    android:layout_weight="1"
+                    android:src="@mipmap/kaishi" />
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12px"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_jieshu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="结束"
+                    android:textColor="@color/white"
+                    android:textSize="15px" />
+
+                <TextView
+                    android:id="@+id/tv_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="暂停"
+                    android:textColor="@color/white"
+                    android:textSize="15px" />
+
+                <TextView
+                    android:id="@+id/tv_goin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="继续"
+                    android:textColor="@color/white"
+                    android:textSize="15px" />
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
 
 
             <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
-                android:layout_marginTop="15px"
                 android:id="@+id/layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20px">
-
-
-            </com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
-
-
-
+                android:layout_marginBottom="20px"
+                android:layout_marginTop="15px"></com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
 
 
         </com.zhy.autolayout.AutoLinearLayout>

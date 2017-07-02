@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -47,8 +48,10 @@ import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.MyFragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.CountdownActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningOutsideActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.FragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.EpConnecteService;
@@ -80,7 +83,7 @@ import static com.jess.arms.integration.AppManager.SHOW_SNACKBAR;
  * Created by suns on 2017-06-13.
  */
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements OnItemClickListener, OnDismissListener {
 
     private final int REQUEST_CODE = 1;
     @BindView(R.id.viewpager)
@@ -129,6 +132,8 @@ public class MainActivity extends FragmentActivity {
 
     private int selected = 0;
     private int thirdItem = 0;
+
+    AlertView alertView_gps;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -182,6 +187,14 @@ public class MainActivity extends FragmentActivity {
         LogUtils.debugInfo("-------------------------onResume_____________________-");
     }
 
+
+    public void set_gps() {
+        alertView_gps = new AlertView(null, getString(R.string.gps), getString(R.string.canecl), new String[]{getString(R.string.confirm)}, null, this, AlertView.Style.Alert, this)
+                .setCancelable(true).setOnDismissListener(this);
+        alertView_gps.show();
+    }
+
+
     private void setListener(final SectorMenuButton button) {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
@@ -189,11 +202,23 @@ public class MainActivity extends FragmentActivity {
                 switch (index) {
                     case 1:
                         //骑行
-
+                        if (ConmonUtils.initGPS(MainActivity.this)) {
+                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                            intent.putExtra("tag", "riding");
+                            startActivity(intent);
+                        } else {
+                            set_gps();
+                        }
                         break;
                     case 2:
                         //登山
-
+                        if (ConmonUtils.initGPS(MainActivity.this)) {
+                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                            intent.putExtra("tag", "mountaineering");
+                            startActivity(intent);
+                        } else {
+                            set_gps();
+                        }
                         break;
                     case 3:
                         //健身
@@ -203,9 +228,14 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case 4:
                         //跑步
-                        Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                        intent.putExtra("tag", "running_out");
-                        startActivity(intent);
+                        if (ConmonUtils.initGPS(MainActivity.this)) {
+                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                            intent.putExtra("tag", "running_out");
+                            startActivity(intent);
+                        } else {
+                            set_gps();
+                        }
+
                         break;
                 }
 
@@ -505,4 +535,20 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
+    @Override
+    public void onDismiss(Object o) {
+
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        switch (position) {
+            case 0:
+                // 转到手机设置界面，用户设置GPS
+                Intent intent = new Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                break;
+        }
+    }
 }

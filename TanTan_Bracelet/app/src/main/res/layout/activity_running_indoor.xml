@@ -115,6 +115,7 @@
 
     </com.zhy.autolayout.AutoLinearLayout>
 
+
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,12 +123,20 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/iv_jiesu"
             android:layout_width="107px"
             android:layout_height="107px"
             android:layout_weight="1"
             android:src="@mipmap/jieshu" />
 
         <ImageView
+            android:id="@+id/iv_stop"
+            android:layout_width="107px"
+            android:layout_height="107px"
+            android:layout_weight="1"
+            android:src="@mipmap/zanting" />
+        <ImageView
+            android:id="@+id/iv_goin"
             android:layout_width="107px"
             android:layout_height="107px"
             android:layout_weight="1"
@@ -136,6 +145,7 @@
 
     </com.zhy.autolayout.AutoLinearLayout>
 
+
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,6 +153,7 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/tv_jieshu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -152,11 +163,22 @@
             android:textSize="15px" />
 
         <TextView
+            android:id="@+id/tv_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="开始"
+            android:text="暂停"
+            android:textColor="@color/white"
+            android:textSize="15px" />
+
+        <TextView
+            android:id="@+id/tv_goin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="继续"
             android:textColor="@color/white"
             android:textSize="15px" />
 

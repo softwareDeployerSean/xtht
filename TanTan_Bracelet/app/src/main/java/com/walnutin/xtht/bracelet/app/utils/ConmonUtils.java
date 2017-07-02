@@ -1,7 +1,16 @@
 package com.walnutin.xtht.bracelet.app.utils;
 
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -12,13 +21,16 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 
 import java.io.UnsupportedEncodingException;
+import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -147,5 +159,65 @@ public class ConmonUtils {
 
         return list;
     }
+
+    /**
+     * 这个方法挺简单的。
+     * DecimalFormat is a concrete subclass of NumberFormat that formats decimal numbers.
+     *
+     * @param d
+     * @return
+     */
+    public static String formatDouble(double d) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+
+
+        // 保留两位小数
+        nf.setMaximumFractionDigits(2);
+
+
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(RoundingMode.UP);
+
+
+        return nf.format(d);
+    }
+
+    public static int updateGpsStatus(int event, GpsStatus status) {
+        int count = 0;
+        if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+            int maxSatellites = status.getMaxSatellites();
+            Iterator<GpsSatellite> it = status.getSatellites().iterator();
+            while (it.hasNext() && count <= maxSatellites) {
+                GpsSatellite s = it.next();
+                if (s.getSnr() != 0)//只有信躁比不为0的时候才算搜到了星
+                {
+                    count++;
+                }
+//Toast.makeText(mContext, "当前星颗数="+count, Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        return count;
+    }
+
+    public static Boolean initGPS(Context context) {
+        LocationManager locationManager = (LocationManager) context
+                .getSystemService(Context.LOCATION_SERVICE);
+        // 判断GPS模块是否开启，如果没有则开启
+        if (!locationManager
+                .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+
+            return false;
+        } else {
+            return true;
+            // 弹出Toast
+//          Toast.makeText(TrainDetailsActivity.this, "GPS is ready",
+//                  Toast.LENGTH_LONG).show();
+//          // 弹出对话框
+//          new AlertDialog.Builder(this).setMessage("GPS is ready")
+//                  .setPositiveButton("OK", null).show();
+        }
+    }
+
 
 }
