@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15px"
+    android:layout_marginTop="50px"
+    android:gravity="center">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/left_est_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="0px">
+
+        <TextView
+            android:id="@+id/tv_time_icon"
+            android:layout_width="30px"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5px"
+            android:drawableTop="@mipmap/run"
+            android:gravity="center"
+            android:text="00:00"
+            android:textColor="@color/black_444444"
+            android:textSize="9px" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/left_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0px"
+        android:layout_marginLeft="30px"
+        android:layout_toRightOf="@+id/left_est_rl"
+        android:paddingBottom="0px">
+
+        <TextView
+            android:id="@+id/tv_left_top"
+            style="@style/home_fragment_style4"
+            android:layout_marginBottom="0px"
+            android:layout_marginLeft="1px"
+            android:paddingBottom="0px"
+            android:text="跑步" />
+
+        <TextView
+            android:id="@+id/tv_left_buttom"
+            style="@style/home_fragment_style4"
+            android:layout_marginTop="2px"
+            android:layout_below="@+id/tv_left_top"
+            android:layout_marginBottom="0px"
+            android:layout_marginLeft="0px"
+            android:paddingBottom="0px"
+            android:text="12步" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0px"
+        android:layout_marginLeft="20px"
+        android:layout_toRightOf="@+id/left_rl"
+        android:paddingBottom="0px">
+
+        <TextView
+            android:id="@+id/tv_right_top"
+            style="@style/home_fragment_style4"
+            android:layout_marginBottom="0px"
+            android:paddingBottom="0px"
+            android:text="0 min" />
+
+        <TextView
+            android:id="@+id/tv_right_buttom"
+            style="@style/home_fragment_style4"
+            android:layout_marginTop="2px"
+            android:layout_below="@+id/tv_right_top"
+            android:layout_marginBottom="0px"
+            android:paddingBottom="0px"
+            android:text="00大卡" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_right_icon_text"
+        style="@style/home_fragment_style4"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="10px"
+        android:layout_marginTop="5px"
+        android:drawableRight="@mipmap/qj"
+        android:gravity="center_vertical|right"
+        android:text="0公里"
+        android:textSize="16px" />
+</com.zhy.autolayout.AutoRelativeLayout>

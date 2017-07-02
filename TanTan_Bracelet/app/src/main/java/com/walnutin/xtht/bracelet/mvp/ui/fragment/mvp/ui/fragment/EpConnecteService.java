@@ -18,6 +18,7 @@ import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
+import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.app.MyApplication;
@@ -177,6 +178,17 @@ public class EpConnecteService extends Service {
 
     @Override
     public void onDestroy() {
+
+        retryTime = 0;
+        MyApplication.getAppContext().unregisterReceiver(connectStateBroadcastReceiver);
+
+        mVpoperateManager.disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+
+            }
+        });
+
         super.onDestroy();
     }
 

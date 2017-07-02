@@ -254,6 +254,13 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent serviceIntent = new Intent(this, EpConnecteService.class);
+        stopService(serviceIntent);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (requestCode == 1000) {

@@ -224,8 +224,8 @@
 
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.RunningIndoorActivity" />
         <activity
-            android:theme="@style/NoTitleTranslucentTheme"
-            android:name=".mvp.ui.activity.mvp.ui.activity.OperationbyRunmapActivity"></activity>
+            android:name=".mvp.ui.activity.mvp.ui.activity.OperationbyRunmapActivity"
+            android:theme="@style/NoTitleTranslucentTheme" />
     </application>
 
 </manifest>
