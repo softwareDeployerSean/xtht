@@ -226,6 +226,7 @@
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.OperationbyRunmapActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RateDetailActivity"></activity>
     </application>
 
 </manifest>

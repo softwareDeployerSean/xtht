@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.walnutin.xtht.bracelet.R;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyViewHolder> {
+
+    private OnItemClickListener mOnItemClickListener;
 
     private Context mContext;
 
@@ -43,6 +46,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         HealthPageData data = healthDatas.get(position);
+
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnItemClickListener != null) {
+                    mOnItemClickListener.onImteClick(data.getType());
+                }
+            }
+        });
 
         holder.timeIconTv.setText(data.getTime());
         if (data.getType() == 1) {
@@ -144,6 +156,11 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
         return (int) (pxValue / scale + 0.5f);
     }
 
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
     @Override
     public int getItemCount() {
         return healthDatas.size();
@@ -163,6 +180,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
         TextView rightIconTv;
 
+        RelativeLayout parent;
+
         public MyViewHolder(View view) {
             super(view);
             timeIconTv = (TextView) view.findViewById(R.id.tv_time_icon);
@@ -171,7 +190,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             rightTopTv = (TextView) view.findViewById(R.id.tv_right_top);
             rightButtomTv = (TextView) view.findViewById(R.id.tv_right_buttom);
             rightIconTv = (TextView) view.findViewById(R.id.tv_right_icon_text);
+
+            parent = (RelativeLayout) view.findViewById(R.id.rl_parent);
         }
+    }
+
+    public interface OnItemClickListener {
+        public void onImteClick(int type);
     }
 
 }

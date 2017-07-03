@@ -2,6 +2,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -121,11 +122,14 @@ public class CustomerRelativeLayout extends RelativeLayout {
                     int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
                     int deltaY = moveY - tempY;
                     tempY = moveY;
-                    if (Math.abs(downY - moveY) > mTouchSlop
+                    isSilding = false;
+                    if (Math.abs(downY - moveY) > mTouchSlop && moveY > mParentView.getY()
                             && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
                         isSilding = true;
                     }
-
+                    Log.d("TAG", "Math.abs(downY - moveY) = " + Math.abs(downY - moveY));
+                    Log.d("TAG", "mParentView.getHeight() = " + mParentView.getHeight());
+                    Log.d("TAG", "downY = " + downY);
                     if (downY - moveY >= 0 && isSilding) {
                         mParentView.scrollBy(0, -deltaY);
                     }

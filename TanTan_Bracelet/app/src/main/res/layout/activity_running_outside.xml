@@ -279,13 +279,17 @@
 
             </com.zhy.autolayout.AutoLinearLayout>
 
-
+<com.zhy.autolayout.AutoRelativeLayout
+    android:layout_width="wrap_content"
+    android:background="@color/transparent"
+    android:layout_height="wrap_content">
             <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
                 android:id="@+id/layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20px"
                 android:layout_marginTop="15px"></com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
+</com.zhy.autolayout.AutoRelativeLayout>
 
 
         </com.zhy.autolayout.AutoLinearLayout>

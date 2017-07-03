@@ -1,6 +1,7 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomePageAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomeViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
@@ -183,6 +185,17 @@ public class HomePageItem {
         }else {
             homePagerAdapter.notifyDataSetChanged();
         }
+
+        homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
+            @Override
+            public void onImteClick(int type) {
+                if(type == 1) {
+                    Intent intent = new Intent(mContext, RateDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            }
+        });
+
         healthRv.setNestedScrollingEnabled(false);
     }
 
