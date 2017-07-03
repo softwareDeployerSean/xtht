@@ -8,6 +8,7 @@ import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.RequestInterceptor;
 import com.jess.arms.http.TWGsonConverterFactory;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,6 +81,7 @@ public class ClientModule {
             builder.addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
+                    LogUtils.debugInfo("是不是"+chain.toString());
                     return chain.proceed(handler.onHttpRequestBefore(chain, chain.request()));
                 }
             });

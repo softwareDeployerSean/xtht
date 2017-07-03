@@ -9,9 +9,7 @@
         android:id="@+id/btnCountTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
         android:background="@null"
-        android:text="倒计时"
         android:textColor="@color/black_444444"
         android:textSize="144px" />
 

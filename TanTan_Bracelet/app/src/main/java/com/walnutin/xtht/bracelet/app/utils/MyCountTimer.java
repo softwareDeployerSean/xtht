@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.MainActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.CountdownActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningIndoorActivity;
@@ -65,6 +66,7 @@ public class MyCountTimer extends CountDownTimer {
      */
     @Override
     public void onTick(long millisUntilFinished) {
+        LogUtils.debugInfo("数字="+millisUntilFinished/1000);
         btn.setEnabled(false);
         //每隔一秒修改一次UI
         btn.setText(millisUntilFinished / 1000 + "");

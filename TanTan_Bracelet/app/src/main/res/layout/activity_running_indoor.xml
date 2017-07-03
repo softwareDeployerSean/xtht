@@ -124,21 +124,21 @@
 
         <ImageView
             android:id="@+id/iv_jiesu"
-            android:layout_width="107px"
-            android:layout_height="107px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@mipmap/jieshu" />
 
         <ImageView
             android:id="@+id/iv_stop"
-            android:layout_width="107px"
-            android:layout_height="107px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@mipmap/zanting" />
         <ImageView
             android:id="@+id/iv_goin"
-            android:layout_width="107px"
-            android:layout_height="107px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@mipmap/kaishi" />
 

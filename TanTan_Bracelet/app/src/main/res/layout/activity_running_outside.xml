@@ -33,8 +33,7 @@
     <FrameLayout
         android:id="@+id/frame_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
@@ -185,16 +184,16 @@
 
             </com.zhy.autolayout.AutoLinearLayout>
 
-            <com.zhy.autolayout.AutoLinearLayout
+            <com.zhy.autolayout.AutoRelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
-                android:gravity="center_horizontal">
+                android:layout_height="72px"
+                android:layout_marginTop="50px">
 
                 <TextView
                     android:id="@+id/tv_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:text="0"
                     android:textColor="@color/white"
                     android:textSize="72px" />
@@ -202,12 +201,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/tv_length"
                     android:text="公里"
                     android:textColor="@color/white"
                     android:textSize="15px" />
 
-            </com.zhy.autolayout.AutoLinearLayout>
+            </com.zhy.autolayout.AutoRelativeLayout>
 
 
             <com.zhy.autolayout.AutoLinearLayout
@@ -218,21 +219,22 @@
 
                 <ImageView
                     android:id="@+id/iv_jiesu"
-                    android:layout_width="107px"
-                    android:layout_height="107px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@mipmap/jieshu" />
 
                 <ImageView
                     android:id="@+id/iv_stop"
-                    android:layout_width="107px"
-                    android:layout_height="107px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@mipmap/zanting" />
+
                 <ImageView
                     android:id="@+id/iv_goin"
-                    android:layout_width="107px"
-                    android:layout_height="107px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@mipmap/kaishi" />
 
@@ -279,17 +281,18 @@
 
             </com.zhy.autolayout.AutoLinearLayout>
 
-<com.zhy.autolayout.AutoRelativeLayout
-    android:layout_width="wrap_content"
-    android:background="@color/transparent"
-    android:layout_height="wrap_content">
-            <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
-                android:id="@+id/layout"
+            <com.zhy.autolayout.AutoRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20px"
-                android:layout_marginTop="15px"></com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
-</com.zhy.autolayout.AutoRelativeLayout>
+                android:background="@color/transparent">
+
+                <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
+                    android:id="@+id/layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20px"
+                    android:layout_marginTop="15px"></com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
+            </com.zhy.autolayout.AutoRelativeLayout>
 
 
         </com.zhy.autolayout.AutoLinearLayout>

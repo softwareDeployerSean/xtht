@@ -119,16 +119,18 @@ public class GlobalConfiguration implements ConfigModule {
                     //这里不光是只能打印错误,还可以根据不同的错误作出不同的逻辑处理
                     String msg = "未知错误";
                     if (t instanceof UnknownHostException) {
-                        msg = "网络不可用";
+                        msg = "网络未连接";
                     } else if (t instanceof SocketTimeoutException) {
                         msg = "请求网络超时";
                     } else if (t instanceof HttpException) {
                         HttpException httpException = (HttpException) t;
-                        msg = convertStatusCode(httpException);
+                        msg = "未知错误";
                     } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException || t instanceof JsonIOException) {
                         msg = "数据解析错误";
+                    }else{
+                        msg="未知错误";
                     }
-                    UiUtils.ToastText(t.getMessage());
+                    UiUtils.ToastText(msg);
                 })
                 .gsonConfiguration((context1, gsonBuilder) -> {//这里可以自己自定义配置Gson的参数
                     gsonBuilder
@@ -263,6 +265,7 @@ public class GlobalConfiguration implements ConfigModule {
             msg = "请求被重定向到其他页面";
         } else {
             msg = httpException.message();
+            LogUtils.debugInfo("是不是你啊 煞笔"+msg);
         }
         return msg;
     }

@@ -5,7 +5,7 @@
     <string name="exercise">运动</string>
     <string name="equipment">设备</string>
     <string name="mine">我的</string>
-    <string name="gps">请开启GPS</string>
+    <string name="gps">请打开手机gps功能</string>
     <!--  登陆  -->
     <string name="regist">注册</string>
     <string name="load">登陆</string>

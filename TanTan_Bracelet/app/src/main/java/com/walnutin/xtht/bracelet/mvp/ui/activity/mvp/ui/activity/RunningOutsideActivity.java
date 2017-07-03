@@ -285,7 +285,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         proxy = GpsStatusProxy.getInstance(getApplicationContext());
         proxy.register();
         set_button_nomal();
-
+        setmap_gesture(false);
     }
 
     /**
