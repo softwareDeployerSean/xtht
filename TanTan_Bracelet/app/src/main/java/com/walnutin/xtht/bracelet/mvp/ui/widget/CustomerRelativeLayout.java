@@ -123,7 +123,7 @@ public class CustomerRelativeLayout extends RelativeLayout {
                     int deltaY = moveY - tempY;
                     tempY = moveY;
                     isSilding = false;
-                    if (Math.abs(downY - moveY) > mTouchSlop && moveY > mParentView.getY()
+                    if (Math.abs(downY - moveY) > mTouchSlop && moveY >= mParentView.getY()
                             && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
                         isSilding = true;
                     }
