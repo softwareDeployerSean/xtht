@@ -11,12 +11,21 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.R;
+
+import java.util.Collections;
+
+import io.reactivex.internal.operators.maybe.MaybeNever;
+
 /**
  * Created by Leiht on 2017/7/3.
  */
 
 public class RateView extends View {
 
+    private Context mContext;
     // 默认边距
     private int Margin = 70;
     // 原点坐标
@@ -43,18 +52,22 @@ public class RateView extends View {
         this.Ylabel = ylabel;
         this.Title = title;
         this.Data = data;
+        this.mContext = context;
     }
 
     public RateView(Context context) {
         super(context);
+        this.mContext = context;
     }
 
     public RateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
     }
 
     public RateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.mContext = context;
     }
 
 
@@ -89,7 +102,7 @@ public class RateView extends View {
         Paint p1 = new Paint();
         p1.setStyle(Paint.Style.STROKE);
         p1.setAntiAlias(true);
-        p1.setColor(Color.BLUE);
+        p1.setColor(mContext.getResources().getColor(R.color.blue_rate_line));
         p1.setStrokeWidth(2);
         init();
         this.drawXLine(canvas, p1);
@@ -101,6 +114,7 @@ public class RateView extends View {
 
     // 画横轴
     private void drawXLine(Canvas canvas, Paint p) {
+        p.setStrokeWidth(3);
         canvas.drawLine(Xpoint, Ypoint, this.Margin, this.Margin, p);
 //        canvas.drawLine(Xpoint, this.Margin, Xpoint - Xpoint / 3, this.Margin
 //                + this.Margin / 3, p);
@@ -110,6 +124,7 @@ public class RateView extends View {
 
     // 画纵轴
     private void drawYLine(Canvas canvas, Paint p) {
+        p.setStrokeWidth(3);
         canvas.drawLine(Xpoint, Ypoint, this.getWidth() - this.Margin, Ypoint,
                 p);
 //        canvas.drawLine(this.getWidth() - this.Margin, Ypoint, this.getWidth()
@@ -163,12 +178,34 @@ public class RateView extends View {
         }
     }
 
+    private void sortData(int[] datas) {
+        int min,max;
+        min=max=datas[0];
+        for(int i=0;i<datas.length;i++)
+        {
+            if(datas[i]>max)   // 判断最大值
+                max=datas[i];
+            if(datas[i]<min)   // 判断最小值
+                min=datas[i];
+        }
+    }
+
     // 画数据
     private void drawData(Canvas canvas) {
         Paint p = new Paint();
         p.setAntiAlias(true);
         p.setColor(Color.BLUE);
         p.setTextSize(this.Margin / 2);
+
+        int maxValue = Data[0];
+        int minValue = Data[0];
+        for(int i = 0; i < Data.length; i++) {
+            if(Data[i]>maxValue)   // 判断最大值
+                maxValue=Data[i];
+            if(Data[i]<minValue)   // 判断最小值
+                minValue=Data[i];
+        }
+
         // 纵向线
         for (int i = 0; i * Xscale <= (this.getWidth() - this.Margin * 2); i++) {
             int startX = Xpoint + i * Xscale;
@@ -182,9 +219,12 @@ public class RateView extends View {
                 p.setTextSize(this.Margin * 2 / 5);
                 canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
                         this.getHeight() - this.Margin / 4, p);
-                p.setColor(Color.BLUE);
+                p.setColor(mContext.getResources().getColor(R.color.red_rate_line));
                 p.setTextSize(this.Margin / 2);
-                canvas.drawCircle(startX, calY(Data[i]), 4, p);
+                if(Data[i] == maxValue || Data[i] == minValue) {
+                    canvas.drawCircle(startX, calY(Data[i]), 10, p);
+                }
+                p.setStrokeWidth(3);
                 canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(Data[i - 1]), startX, calY(Data[i]), p);
             }
         }

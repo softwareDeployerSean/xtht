@@ -66,5 +66,8 @@
 
     <color name="red_FF6466">#FF6466</color>
     <color name="canlendar_text_color">#323232</color>
+    <color name="blue_rate_line">#9BE2B0</color>
+    <color name="red_rate_line">#D53D49</color>
+    <color name="run_dig">#7CBC30</color>
 
 </resources>

@@ -127,9 +127,9 @@ public class CustomerRelativeLayout extends RelativeLayout {
                             && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
                         isSilding = true;
                     }
-                    Log.d("TAG", "Math.abs(downY - moveY) = " + Math.abs(downY - moveY));
-                    Log.d("TAG", "mParentView.getHeight() = " + mParentView.getHeight());
-                    Log.d("TAG", "downY = " + downY);
+//                    Log.d("TAG", "Math.abs(downY - moveY) = " + Math.abs(downY - moveY));
+//                    Log.d("TAG", "mParentView.getHeight() = " + mParentView.getHeight());
+//                    Log.d("TAG", "downY = " + downY);
                     if (downY - moveY >= 0 && isSilding) {
                         mParentView.scrollBy(0, -deltaY);
                     }

@@ -226,7 +226,19 @@
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.OperationbyRunmapActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.RateDetailActivity"></activity>
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.RateDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/ratedata"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.ExerciseListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/exercise_list"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".mvp.ui.activity.mvp.ui.activity.ExerciseDetailActivity"></activity>
     </application>
 
 </manifest>

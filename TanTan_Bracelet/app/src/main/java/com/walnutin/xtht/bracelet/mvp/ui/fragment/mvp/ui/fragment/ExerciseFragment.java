@@ -6,22 +6,38 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.RelativeLayout;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ExerciseListActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerExerciseComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.ExerciseModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.ExerciseContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.ExercisePresenter;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements ExerciseContract.View {
 
+    @BindView(R.id.item_1_parent)
+    public RelativeLayout itemRl1;
+
+    @BindView(R.id.item_2_parent)
+    public RelativeLayout itemRl2;
+
+    @BindView(R.id.item_3_parent)
+    public RelativeLayout itemRl3;
+
+    @BindView(R.id.item_4_parent)
+    public RelativeLayout itemRl4;
 
     public static ExerciseFragment newInstance() {
         ExerciseFragment fragment = new ExerciseFragment();
@@ -45,7 +61,44 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
 
     @Override
     public void initData(Bundle savedInstanceState) {
+//        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 
+        itemRl1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setItemClick(itemRl1, 1);
+            }
+        });
+        itemRl2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setItemClick(itemRl2, 2);
+            }
+        });
+        itemRl3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setItemClick(itemRl3, 3);
+            }
+        });
+        itemRl4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setItemClick(itemRl4, 4);
+            }
+        });
+
+    }
+
+    private void setItemClick(RelativeLayout itemRl, int type) {
+        itemRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
+                intent.putExtra("type", type);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
