@@ -96,6 +96,8 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     RadioButton radioEquipment;
     @BindView(R.id.radio_mine)
     RadioButton radioMine;
+    @BindView(R.id.in_toolbar)
+    View in_toolbar;
     @BindView(R.id.bottom_sector_menu)
     SectorMenuButton bottom_sector_menu;
     //菜单
@@ -179,6 +181,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         bottom_sector_menu.setButtonDatas(buttonDatas);
         setListener(bottom_sector_menu);
         DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "true");
+        in_toolbar.setVisibility(View.GONE);
     }
 
     @Override
@@ -202,38 +205,48 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 switch (index) {
                     case 1:
                         //骑行
-                        if (ConmonUtils.initGPS(MainActivity.this)) {
-                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                            intent.putExtra("tag", "riding");
-                            startActivity(intent);
-                        } else {
-                            set_gps();
+                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                            if (ConmonUtils.initGPS(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                intent.putExtra("tag", "riding");
+                                startActivity(intent);
+                            } else {
+                                set_gps();
+                            }
                         }
                         break;
                     case 2:
                         //登山
-                        if (ConmonUtils.initGPS(MainActivity.this)) {
-                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                            intent.putExtra("tag", "mountaineering");
-                            startActivity(intent);
-                        } else {
-                            set_gps();
+
+
+                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                            if (ConmonUtils.initGPS(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                intent.putExtra("tag", "mountaineering");
+                                startActivity(intent);
+                            } else {
+                                set_gps();
+                            }
                         }
                         break;
                     case 3:
                         //健身
-                        Intent intent_door = new Intent(MainActivity.this, CountdownActivity.class);
-                        intent_door.putExtra("tag", "running_indoor");
-                        startActivity(intent_door);
+                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                            Intent intent_door = new Intent(MainActivity.this, CountdownActivity.class);
+                            intent_door.putExtra("tag", "running_indoor");
+                            startActivity(intent_door);
+                        }
                         break;
                     case 4:
                         //跑步
-                        if (ConmonUtils.initGPS(MainActivity.this)) {
-                            Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                            intent.putExtra("tag", "running_out");
-                            startActivity(intent);
-                        } else {
-                            set_gps();
+                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                            if (ConmonUtils.initGPS(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                intent.putExtra("tag", "running_out");
+                                startActivity(intent);
+                            } else {
+                                set_gps();
+                            }
                         }
 
                         break;
@@ -485,14 +498,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         switch (v.getId()) {
             case R.id.radio_main:
                 viewpager.setCurrentItem(TAB_HOME, false);
-                toolbarTitle.setText("");
+                in_toolbar.setVisibility(View.GONE);
                 break;
             case R.id.radio_exerse:
                 viewpager.setCurrentItem(TAB_EXERCISE, false);
-                toolbarTitle.setText("");
+                in_toolbar.setVisibility(View.GONE);
                 break;
             case R.id.radio_equipment:
-
+                in_toolbar.setVisibility(View.VISIBLE);
                 String connect_state = DataHelper.getStringSF(this, "connect_state");
                 LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
                 LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
@@ -505,6 +518,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 toolbarTitle.setText(getString(R.string.ep_setup));
                 break;
             case R.id.radio_mine:
+                in_toolbar.setVisibility(View.VISIBLE);
                 viewpager.setCurrentItem(TAB_MINE, false);
                 toolbarTitle.setText(getString(R.string.name));
                 break;

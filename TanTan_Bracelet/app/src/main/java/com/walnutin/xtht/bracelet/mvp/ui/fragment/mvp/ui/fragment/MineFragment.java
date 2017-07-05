@@ -223,6 +223,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             case 0:
                 launchActivity(new Intent(getActivity(), LoadActivity.class));
                 getActivity().finish();
+                DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "default");
                 break;
         }
     }

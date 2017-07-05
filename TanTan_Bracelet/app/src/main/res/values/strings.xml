@@ -109,9 +109,9 @@
     <string name="tuichu">退出</string>
     <string name="goin">继续</string>
     <string name="no_path">没有记录到路径</string>
-
     <string name="ratedata">心率数据</string>
     <string name="exercise_list">活动列表</string>
+    <string name="exercise_detail">运动列表</string>
 
 
 </resources>

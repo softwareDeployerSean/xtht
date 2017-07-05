@@ -3,6 +3,7 @@ package com.walnutin.xtht.bracelet.app.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -17,38 +18,41 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RunningOutside
 /**
  * @author donkor
  */
-public class MyCountTimer extends CountDownTimer {
+public class MyCountTimer {
     public static final int TIME_COUNT = 4000;//倒计时总时间为31S，时间防止从29s开始显示（以倒计时30s为例子）
     private TextView btn;
     private String endStrRid;
     private Activity activity;
+    Handler mhandler = new Handler();
+    long time = 4;
 
-    /**
-     * 参数 millisInFuture         倒计时总时间（如30s,60S，120s等）
-     * 参数 countDownInterval    渐变时间（每次倒计1s）
-     * 参数 btn               点击的按钮(因为Button是TextView子类，为了通用我的参数设置为TextView）
-     * 参数 endStrRid   倒计时结束后，按钮对应显示的文字
-     */
-    public MyCountTimer(long millisInFuture, long countDownInterval, TextView btn, String endStrRid, Activity activity) {
-        super(millisInFuture, countDownInterval);
-        this.btn = btn;
+
+    public MyCountTimer(Activity activity,String endStrRid,TextView textView) {
         this.endStrRid = endStrRid;
-        this.activity = activity;
+        mhandler.post(timerrunable);
+        btn=textView;
+        this.activity=activity;
     }
 
-    /**
-     * 参数上面有注释
-     */
-    public MyCountTimer(TextView btn, String endStrRid) {
-        super(TIME_COUNT, 1000);
-        this.btn = btn;
-        this.endStrRid = endStrRid;
-    }
+    Runnable timerrunable = new Runnable() {
+        @Override
+        public void run() {
+            if (time == 1) {
+                mhandler.removeCallbacks(timerrunable);
+                onFinish();
+            } else {
+                onTick(--time);
+                mhandler.postDelayed(timerrunable,1000);
+            }
+
+        }
+    };
+
 
     /**
      * 计时完毕时触发
      */
-    @Override
+
     public void onFinish() {
         if (endStrRid.equals("running_indoor")) {
             activity.startActivity(new Intent(activity, RunningIndoorActivity.class));
@@ -64,12 +68,11 @@ public class MyCountTimer extends CountDownTimer {
     /**
      * 计时过程显示
      */
-    @Override
+
     public void onTick(long millisUntilFinished) {
-        LogUtils.debugInfo("数字="+millisUntilFinished/1000);
         btn.setEnabled(false);
         //每隔一秒修改一次UI
-        btn.setText(millisUntilFinished / 1000 + "");
+        btn.setText(millisUntilFinished + "");
 
         // 设置透明度渐变动画
         final AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);

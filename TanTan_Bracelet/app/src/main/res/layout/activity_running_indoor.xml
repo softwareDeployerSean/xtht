@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
+        android:layout_marginTop="38px"
         android:text="室内跑"
         android:textColor="@color/white"
         android:textSize="15px" />
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="565"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="32px" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="565"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="32px" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="565"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="32px" />
 
@@ -101,7 +101,7 @@
             android:id="@+id/tv_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="565"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="72px" />
 
@@ -135,6 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@mipmap/zanting" />
+
         <ImageView
             android:id="@+id/iv_goin"
             android:layout_width="wrap_content"
@@ -186,15 +187,21 @@
     </com.zhy.autolayout.AutoLinearLayout>
 
 
-    <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
-        android:layout_marginTop="30px"
-        android:id="@+id/layout"
+    <com.zhy.autolayout.AutoRelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20px">
+        android:background="@color/transparent">
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20px"
+            android:layout_marginTop="15px">
 
 
-    </com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
+        </com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>
+    </com.zhy.autolayout.AutoRelativeLayout>
 
 
 </com.zhy.autolayout.AutoLinearLayout>

@@ -3,6 +3,9 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -74,7 +77,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter> implements RunningOutsideContract.View, LocationSource,
-        AMapLocationListener, OnItemClickListener, OnDismissListener {
+        AMapLocationListener, OnItemClickListener, OnDismissListener, SensorEventListener {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -322,8 +325,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     }
 
     private String getDuration() {
-        return String.valueOf((mEndTime - mStartTime) / 1000f);
+        return timer.getText().toString().trim();
     }
+
+
 
     private String getAverage(float distance) {
         return String.valueOf(distance / (float) (mEndTime - mStartTime));
@@ -380,7 +385,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         mPolyoptions.width(10f);
         mPolyoptions.color(Color.GREEN);
         tracePolytion = new PolylineOptions();
-        tracePolytion.width(40);
+        tracePolytion.width(80);
         tracePolytion.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.read_circle));
     }
 
@@ -429,7 +434,13 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 mylocation = new LatLng(amapLocation.getLatitude(),
                         amapLocation.getLongitude());
                 mAMap.moveCamera(CameraUpdateFactory.changeLatLng(mylocation));
-                tvSpeed.setText(amapLocation.getSpeed() + "");
+                if (amapLocation.getSpeed() == 0) {
+                    tvSpeed.setText("00:00");
+                } else {
+                    int a = (int) (1000 / amapLocation.getSpeed());
+                    LogUtils.debugInfo("sudua =" + a);
+                    tvSpeed.setText(ConmonUtils.secToTime(a));
+                }
                 LogUtils.debugInfo("速度==" + amapLocation.getSpeed());
                 record.addpoint(amapLocation);
                 mPolyoptions.add(mylocation);
@@ -604,7 +615,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         return String.format(Locale.CHINA, "%02d:%02d:%02d", hour, min, second);
     }
 
-    //点击返回键返回桌面而不是退出程序
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -661,7 +672,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     @Override
     public void onDismiss(Object o) {
         LogUtils.debugInfo("继续11");
-        if (tag==2){
+        if (tag == 2) {
             finish();
         }
 
@@ -673,7 +684,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             case 0:
                 if (tag == 2) {
                     alertView.dismiss();
-                    tag=3;
+                    tag = 3;
                     LogUtils.debugInfo("继续22");
                 } else {
                     mEndTime = System.currentTimeMillis();
@@ -685,4 +696,39 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
     }
 
+    long lastTime = 0;
+    float mAngle = 0;
+    long TIME_SENSOR = 500;  //66667;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (System.currentTimeMillis() - lastTime < TIME_SENSOR) {
+            return;
+        }
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ORIENTATION: {
+                float x = event.values[0];
+                x += 0;
+                x %= 360.0F;
+                if (x > 180.0F)
+                    x -= 360.0F;
+                else if (x < -180.0F)
+                    x += 360.0F;
+
+                if (Math.abs(mAngle - x) < 3.0f) {
+                    break;
+                }
+                mAngle = Float.isNaN(x) ? 0 : x;
+                mAMap.setMyLocationRotateAngle(360 - mAngle);
+                lastTime = System.currentTimeMillis();
+            }
+        }
+
+    }
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 }

@@ -7,7 +7,9 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
+    <include
+        android:id="@+id/in_toolbar"
+        layout="@layout/include_title" />
 
     <com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager
         android:id="@+id/viewpager"
