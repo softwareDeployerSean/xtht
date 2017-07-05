@@ -299,8 +299,13 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         float distance = getDistance();
         String average = getAverage(distance);
         DbHepler.createrecord(String.valueOf(distance), duration, average,
-                "", "", "", record.getDate());
+                "", "", "", record.getDate(),getcalorie(),"0");
         DbHepler.close();
+    }
+
+
+    public String getcalorie() {
+        return tvCalories.getText().toString().trim();
     }
 
     private String getDuration() {

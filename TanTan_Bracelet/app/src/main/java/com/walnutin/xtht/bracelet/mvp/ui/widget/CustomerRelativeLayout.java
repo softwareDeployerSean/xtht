@@ -17,12 +17,13 @@ import android.widget.TextView;
 
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.zhy.autolayout.AutoRelativeLayout;
 
 /**
  * Created by user on 6/30/17.
  */
 
-public class CustomerRelativeLayout extends RelativeLayout {
+public class CustomerRelativeLayout extends AutoRelativeLayout {
     /**
      * 父布局
      */

@@ -19,7 +19,7 @@
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56px"
+        android:layout_marginTop="40px"
         android:gravity="center">
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="0"
+            android:text="--"
             android:textColor="@color/white"
             android:textSize="32px" />
 
@@ -94,7 +94,7 @@
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
+        android:layout_marginTop="40px"
         android:gravity="center_horizontal">
 
         <TextView
@@ -119,7 +119,7 @@
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
+        android:layout_marginTop="40px"
         android:gravity="center">
 
         <ImageView
@@ -188,6 +188,9 @@
 
 
     <com.zhy.autolayout.AutoRelativeLayout
+
+        android:layout_marginBottom="15px"
+        android:layout_marginTop="15px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/transparent">
@@ -195,9 +198,7 @@
         <com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout
             android:id="@+id/layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20px"
-            android:layout_marginTop="15px">
+            android:layout_height="wrap_content">
 
 
         </com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout>

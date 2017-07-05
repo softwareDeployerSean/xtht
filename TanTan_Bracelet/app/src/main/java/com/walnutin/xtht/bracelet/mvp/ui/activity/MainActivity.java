@@ -217,8 +217,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                         break;
                     case 2:
                         //登山
-
-
                         if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
                             if (ConmonUtils.initGPS(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, CountdownActivity.class);

@@ -107,6 +107,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     ImageView ivJiesu;
     @BindView(R.id.iv_stop)
     ImageView ivStop;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
     @BindView(R.id.iv_goin)
     ImageView ivGoin;
     @BindView(R.id.tv_jieshu)
@@ -229,20 +231,25 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             mMapView.onDestroy();
         }
         proxy.unRegister();
+        mAMap = null;
     }
 
 
     int cnt = 0;
+    String tag_title = "";
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        //mapView.onCreate(savedInstanceState);// 此方法必须重写
-        /*init();
-        //初始化定位
-        initLocation();
-*/
-        timer1 = new Timer();
+        tag_title = getIntent().getStringExtra("tag");
+        if (tag_title.equals("riding")) {
+            tv_title.setText(getString(R.string.rideing));
+        } else if (tag_title.equals("mountaineering")) {
+            tv_title.setText(getString(R.string.mountaineering));
+        } else if (tag_title.equals("running_out")) {
+            tv_title.setText(getString(R.string.run_out));
+        }
 
+        timer1 = new Timer();
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -260,8 +267,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         initpolyline();
-
-
         mAMap.clear(true);
         if (record != null) {
             record = null;
@@ -270,8 +275,6 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         record = new PathRecord();
         mStartTime = System.currentTimeMillis();
         record.setDate(getcueDate(mStartTime));
-
-
         mCustomerRelativeLayout.setOnFinishListener(new CustomerRelativeLayout.OnFinishListener() {
             @Override
             public void onFinish(boolean isUpOrDown) {
@@ -297,8 +300,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     private void init() {
         if (mAMap == null) {
             mAMap = mMapView.getMap();
-            setUpMap();
         }
+        setUpMap();
         uiSettings = mAMap.getUiSettings();
         mTraceoverlay = new TraceOverlay(mAMap);
     }
@@ -316,18 +319,48 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             AMapLocation lastLocaiton = list.get(list.size() - 1);
             String stratpoint = amapLocationToString(firstLocaiton);
             String endpoint = amapLocationToString(lastLocaiton);
+            String height = getheight(list);
             DbHepler.createrecord(String.valueOf(distance), duration, average,
-                    pathlineSring, stratpoint, endpoint, time);
+                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height);
             DbHepler.close();
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
         }
     }
 
+
+    public String getheight(List<AMapLocation> list) {
+        double start_hetght = 0;
+        double end_height = 0;
+        for (int i = 0; i < list.size(); i++) {
+            double tag = list.get(i).getAltitude();
+            if (tag != 0) {
+                start_hetght = tag;
+                break;
+            }
+        }
+        for (int i = list.size() - 1; i >= 0; i--) {
+            double tag = list.get(i).getAltitude();
+            if (tag != 0) {
+                end_height = tag;
+                break;
+            }
+        }
+        double height = end_height - start_hetght;
+
+        return String.valueOf(height);
+
+    }
+
+
+    public String getcalorie() {
+        return tvCalories.getText().toString().trim();
+    }
+
+
     private String getDuration() {
         return timer.getText().toString().trim();
     }
-
 
 
     private String getAverage(float distance) {
@@ -413,9 +446,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         if (mLocationClient != null) {
             mLocationClient.stopLocation();
             mLocationClient.onDestroy();
-
         }
         mLocationClient = null;
+        mAMap = null;
     }
 
     LatLng mylocation;
@@ -435,13 +468,13 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                         amapLocation.getLongitude());
                 mAMap.moveCamera(CameraUpdateFactory.changeLatLng(mylocation));
                 if (amapLocation.getSpeed() == 0) {
-                    tvSpeed.setText("00:00");
+                    tvSpeed.setText("--");
                 } else {
                     int a = (int) (1000 / amapLocation.getSpeed());
                     LogUtils.debugInfo("sudua =" + a);
                     tvSpeed.setText(ConmonUtils.secToTime(a));
                 }
-                LogUtils.debugInfo("速度==" + amapLocation.getSpeed());
+                LogUtils.debugInfo("海拔速度===" + amapLocation.getAltitude());
                 record.addpoint(amapLocation);
                 mPolyoptions.add(mylocation);
                 mTracelocationlist.add(Util.parseTraceLocation(amapLocation));
@@ -462,6 +495,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     mResultShow.setText(ConmonUtils.formatDouble(distance / 1000) + "");
                 }
                 proxy.notifyLocation(amapLocation);
+
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": "
                         + amapLocation.getErrorInfo();
@@ -490,9 +524,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             // 在定位结束后，在合适的生命周期调用onDestroy()方法
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
             mLocationClient.startLocation();
-
+        } else {
+            mLocationClient.startLocation();
         }
     }
+
 
     /**
      * 实时轨迹画线

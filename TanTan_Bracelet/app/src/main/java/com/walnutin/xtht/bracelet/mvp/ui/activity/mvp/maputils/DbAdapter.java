@@ -39,6 +39,8 @@ public class DbAdapter {
 			+ "pathline STRING,"
 			+ "distance STRING,"
 			+ "duration STRING,"
+			+ "calorie STRING,"
+			+ "altitude STRING,"
 			+ "averagespeed STRING,"
 			+ "date STRING" + ");";
 
@@ -101,7 +103,7 @@ public class DbAdapter {
 	 */
 	public long createrecord(String distance, String duration,
 			String averagespeed, String pathline, String stratpoint,
-			String endpoint, String date) {
+			String endpoint, String date,String calorie,String altitude) {
 		ContentValues args = new ContentValues();
 		args.put("distance", distance);
 		args.put("duration", duration);
@@ -110,6 +112,8 @@ public class DbAdapter {
 		args.put("stratpoint", stratpoint);
 		args.put("endpoint", endpoint);
 		args.put("date", date);
+		args.put("calorie", calorie);
+		args.put("altitude", altitude);
 		return db.insert(RECORD_TABLE, null, args);
 	}
 

@@ -112,6 +112,9 @@
     <string name="ratedata">心率数据</string>
     <string name="exercise_list">活动列表</string>
     <string name="exercise_detail">运动列表</string>
+    <string name="run_out">室外跑</string>
+    <string name="rideing">骑行</string>
+    <string name="mountaineering">登山</string>
 
 
 </resources>
