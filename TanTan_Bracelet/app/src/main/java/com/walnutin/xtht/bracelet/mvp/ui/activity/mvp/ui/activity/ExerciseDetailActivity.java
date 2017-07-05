@@ -145,7 +145,10 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
                 getApplicationContext());
         DbAdapter dbhelper = new DbAdapter(this.getApplicationContext());
         dbhelper.open();
-        PathRecord mRecord = dbhelper.queryRecordAll().get(0);
+        PathRecord mRecord=new PathRecord();
+        if (dbhelper.queryRecordAll() != null) {
+            mRecord = dbhelper.queryRecordAll().get(0);
+        }
         LogUtils.debugInfo("数据---" + dbhelper.queryRecordAll().size() + dbhelper.queryRecordAll().get(0).toString());
         dbhelper.close();
         if (mRecord != null) {
