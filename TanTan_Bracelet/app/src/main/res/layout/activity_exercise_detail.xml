@@ -1,14 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.jess.arms.widget.autolayout.AutoScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/include_title" />
-
-    <com.amap.api.maps.MapView
-        android:id="@+id/map"
+    <com.zhy.autolayout.AutoLinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="450px"></com.amap.api.maps.MapView>
-</com.zhy.autolayout.AutoLinearLayout>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title" />
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="450px"></com.amap.api.maps.MapView>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="25px"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:layout_marginRight="8px"
+                android:layout_marginTop="6px"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="图表详情"
+                android:textColor="@color/black_444444"
+                android:textSize="15px" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:layout_marginLeft="8px"
+                android:layout_marginTop="6px"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+        <!--心率-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="25px">
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
+
+                <ImageView
+                    android:id="@+id/rate_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/xin" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/rate_image"
+                    android:text="心率(bpm)"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/highest_rate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="最高"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/highest_rate_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_rate_text"
+                    android:text="120"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_rate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_rate_value_tv"
+                    android:text="平均"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_rate_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/average_rate_text"
+                    android:text="100"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:layout_width="match_parent"
+            android:layout_height="300px" />
+        <!--配速-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="25px">
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
+
+                <ImageView
+                    android:id="@+id/peishu_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/peisuheise" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/peishu_image"
+                    android:text="配速(分钟/公里)"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/highest_speeds_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="最快"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/highest_speeds_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_speeds_text"
+                    android:text="120"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_speeds_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_speeds_value_tv"
+                    android:text="平均"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_speeds_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/average_speeds_text"
+                    android:text="100"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:layout_width="match_parent"
+            android:layout_height="300px" />
+        <!--步频-->
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="25px">
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
+
+                <ImageView
+                    android:id="@+id/buping_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/yundongxie" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/buping_image"
+                    android:text="步频(步/分钟)"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/highest_buping_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="最快"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/highest_buping_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_buping_text"
+                    android:text="100"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_buping_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/highest_buping_value_tv"
+                    android:text="平均"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:id="@+id/average_buping_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_toRightOf="@id/average_buping_text"
+                    android:text="50"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:layout_width="match_parent"
+            android:layout_height="300px"
+            android:layout_marginBottom="80px"/>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+</com.jess.arms.widget.autolayout.AutoScrollView>

@@ -63,30 +63,10 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
     public void initData(Bundle savedInstanceState) {
 //        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 
-        itemRl1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setItemClick(itemRl1, 1);
-            }
-        });
-        itemRl2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setItemClick(itemRl2, 2);
-            }
-        });
-        itemRl3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setItemClick(itemRl3, 3);
-            }
-        });
-        itemRl4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setItemClick(itemRl4, 4);
-            }
-        });
+        setItemClick(itemRl1, 1);
+        setItemClick(itemRl2, 2);
+        setItemClick(itemRl3, 3);
+        setItemClick(itemRl4, 4);
 
     }
 

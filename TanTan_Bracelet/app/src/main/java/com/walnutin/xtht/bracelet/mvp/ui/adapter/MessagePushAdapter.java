@@ -87,7 +87,7 @@ public class MessagePushAdapter extends RecyclerView.Adapter<MessagePushAdapter.
             @Override
             public void triggerOn() {
                 LogUtils.debugInfo(TAG + " triggerOn ");
-                ((MessagePushActivity)mContext).updateSocailMsgData(position, EFunctionStatus.SUPPORT);
+                ((MessagePushActivity)mContext).updateSocailMsgData(position, EFunctionStatus.SUPPORT_OPEN);
             }
 
             @Override

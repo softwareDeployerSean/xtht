@@ -217,9 +217,9 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
 
     @Override
     public void onMapLoaded() {
-        LogUtils.debugInfo("第一个方法");
-        Message msg = handler.obtainMessage();
-        msg.what = AMAP_LOADED;
-        handler.sendMessage(msg);
+//        LogUtils.debugInfo("第一个方法");
+//        Message msg = handler.obtainMessage();
+//        msg.what = AMAP_LOADED;
+//        handler.sendMessage(msg);
     }
 }

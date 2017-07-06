@@ -75,13 +75,36 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(basicItemSupport.getFanwanModel() == -1
-                    || basicItemSupport.getLongSeat() == -1 || basicItemSupport.getMsgPush() == -1) {
-                LogUtils.debugInfo(TAG + "------Don't handle all menue return");
-                return;
+            switch (msg.what) {
+                case 1:
+                    if(basicItemSupport.getFanwanModel() == -1
+                            || basicItemSupport.getLongSeat() == -1 || basicItemSupport.getMsgPush() == -1) {
+                        LogUtils.debugInfo(TAG + "------Don't handle all menue return");
+                        return;
+                    }
+                    LogUtils.debugInfo(TAG + "------update UI");
+                    mPresenter.loadBasicSettingsMenue(basicItemSupport);
+                    break;
+                case 2:
+                    //读取夜间转腕 读取
+                    mVPOperateManager.readNightTurnWriste(new IBleWriteResponse() {
+                        @Override
+                        public void onResponse(int i) {
+                            LogUtils.debugInfo(TAG + "读取夜间转腕 onResponse=" + i);
+                        }
+                    }, new INightTurnWristeDataListener() {
+                        @Override
+                        public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
+                            String message = "夜间转腕-读取:\n" + nightTurnWristeData.toString();
+                            LogUtils.debugInfo(TAG + message);
+                            basicItemSupport.setFanwanModel(nightTurnWristeData.isNightTureWirsteStatusOpen() ? 0 : 1);
+
+                            sendMsg(null, 1);
+                        }
+                    });
+                    break;
             }
-            LogUtils.debugInfo(TAG + "------update UI");
-            mPresenter.loadBasicSettingsMenue(basicItemSupport);
+
         }
     };
 
@@ -146,33 +169,10 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
             @Override
             public void onLongSeatDataChange(LongSeatData longSeat) {
                 String message = "设置久坐-读取:\n" + longSeat.toString();
-
-                mLongSeat = longSeat;
-                LogUtils.debugInfo(TAG + message);
-                boolean isSupport = longSeat.getStatus() == LongSeatOperater.LSStatus.OPEN_SUCCESS;
-                basicItemSupport.setLongSeat(isSupport ? 0 : 1);
+                basicItemSupport.setLongSeat(longSeat.isOpen() ? 0 : 1);
                 sendMsg(null, 1);
             }
         });
-
-        //手机防丢失,默认给打开状态
-        mVPOperateManager.settingFindDevice(new IBleWriteResponse() {
-            @Override
-            public void onResponse(int i) {
-                LogUtils.debugInfo(TAG + "手机防丢失 onResponse=" + i);
-            }
-        }, new IFindDeviceDatalistener() {
-            @Override
-            public void onFindDevice(FindDeviceData findDeviceData) {
-                String message = "防丢-打开:\n" + findDeviceData.toString();
-                LogUtils.debugInfo(TAG + message);
-
-                LogUtils.debugInfo(TAG + "---------手机防丢失-----------" );
-                boolean isFdSupport = findDeviceData.getStatus() == FindDeviceOperater.FDStatus.OPEN_SUCCESS ? true : false;
-                basicItemSupport.setFindDevice(isFdSupport ? 0 : 1);
-                sendMsg(null, 1);
-            }
-        }, true);
 
     }
 
@@ -197,9 +197,10 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                     setFanWanModel(true);
                 }else if(position == 2) { //久坐提醒
                     setLongSeat(true);
-                }else if(position == 3) { //手机防丢失
-                    setFindDevice(true);
                 }
+//                else if(position == 3) { //手机防丢失
+//                    setFindDevice(true);
+//                }
             }
 
             @Override
@@ -210,9 +211,10 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                     setFanWanModel(false);
                 }else if(position == 2) { //久坐提醒
                     setLongSeat(false);
-                }else if(position == 3) { //手机防丢失
-                    setFindDevice(false);
                 }
+//                else if(position == 3) { //手机防丢失
+//                    setFindDevice(false);
+//                }
             }
         });
 
@@ -252,6 +254,7 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
             public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                 String message = "夜间转腕-打开 or 关闭: b=" + b + "," + nightTurnWristeData.toString();
                 LogUtils.debugInfo(TAG + message);
+                sendMsg(null, 2);
             }
         }, b);
     }
@@ -263,7 +266,7 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                 public void onResponse(int i) {
                     LogUtils.debugInfo(TAG + "设置久坐-打开 onResponse i=" + i);
                 }
-            }, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
+            }, new LongSeatSetting(9, 0, 17, 00, 60, true), new ILongSeatDataListener() {
                 @Override
                 public void onLongSeatDataChange(LongSeatData longSeat) {
                     String message = "设置久坐-打开:\n" + longSeat.toString();
@@ -276,7 +279,7 @@ public class BasicSettingsActivity extends BaseActivity<BasicSettingsPresenter> 
                 public void onResponse(int i) {
                     LogUtils.debugInfo(TAG + "设置久坐-关闭 onResponse i=" + i);
                 }
-            }, new LongSeatSetting(10, 40, 12, 40, 40, false), new ILongSeatDataListener() {
+            }, new LongSeatSetting(9, 0, 17, 00, 60, false), new ILongSeatDataListener() {
 
                 @Override
                 public void onLongSeatDataChange(LongSeatData longSeat) {

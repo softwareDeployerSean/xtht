@@ -182,6 +182,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         setListener(bottom_sector_menu);
         DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "true");
         in_toolbar.setVisibility(View.GONE);
+
+        if(selected == 2) {
+            toolbarTitle.setText(getString(R.string.ep_setup));
+            in_toolbar.setVisibility(View.VISIBLE);
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText(getString(R.string.ep_setup));
+        }
+
     }
 
     @Override
@@ -314,7 +322,11 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 radioExerse.setChecked(true);
                 break;
             case TAB_EQUIPMENT:
+                LogUtils.debugInfo("--------------select 2------------");
+                toolbarTitle.setText(getString(R.string.ep_setup));
                 radioEquipment.setChecked(true);
+                in_toolbar.setVisibility(View.VISIBLE);
+                toolbarTitle.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(getString(R.string.ep_setup));
                 break;
             case TAB_MINE:

@@ -136,11 +136,10 @@ public class RateView extends View {
     // 画表格
     private void drawTable(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
+//        paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.GRAY);
         Path path = new Path();
-        PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
-        paint.setPathEffect(effects);
+
         // 纵向线
 //        for (int i = 1; i * Xscale <= (this.getWidth() - this.Margin); i++) {
 //            int startX = Xpoint + i * Xscale;
@@ -161,11 +160,15 @@ public class RateView extends View {
 
 
             if (i == 75) {
+                paint.setStyle(Paint.Style.STROKE);
+                PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
+                paint.setPathEffect(effects);
                 path.moveTo(startX, startY);
                 path.lineTo(stopX, startY);
                 canvas.drawPath(path, paint);
             }
-
+            paint.setStyle(Paint.Style.FILL);
+            paint.setPathEffect(null);
             if (i == 30 || i == 60 || i == 90 || i == 120 || i == 149) {
                 if (i == 149) {
                     canvas.drawText(String.valueOf(Integer.parseInt(this.Ylabel[i]) + 1), this.Margin / 4, startY

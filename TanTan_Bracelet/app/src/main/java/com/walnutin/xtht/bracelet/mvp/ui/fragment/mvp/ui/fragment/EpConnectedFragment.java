@@ -126,7 +126,7 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                     } else {
                         epStateTextView.setText(getResources().getString(R.string.ep_not_connected));
                         epPower.setText("  0% ");
-                        ToastUtils.showToast("连接断开，请重新连接设备", getActivity());
+//                        ToastUtils.showToast("连接断开，请重新连接设备", getActivity());
                     }
                     break;
             }
@@ -592,7 +592,7 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
         }
     };
 
-    private int deviceNumber = 1;
+    private int deviceNumber = -1;
     private String deviceVersion;
     private String deviceTestVersion;
     boolean isOadModel = false;
@@ -655,31 +655,34 @@ public class EpConnectedFragment extends BaseFragment<EpConnectedPresenter> impl
                                 @Override
                                 public void onPwdDataChange(PwdData pwdData) {
                                     String message = "PwdData:\n" + pwdData.toString();
-                                    LogUtils.debugInfo(TAG + message);
+                                    LogUtils.debugInfo(TAG + "onPwdDataChange:"  + message);
 //                                sendMsg(message, 1);
                                     deviceNumber = pwdData.getDeviceNumber();
                                     deviceVersion = pwdData.getDeviceVersion();
                                     deviceTestVersion = pwdData.getDeviceTestVersion();
-
                                     mHandler.sendEmptyMessage(1);
                                 }
                             }, new IDeviceFuctionDataListener() {
                                 @Override
                                 public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
                                     String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
-                                    LogUtils.debugInfo(TAG + message);
+                                    LogUtils.debugInfo(TAG + "onFunctionSupportDataChange" + message);
                                     //sendMsg(message, 2);
                                     if (functionSupport.getNewCalcSport().equals(EFunctionStatus.SUPPORT)) {
                                         isNewSportCalc = true;
                                     } else {
                                         isNewSportCalc = false;
                                     }
+
+                                    int watchDataDay = functionSupport.getWathcDay();
+                                    int contactMsgLength = functionSupport.getContactMsgLength();
+                                    int allMsgLenght = functionSupport.getAllMsgLength();
                                 }
                             }, new ISocialMsgDataListener() {
                                 @Override
                                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
                                     String message = "FunctionSocailMsgData:\n" + socailMsgData.toString();
-                                    LogUtils.debugInfo(TAG + message);
+                                    LogUtils.debugInfo(TAG + "onSocialMsgSupportDataChange" + message);
                                     //sendMsg(message, 3);
                                 }
                             }, "0000", is24Hourmodel);

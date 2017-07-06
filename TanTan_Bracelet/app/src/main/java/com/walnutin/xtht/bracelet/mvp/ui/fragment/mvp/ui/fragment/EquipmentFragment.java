@@ -471,8 +471,8 @@ public class EquipmentFragment extends BaseFragment<EquipmentPresenter> implemen
         LogUtils.debugInfo("--------------layoutHeiht=" + layoutHeiht);
 
         LogUtils.debugInfo("TAG windowHeight * 0.1=" + windowHeight * 0.1);
-        if (layoutHeiht <= 80) {
-            layoutHeiht = 80;
+        if (layoutHeiht <= 40) {
+            layoutHeiht = 40;
         }
         LogUtils.debugInfo("TAG layoutHeiht=" + layoutHeiht);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) epSearchBtn.getLayoutParams();

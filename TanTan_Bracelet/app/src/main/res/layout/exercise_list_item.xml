@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/month_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="30px"
+            android:background="@color/epListEven"
+            android:gravity="center_vertical"
+            android:paddingLeft="15px"
+            android:paddingRight="15px"
+            android:text="四月"
+            android:textColor="@color/black_444444"
+            android:visibility="gone" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.mcxtzhang.swipemenulib.SwipeMenuLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:id="@+id/exercise_list_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/run_item_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingLeft="15px"
+            android:paddingRight="15px">
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/exercise_list_parent_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/exercise_list_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+                    android:paddingLeft="2px"
+                    android:text="2017/4/21 11:20"
+                    android:textSize="12px" />
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/exercise_list_date"
+                    android:layout_marginBottom="5px"
+                    android:layout_marginTop="5px"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/iexercise_list_distance_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.38"
+                        android:textColor="@color/run_dig"
+                        android:textSize="36px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="15px"
+                        android:layout_marginLeft="5px"
+                        android:layout_toRightOf="@id/iexercise_list_distance_tv"
+                        android:paddingBottom="8px"
+                        android:text="公里"
+                        android:textSize="12px" />
+
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:id="@+id/iexercise_list_parent_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20px">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/qj_run" />
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:id="@+id/iexercise_list_parent_center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/iexercise_list_parent_right"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="5px"
+                android:paddingTop="5px">
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/time_imageview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/shichang" />
+
+                    <TextView
+                        android:id="@+id/time_text_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8px"
+                        android:layout_toRightOf="@id/time_imageview"
+                        android:text="时长"
+                        android:textSize="12px" />
+
+                    <TextView
+                        android:id="@+id/time_value_tv"
+                        android:layout_width="60px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8px"
+                        android:layout_toRightOf="@id/time_text_tv"
+                        android:text="05:14"
+                        android:textSize="12px" />
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5px">
+
+                    <ImageView
+                        android:id="@+id/speeds_imageview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/peisu" />
+
+                    <TextView
+                        android:id="@+id/speeds_text_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8px"
+                        android:layout_toRightOf="@id/speeds_imageview"
+                        android:text="配速"
+                        android:textSize="12px" />
+
+                    <TextView
+                        android:id="@+id/speeds_value_tv"
+                        android:layout_width="60px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8px"
+                        android:layout_toRightOf="@id/speeds_text_tv"
+                        android:text="0:31:20"
+                        android:textSize="12px" />
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <Button
+            android:id="@+id/exercise_list_item_del_btn"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:background="@color/redFF3030"
+            android:text="删除"
+            android:textColor="@android:color/white" />
+    </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
+</com.zhy.autolayout.AutoLinearLayout>

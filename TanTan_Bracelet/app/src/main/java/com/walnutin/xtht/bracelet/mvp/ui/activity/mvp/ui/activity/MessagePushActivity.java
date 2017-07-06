@@ -19,10 +19,17 @@ import com.jess.arms.utils.UiUtils;
 
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
+import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
+import com.veepoo.protocol.listener.data.IPwdDataListener;
 import com.veepoo.protocol.listener.data.ISocialMsgDataListener;
+import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
 import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.veepoo.protocol.model.datas.PwdData;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
+import com.veepoo.protocol.model.enums.ESocailMsg;
+import com.veepoo.protocol.model.settings.ContentSetting;
+import com.veepoo.protocol.model.settings.ContentSmsSetting;
+import com.veepoo.protocol.util.VPLogger;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerMessagePushComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.MessagePushModule;
@@ -32,6 +39,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.adapter.MessagePushAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
 
+
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 
@@ -48,6 +57,18 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
     VPOperateManager mVPOperateManager;
 
     FunctionSocailMsgData socailMsgData = null;
+
+    /**
+     * 密码验证获取以下信息
+     */
+    int watchDataDay = 3;
+    int contactMsgLength = 0;
+    int allMsgLenght = 4;
+    private int deviceNumber = -1;
+    private String deviceVersion;
+    private String deviceTestVersion;
+    boolean isOadModel = false;
+    boolean isNewSportCalc = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -135,25 +156,55 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
                 sendMsg(message, -1);
             }
         });
-//        VPOperateManager.getMangerInstance(this).readSocialMsg(writeResponse, new ISocialMsgDataListener() {
-//            @Override
-//            public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
-//                String message = " 社交信息提醒-读取:\n" + socailMsgData.toString();
-////                Logger.t(TAG).i(message);
-//                LogUtils.debugInfo(TAG + message);
-//                sendMsg(message, -1);
-//            }
-//        });
+
     }
-    WriteResponse writeResponse = new WriteResponse();
-    class WriteResponse implements IBleWriteResponse {
 
-        @Override
-        public void onResponse(int code) {
-//            Logger.t(TAG).i("write cmd status:" + code);
-            LogUtils.debugInfo(TAG + "readSocialMsg failed ");
+    private void readPara() {
+        boolean is24Hourmodel = false;
+        mVPOperateManager.confirmDevicePwd(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+                LogUtils.debugInfo(TAG, "confirmDevicePwd onResponse i=" + i);
+            }
+        }, new IPwdDataListener() {
+            @Override
+            public void onPwdDataChange(PwdData pwdData) {
+                String message = "PwdData:\n" + pwdData.toString();
+                LogUtils.debugInfo(TAG + "onPwdDataChange" + message);
+//                sendMsg(message, 1);
 
-        }
+                deviceNumber = pwdData.getDeviceNumber();
+                deviceVersion = pwdData.getDeviceVersion();
+                deviceTestVersion = pwdData.getDeviceTestVersion();
+
+            }
+        }, new IDeviceFuctionDataListener() {
+            @Override
+            public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
+                String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
+                LogUtils.debugInfo(TAG + message);
+//                sendMsg(message, 2);
+                EFunctionStatus newCalcSport = functionSupport.getNewCalcSport();
+                if (newCalcSport != null && newCalcSport.equals(EFunctionStatus.SUPPORT)) {
+                    isNewSportCalc = true;
+                } else {
+                    isNewSportCalc = false;
+                }
+                watchDataDay = functionSupport.getWathcDay();
+                contactMsgLength = functionSupport.getContactMsgLength();
+                allMsgLenght = functionSupport.getAllMsgLength();
+                LogUtils.debugInfo(TAG + "onFunctionSupportDataChange" + message);
+//                VPLogger.i("数据读取处理，ORIGIN_DATA_DAY:" + watchDataDay);
+            }
+        }, new ISocialMsgDataListener() {
+            @Override
+            public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+                String message = "FunctionSocailMsgData:\n" + socailMsgData.toString();
+                LogUtils.debugInfo(TAG + message);
+//                sendMsg(message, 3);
+                LogUtils.debugInfo(TAG + "onSocialMsgSupportDataChange" + message);
+            }
+        }, "0000", is24Hourmodel);
     }
 
     @Override
@@ -183,7 +234,7 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
         finish();
     }
 
-    public void updateSocailMsgData(int pos,  EFunctionStatus state) {
+    public void updateSocailMsgData(int pos, EFunctionStatus state) {
         switch (pos) {
             case 0:
                 socailMsgData.setFacebook(state);
@@ -198,13 +249,26 @@ public class MessagePushActivity extends BaseActivity<MessagePushPresenter> impl
                 socailMsgData.setWechat(state);
                 break;
             case 4:
+
                 socailMsgData.setMsg(state);
+                /**短信，可以只传电话号码**/
+                ContentSetting contentsmsSetting0 = new ContentSmsSetting(ESocailMsg.SMS, contactMsgLength, allMsgLenght, "0755-86562490", "公司研发的项目主要在医疗健康智能穿戴、智能家居、新型智能交友产品、飞机航模、智能安全锁五个领域方面");
+                /**短信，传联系人姓名以及电话号码，最终显示的联系人姓名**/
+                ContentSetting contentsmsSetting1 = new ContentSmsSetting(ESocailMsg.SMS, contactMsgLength, allMsgLenght, "深圳市维亿魄科技有限公司", "0755-86562490", "公司研发的项目主要在医疗健康智能穿戴、智能家居、新型智能交友产品、飞机航模、智能安全锁五个领域方面");
+                mVPOperateManager.sendSocialMsgContent(new IBleWriteResponse() {
+                    @Override
+                    public void onResponse(int i) {
+                        LogUtils.debugInfo(TAG + "sendSocialMsgContent onResponse i=" + i);
+                    }
+                }, contentsmsSetting1);
                 break;
             case 5:
                 //其它，暂时不知道对应哪一个
+                socailMsgData.setOther(state);
+                LogUtils.debugInfo(TAG + "socailMsgData=" + socailMsgData);
                 break;
         }
-        LogUtils.debugInfo(TAG + "socailMsgData=" + socailMsgData);
+        LogUtils.debugInfo(TAG + "------------------------------socailMsgData=" + socailMsgData);
         mVPOperateManager.settingSocialMsg(new IBleWriteResponse() {
             @Override
             public void onResponse(int i) {

@@ -49,8 +49,8 @@ public class BasicSettingsModel extends BaseModel implements BasicSettingsContra
         BasicSettingsMenue menue3 = new BasicSettingsMenue(2, "久坐提醒", "", false, 0, basicItemSupport.getLongSeat() == 0 ? true : false, false, "", 0, true);
         basicSettingsMenues.add(menue3);
 
-        BasicSettingsMenue menue4 = new BasicSettingsMenue(3, "手机防遗失", "", false, 0, basicItemSupport.getFindDevice() == 0 ? true : false, false, "", 0, true);
-        basicSettingsMenues.add(menue4);
+//        BasicSettingsMenue menue4 = new BasicSettingsMenue(3, "手机防遗失", "", false, 0, basicItemSupport.getFindDevice() == 0 ? true : false, false, "", 0, true);
+//        basicSettingsMenues.add(menue4);
 
 //        BasicSettingsMenue menue5 = new BasicSettingsMenue(4, "重启设备", "", true, 150, false, true, "red", 0, false);
 //        basicSettingsMenues.add(menue5);
@@ -58,7 +58,7 @@ public class BasicSettingsModel extends BaseModel implements BasicSettingsContra
 //        BasicSettingsMenue menue6 = new BasicSettingsMenue(5, "恢复出厂设置", "", false, 0, false, true, "red", 0, false);
 //        basicSettingsMenues.add(menue6);
 
-        BasicSettingsMenue menue7 = new BasicSettingsMenue(6, "解除绑定", "", true, 150, false, true, "red", 0, false);
+        BasicSettingsMenue menue7 = new BasicSettingsMenue(3, "解除绑定", "", true, 150, false, true, "red", 0, false);
         basicSettingsMenues.add(menue7);
 
         return basicSettingsMenues;
