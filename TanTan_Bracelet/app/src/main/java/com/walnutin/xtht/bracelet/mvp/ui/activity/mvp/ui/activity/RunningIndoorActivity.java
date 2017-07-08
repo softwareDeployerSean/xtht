@@ -132,7 +132,6 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         record = new PathRecord();
         mStartTime = System.currentTimeMillis();
         record.setDate(getcueDate(mStartTime));
-
     }
 
     private String getStringTime(int cnt) {
@@ -283,8 +282,7 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                 } else {
                     /*mEndTime = System.currentTimeMillis();
                     saveRecord(record.getPathline(), record.getDate());*/
-                    saveRecord();
-                    finish();
+                    postdata();
                 }
                 break;
 
@@ -298,9 +296,21 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         String duration = getDuration();
         float distance = getDistance();
         String average = getAverage(distance);
+        mPresenter.post_sportdata(String.valueOf(distance), duration, average,
+                "", "", "", record.getDate(), getcalorie(), "0", "室内");
+
         DbHepler.createrecord(String.valueOf(distance), duration, average,
-                "", "", "", record.getDate(),getcalorie(),"0");
+                "", "", "", record.getDate(), getcalorie(), "0", "室内跑", "heart");
         DbHepler.close();
+    }
+
+    //上传
+    protected void postdata() {
+        String duration = getDuration();
+        float distance = getDistance();
+        String average = getAverage(distance);
+        mPresenter.post_sportdata(String.valueOf(distance), duration, average,
+                "", "", "", record.getDate(), getcalorie(), "0", "室内");
     }
 
 
@@ -338,4 +348,9 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         return date;
     }
 
+    @Override
+    public void post_success() {
+        saveRecord();
+        finish();
+    }
 }

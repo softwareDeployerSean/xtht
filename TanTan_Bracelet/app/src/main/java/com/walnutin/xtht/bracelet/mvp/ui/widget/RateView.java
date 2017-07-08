@@ -85,7 +85,6 @@ public class RateView extends View {
         Xscale = (this.getWidth() - 2 * this.Margin) / (this.Xlabel.length - 1);
         Yscale = (this.getHeight() - 2 * this.Margin)
                 / (this.Ylabel.length - 1);
-        Log.d("TAG", "getWidth()=" + getWidth() + ",getHeight=" + getHeight());
     }
 
     public int getMargin() {
@@ -182,14 +181,13 @@ public class RateView extends View {
     }
 
     private void sortData(int[] datas) {
-        int min,max;
-        min=max=datas[0];
-        for(int i=0;i<datas.length;i++)
-        {
-            if(datas[i]>max)   // 判断最大值
-                max=datas[i];
-            if(datas[i]<min)   // 判断最小值
-                min=datas[i];
+        int min, max;
+        min = max = datas[0];
+        for (int i = 0; i < datas.length; i++) {
+            if (datas[i] > max)   // 判断最大值
+                max = datas[i];
+            if (datas[i] < min)   // 判断最小值
+                min = datas[i];
         }
     }
 
@@ -202,11 +200,11 @@ public class RateView extends View {
 
         int maxValue = Data[0];
         int minValue = Data[0];
-        for(int i = 0; i < Data.length; i++) {
-            if(Data[i]>maxValue)   // 判断最大值
-                maxValue=Data[i];
-            if(Data[i]<minValue)   // 判断最小值
-                minValue=Data[i];
+        for (int i = 0; i < Data.length; i++) {
+            if (Data[i] > maxValue)   // 判断最大值
+                maxValue = Data[i];
+            if (Data[i] < minValue)   // 判断最小值
+                minValue = Data[i];
         }
 
         // 纵向线
@@ -224,7 +222,7 @@ public class RateView extends View {
                         this.getHeight() - this.Margin / 4, p);
                 p.setColor(mContext.getResources().getColor(R.color.red_rate_line));
                 p.setTextSize(this.Margin / 2);
-                if(Data[i] == maxValue || Data[i] == minValue) {
+                if (Data[i] == maxValue || Data[i] == minValue) {
                     canvas.drawCircle(startX, calY(Data[i]), 10, p);
                 }
                 p.setStrokeWidth(3);

@@ -66,6 +66,7 @@ public class Personal_dataPresenter extends BasePresenter<Personal_dataContract.
         hashMap.put("heightOfUnit", heightofunit);
         hashMap.put("token", DataHelper.getStringSF(MyApplication.getAppContext(), "token"));
         String jsonStr = JSONObject.toJSONString(hashMap);
+        LogUtils.debugInfo(jsonStr);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
         mModel.change_data(body)
                 .subscribeOn(Schedulers.io()).doOnSubscribe(disposable -> {

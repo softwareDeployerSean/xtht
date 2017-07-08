@@ -214,10 +214,7 @@
 
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.CountdownActivity" />
 
-        <service
-            android:name=".mvp.ui.fragment.mvp.ui.fragment.DfuService"
-            android:enabled="true"
-            android:exported="true" />
+
         <service
             android:name=".mvp.ui.fragment.mvp.ui.fragment.EpConnecteService"
             android:enabled="true"
@@ -241,10 +238,16 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".mvp.ui.activity.mvp.ui.activity.ExerciseDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/exercise_list"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.ExerciseListNodataActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/exercise_detail"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

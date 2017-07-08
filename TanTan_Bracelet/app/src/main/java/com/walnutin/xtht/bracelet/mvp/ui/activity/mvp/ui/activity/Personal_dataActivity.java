@@ -145,7 +145,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
     public void initData(Bundle savedInstanceState) {
         toolbarRight.setText(getString(R.string.ok));
         user_photo_url = sharedPreferences.getString(sharedPreferences.getString("username", ""), "");
-        LogUtils.debugInfo("user_photo_url="+user_photo_url);
+        LogUtils.debugInfo("user_photo_url=" + user_photo_url);
         if (!user_photo_url.equals("")) {
             bitmap = BitmapUtil.getScaleBitmap(user_photo_url, 100, 100);//图片压缩
             if (bitmap != null) {
@@ -470,9 +470,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 //返回的分别是三个级别的选中位置
                 String tx = "";
                 if (option2 == 0) {
-                    tx = options1Items.get(options1) + "["+options2Items.get(options1).get(option2)+"]";
+                    tx = options1Items.get(options1) + "[" + options2Items.get(options1).get(option2) + "]";
                 } else if (option2 == 1) {
-                    tx = options1Items_ft.get(options1) +  "["+options2Items_ft.get(options1).get(option2)+"]";
+                    tx = options1Items_ft.get(options1) + "[" + options2Items_ft.get(options1).get(option2) + "]";
                 }
 
                 tvHeight.setText(tx);
@@ -552,9 +552,9 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
                 //返回的分别是三个级别的选中位置
                 String tx = "";
                 if (option2 == 0) {
-                    tx = options1Items_weight.get(options1) +"["+ options2Items_weight.get(options1).get(option2)+"]";
+                    tx = options1Items_weight.get(options1) + "[" + options2Items_weight.get(options1).get(option2) + "]";
                 } else if (option2 == 1) {
-                    tx = options1Items_weight_lb.get(options1) +"["+ options2Items_weight_lb.get(options1).get(option2)+"]";
+                    tx = options1Items_weight_lb.get(options1) + "[" + options2Items_weight_lb.get(options1).get(option2) + "]";
                 }
 
                 tvWeight.setText(tx);
@@ -678,7 +678,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         }
         //身高是英尺ft
         for (int i = 12; i < 97; i++) {
-            options1Items_ft.add(ConmonUtils.getYingCun(i ));
+            options1Items_ft.add(ConmonUtils.getYingCun(i));
         }
         //选项2
         ArrayList<String> options2Items_01_ft = new ArrayList<>();
@@ -702,7 +702,7 @@ public class Personal_dataActivity extends BaseActivity<Personal_dataPresenter> 
         }
         //体重 单位lb
         for (int i = 50; i < 351; i++) {
-            options1Items_weight_lb.add(i+ "");
+            options1Items_weight_lb.add(i + "");
         }
 
         for (int i = 0; i < options1Items_weight_lb.size(); i++) {

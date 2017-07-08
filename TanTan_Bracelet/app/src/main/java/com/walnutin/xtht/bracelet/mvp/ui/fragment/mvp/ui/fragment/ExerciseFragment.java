@@ -6,21 +6,31 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
-
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ExerciseListActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ExerciseListNodataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerExerciseComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.ExerciseModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.ExerciseContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.ExercisePresenter;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -38,6 +48,33 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
 
     @BindView(R.id.item_4_parent)
     public RelativeLayout itemRl4;
+    //运动数据==
+    List<PathRecord> run_record = new ArrayList<PathRecord>();
+    List<PathRecord> indoor_record = new ArrayList<PathRecord>();
+    List<PathRecord> mountain_record = new ArrayList<PathRecord>();
+    List<PathRecord> ride_record = new ArrayList<PathRecord>();
+    @BindView(R.id.all_run_distance_tv)
+    TextView allRunDistanceTv;
+    @BindView(R.id.all_run_count_tv)
+    TextView allRunCountTv;
+    @BindView(R.id.inner_run_distance_tv)
+    TextView innerRunDistanceTv;
+    @BindView(R.id.item_2_run_count)
+    TextView item2RunCount;
+    @BindView(R.id.inner_run_count_tv)
+    TextView innerRunCountTv;
+    @BindView(R.id.dengshan_run_distance_tv)
+    TextView dengshanRunDistanceTv;
+    @BindView(R.id.item_3_run_count)
+    TextView item3RunCount;
+    @BindView(R.id.qixing_run_distance_tv)
+    TextView qixingRunDistanceTv;
+    @BindView(R.id.item_4_run_count)
+    TextView item4RunCount;
+    @BindView(R.id.qixing_run_count_tv)
+    TextView qixingRunCountTv;
+    Unbinder unbinder;
+
 
     public static ExerciseFragment newInstance() {
         ExerciseFragment fragment = new ExerciseFragment();
@@ -59,24 +96,117 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
         return inflater.inflate(R.layout.fragment_exercise, container, false);
     }
 
+    /**
+     * @param savedInstanceState 1.跑步
+     *                           2.室内
+     *                           3.登山
+     *                           4.骑行
+     */
     @Override
     public void initData(Bundle savedInstanceState) {
-//        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
-
         setItemClick(itemRl1, 1);
         setItemClick(itemRl2, 2);
         setItemClick(itemRl3, 3);
         setItemClick(itemRl4, 4);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        get_Exercisedata();
+    }
+
+    double run_distance = 0;
+    int run_number = 0;
+    double indoor_distance = 0;
+    int indoor_number = 0;
+    double mountain_distance = 0;
+    int mountain_number = 0;
+    double riding_distance = 0;
+    int riding_number = 0;
+
+
+    public void get_Exercisedata() {
+        DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
+        dbhelper.open();
+        run_record = dbhelper.queryRecordBySign("running_out");
+        indoor_record = dbhelper.queryRecordBySign("running_indoor");
+        mountain_record = dbhelper.queryRecordBySign("mountaineering");
+        ride_record = dbhelper.queryRecordBySign("riding");
+        if (run_record.size() > 0) {
+            for (PathRecord p : run_record) {
+                run_distance += Double.parseDouble(p.getDistance());
+                LogUtils.debugInfo("距离="+p.getDistance()+p.getDate()+"标记="+p.getSign());
+            }
+            run_number = run_record.size();
+            allRunDistanceTv.setText(run_distance + "");
+            allRunCountTv.setText(run_number + "");
+        }
+        if (indoor_record.size() > 0) {
+            for (PathRecord p : indoor_record) {
+                indoor_distance += Double.parseDouble(p.getDistance());
+            }
+            indoor_number = indoor_record.size();
+            innerRunDistanceTv.setText(indoor_distance + "");
+            item2RunCount.setText(indoor_number + "");
+        }
+        if (mountain_record.size() > 0) {
+            for (PathRecord p : mountain_record) {
+                mountain_distance += Double.parseDouble(p.getDistance());
+            }
+            mountain_number = mountain_record.size();
+            dengshanRunDistanceTv.setText(mountain_distance + "");
+            item3RunCount.setText(mountain_number + "");
+        }
+        if (ride_record.size() > 0) {
+            for (PathRecord p : ride_record) {
+                riding_distance += Double.parseDouble(p.getDistance());
+            }
+            riding_number = ride_record.size();
+            qixingRunDistanceTv.setText(riding_distance + "");
+            qixingRunCountTv.setText(riding_number + "");
+        }
+
 
     }
+
 
     private void setItemClick(RelativeLayout itemRl, int type) {
         itemRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
-                intent.putExtra("type", type);
-                startActivity(intent);
+                switch (type) {
+                    case 1:
+                        if (run_record.size() == 0) {
+                            launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
+                        } else {
+                            Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
+                        }
+                        break;
+                    case 2:
+                        if (indoor_record.size() == 0) {
+                            launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
+                        } else {
+
+                        }
+                        break;
+                    case 3:
+                        if (mountain_record.size() == 0) {
+                            launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
+                        } else {
+
+                        }
+                        break;
+                    case 4:
+                        if (ride_record.size() == 0) {
+                            launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
+                        } else {
+
+                        }
+                        break;
+                }
             }
         });
     }
@@ -126,4 +256,17 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
 
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

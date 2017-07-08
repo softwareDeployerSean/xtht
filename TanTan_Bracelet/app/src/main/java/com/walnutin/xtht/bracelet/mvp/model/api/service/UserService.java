@@ -93,4 +93,7 @@ public interface UserService {
     @GET("user/bindBracelet")
     Observable<String> getBIndBracelet(@Query("token") String token);
 
+    //上传运动数据
+    @POST("sport/path")
+    Observable<String> sportData(@Body RequestBody route);
 }

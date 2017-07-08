@@ -58,7 +58,7 @@
                             android:id="@+id/all_run_distance_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0.38"
+                            android:text="--"
                             android:textColor="@color/run_dig"
                             android:textSize="36px" />
 
@@ -113,25 +113,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5px"
                         android:layout_toRightOf="@id/item_1_run_count"
-                        android:text="5"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_1_peishu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/all_run_count_tv"
-                        android:text="配速"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_1_peishu_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/item_1_peishu"
-                        android:text="0:31:20"
+                        android:text="-"
                         android:textSize="12px" />
 
                 </com.zhy.autolayout.AutoRelativeLayout>
@@ -176,7 +158,7 @@
                             android:id="@+id/inner_run_distance_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0.38"
+                            android:text="--"
                             android:textColor="@color/run_dig"
                             android:textSize="36px" />
 
@@ -222,7 +204,7 @@
                         android:id="@+id/item_2_run_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="跑步次数"
+                        android:text="室内次数"
                         android:textSize="12px" />
 
                     <TextView
@@ -231,27 +213,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5px"
                         android:layout_toRightOf="@id/item_2_run_count"
-                        android:text="5"
+                        android:text="--"
                         android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_2_peishu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/inner_run_count_tv"
-                        android:text="配速"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_inner_peishu_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/item_2_peishu"
-                        android:text="0:31:20"
-                        android:textSize="12px" />
-
                 </com.zhy.autolayout.AutoRelativeLayout>
 
             </com.zhy.autolayout.AutoRelativeLayout>
@@ -294,7 +257,7 @@
                             android:id="@+id/dengshan_run_distance_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0.38"
+                            android:text="--"
                             android:textColor="@color/run_dig"
                             android:textSize="36px" />
 
@@ -340,7 +303,7 @@
                         android:id="@+id/item_3_run_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="跑步次数"
+                        android:text="登山次数"
                         android:textSize="12px" />
 
                     <TextView
@@ -349,25 +312,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5px"
                         android:layout_toRightOf="@id/item_3_run_count"
-                        android:text="5"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_3_peishu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/dengshan_run_count_tv"
-                        android:text="配速"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_dengshan_peishu_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/item_3_peishu"
-                        android:text="0:31:20"
+                        android:text="--"
                         android:textSize="12px" />
 
                 </com.zhy.autolayout.AutoRelativeLayout>
@@ -412,7 +357,7 @@
                             android:id="@+id/qixing_run_distance_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0.38"
+                            android:text="--"
                             android:textColor="@color/run_dig"
                             android:textSize="36px" />
 
@@ -458,7 +403,7 @@
                         android:id="@+id/item_4_run_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="跑步次数"
+                        android:text="骑行次数"
                         android:textSize="12px" />
 
                     <TextView
@@ -467,26 +412,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5px"
                         android:layout_toRightOf="@id/item_4_run_count"
-                        android:text="5"
+                        android:text="--"
                         android:textSize="12px" />
 
-                    <TextView
-                        android:id="@+id/item_4_peishu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/qixing_run_count_tv"
-                        android:text="配速"
-                        android:textSize="12px" />
-
-                    <TextView
-                        android:id="@+id/item_qixing_peishu_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5px"
-                        android:layout_toRightOf="@id/item_4_peishu"
-                        android:text="0:31:20"
-                        android:textSize="12px" />
 
                 </com.zhy.autolayout.AutoRelativeLayout>
 

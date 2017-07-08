@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
@@ -61,6 +62,8 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
     private List<LatLng> mGraspLatLngList;
 
     private final static int AMAP_LOADED = 2;
+    int type = -1;
+    int id = -1;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -100,6 +103,11 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
     public void initData(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         initMap();
+        type = getIntent().getIntExtra("type", -1);
+        id = getIntent().getIntExtra("id", -1);
+        if (type == 4) {
+            mMapView.setVisibility(View.GONE);
+        }
     }
 
     private void initMap() {
@@ -145,11 +153,8 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
                 getApplicationContext());
         DbAdapter dbhelper = new DbAdapter(this.getApplicationContext());
         dbhelper.open();
-        PathRecord mRecord=new PathRecord();
-        if (dbhelper.queryRecordAll() != null) {
-            mRecord = dbhelper.queryRecordAll().get(0);
-        }
-        LogUtils.debugInfo("数据---" + dbhelper.queryRecordAll().size() + dbhelper.queryRecordAll().get(0).toString());
+        PathRecord mRecord = new PathRecord();
+        mRecord = dbhelper.queryRecordById(id);
         dbhelper.close();
         if (mRecord != null) {
             List<AMapLocation> recordList = mRecord.getPathline();
@@ -217,9 +222,12 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
 
     @Override
     public void onMapLoaded() {
-//        LogUtils.debugInfo("第一个方法");
-//        Message msg = handler.obtainMessage();
-//        msg.what = AMAP_LOADED;
-//        handler.sendMessage(msg);
+        LogUtils.debugInfo("第一个方法");
+        if (type != 4) {
+            Message msg = handler.obtainMessage();
+            msg.what = AMAP_LOADED;
+            handler.sendMessage(msg);
+        }
+
     }
 }

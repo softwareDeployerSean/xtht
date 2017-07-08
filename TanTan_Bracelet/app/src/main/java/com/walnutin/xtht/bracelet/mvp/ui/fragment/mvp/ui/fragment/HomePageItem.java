@@ -9,17 +9,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomePageAdapter;
-import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomeViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CylinderView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView;
-import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.FullyLinearLayoutManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

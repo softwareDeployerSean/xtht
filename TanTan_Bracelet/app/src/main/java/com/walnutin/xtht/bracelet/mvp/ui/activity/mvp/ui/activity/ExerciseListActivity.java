@@ -8,11 +8,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
@@ -23,6 +26,7 @@ import com.walnutin.xtht.bracelet.mvp.model.entity.ExerciserData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerExerciseListComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ExerciseListModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ExerciseListContract;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ExerciseListPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.ExerciseListAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
@@ -30,6 +34,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,17 +51,15 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
     @BindView(R.id.exercise_list_rv)
     public RecyclerView exerciseListRl;
 
+    @BindView(R.id.refresh)
+    MaterialRefreshLayout materialRefreshLayout;
+
     private ExerciseListAdapter adapter;
-    private List<ExerciserData> exerciserDataList;
+    private List<PathRecord> exerciserDataList;
 
-    private boolean isLoading = false;
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-    };
+    int type = -1;
+    //页码
+    private int nextPage = 1;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -75,16 +78,44 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        exerciserDataList = mPresenter.loadExerciseList();
-
-        sort(exerciserDataList);
-
+        type = getIntent().getIntExtra("type", -1);
+        exerciserDataList = mPresenter.loadExerciseList(type, nextPage);
+        //sort(exerciserDataList);
         showMonthTitle(exerciserDataList);
-
         setAdapter(exerciserDataList);
+        init_refresh();
     }
 
-    private void showMonthTitle(List<ExerciserData> list) {
+    private void init_refresh() {
+        materialRefreshLayout.setLoadMore(true);
+        materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                materialRefreshLayout.finishRefresh();
+            }
+
+            @Override
+            public void onfinish() {
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                more_data(++nextPage);
+            }
+        });
+        materialRefreshLayout.autoRefresh();
+    }
+
+
+    private void more_data(int nextPage) {
+        exerciserDataList = mPresenter.loadExerciseList(type, nextPage);
+        adapter.setDatas(exerciserDataList);
+        materialRefreshLayout.finishRefreshLoadMore();
+    }
+
+
+    private void showMonthTitle(List<PathRecord> list) {
         if (list == null || list.size() <= 0) {
             return;
         }
@@ -104,10 +135,10 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
         LogUtils.debugInfo(list.toString());
     }
 
-    private void sort(List<ExerciserData> list) {
-        Collections.sort(list, new Comparator<ExerciserData>() {
+    private void sort(List<PathRecord> list) {
+        Collections.sort(list, new Comparator<PathRecord>() {
             @Override
-            public int compare(ExerciserData data1, ExerciserData data2) {
+            public int compare(PathRecord data1, PathRecord data2) {
                 try {
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
@@ -132,7 +163,7 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
 
 
     @Override
-    public void setAdapter(List<ExerciserData> list) {
+    public void setAdapter(List<PathRecord> list) {
         adapter = new ExerciseListAdapter(this, list);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         exerciseListRl.setLayoutManager(layoutManager);
@@ -143,6 +174,8 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
             @Override
             public void onIemClick(int position) {
                 Intent intent = new Intent(ExerciseListActivity.this, ExerciseDetailActivity.class);
+                intent.putExtra("type", type);
+                intent.putExtra("id",exerciserDataList.get(position).getId());
                 startActivity(intent);
             }
 
@@ -155,38 +188,6 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
             }
         });
 
-        exerciseListRl.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d("test", "StateChanged = " + newState);
-
-
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d("test", "onScrolled");
-
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
-                    Log.d("test", "loading executed");
-
-                    if (!isLoading) {
-                        isLoading = true;
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadMore();
-                                Log.d("test", "load more completed");
-                                isLoading = false;
-                            }
-                        }, 1000);
-                    }
-                }
-            }
-        });
         exerciseListRl.setAdapter(adapter);
     }
 

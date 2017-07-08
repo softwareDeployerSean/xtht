@@ -62,6 +62,7 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
                     @Override
                     public void onNext(UserBean users) {
                         mRootView.hideLoading();
+                        LogUtils.debugInfo("进来"+users.toString());
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "username", name);
                         if (ConmonUtils.checkEmail(name)) {

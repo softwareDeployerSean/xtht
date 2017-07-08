@@ -55,6 +55,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Util;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.RunningOutsidePresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomerRelativeLayout;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
@@ -195,18 +196,18 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
 
     @Override
     public void showLoading() {
-
+        CustomProgressDialog.show(this);
     }
 
     @Override
     public void hideLoading() {
-
+        CustomProgressDialog.dissmiss();
     }
 
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
-        UiUtils.SnackbarText(message);
+        ToastUtils.showToast(message, this);
     }
 
     @Override
@@ -320,9 +321,27 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             String stratpoint = amapLocationToString(firstLocaiton);
             String endpoint = amapLocationToString(lastLocaiton);
             String height = getheight(list);
+            LogUtils.debugInfo("平均速度=" + average);
             DbHepler.createrecord(String.valueOf(distance), duration, average,
-                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height);
+                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, "heart");
             DbHepler.close();
+        } else {
+            ToastUtils.showToast(getString(R.string.no_path), this);
+        }
+    }
+
+    protected void postdata(List<AMapLocation> list, String time) {
+        if (list != null && list.size() > 0) {
+            String duration = getDuration();
+            float distance = getDistance(list);
+            String average = getAverage(distance);
+            String pathlineSring = getPathLineString(list);
+            AMapLocation firstLocaiton = list.get(0);
+            AMapLocation lastLocaiton = list.get(list.size() - 1);
+            String stratpoint = amapLocationToString(firstLocaiton);
+            String endpoint = amapLocationToString(lastLocaiton);
+            String height = getheight(list);
+            mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title);
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
         }
@@ -362,28 +381,21 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         return timer.getText().toString().trim();
     }
 
+    private int get_second() {
+        String time = getDuration();
+        String a[] = time.split(":");
+        int sec = Integer.parseInt(a[0]) * 60 * 60 + Integer.parseInt(a[1]) * 60 + Integer.parseInt(a[2]);
+        return sec;
+    }
 
     private String getAverage(float distance) {
-        return String.valueOf(distance / (float) (mEndTime - mStartTime));
+        Float f = new Float(get_second() / distance);
+        int i = f.intValue();
+        return ConmonUtils.secToTime(i);
     }
 
     private float getDistance(List<AMapLocation> list) {
-        float distance = 0;
-        if (list == null || list.size() == 0) {
-            return distance;
-        }
-        for (int i = 0; i < list.size() - 1; i++) {
-            AMapLocation firstpoint = list.get(i);
-            AMapLocation secondpoint = list.get(i + 1);
-            LatLng firstLatLng = new LatLng(firstpoint.getLatitude(),
-                    firstpoint.getLongitude());
-            LatLng secondLatLng = new LatLng(secondpoint.getLatitude(),
-                    secondpoint.getLongitude());
-            double betweenDis = AMapUtils.calculateLineDistance(firstLatLng,
-                    secondLatLng);
-            distance = (float) (distance + betweenDis);
-        }
-        return distance;
+        return Float.parseFloat(mResultShow.getText().toString());
     }
 
     private String getPathLineString(List<AMapLocation> list) {
@@ -724,6 +736,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     LogUtils.debugInfo("继续22");
                 } else {
                     mEndTime = System.currentTimeMillis();
+                    //这里记得取消注释==========
+                    //postdata(record.getPathline(), record.getDate());
+                    //这里记得删掉==========
                     saveRecord(record.getPathline(), record.getDate());
                     finish();
                 }
@@ -766,5 +781,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    @Override
+    public void post_success() {
+        saveRecord(record.getPathline(), record.getDate());
+        finish();
     }
 }

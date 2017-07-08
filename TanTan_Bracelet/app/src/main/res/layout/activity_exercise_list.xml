@@ -10,9 +10,24 @@
         android:id="@+id/clock_list_titlebar"
         layout="@layout/include_title" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/exercise_list_rv"
+    <com.cjj.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        app:overlay="false"
+        app:progress_backgroud_color="#FFFAFAFA"
+        app:progress_colors="@array/material_colors"
+        app:progress_show_arrow="true"
+        app:progress_show_circle_backgroud="true"
+        app:wave_color="#20ff2020"
+        app:wave_height_type="normal"
+        app:wave_show="true">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/exercise_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+    </com.cjj.MaterialRefreshLayout>
 </com.zhy.autolayout.AutoLinearLayout>

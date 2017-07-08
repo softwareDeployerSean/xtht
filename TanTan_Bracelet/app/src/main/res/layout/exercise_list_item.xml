@@ -63,7 +63,7 @@
                         android:id="@+id/iexercise_list_distance_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0.38"
+                        android:text="--"
                         android:textColor="@color/run_dig"
                         android:textSize="36px" />
 
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8px"
                         android:layout_toRightOf="@id/time_text_tv"
-                        android:text="05:14"
+                        android:text="--"
                         android:textSize="12px" />
                 </com.zhy.autolayout.AutoRelativeLayout>
 
@@ -163,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8px"
                         android:layout_toRightOf="@id/speeds_text_tv"
-                        android:text="0:31:20"
+                        android:text="--"
                         android:textSize="12px" />
                 </com.zhy.autolayout.AutoRelativeLayout>
 

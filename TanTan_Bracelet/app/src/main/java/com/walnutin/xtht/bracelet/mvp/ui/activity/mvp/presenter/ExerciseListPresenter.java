@@ -11,8 +11,11 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.ExerciserData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ExerciseListContract;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,23 +39,20 @@ public class ExerciseListPresenter extends BasePresenter<ExerciseListContract.Mo
         this.mAppManager = appManager;
     }
 
-    public List<ExerciserData> loadExerciseList(){
-        List<ExerciserData> list = new ArrayList<>();
+    List<PathRecord> list = new ArrayList<>();
 
-        ExerciserData data1 = new ExerciserData("2017-04-08 11:20");
-        ExerciserData data2 = new ExerciserData("2017-04-03 11:20");
-        ExerciserData data3 = new ExerciserData("2017-04-06 11:20");
-        ExerciserData data4 = new ExerciserData("2017-03-01 11:20");
-        ExerciserData data5 = new ExerciserData("2017-03-03 11:20");
-        ExerciserData data6 = new ExerciserData("2017-03-02 11:20");
-
-        list.add(data1);
-        list.add(data2);
-        list.add(data3);
-        list.add(data4);
-        list.add(data5);
-        list.add(data6);
-
+    public List<PathRecord> loadExerciseList(int type, int nextPage) {
+        DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
+        dbhelper.open();
+        if (type == 1) {
+            list.addAll(dbhelper.queryRecordBySign_andpage("running_out", nextPage));
+        } else if (type == 2) {
+            list.addAll(dbhelper.queryRecordBySign_andpage("running_indoor", nextPage));
+        } else if (type == 3) {
+            list.addAll(dbhelper.queryRecordBySign_andpage("mountaineering", nextPage));
+        } else if (type == 4) {
+            list.addAll(dbhelper.queryRecordBySign_andpage("riding", nextPage));
+        }
         return list;
     }
 

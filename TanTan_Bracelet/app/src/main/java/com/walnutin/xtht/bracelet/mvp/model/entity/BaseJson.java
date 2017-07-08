@@ -40,13 +40,7 @@ public class BaseJson<T> implements Serializable {
         this.msg = msg;
     }
 
-    @Override
-    public String toString() {
-        return "BaseBean{" +
-                "code='" + code + '\'' +
-                ", msg='" + msg + '\'' +
-                '}';
-    }
+
 
 
     /**

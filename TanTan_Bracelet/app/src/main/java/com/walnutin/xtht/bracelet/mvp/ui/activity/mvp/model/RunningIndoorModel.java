@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.walnutin.xtht.bracelet.mvp.model.api.service.UserService;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.RunningIndoorContract;
+
+import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -23,6 +27,12 @@ public class RunningIndoorModel extends BaseModel implements RunningIndoorContra
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
+    }
+
+    @Override
+    public Observable<String> sportData(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .sportData(body);
     }
 
     @Override

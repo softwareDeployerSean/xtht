@@ -1,1 +1,1 @@
-include ':app', ':arms', ':library', ':ShortMessageSDKGUI', ':SMSSDK', ':pickerview'
+include ':app', ':arms', ':library', ':ShortMessageSDKGUI', ':SMSSDK', ':pickerview', ':calendar'
