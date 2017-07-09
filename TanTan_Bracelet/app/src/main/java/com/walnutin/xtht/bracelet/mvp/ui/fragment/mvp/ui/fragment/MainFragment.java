@@ -81,8 +81,13 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtils.debugInfo(TAG, "------------requestCode=" + requestCode);
-        if (requestCode == DATE_REQUEST_ID) {
+        if (requestCode == DATE_REQUEST_ID && data != null) {
             String date = data.getStringExtra("selectedDate");
+
+            if(date == null || "".equals(date)) {
+                return;
+            }
+
             LogUtils.debugInfo(TAG, "------------date=" + date);
             int pos = getPositionByDate(date);
             LogUtils.debugInfo(TAG, "------------pos=" + pos);

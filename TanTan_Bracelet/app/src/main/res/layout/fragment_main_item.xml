@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="250px"
             android:layout_gravity="center" />
-        
+
         <com.walnutin.xtht.bracelet.mvp.ui.widget.CylinderView
             android:layout_width="match_parent"
             android:id="@+id/cylinder_view"

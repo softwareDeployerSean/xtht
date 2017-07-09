@@ -111,8 +111,8 @@ public class HomePageItem {
 
         healthRv = (RecyclerView) view.findViewById(R.id.health_rv);
 
-        healthRv.setHasFixedSize(true);
-        healthRv.setNestedScrollingEnabled(false);
+//        healthRv.setHasFixedSize(true);
+//        healthRv.setNestedScrollingEnabled(false);
     }
 
     public void update(String date) {
@@ -191,7 +191,7 @@ public class HomePageItem {
 
             mLayoutManager.setScrollEnabled(false);
             mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            healthRv.setLayoutManager(mLayoutManager);
+            healthRv.setLayoutManager(new LinearLayoutManager(mContext));
 
             healthRv.addItemDecoration(new RecycleViewDivider(
                     mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
@@ -211,7 +211,7 @@ public class HomePageItem {
             }
         });
 
-        healthRv.setNestedScrollingEnabled(false);
+//        healthRv.setNestedScrollingEnabled(false);
 
     }
 
@@ -321,7 +321,7 @@ public class HomePageItem {
 
             mLayoutManager.setScrollEnabled(false);
             mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            healthRv.setLayoutManager(mLayoutManager);
+            healthRv.setLayoutManager(new LinearLayoutManager(mContext));
 
             healthRv.addItemDecoration(new RecycleViewDivider(
                     mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
@@ -341,7 +341,7 @@ public class HomePageItem {
             }
         });
 
-        healthRv.setNestedScrollingEnabled(false);
+//        healthRv.setNestedScrollingEnabled(false);
     }
 
     public View getView() {
