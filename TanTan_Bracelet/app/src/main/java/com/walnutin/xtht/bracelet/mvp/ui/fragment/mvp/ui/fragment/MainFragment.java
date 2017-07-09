@@ -19,6 +19,7 @@ import com.jess.arms.utils.UiUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.model.entity.ExerciserData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMainComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MainModule;
@@ -27,8 +28,10 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MainPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -78,16 +81,29 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtils.debugInfo(TAG, "------------requestCode=" + requestCode);
-        if(requestCode == DATE_REQUEST_ID) {
+        if (requestCode == DATE_REQUEST_ID) {
             String date = data.getStringExtra("selectedDate");
             LogUtils.debugInfo(TAG, "------------date=" + date);
             int pos = getPositionByDate(date);
             LogUtils.debugInfo(TAG, "------------pos=" + pos);
-//            vp.setCurrentItem(1001 - pos);
-            updateUi(1001 - pos);
+
+            //大于今天的，不显示
+            if (pos < 0) {
+                LogUtils.debugInfo("--------------pos<=0");
+                return;
+            }
+
+            vp.setScrollble(true);
+
+            int currentPosition = vp.getCurrentItem();
+            LogUtils.debugInfo(TAG, "-------------currentPosition=" + currentPosition);
+
+            HomePageItem item = items[currentPosition % 3];
+
+            item.update(date);
+            currentDate = date;
         }
     }
-
 
     private int getPositionByDate(String date) {
         SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
@@ -95,11 +111,19 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         try {
             Date d = dft.parse(date);
             long s1 = d.getTime();//将时间转为毫秒
-            long s2 = System.currentTimeMillis();//得到当前的毫秒
-            pos = (int)((s2 - s1) / 1000 / 60 / 60 / 24);
+
+            Date current = new Date();
+            String currnetDate = dft.format(current);
+            Date cDate = dft.parse(currnetDate);
+            long s2 = cDate.getTime();
+
+            long distance = s2 - s1;
+
+            pos = (int) ((s2 - s1) / 1000 / 60 / 60 / 24);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return pos;
     }
 
@@ -117,11 +141,55 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     }
 
     private void updateUi(int position) {
-        //获取当前显示的HomePageItem
-        HomePageItem item = items[position % 3];
+        try {
+            //获取当前显示的HomePageItem
+            HomePageItem item = items[position % 3];
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(currentDate));
+            int day = calendar.get(Calendar.DATE);
+            if (position > currentIndexItem) {
+                calendar.set(Calendar.DATE, day + 1);
+            } else if (position < currentIndexItem) {
+                calendar.set(Calendar.DATE, day - 1);
+            }
 
-        item.update(position);
+            String updateDate = sdf.format(calendar.getTime());
+
+            LogUtils.debugInfo("updateDate = " + updateDate);
+
+            item.update(updateDate);
+
+            currentIndexItem = position;
+            currentDate = item.getDate();
+
+            if(isNow(currentDate)) {
+                vp.setScrollble(false);
+            }else {
+                vp.setScrollble(true);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    private boolean isNow(String date) {
+        //当前时间
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取今天的日期
+        String nowDay = sf.format(now);
+
+        LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + date);
+        LogUtils.debugInfo("day.equals(nowDay)=" + date.equals(nowDay));
+
+        return date.equals(nowDay);
+
+    }
+
+    private String currentDate;
+
+    private int currentIndexItem = 1001;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -135,17 +203,18 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         vp.setCurrentItem(1001);
         HomePageItem item = items[1001 % 3];
         item.update(1001);
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        currentDate = sdf.format(c.getTime());
+
         vp.setScrollble(false);
         vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 Log.d("--------------", "------------------------" + position);
-                if (position == 1001) {
-                    vp.setScrollble(false);
-                } else {
-                    vp.setScrollble(true);
-                }
                 updateUi(position);
+
             }
 
             @Override
@@ -229,11 +298,11 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         public Object instantiateItem(ViewGroup container, int position) {
 
             if (((ViewPager) container).getChildCount() == items.length) {
-                ((ViewPager) container).removeView(((HomePageItem)items[position % items.length]).getView());
+                ((ViewPager) container).removeView(((HomePageItem) items[position % items.length]).getView());
             }
 
-            ((ViewPager) container).addView(((HomePageItem)items[position % items.length]).getView(), 0);
-            return ((HomePageItem)items[position % items.length]).getView();
+            ((ViewPager) container).addView(((HomePageItem) items[position % items.length]).getView(), 0);
+            return ((HomePageItem) items[position % items.length]).getView();
         }
 
         @Override

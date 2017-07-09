@@ -67,6 +67,9 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
         mViewPager.setCurrentItem(498);
 
+        updateNearPage(498);
+
+
     }
 
     private void setViewPager() {
@@ -76,29 +79,7 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
             @Override
             public void onPageSelected(int position) {
                 Log.d("TAG", "--------------onPageSelected-------------------");
-                measureDirection(position);
-                updateCalendarView(position);
-
-                DatePageImte item = items[position % items.length];
-                CustomDate currentShowDate = item.getCurrentCalendar().getShowDate();
-
-                Log.d("TAG", "currentShowDate.day=" + currentShowDate.day);
-
-                item.update(position);
-
-                //更新下一个页面
-                DatePageImte nextPage = items[(position + 1) % items.length];
-                nextPage.getCurrentCalendar().getShowDate().year = currentShowDate.year;
-                nextPage.getCurrentCalendar().getShowDate().month = currentShowDate.month;
-                nextPage.getCurrentCalendar().getShowDate().day = currentShowDate.day;
-
-                //更新上一个页面
-                DatePageImte prePage = items[(position - 1) % items.length];
-                prePage.getCurrentCalendar().getShowDate().year = currentShowDate.year;
-                prePage.getCurrentCalendar().getShowDate().month = currentShowDate.month;
-                prePage.getCurrentCalendar().getShowDate().day = currentShowDate.day;
-
-                Log.d("TAG", "---------after currentShowDate month=" + currentShowDate.getMonth());
+                updateNearPage(position);
             }
 
             @Override
@@ -111,6 +92,32 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
             }
         });
+    }
+
+    private void updateNearPage(int position) {
+        measureDirection(position);
+        updateCalendarView(position);
+
+        DatePageImte item = items[position % items.length];
+        CustomDate currentShowDate = item.getCurrentCalendar().getShowDate();
+
+        Log.d("TAG", "currentShowDate.day=" + currentShowDate.day);
+
+        item.update(position);
+
+        //更新下一个页面
+        DatePageImte nextPage = items[(position + 1) % items.length];
+        nextPage.getCurrentCalendar().getShowDate().year = currentShowDate.year;
+        nextPage.getCurrentCalendar().getShowDate().month = currentShowDate.month;
+        nextPage.getCurrentCalendar().getShowDate().day = currentShowDate.day;
+
+        //更新上一个页面
+        DatePageImte prePage = items[(position - 1) % items.length];
+        prePage.getCurrentCalendar().getShowDate().year = currentShowDate.year;
+        prePage.getCurrentCalendar().getShowDate().month = currentShowDate.month;
+        prePage.getCurrentCalendar().getShowDate().day = currentShowDate.day;
+
+        Log.d("TAG", "---------after currentShowDate month=" + currentShowDate.getMonth());
     }
 
     @Override
