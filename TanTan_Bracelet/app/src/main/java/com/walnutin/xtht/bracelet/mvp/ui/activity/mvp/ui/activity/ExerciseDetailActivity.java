@@ -2,13 +2,13 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
@@ -22,7 +22,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
-import com.amap.api.trace.TraceLocation;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
@@ -50,6 +49,19 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
 
     @BindView(R.id.map)
     MapView mMapView;
+    @BindView(R.id.tv_length)
+    TextView tvLength;
+    @BindView(R.id.tv_duration)
+    TextView tvDuration;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+    @BindView(R.id.tv_cal)
+    TextView tvCal;
+    @BindView(R.id.tv_height)
+    TextView tvHeight;
+
+    @BindView(R.id.tv_sudu)
+    TextView tvSudu;
 
     private AMap mAMap;
     private DbAdapter mDataBaseHelper;
@@ -169,6 +181,12 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
                     endLoc.getLongitude());
             mOriginLatLngList = Util.parseLatLngList(recordList);
             addOriginTrace(startLatLng, endLatLng, mOriginLatLngList);
+            tvLength.setText(mRecord.getDistance());
+            tvDuration.setText(mRecord.getDuration());
+            tvTime.setText(mRecord.getDate());
+            tvHeight.setText(mRecord.getAltitude() + "m");
+            tvSudu.setText(mRecord.getAveragespeed() + "km");
+
         } else {
         }
 
@@ -230,4 +248,5 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         }
 
     }
+
 }

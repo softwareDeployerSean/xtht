@@ -11,10 +11,138 @@
 
         <include layout="@layout/include_title" />
 
-        <com.amap.api.maps.MapView
-            android:id="@+id/map"
+        <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="450px"></com.amap.api.maps.MapView>
+            android:layout_height="wrap_content">
+
+            <com.amap.api.maps.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="450px"></com.amap.api.maps.MapView>
+
+            <com.zhy.autolayout.AutoRelativeLayout
+                android:layout_width="345px"
+                android:layout_height="94px"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_whitetransparent_bg_normal">
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:layout_marginLeft="36px"
+                    android:layout_marginTop="10px"
+                    >
+                    <TextView
+                        android:id="@+id/tv_length"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3.08"
+                        android:textColor="@color/white"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5px"
+                        android:text="KM"
+                        android:textColor="@color/white"
+                        android:textSize="12px" />
+
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+
+
+                <TextView
+                    android:id="@+id/tv_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10px"
+                    android:layout_marginTop="10px"
+                    android:text="22:32:00"
+                    android:textColor="@color/white"
+                    android:textSize="32px" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/tv_duration"
+                    android:layout_marginRight="10px"
+                    android:layout_marginTop="5px"
+                    android:text="2017-5-58"
+                    android:textColor="@color/white"
+                    android:textSize="12px" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_time"
+                    android:layout_marginTop="5px"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:layout_width="15px"
+                        android:layout_height="15px"
+                        android:background="@mipmap/kaluli"
+                        android:layout_marginLeft="36px"
+                        />
+                    
+                    <TextView
+                        android:layout_marginLeft="2px"
+                        android:id="@+id/tv_cal"
+                        android:layout_width="50px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="33cal"
+                        android:textColor="@color/white"
+                        android:textSize="12px"
+                        />
+                    <ImageView
+                        android:layout_width="15px"
+                        android:layout_height="15px"
+                        android:background="@mipmap/peisubaise"
+                        />
+                    <TextView
+                        android:id="@+id/tv_sudu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="33cal"
+                        android:textColor="@color/white"
+                        android:textSize="12px"
+                        android:layout_marginLeft="2px"/>
+                    <ImageView
+                        android:layout_width="15px"
+                        android:layout_height="15px"
+                        android:background="@mipmap/shan"
+                        />
+                    <TextView
+                        android:layout_marginLeft="3px"
+                        android:id="@+id/tv_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="left"
+                        android:text="33cal"
+                        android:textColor="@color/white"
+                        android:textSize="12px" />
+
+
+                </LinearLayout>
+
+
+            </com.zhy.autolayout.AutoRelativeLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
 
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
@@ -285,7 +413,7 @@
         <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
             android:layout_width="match_parent"
             android:layout_height="300px"
-            android:layout_marginBottom="80px"/>
+            android:layout_marginBottom="80px" />
 
     </com.zhy.autolayout.AutoLinearLayout>
 </com.jess.arms.widget.autolayout.AutoScrollView>
