@@ -14,16 +14,22 @@ import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMainComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MainModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MainContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MainPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 
@@ -35,6 +41,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     private static final String TAG = "[TAN][" + MainFragment.class.getSimpleName() + "]";
 
     public static final int CALENGAR_REQUEST_ID = 100;
+    public static final int DATE_REQUEST_ID = 101;
 
     VPOperateManager mVpoperateManager;
 
@@ -62,9 +69,38 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
                 .inject(this);
     }
 
+    public void toDateActivity() {
+        Intent intent = new Intent(getActivity(), DateSelectActivity.class);
+        getActivity().startActivityForResult(intent, DATE_REQUEST_ID);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.debugInfo(TAG, "------------requestCode=" + requestCode);
+        if(requestCode == DATE_REQUEST_ID) {
+            String date = data.getStringExtra("selectedDate");
+            LogUtils.debugInfo(TAG, "------------date=" + date);
+            int pos = getPositionByDate(date);
+            LogUtils.debugInfo(TAG, "------------pos=" + pos);
+//            vp.setCurrentItem(1001 - pos);
+            updateUi(1001 - pos);
+        }
+    }
+
+
+    private int getPositionByDate(String date) {
+        SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+        int pos = 0;
+        try {
+            Date d = dft.parse(date);
+            long s1 = d.getTime();//将时间转为毫秒
+            long s2 = System.currentTimeMillis();//得到当前的毫秒
+            pos = (int)((s2 - s1) / 1000 / 60 / 60 / 24);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return pos;
     }
 
     @Override

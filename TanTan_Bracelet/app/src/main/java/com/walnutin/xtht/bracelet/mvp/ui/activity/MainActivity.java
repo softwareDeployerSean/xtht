@@ -582,4 +582,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //将值传入DemoFragment
+        this.getSupportFragmentManager().findFragmentByTag(MainFragment.class.getSimpleName()).onActivityResult(requestCode, resultCode, data);
+    }
 }

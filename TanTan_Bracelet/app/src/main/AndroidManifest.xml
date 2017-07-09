@@ -33,10 +33,10 @@
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:hardwareAccelerated="false"
         android:theme="@style/AppTheme">
 
         <!-- 蓝牙服务 -->
@@ -214,7 +214,6 @@
 
         <activity android:name=".mvp.ui.activity.mvp.ui.activity.CountdownActivity" />
 
-
         <service
             android:name=".mvp.ui.fragment.mvp.ui.fragment.EpConnecteService"
             android:enabled="true"
@@ -248,6 +247,12 @@
             android:label="@string/exercise_detail"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.DateSelectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/date"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

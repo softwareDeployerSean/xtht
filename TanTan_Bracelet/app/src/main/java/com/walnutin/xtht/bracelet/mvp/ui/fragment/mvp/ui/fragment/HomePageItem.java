@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomePageAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
@@ -70,7 +71,7 @@ public class HomePageItem {
         dayTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mainFragment.toDateActivity();
             }
         });
 
@@ -110,33 +111,33 @@ public class HomePageItem {
 
         //更新页面最上端中间显示日期
         String currentDate = "";
-        if(position == 1001) {
+        if (position == 1001) {
             currentDate = "今天";
-        }else if(position == 1000) {
+        } else if (position == 1000) {
             currentDate = "昨天";
-        }else {
+        } else {
             currentDate = getDistanceDate(position - 1001);
         }
         currentDateTv.setText(currentDate);
 
-        if(mainFragment.isArcOrLinder()) {
+        if (mainFragment.isArcOrLinder()) {
             cylinderView.setVisibility(View.GONE);
             stepArcView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             stepArcView.setVisibility(View.GONE);
             cylinderView.setVisibility(View.VISIBLE);
         }
 
         //更新左上角当前的日
         String tempDate = getDistanceDate(position - 1001);
-        tempDate = tempDate.substring(tempDate.length() - 2 ,tempDate.length());
-        if(tempDate.startsWith("0")) {
+        tempDate = tempDate.substring(tempDate.length() - 2, tempDate.length());
+        if (tempDate.startsWith("0")) {
             tempDate = tempDate.substring(1, tempDate.length());
         }
         dayTv.setText(tempDate);
 
         stepArcView.setCurrentCount(7000, 6000);
-        if(healthDatas == null) {
+        if (healthDatas == null) {
             healthDatas = new ArrayList<>();
         }
 
@@ -161,7 +162,7 @@ public class HomePageItem {
         healthDatas.add(data7);
         healthDatas.add(data8);
 
-        if(homePagerAdapter == null) {
+        if (homePagerAdapter == null) {
             homePagerAdapter = new HomePageAdapter(mContext, healthDatas);
 //            FullyLinearLayoutManager fullyLinearLayoutManager = new FullyLinearLayoutManager(mContext);
 //            fullyLinearLayoutManager.setScrollEnabled(false);
@@ -179,14 +180,14 @@ public class HomePageItem {
                     mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
 
             healthRv.setAdapter(homePagerAdapter);
-        }else {
+        } else {
             homePagerAdapter.notifyDataSetChanged();
         }
 
         homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
             @Override
             public void onImteClick(int type) {
-                if(type == 1) {
+                if (type == 1) {
                     Intent intent = new Intent(mContext, RateDetailActivity.class);
                     mContext.startActivity(intent);
                 }

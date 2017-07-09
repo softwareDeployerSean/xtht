@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/gray_EEEEEE"
+            android:layout_height="10px" />
+        
+        <com.zhy.autolayout.AutoLinearLayout
+        android:id="@+id/text1_parent_al"
+        android:layout_marginTop="10px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/sunday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/monday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/thesday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/wednesday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/thursday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/friday"
+            android:textColor="@color/canlendar_text_color" />
+
+        <TextView
+            style="@style/dateStyle"
+            android:layout_weight="1"
+            android:text="@string/saturday"
+            android:textColor="@color/canlendar_text_color" />
+    </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5px"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/current__month_tv"
+                android:text="5月"
+                android:paddingRight="16px"
+                android:textSize="15px"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+        
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard
+        android:id="@+id/current_calendar_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/gray_EEEEEE"
+            android:layout_height="10px" />
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/text2_parent_al"
+            android:layout_marginTop="10px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/sunday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/monday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/thesday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/wednesday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/thursday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/friday"
+                android:textColor="@color/canlendar_text_color" />
+
+            <TextView
+                style="@style/dateStyle"
+                android:layout_weight="1"
+                android:text="@string/saturday"
+                android:textColor="@color/canlendar_text_color" />
+        </com.zhy.autolayout.AutoLinearLayout>
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_marginTop="5px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/next_month_tv"
+                android:textSize="15px"
+                android:layout_alignParentRight="true"
+                android:text="5月"
+                android:paddingRight="16px"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard
+        android:id="@+id/next_calendar_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard>
+    </com.zhy.autolayout.AutoLinearLayout>
+
+</com.zhy.autolayout.AutoLinearLayout>

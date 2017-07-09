@@ -69,5 +69,10 @@
     <color name="blue_rate_line">#9BE2B0</color>
     <color name="red_rate_line">#D53D49</color>
     <color name="run_dig">#7CBC30</color>
+    <color name="gray_EEEEEE">#EEEEEE</color>
+    <color name="gray_DDDDDD">#DDDDDD</color>
+    <color name="yellow_EAA434">#EAA434</color>
+    <color name="blue_7CBC30">#7CBC30</color>
+    <color name="black">#000000</color><!--黑色 -->
 
 </resources>
