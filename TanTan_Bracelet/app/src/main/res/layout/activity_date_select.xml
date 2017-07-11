@@ -10,11 +10,11 @@
         android:id="@+id/clock_list_titlebar"
         layout="@layout/include_title" />
 
-    <com.walnutin.xtht.bracelet.mvp.ui.widget.date.VerticalViewPager
+    <fr.castorflex.android.verticalviewpager.VerticalViewPager
         android:id="@+id/vp_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/white"></com.walnutin.xtht.bracelet.mvp.ui.widget.date.VerticalViewPager>
+        android:background="@color/white"></fr.castorflex.android.verticalviewpager.VerticalViewPager>
 
 </com.zhy.autolayout.AutoLinearLayout>

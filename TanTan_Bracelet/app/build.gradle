@@ -93,4 +93,5 @@ dependencies {
     compile 'com.amap.api:location:latest.integration'
     compile 'com.github.hzw1199:AndroidGpsStatus:1.1'
     compile files('libs/vpprotocol_1.0.6.jar')
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
 }

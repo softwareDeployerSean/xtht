@@ -3,6 +3,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 
@@ -19,8 +20,9 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarViewAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CustomDate;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.DatePageImte;
-import com.walnutin.xtht.bracelet.mvp.ui.widget.date.VerticalViewPager;
 
+
+import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -74,7 +76,7 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
     private void setViewPager() {
         mViewPager.setAdapter(adapter);
-        mViewPager.setOnPageChangeListener(new VerticalViewPager.OnPageChangeListener() {
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {

@@ -1,7 +1,10 @@
 package com.walnutin.xtht.bracelet.mvp.ui.widget.date;
 
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
 public class CalendarViewAdapter<V> extends PagerAdapter {
     public static final String TAG = "CalendarViewAdapter";
