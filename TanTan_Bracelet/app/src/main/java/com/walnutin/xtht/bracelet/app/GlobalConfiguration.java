@@ -69,20 +69,20 @@ public class GlobalConfiguration implements ConfigModule {
                         /* 这里可以先客户端一步拿到每一次http请求的结果,可以解析成json,做一些操作,如检测到token过期后
                            重新请求token,并重新执行请求 */
 
-                            if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body())) {
-                                BaseJson baseBean = JSON.parseObject(httpResult, BaseJson.class);
-                                if ("1".equals(baseBean.code)) {
+                        if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body())) {
+                            BaseJson baseBean = JSON.parseObject(httpResult, BaseJson.class);
+                            if ("1".equals(baseBean.code)) {
 
-                                    if (!TextUtils.isEmpty(baseBean.msg.toString())) {
-                                        response = onSuccess(response, baseBean.msg.toString());
-                                        LogUtils.debugInfo("baseBean.msg.toString()进来了的==");
-                                    } else
-                                        throw new RuntimeException("获取结果为空");
-                                } else {
-                                    throw new RuntimeException(baseBean.msg.toString());
-                                }
-
+                                if (!TextUtils.isEmpty(baseBean.msg.toString())) {
+                                    response = onSuccess(response, baseBean.msg.toString());
+                                    LogUtils.debugInfo("baseBean.msg.toString()进来了的==");
+                                } else
+                                    throw new RuntimeException("获取结果为空");
+                            } else {
+                                throw new RuntimeException(baseBean.msg.toString());
                             }
+
+                        }
 
 
 
@@ -117,18 +117,16 @@ public class GlobalConfiguration implements ConfigModule {
                        rxjava必要要使用ErrorHandleSubscriber(默认实现Subscriber的onError方法),此监听才生效 */
                     Timber.tag("Catch-Error").w(t.getMessage());
                     //这里不光是只能打印错误,还可以根据不同的错误作出不同的逻辑处理
-                    String msg = "未知错误";
+                    String msg = t.getMessage();
                     if (t instanceof UnknownHostException) {
                         msg = "网络未连接";
                     } else if (t instanceof SocketTimeoutException) {
                         msg = "请求网络超时";
                     } else if (t instanceof HttpException) {
                         HttpException httpException = (HttpException) t;
-                        msg = "未知错误";
+                        msg = convertStatusCode(httpException);
                     } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException || t instanceof JsonIOException) {
                         msg = "数据解析错误";
-                    }else{
-                        msg="未知错误";
                     }
                     UiUtils.ToastText(msg);
                 })
@@ -265,7 +263,7 @@ public class GlobalConfiguration implements ConfigModule {
             msg = "请求被重定向到其他页面";
         } else {
             msg = httpException.message();
-            LogUtils.debugInfo("是不是你啊 煞笔"+msg);
+            LogUtils.debugInfo("是不是你啊 煞笔" + msg);
         }
         return msg;
     }

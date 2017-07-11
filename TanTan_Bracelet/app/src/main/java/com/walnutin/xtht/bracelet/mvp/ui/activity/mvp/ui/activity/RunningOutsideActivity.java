@@ -480,7 +480,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                         amapLocation.getLongitude());
                 mAMap.moveCamera(CameraUpdateFactory.changeLatLng(mylocation));
                 if (amapLocation.getSpeed() == 0) {
-                    tvSpeed.setText("--");
+                    tvSpeed.setText("- -");
                 } else {
                     int a = (int) (1000 / amapLocation.getSpeed());
                     LogUtils.debugInfo("sudua =" + a);

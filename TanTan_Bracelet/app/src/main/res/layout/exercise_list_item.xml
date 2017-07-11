@@ -19,6 +19,19 @@
             android:text="四月"
             android:textColor="@color/black_444444"
             android:visibility="gone" />
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/month_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="30px"
+            android:background="@color/epListEven"
+            android:gravity="center_vertical"
+            android:layout_marginRight="20px"
+            android:text="四月"
+            android:textColor="@color/black_444444"
+            android:visibility="gone"
+            />
     </com.zhy.autolayout.AutoRelativeLayout>
 
     <com.mcxtzhang.swipemenulib.SwipeMenuLayout
@@ -171,12 +184,12 @@
 
         </com.zhy.autolayout.AutoRelativeLayout>
 
-        <Button
+       <!-- <Button
             android:id="@+id/exercise_list_item_del_btn"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:background="@color/redFF3030"
             android:text="删除"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white" />-->
     </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
 </com.zhy.autolayout.AutoLinearLayout>

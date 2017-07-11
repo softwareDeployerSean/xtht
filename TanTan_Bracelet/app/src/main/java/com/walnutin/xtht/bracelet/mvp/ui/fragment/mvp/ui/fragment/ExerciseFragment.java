@@ -15,6 +15,7 @@ import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ExerciseListActivity;
@@ -125,8 +126,20 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
     double riding_distance = 0;
     int riding_number = 0;
 
+    public void initdata() {
+        run_distance = 0;
+        run_number = 0;
+        indoor_distance = 0;
+        indoor_number = 0;
+        mountain_distance = 0;
+        mountain_number = 0;
+        riding_distance = 0;
+        riding_number = 0;
+    }
+
 
     public void get_Exercisedata() {
+        initdata();
         DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
         dbhelper.open();
         run_record = dbhelper.queryRecordBySign("running_out");
@@ -136,10 +149,10 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
         if (run_record.size() > 0) {
             for (PathRecord p : run_record) {
                 run_distance += Double.parseDouble(p.getDistance());
-                LogUtils.debugInfo("距离="+p.getDistance()+p.getDate()+"标记="+p.getSign());
+                LogUtils.debugInfo("距离=" + p.getDistance() + p.getDate() + "标记=" + p.getSign());
             }
             run_number = run_record.size();
-            allRunDistanceTv.setText(run_distance + "");
+            allRunDistanceTv.setText(ConmonUtils.shuzi(run_distance) + "");
             allRunCountTv.setText(run_number + "");
         }
         if (indoor_record.size() > 0) {
@@ -147,7 +160,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
                 indoor_distance += Double.parseDouble(p.getDistance());
             }
             indoor_number = indoor_record.size();
-            innerRunDistanceTv.setText(indoor_distance + "");
+            innerRunDistanceTv.setText(ConmonUtils.shuzi(indoor_distance) + "");
             item2RunCount.setText(indoor_number + "");
         }
         if (mountain_record.size() > 0) {
@@ -155,7 +168,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
                 mountain_distance += Double.parseDouble(p.getDistance());
             }
             mountain_number = mountain_record.size();
-            dengshanRunDistanceTv.setText(mountain_distance + "");
+            dengshanRunDistanceTv.setText(ConmonUtils.shuzi(mountain_distance) + "");
             item3RunCount.setText(mountain_number + "");
         }
         if (ride_record.size() > 0) {
@@ -163,7 +176,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
                 riding_distance += Double.parseDouble(p.getDistance());
             }
             riding_number = ride_record.size();
-            qixingRunDistanceTv.setText(riding_distance + "");
+            qixingRunDistanceTv.setText(ConmonUtils.shuzi(riding_distance) + "");
             qixingRunCountTv.setText(riding_number + "");
         }
 

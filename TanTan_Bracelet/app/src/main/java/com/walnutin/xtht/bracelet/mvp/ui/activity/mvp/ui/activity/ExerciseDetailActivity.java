@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -27,6 +29,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerExerciseDetailComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.ExerciseDetailModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.ExerciseDetailContract;
@@ -40,6 +43,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -248,5 +252,11 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         }
 
     }
+
+    @OnClick(R.id.iv_back)
+    public void onClick(View view) {
+        finish();
+    }
+
 
 }

@@ -9,7 +9,6 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <include layout="@layout/include_title" />
 
         <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
@@ -92,7 +91,7 @@
                         android:background="@mipmap/kaluli"
                         android:layout_marginLeft="36px"
                         />
-                    
+
                     <TextView
                         android:layout_marginLeft="2px"
                         android:id="@+id/tv_cal"
@@ -140,6 +139,14 @@
 
 
             </com.zhy.autolayout.AutoRelativeLayout>
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/fanhuijian"
+                android:layout_marginLeft="15px"
+                android:layout_marginTop="5px"
+                />
 
         </com.zhy.autolayout.AutoRelativeLayout>
 

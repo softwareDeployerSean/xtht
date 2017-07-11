@@ -230,14 +230,14 @@ public class ConmonUtils {
             minute = time / 60;
             if (minute < 60) {
                 second = time % 60;
-                timeStr = unitFormat(minute) + "'" + unitFormat(second)+"''";
+                timeStr = unitFormat(minute) + "'" + unitFormat(second) + "''";
             } else {
                 hour = minute / 60;
                 if (hour > 99)
                     return "99:59:59";
                 minute = minute % 60;
                 second = time - hour * 3600 - minute * 60;
-                timeStr = unitFormat(hour) + "'" + unitFormat(minute) + "''" + unitFormat(second)+"'''";
+                timeStr = unitFormat(hour) + "'" + unitFormat(minute) + "''" + unitFormat(second) + "'''";
             }
         }
         return timeStr;
@@ -251,4 +251,21 @@ public class ConmonUtils {
             retStr = "" + i;
         return retStr;
     }
+
+    public static String shuzi(Double d){
+        DecimalFormat decimalFormat=new DecimalFormat("##############0.0");
+        String tmp=decimalFormat.format(d);
+        return tmp;
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

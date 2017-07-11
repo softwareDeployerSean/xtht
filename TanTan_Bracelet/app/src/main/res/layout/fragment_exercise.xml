@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/grey_eeeeee">
 
     <ImageView
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="230px"
         android:src="@mipmap/gao" />
@@ -17,7 +19,6 @@
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey_eeeeee"
             android:orientation="vertical">
 
             <!--跑步累计距离 -->
@@ -342,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10px"
                         android:paddingLeft="2px"
-                        android:text="骑行跑累计距离"
+                        android:text="骑行累计距离"
                         android:textSize="12px" />
 
                     <com.zhy.autolayout.AutoRelativeLayout

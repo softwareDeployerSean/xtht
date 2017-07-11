@@ -52,12 +52,14 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return holder;
     }
 
+
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof MyViewHolder) {
             MyViewHolder holder = (MyViewHolder) viewHolder;
             holder.monthTitleTv.setVisibility(View.GONE);
-
+            holder.month_distance.setVisibility(View.GONE);
             PathRecord data = exerciseList.get(position);
             holder.timeTv.setText(data.getDate());
             holder.time_value_tv.setText(data.getDuration());
@@ -66,6 +68,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.iexercise_list_distance_tv.setText(data.getDistance());
             if (data.isDisplayMonthTitle()) {
                 holder.monthTitleTv.setVisibility(View.VISIBLE);
+                holder.month_distance.setVisibility(View.VISIBLE);
                 try {
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
@@ -86,14 +89,14 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
 
-            holder.delBtn.setOnClickListener(new View.OnClickListener() {
+           /* holder.delBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnItemClickListener != null) {
                         mOnItemClickListener.onItemDel(position);
                     }
                 }
-            });
+            });*/
 
             holder.parent.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,7 +111,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return exerciseList.size() ;
+        return exerciseList.size();
     }
 
 
@@ -120,15 +123,16 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         TextView timeTv;
         TextView monthTitleTv;
-        Button delBtn;
-        TextView time_value_tv, speeds_value_tv, iexercise_list_distance_tv;
+        //Button delBtn;
+        TextView time_value_tv, speeds_value_tv, iexercise_list_distance_tv, month_distance;
         RelativeLayout parent;
 
         public MyViewHolder(View view) {
             super(view);
             timeTv = (TextView) view.findViewById(R.id.exercise_list_date);
             monthTitleTv = (TextView) view.findViewById(R.id.month_title_tv);
-            delBtn = (Button) view.findViewById(R.id.exercise_list_item_del_btn);
+            month_distance = (TextView) view.findViewById(R.id.month_distance);
+            //delBtn = (Button) view.findViewById(R.id.exercise_list_item_del_btn);
             time_value_tv = (TextView) view.findViewById(R.id.time_value_tv);
             speeds_value_tv = (TextView) view.findViewById(R.id.speeds_value_tv);
             iexercise_list_distance_tv = (TextView) view.findViewById(R.id.iexercise_list_distance_tv);
@@ -151,7 +155,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onItemDel(int position);
     }
 
-    public void setDatas(List<PathRecord> objects){
+    public void setDatas(List<PathRecord> objects) {
         this.exerciseList = objects;
         notifyDataSetChanged();
     }
