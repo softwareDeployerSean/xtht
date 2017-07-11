@@ -64,7 +64,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
 
             holder.rightTopTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
-
             holder.rightIconTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
         } else if (data.getType() == 2) {
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xueya);
@@ -113,7 +112,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             holder.rightTopTv.setText(str);
             holder.rightButtomTv.setText("");
             holder.rightIconTv.setText("查看");
-            holder.rightIconTv.setTextSize(px2dip(mContext, 12));
+            holder.rightIconTv.setTextSize(px2dip(mContext, 8));
         } else if (data.getType() == 2) {
             holder.rightTopTv.setText("高压  " + data.getRightTop() + " mmhg");
             holder.rightButtomTv.setText("低压  " + data.getRightButtom() + " mmhg");
@@ -137,7 +136,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             if (data.getType() == 1) {
                 drawable = mContext.getResources().getDrawable(R.mipmap.fanhuijianhs);
             } else {
-                drawable = mContext.getResources().getDrawable(R.mipmap.fanhuijian);
+                drawable = mContext.getResources().getDrawable(R.mipmap.fanhuijian_right);
             }
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());

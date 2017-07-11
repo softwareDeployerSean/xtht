@@ -164,8 +164,8 @@ public class HomePageItem {
 
         //模拟从数据库查询当天对应的数据
         HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62", "78", "", true, 1);
-        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2);
-        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", true, 3);
+        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", false, 2);
+        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3);
         HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4);
         HealthPageData data5 = new HealthPageData(5, "14:25", "散步", "12", "12", "42", "100", false, 5);
         HealthPageData data6 = new HealthPageData(6, "14:25", "跑步", "12", "48", "42", "100", false, 6);
