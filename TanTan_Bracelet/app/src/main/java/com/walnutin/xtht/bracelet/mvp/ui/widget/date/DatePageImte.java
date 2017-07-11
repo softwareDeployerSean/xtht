@@ -1,16 +1,24 @@
 package com.walnutin.xtht.bracelet.mvp.ui.widget.date;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Leiht on 2017/7/8.
@@ -37,14 +45,21 @@ public class DatePageImte {
      */
     private CalendarCard currentCalendar;
 
-    private TextView currentMonthTv;
-
     /**
      * Next Calendar
      */
     private CalendarCard nextCalendar;
 
-    private TextView nextMonthTv;
+    /**
+     * the parent LinearLayout for current month text
+     */
+    private LinearLayout currentMonthParent;
+
+    /**
+     * the parent LinearLayout for next month text
+     */
+    private LinearLayout nextMonthParent;
+
 
 
     public DatePageImte(Context context) {
@@ -56,14 +71,32 @@ public class DatePageImte {
 
         nextCalendar = (CalendarCard) view.findViewById(R.id.next_calendar_card);
 
-        currentMonthTv = (TextView) view.findViewById(R.id.current__month_tv);
+        currentMonthParent = (LinearLayout) view.findViewById(R.id.currnet_month_parent_al);
 
-        nextMonthTv = (TextView) view.findViewById(R.id.next_month_tv);
+        nextMonthParent = (LinearLayout) view.findViewById(R.id.next_month_parent_al);
+
+//        currentMonthTv = (TextView) view.findViewById(R.id.current__month_tv);
+//
+//        nextMonthTv = (TextView) view.findViewById(R.id.next_month_tv);
 
     }
 
     public void update(int position) {
-        currentMonthTv.setText(currentCalendar.getShowDate().getMonth() + "月");
+
+        for(int i = 0; i < currentMonthParent.getChildCount(); i++) {
+            ((TextView)currentMonthParent.getChildAt(i)).setTextColor(Color.WHITE);
+        }
+        for(int i = 0; i < nextMonthParent.getChildCount(); i++) {
+            ((TextView)nextMonthParent.getChildAt(i)).setTextColor(Color.WHITE);
+        }
+
+        String firstDayOfMonth = currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth() + "-01";
+        int firstDayOfWeek = getWeekByDate(firstDayOfMonth);
+
+        TextView currenTv = ((TextView)currentMonthParent.getChildAt(firstDayOfWeek - 1));
+        currenTv.setTextColor(Color.BLACK);
+        currenTv.setText(currentCalendar.getShowDate().getMonth() + "月");
+
 
         Log.d("TAG", "update() month=" + currentCalendar.getShowDate().getMonth());
 
@@ -71,8 +104,30 @@ public class DatePageImte {
         nextCalendar.getShowDate().month = currentCalendar.getShowDate().month;
         nextCalendar.getShowDate().day = currentCalendar.getShowDate().day;
         nextCalendar.nextMonth();
-        nextMonthTv.setText(nextCalendar.getShowDate().getMonth() + "月");
 
+        String nextDayOfMonth = nextCalendar.getShowDate().getYear() + "-" + nextCalendar.getShowDate().getMonth() + "-01";
+        int nextDayOfWeek = getWeekByDate(nextDayOfMonth);
+
+        TextView nextTv = ((TextView)nextMonthParent.getChildAt(nextDayOfWeek - 1));
+        nextTv.setTextColor(Color.BLACK);
+        nextTv.setText(nextCalendar.getShowDate().getMonth() + "月");
+
+    }
+
+    private int getWeekByDate(String date) {
+        int week = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            Date d = sdf.parse(date);
+
+            calendar.setTime(d);
+
+            week = calendar.get(Calendar.DAY_OF_WEEK);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return week;
     }
 
     public View getView() {

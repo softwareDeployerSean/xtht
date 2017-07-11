@@ -107,4 +107,12 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">16px</item>
     </style>
+    <style name="dateStyle1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingBottom">8px</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16px</item>
+    </style>
 </resources>

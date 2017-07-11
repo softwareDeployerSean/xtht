@@ -67,22 +67,55 @@
             android:textColor="@color/canlendar_text_color" />
     </com.zhy.autolayout.AutoLinearLayout>
 
-        <com.zhy.autolayout.AutoRelativeLayout
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/currnet_month_parent_al"
+            android:layout_marginTop="10px"
             android:layout_width="match_parent"
-            android:layout_marginTop="5px"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/current__month_tv"
-                android:text="5月"
-                android:paddingRight="16px"
-                android:textSize="15px"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
 
-        </com.zhy.autolayout.AutoRelativeLayout>
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white"/>
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white"/>
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+        </com.zhy.autolayout.AutoLinearLayout>
         
         <com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard
         android:id="@+id/current_calendar_card"
@@ -150,22 +183,57 @@
                 android:text="@string/saturday"
                 android:textColor="@color/canlendar_text_color" />
         </com.zhy.autolayout.AutoLinearLayout>
-        <com.zhy.autolayout.AutoRelativeLayout
-            android:layout_marginTop="5px"
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:id="@+id/next_month_parent_al"
+            android:layout_marginTop="10px"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/next_month_tv"
-                android:textSize="15px"
-                android:layout_alignParentRight="true"
-                android:text="5月"
-                android:paddingRight="16px"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
 
-        </com.zhy.autolayout.AutoRelativeLayout>
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white"/>
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white"/>
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/dateStyle1"
+                android:layout_weight="1"
+                android:text="1月"
+                android:textColor="@color/white" />
+        </com.zhy.autolayout.AutoLinearLayout>
+
         <com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard
         android:id="@+id/next_calendar_card"
         android:layout_width="match_parent"

@@ -138,7 +138,8 @@ public class CustomerRelativeLayout extends AutoRelativeLayout {
                     int moveY = (int) event.getRawY();// 触摸点相对于屏幕的位置
                     int deltaY = tempY - moveY;
                     tempY = moveY;
-                    if (Math.abs(moveY - downY) > mTouchSlop
+                    isSilding = false;
+                    if (Math.abs(moveY - downY) > mTouchSlop && moveY <= mParentView.getY() + this.getHeight()
                             && Math.abs((int) event.getRawX() - downX) < mTouchSlop) {
                         isSilding = true;
                     }
