@@ -202,21 +202,27 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
                         if (indoor_record.size() == 0) {
                             launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
                         } else {
-
+                            Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
                         }
                         break;
                     case 3:
                         if (mountain_record.size() == 0) {
                             launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
                         } else {
-
+                            Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
                         }
                         break;
                     case 4:
                         if (ride_record.size() == 0) {
                             launchActivity(new Intent(getActivity(), ExerciseListNodataActivity.class));
                         } else {
-
+                            Intent intent = new Intent(getActivity(), ExerciseListActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
                         }
                         break;
                 }

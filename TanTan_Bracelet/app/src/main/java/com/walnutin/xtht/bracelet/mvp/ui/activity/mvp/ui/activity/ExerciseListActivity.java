@@ -89,6 +89,7 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
 
         setAdapter(exerciserDataList);
         init_refresh();
+
     }
 
     private void init_refresh() {
@@ -130,16 +131,16 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
             list.get(i).setDisplayMonthTitle(false);
         }
 
-        if(monthTotleMap == null) {
+        if (monthTotleMap == null) {
             monthTotleMap = new HashMap<>();
-        }else {
+        } else {
             monthTotleMap.clear();
         }
 
         LogUtils.debugInfo(list.toString());
 
         list.get(0).setDisplayMonthTitle(true);
-        monthTotleMap.put(list.get(9).getDate(), "0");
+        monthTotleMap.put(list.get(0).getDate(), "0");
         for (int i = 0; i < list.size() - 1; i++) {
             if (!equalsMonth(list.get(i).getDate(), list.get(i + 1).getDate())) {
                 list.get(i + 1).setDisplayMonthTitle(true);
@@ -190,7 +191,7 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
             public void onIemClick(int position) {
                 Intent intent = new Intent(ExerciseListActivity.this, ExerciseDetailActivity.class);
                 intent.putExtra("type", type);
-                intent.putExtra("id",exerciserDataList.get(position).getId());
+                intent.putExtra("id", exerciserDataList.get(position).getId());
                 startActivity(intent);
             }
 

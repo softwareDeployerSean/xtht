@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.jess.arms.utils.LogUtils;
 
@@ -298,6 +299,26 @@ public class DbAdapter {
         }
         return signRecord;
     }
+
+    /**
+     * 根据月份查询
+     *
+     * @param
+     * @return
+     */
+    public String bytimegetdata(String begintime, String endtime) {
+        double all_distance = 0;
+        String where = KEY_DATE + ">=? and" + KEY_DATE + "<=";
+        String[] selectionArgs = new String[]{begintime + "T00:00:00", endtime + "T23:59:59"};
+        Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
+                selectionArgs, null, null, null, null);
+        while (cursor.moveToNext()) {
+            String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
+            all_distance += Double.parseDouble(distance);
+        }
+        return all_distance + "";
+    }
+
 
     private String[] getColumns() {
         return new String[]{KEY_ROWID, KEY_DISTANCE, KEY_DURATION, KEY_SPEED,

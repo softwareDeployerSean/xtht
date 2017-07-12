@@ -57,7 +57,6 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof MyViewHolder) {
@@ -88,7 +87,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     holder.monthTitleTv.setText(months[month - 1] + "月");
 
-                    if(monthTotleMap != null && monthTotleMap.containsKey(data.getDate()) && Integer.parseInt(monthTotleMap.get(data.getDate())) > 0) {
+                    if (monthTotleMap != null && monthTotleMap.containsKey(data.getDate()) && Integer.parseInt(monthTotleMap.get(data.getDate())) > 0) {
                         holder.month_distance.setVisibility(View.VISIBLE);
                         holder.month_distance.setText(monthTotleMap.get(data.getDate()));
                     }
