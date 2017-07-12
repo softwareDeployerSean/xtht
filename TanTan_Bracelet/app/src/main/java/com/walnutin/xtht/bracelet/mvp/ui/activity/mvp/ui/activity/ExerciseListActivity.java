@@ -39,7 +39,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -82,6 +84,9 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
         exerciserDataList = mPresenter.loadExerciseList(type, nextPage);
         //sort(exerciserDataList);
         showMonthTitle(exerciserDataList);
+
+        //Query database throuh monthTotleMap.key then display the totle count on the UI
+
         setAdapter(exerciserDataList);
         init_refresh();
     }
@@ -114,6 +119,7 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
         materialRefreshLayout.finishRefreshLoadMore();
     }
 
+    private Map<String, String> monthTotleMap;
 
     private void showMonthTitle(List<PathRecord> list) {
         if (list == null || list.size() <= 0) {
@@ -124,15 +130,24 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
             list.get(i).setDisplayMonthTitle(false);
         }
 
+        if(monthTotleMap == null) {
+            monthTotleMap = new HashMap<>();
+        }else {
+            monthTotleMap.clear();
+        }
+
         LogUtils.debugInfo(list.toString());
 
         list.get(0).setDisplayMonthTitle(true);
+        monthTotleMap.put(list.get(9).getDate(), "0");
         for (int i = 0; i < list.size() - 1; i++) {
             if (!equalsMonth(list.get(i).getDate(), list.get(i + 1).getDate())) {
                 list.get(i + 1).setDisplayMonthTitle(true);
+                monthTotleMap.put(list.get(i + 1).getDate(), "0");
             }
         }
         LogUtils.debugInfo(list.toString());
+
     }
 
     private void sort(List<PathRecord> list) {
@@ -164,7 +179,7 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
 
     @Override
     public void setAdapter(List<PathRecord> list) {
-        adapter = new ExerciseListAdapter(this, list);
+        adapter = new ExerciseListAdapter(this, list, monthTotleMap);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         exerciseListRl.setLayoutManager(layoutManager);
         exerciseListRl.addItemDecoration(new RecycleViewDivider(

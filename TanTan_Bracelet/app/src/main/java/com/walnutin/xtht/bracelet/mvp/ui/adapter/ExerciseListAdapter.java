@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Leiht on 2017/7/5.
@@ -37,9 +38,12 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private List<PathRecord> exerciseList;
 
-    public ExerciseListAdapter(Context context, List<PathRecord> exerciseList) {
+    private Map<String, String> monthTotleMap;
+
+    public ExerciseListAdapter(Context context, List<PathRecord> exerciseList, Map<String, String> monthTotleMap) {
         this.mContext = context;
         this.exerciseList = exerciseList;
+        this.monthTotleMap = monthTotleMap;
     }
 
     @Override
@@ -68,7 +72,6 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.iexercise_list_distance_tv.setText(data.getDistance());
             if (data.isDisplayMonthTitle()) {
                 holder.monthTitleTv.setVisibility(View.VISIBLE);
-                holder.month_distance.setVisibility(View.VISIBLE);
                 try {
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
@@ -84,6 +87,12 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     String[] months = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 
                     holder.monthTitleTv.setText(months[month - 1] + "月");
+
+                    if(monthTotleMap != null && monthTotleMap.containsKey(data.getDate()) && Integer.parseInt(monthTotleMap.get(data.getDate())) > 0) {
+                        holder.month_distance.setVisibility(View.VISIBLE);
+                        holder.month_distance.setText(monthTotleMap.get(data.getDate()));
+                    }
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

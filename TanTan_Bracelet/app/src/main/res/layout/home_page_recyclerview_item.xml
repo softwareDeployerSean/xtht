@@ -84,7 +84,6 @@
         android:layout_alignParentRight="true"
         android:drawablePadding="10px"
         android:layout_marginTop="5px"
-        android:drawableRight="@mipmap/qj"
         android:gravity="center_vertical|right"
         android:text="0公里"
         android:textSize="16px" />

@@ -73,6 +73,7 @@
     <color name="gray_DDDDDD">#DDDDDD</color>
     <color name="yellow_EAA434">#EAA434</color>
     <color name="blue_7CBC30">#7CBC30</color>
-    <color name="black">#000000</color><!--黑色 -->
+    <color name="black">#000000</color>
+    <color name="blue_B9BD5">#5B9BD5</color>
 
 </resources>
