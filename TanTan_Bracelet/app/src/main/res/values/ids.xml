@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+    <!-- Messages IDs -->
+    <item name="login_login" type="id" />
+    <item name="login_register" type="id" />
+    <item name="login_showPwd" type="id" />
+    <item name="login_phonenum" type="id" />
+    <item name="regist_emailid" type="id" />
+    <item name="login_pwd" type="id" />
+    <item name="login_forgetPwd" type="id" />
+
+    <item name="register_back" type="id" />
+    <item name="register_register" type="id" />
+    <item name="registe_phonenum" type="id" />
+    <item name="register_pwd" type="id" />
+    <item name="register_inputvalidateCode" type="id" />
+    <item name="register_getValidataCode" type="id" />
+    <item name="registe_showPwd" type="id" />
+
+    <item name="personal_back" type="id" />
+    <item name="personal_name" type="id" />
+    <item name="personal_name_check" type="id" />
+    <item name="personal_sex" type="id" />
+    <item name="personal_sex_check" type="id" />
+    <item name="personal_birth" type="id" />
+    <item name="personal_birth_check" type="id" />
+    <item name="personal_hight" type="id" />
+    <item name="personal_hight_check" type="id" />
+    <item name="personal_weight" type="id" />
+    <item name="personal_weight_check" type="id" />
+    <item name="personal_finish" type="id" />
+    <item name="personal_directorEnter" type="id" />
+
+    <item name="validate_back" type="id" />
+    <item name="validate_phoneNum" type="id" />
+    <item name="validate_inputValidateCode" type="id" />
+    <item name="validate_getValidateCode" type="id" />
+    <item name="validate_firstPwd" type="id" />
+    <item name="validate_secondPwd" type="id" />
+    <item name="validate_ok" type="id" />
+
+    <item name="third_qq" type="id" />
+    <item name="third_wechat" type="id" />
+    <item name="third_weibo" type="id" />
+    <item name="mViewPager" type="id" />
+    <item name="rllable" type="id"></item>
+    <item name="content_frame" type="id">false</item>
+    <item name="ll_main_container" type="id">false</item>
+    <item name="tab_split_line" type="id">false</item>
+    <item name="tab_running" type="id">false</item>
+    <item name="rl_month_month" type="id">false</item>
+
+    <item name="lable_viewpage" type="id" />
+    <item type="id" name="lable_dataTable"/>
+    <item name="label_group" type="id" />
+    <item name="label_activity" type="id"></item>
+    <item name="label_nulls" type="id"></item>
+    <item name="label_me" type="id"></item>
+
+    <item name="viewpageid" type="id" />
+    <item name="dataTableId" type="id" />
+    <item name="groupid" type="id" />
+    <item name="runningid" type="id"></item>
+    <item name="activityid" type="id"></item>
+    <item name="meid" type="id"></item>
+    <item name="topTitle" type="id"></item>
+
+    <!-- 手机设置页面 -->
+    <item name="setting_return" type="id">false</item>
+    <item name="setting_title" type="id">false</item>
+    <item name="setting_data" type="id">false</item>
+    <item name="setting_acitonbar" type="id">false</item>
+    <item name="setting_goal" type="id"></item>
+    <item name="setting_information" type="id"></item>
+    <item name="setting_aim" type="id"></item>
+    <item name="setting_bind" type="id"></item>
+    <item name="setting_bindinformation" type="id">false</item>
+    <item name="setting_autopause" type="id"></item>
+    <item name="setting_voice" type="id"></item>
+    <item name="scrollView" type="id"></item>
+    <item name="setting_nightmode" type="id">false</item>
+    <item name="setting_stopswitch" type="id">false</item>
+    <item name="setting_voicewitch" type="id">false</item>
+    <item name="setting_purviewsetting" type="id">false</item>
+    <item name="setting_userfeedback" type="id">false</item>
+    <item name="setting_aboutwe" type="id">false</item>
+    <item name="running_txt_commomMode" type="id"></item>
+    <item name="running_txt_speedMode" type="id"></item>
+    <item name="running_txt_runMode" type="id"></item>
+
+
+
+
+
+    <item name="setting_item_line" type="id" />
+    <item name="centerTitle" type="id" />
+    <item name="left_img" type="id" />
+    <item name="labelText" type="id" />
+
+
+</resources>

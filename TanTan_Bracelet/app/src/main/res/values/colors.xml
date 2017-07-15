@@ -9,6 +9,7 @@
     <color name="grey_D8D8D8">#D8D8D8</color>
     <color name="grey_BBBBBB">#BBBBBB</color>
     <color name="grey_eeeeee">#eeeeee</color>
+    <color name="bgColor">#efefef</color>
 
     <!--  线  -->
     <color name="line">#EDECEB</color>
@@ -75,5 +76,13 @@
     <color name="blue_7CBC30">#7CBC30</color>
     <color name="black">#000000</color>
     <color name="blue_B9BD5">#5B9BD5</color>
+    <!--睡眠图表-->
+
+
+    <color name="fontColor">#434343</color>
+    <color name="grey_transparent">#ffe5e5e5</color>
+    <color name="lineColor">#e5e5e5</color>
+    <color name="sleep_deep">#6A289A</color>
+    <color name="sleep_normal">#7C2FC3</color>
 
 </resources>

@@ -308,7 +308,7 @@ public class DbAdapter {
      */
     public String bytimegetdata(String begintime, String endtime) {
         double all_distance = 0;
-        String where = KEY_DATE + ">=? and" + KEY_DATE + "<=";
+        String where = KEY_DATE + ">=? and " + KEY_DATE + "<=";
         String[] selectionArgs = new String[]{begintime + "T00:00:00", endtime + "T23:59:59"};
         Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
                 selectionArgs, null, null, null, null);

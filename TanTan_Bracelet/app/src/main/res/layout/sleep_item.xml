@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="420px"
+    android:orientation="vertical"
+    android:id="@+id/linear_sleep"
+    >
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.SleepLinearlayout
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        ></com.walnutin.xtht.bracelet.mvp.ui.widget.SleepLinearlayout>
+
+    <TextView
+        android:text="03"
+        android:textColor="@color/black_444444"
+        android:textSize="18sp"
+        android:id="@+id/tv_hour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

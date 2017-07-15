@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:watchSettingItem="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor">
+
+    <com.walnutin.xtht.bracelet.ProductList.fragment.TopTitleLableView
+        android:id="@id/topTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:visibility="visible"
+        app:background="@color/green"
+        app:lableText="@string/equipment">
+
+    </com.walnutin.xtht.bracelet.ProductList.fragment.TopTitleLableView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topTitle"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+
+                android:id="@+id/rlStartSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/ivCircle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/tyuan">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/dashouhuan" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llSearch"
+                    android:layout_below="@id/ivCircle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="100dp"
+                    android:background="@drawable/btn_green_selector"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/sousuo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:clickable="false"
+                        android:text="搜索设备"
+                        android:textColor="@color/bgColor_actionsheet_cancel_nor"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llLinkedView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:clipToPadding="true"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+                    <com.zhy.autolayout.AutoRelativeLayout
+                        android:id="@+id/ep_connected_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/ep_connected_titlebar"
+                        android:layout_gravity="center"
+                        android:background="@drawable/menu_item_selector">
+
+                        <ImageView
+                            android:id="@+id/ep_llist_item_imageview1"
+                            android:layout_width="70px"
+                            android:layout_height="70px"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginBottom="30px"
+                            android:layout_marginLeft="25px"
+                            android:layout_marginRight="6px"
+                            android:layout_marginTop="30px"
+                            android:layout_weight="0.00"
+                            android:src="@mipmap/shouhuan" />
+
+
+                        <com.zhy.autolayout.AutoRelativeLayout
+                            android:id="@+id/ep_list_item_midel_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/ep_llist_item_imageview1"
+                            android:layout_toEndOf="@+id/ep_llist_item_imageview1"
+                            android:layout_toRightOf="@+id/ep_llist_item_imageview1"
+                            android:gravity="left|center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/ep_connected_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="18px"
+                                android:layout_marginTop="2px"
+                                android:gravity="bottom"
+                                android:text="XX手环"
+                                android:textSize="@dimen/dimen_12px" />
+
+                            <TextView
+                                android:id="@+id/ep_connected_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="18px"
+                                android:layout_below="@id/ep_connected_name"
+                                android:layout_marginTop="6px"
+                                android:text="未连接"
+                                android:textSize="@dimen/dimen_12px" />
+
+                            <com.zhy.autolayout.AutoLinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="18px"
+                                android:layout_below="@id/ep_connected_status"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/ep_connected_dianliang"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="2px"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/dimen_12px" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:src="@mipmap/dianliang" />
+                            </com.zhy.autolayout.AutoLinearLayout>
+                        </com.zhy.autolayout.AutoRelativeLayout>
+
+
+                        <ImageView
+                            android:id="@+id/ep_connected_imageview2"
+                            android:layout_width="20px"
+                            android:layout_height="20px"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="45px"
+                            android:layout_marginRight="20px"
+                            android:layout_marginTop="45px"
+                            android:layout_weight="0.00"
+                            android:background="@android:color/transparent"
+                            android:src="@mipmap/qj" />
+                    </com.zhy.autolayout.AutoRelativeLayout>
+
+                    <View
+                        android:id="@+id/fengexian"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:layout_below="@id/ep_connected_rl"
+                        android:background="?android:attr/listDivider" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/ep_connected_menue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fengexian"
+                        android:layout_marginTop="10px" />
+
+
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

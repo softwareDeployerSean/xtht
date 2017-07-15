@@ -46,6 +46,11 @@ import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
 import com.veepoo.protocol.listener.base.IABluetoothStateListener;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
+import com.walnutin.xtht.bracelet.ProductList.DeviceSharedPf;
+import com.walnutin.xtht.bracelet.ProductList.GlobalValue;
+import com.walnutin.xtht.bracelet.ProductList.ModelConfig;
+import com.walnutin.xtht.bracelet.ProductList.fragment.SettingFragment;
+import com.walnutin.xtht.bracelet.ProductList.ycy.LinkService;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
@@ -65,6 +70,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.MyViewPager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
+import com.yc.pedometer.sdk.BLEServiceOperate;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 import org.simple.eventbus.EventBus;
@@ -143,10 +149,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
         LogUtils.debugInfo("-----------oncreate------------------");
         mVpoperateManager = VPOperateManager.getMangerInstance(MyApplication.getAppContext());
+        BLEServiceOperate.getInstance(getApplicationContext());   //优创意初始化
+
         checkBLE();
 
-        Intent serviceIntent = new Intent(this, EpConnecteService.class);
-        startService(serviceIntent);
+//        Intent serviceIntent = new Intent(this, EpConnecteService.class);
+//        startService(serviceIntent);
 
         Intent intent = getIntent();
 
@@ -183,7 +191,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         DataHelper.setStringSF(MyApplication.getAppContext(), "isload", "true");
         in_toolbar.setVisibility(View.GONE);
 
-        if(selected == 2) {
+        if (selected == 2) {
             toolbarTitle.setText(getString(R.string.ep_setup));
             in_toolbar.setVisibility(View.VISIBLE);
             toolbarTitle.setVisibility(View.VISIBLE);
@@ -303,14 +311,17 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         equipmentFragment = EquipmentFragment.newInstance();
         fragments.add(mainfragment);
         fragments.add(exerciseFragment);
-        if (thirdItem == 0) {
-            fragments.add(equipmentFragment);
-        } else {
-            fragments.add(epConnectedFragment);
-        }
+        fragments.add(new SettingFragment());
+//        if (thirdItem == 0) {
+//            fragments.add(equipmentFragment);
+//        } else {
+//            fragments.add(epConnectedFragment);
+//        }
 
         fragments.add(mineFragment);
         this.viewpager.setOffscreenPageLimit(0);
+
+
         MyFragmentViewPagerAdapter adapter = new MyFragmentViewPagerAdapter(this.getSupportFragmentManager(), viewpager, fragments);
 
         viewpager.setCurrentItem(selected, false);
@@ -366,11 +377,11 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     };
 
     public void connecteSuccess() {
-        mHandler.sendEmptyMessage(0);
+        //    mHandler.sendEmptyMessage(0);
     }
 
     public void disConnecte() {
-        mHandler.sendEmptyMessage(1);
+        //    mHandler.sendEmptyMessage(1);
     }
 
     private void connectDevice() {
@@ -429,7 +440,20 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
             startActivityForResult(enableBtIntent, REQUEST_CODE);
             return false;
         } else {
+            String factoryName = DeviceSharedPf.getInstance(getApplicationContext()).getString("device_factory");
+            System.out.println("checkBLE: "+factoryName);
+            if (factoryName != null && !factoryName.equals("null")) {
+            //    ModelConfig.getInstance().initBleOperateByUUID(getApplicationContext(), factoryName);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent serviceIntent = new Intent(getApplicationContext(), LinkService.class);
+                        startService(serviceIntent);
+                    }
+                }, 2000);
+            }
             return true;
+
         }
     }
 
@@ -515,17 +539,17 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 in_toolbar.setVisibility(View.GONE);
                 break;
             case R.id.radio_equipment:
-                in_toolbar.setVisibility(View.VISIBLE);
-                String connect_state = DataHelper.getStringSF(this, "connect_state");
-                LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
-                LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
-                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
-                    fragments.set(2, epConnectedFragment);
-//                    adapter.updateList(fragments);
-                }
-
+//                in_toolbar.setVisibility(View.VISIBLE);
+//                String connect_state = DataHelper.getStringSF(this, "connect_state");
+//                LogUtils.debugInfo(TAG + ", table change connect_state=" + connect_state);
+//                LogUtils.debugInfo(TAG + ", (fragments.get(2) instanceof EpConnectedFragment)=" + (fragments.get(2) instanceof EpConnectedFragment));
+//                if (connect_state.equals("3") && !(fragments.get(2) instanceof EpConnectedFragment)) {
+//                    fragments.set(2, epConnectedFragment);
+////                    adapter.updateList(fragments);
+//                }
+                in_toolbar.setVisibility(View.GONE);
                 viewpager.setCurrentItem(TAB_EQUIPMENT, false);
-                toolbarTitle.setText(getString(R.string.ep_setup));
+                //           toolbarTitle.setText(getString(R.string.ep_setup));
                 break;
             case R.id.radio_mine:
                 in_toolbar.setVisibility(View.VISIBLE);
@@ -586,7 +610,26 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            //    finish();
+            return;
+        } else if (requestCode == REQUEST_CODE
+                && resultCode == RESULT_OK) {
+            String factoryName = DeviceSharedPf.getInstance(getApplicationContext()).getString("device_factory");
 
+            if (factoryName != null) {
+                ModelConfig.getInstance().initBleOperateByUUID(getApplicationContext(), factoryName);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       Intent serviceIntent = new Intent(getApplicationContext(), LinkService.class);
+                        startService(serviceIntent);
+                    }
+                }, 1500);
+            }
+            Log.d(TAG, "onActivityResult: ");
+        }
         //将值传入DemoFragment
         this.getSupportFragmentManager().findFragmentByTag(MainFragment.class.getSimpleName()).onActivityResult(requestCode, resultCode, data);
     }

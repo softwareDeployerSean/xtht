@@ -125,5 +125,20 @@
     <string name="friday">五</string>
     <string name="saturday">六</string>
 
-
+    <string name="isBluetoothSupport">设备不支持Bluetooth4.0</string>
+    <!--loadDataDialog-->
+    <string name="logining">正在登录...</string>
+    <string name="initing">保存数据中...</string>
+    <string name="uping">数据上传中...</string>
+    <string name="cleaning">缓存清理中...</string>
+    <string name="authoring">授权中...</string>
+    <string name="dealing">处理中...</string>
+    <string name="linking">连接中...</string>
+    <string name="linkConnect">连接成功</string>
+    <string name="linkFailed">连接失败</string>
+    <string name="braceletTimeOut">连接超时</string>
+    <string name="braceletbreak">连接断开</string>
+    <string name="syncTimeOut">同步超时...</string>
+    <string name="syncFailed">同步失败...</string>
+    <string name="syncFinish">同步完成...</string>
 </resources>

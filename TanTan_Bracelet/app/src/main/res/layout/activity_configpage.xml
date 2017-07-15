@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:watchSettingItem="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor">
+
+    <com.walnutin.xtht.bracelet.ProductList.fragment.TopTitleLableView
+        android:id="@id/topTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:background="@color/green"
+        app:lableText="@string/ep_basic_settings">
+
+    </com.walnutin.xtht.bracelet.ProductList.fragment.TopTitleLableView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topTitle"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/llLinkedView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.walnutin.xtht.bracelet.ProductList.LineItemView
+                android:id="@+id/findBraceletItemView"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                watchSettingItem:centerTitle="查找手环">
+
+            </com.walnutin.xtht.bracelet.ProductList.LineItemView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/lineColor"
+                android:visibility="visible"></View>
+
+
+            <TextView
+                android:id="@+id/unBind"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="解绑设备"
+                android:textColor="@color/redFF1212" />
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

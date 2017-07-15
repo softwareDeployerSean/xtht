@@ -13,22 +13,34 @@ import com.mob.MobApplication;
  * Created by suns on 2017-06-18.
  */
 
-public class MyApplication  extends MobApplication implements App {
+public class MyApplication extends MobApplication implements App {
 
     private AppDelegate mAppDelegate;
 
     public static MyApplication bizApp;//单列模式
 
-
-
+    public static String account = "vistor";
+    public static boolean isDevConnected;
+    public static boolean isSyncing;
+    public static String deviceAddr;
+    public static String deviceName;
+    public static String globalFactoryName;
+    public static String county = "";
+    public static String tmpDeviceAddr = null;
+    public static String tmpDeviceName = null;
+    public static String tmpFactoryName = null;
+    public static boolean isManualOff = false;
+    static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         this.mAppDelegate = new AppDelegate(this);
         this.mAppDelegate.onCreate();
         bizApp = this;
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -61,6 +73,9 @@ public class MyApplication  extends MobApplication implements App {
         return mAppDelegate.getAppComponent();
     }
 
+    public static Context getContext() {
+        return context;
+    }
 
 
 }

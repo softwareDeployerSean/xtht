@@ -2,8 +2,8 @@
 <com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include
@@ -11,8 +11,16 @@
         layout="@layout/include_title" />
 
     <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
-        android:layout_marginTop="30px"
         android:layout_width="match_parent"
-        android:layout_height="300px" />
+        android:layout_height="300px"
+        android:layout_marginTop="30px" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"
+        android:id="@+id/recycle"
+        android:layout_width="match_parent"
+        android:layout_height="250px"></android.support.v7.widget.RecyclerView>
+
 
 </com.zhy.autolayout.AutoLinearLayout>

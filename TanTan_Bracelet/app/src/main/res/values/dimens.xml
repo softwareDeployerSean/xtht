@@ -64,4 +64,8 @@
     <!--圆角-->
     <dimen name="radius_alertview">15px</dimen>
 
+<!-- 标题栏颜色-->
+    <dimen name="top_title_font">20sp</dimen>
+    <dimen name="lineHeight">1dp</dimen>
+
 </resources>

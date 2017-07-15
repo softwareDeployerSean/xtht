@@ -7,5 +7,13 @@
         <attr name="childSize"/>
     </declare-styleable>
 
-
+    <declare-styleable name="UIActivityIndicatorView">
+        <attr name="AIV_startColor" format="color" />
+        <attr name="AIV_startAngle" format="integer" />
+        <attr name="AIV_strokeWidth" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="watchSettingItem">
+        <attr name="leftImg" format="reference" />
+        <attr name="centerTitle" format="string" />
+    </declare-styleable>
 </resources>

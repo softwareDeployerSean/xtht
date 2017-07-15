@@ -115,4 +115,26 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">16px</item>
     </style>
+
+    <declare-styleable name="topTitle">
+        <attr name="back" format="string" />
+        <attr name="lableText" format="string" />
+        <attr name="background" format="reference" />
+        <attr name="lableColor" format="color" />
+    </declare-styleable>
+
+    <style name="myDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+    </style>
 </resources>
