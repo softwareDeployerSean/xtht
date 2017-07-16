@@ -308,13 +308,17 @@ public class DbAdapter {
      */
     public String bytimegetdata(String begintime, String endtime) {
         double all_distance = 0;
-        String where = KEY_DATE + ">=? and " + KEY_DATE + "<=";
+
+        String where = KEY_DATE + " Between ? and ?";
+
         String[] selectionArgs = new String[]{begintime + "T00:00:00", endtime + "T23:59:59"};
         Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
                 selectionArgs, null, null, null, null);
-        while (cursor.moveToNext()) {
-            String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
-            all_distance += Double.parseDouble(distance);
+        if(cursor != null) {
+            while (cursor.moveToNext()) {
+                String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
+                all_distance += Double.parseDouble(distance);
+            }
         }
         return all_distance + "";
     }

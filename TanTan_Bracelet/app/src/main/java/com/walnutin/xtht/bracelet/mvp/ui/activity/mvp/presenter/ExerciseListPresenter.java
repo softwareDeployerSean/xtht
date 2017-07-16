@@ -56,6 +56,14 @@ public class ExerciseListPresenter extends BasePresenter<ExerciseListContract.Mo
         return list;
     }
 
+    public String getAllByMonth(String firstDayOfMonth, String lastDayOfMonth) {
+        DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
+        dbhelper.open();
+        String total = dbhelper.bytimegetdata(firstDayOfMonth, lastDayOfMonth);
+
+        return total;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

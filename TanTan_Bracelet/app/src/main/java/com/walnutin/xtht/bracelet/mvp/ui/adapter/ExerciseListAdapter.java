@@ -87,11 +87,10 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     holder.monthTitleTv.setText(months[month - 1] + "月");
 
-                    if (monthTotleMap != null && monthTotleMap.containsKey(data.getDate()) && Integer.parseInt(monthTotleMap.get(data.getDate())) > 0) {
+                    if (monthTotleMap != null && monthTotleMap.containsKey(data.getDate())) {
                         holder.month_distance.setVisibility(View.VISIBLE);
-                        holder.month_distance.setText(monthTotleMap.get(data.getDate()));
+                        holder.month_distance.setText(monthTotleMap.get(data.getDate()) + "公里");
                     }
-
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

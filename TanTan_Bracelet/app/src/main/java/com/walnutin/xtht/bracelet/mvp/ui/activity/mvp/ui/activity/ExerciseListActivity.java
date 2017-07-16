@@ -1,5 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -86,7 +87,33 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
         showMonthTitle(exerciserDataList);
 
         //Query database throuh monthTotleMap.key then display the totle count on the UI
+        for(String key : monthTotleMap.keySet()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar1 = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                Date date = sdf.parse(key);
 
+                calendar1.setTime(date);
+
+                calendar1.set(Calendar.DAY_OF_MONTH, 1);
+
+                String firstDayOfMonth = sdf.format(calendar1.getTime());
+
+                calendar2.set(Calendar.DAY_OF_MONTH, calendar2.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+                String lastDayOfMonth = sdf.format(calendar2.getTime());
+
+                String total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth);
+
+                monthTotleMap.put(key, total);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
         setAdapter(exerciserDataList);
         init_refresh();
 

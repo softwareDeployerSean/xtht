@@ -35,6 +35,7 @@
     <string name="ep_msg_push">消息推送</string>
     <string name="ep_known_call">来电识别</string>
     <string name="ep_clock_list">日常闹钟</string>
+    <string name="clock">闹钟</string>
     <string name="ep_question_handler">问题诊断</string>
     <string name="ep_hard_update">固件更新</string>
     <string name="ep_basic_settings">基础设置</string>
@@ -141,4 +142,20 @@
     <string name="syncTimeOut">同步超时...</string>
     <string name="syncFailed">同步失败...</string>
     <string name="syncFinish">同步完成...</string>
+
+    <string name="day_radio_button">日</string>
+    <string name="week_radio_button">周</string>
+    <string name="month_radio_button">月</string>
+    <string name="sleep_data">睡眠数据</string>
+    <string name="sleep">睡眠</string>
+    <string name="sports">运动</string>
+    <string name="sports_data">运动数据</string>
+    <string name="sleep_jiuqin">就寝</string>
+    <string name="sleep_getup">起床</string>
+    <string name="moring">上午</string>
+    <string name="afternoon">下午</string>
+    <string name="plan_sleep_time">计划睡眠</string>
+    <string name="actual_sleep_time">实际睡眠</string>
+    <string name="sleep_analysis">睡眠分析</string>
+
 </resources>

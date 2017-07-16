@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
-import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DataShowActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomePageAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomLinearLayoutManager;
@@ -84,6 +83,14 @@ public class HomePageItem {
         });
 
         sleepIconIv = (ImageView) view.findViewById(R.id.iv_data);
+
+        sleepIconIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, DataShowActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
 
         stepArcView = (StepArcView) view.findViewById(R.id.arc_view);
 

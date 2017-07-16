@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jess.arms.widget.autolayout.AutoScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhy.autolayout.AutoLinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30px"
+        android:orientation="vertical">
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30px"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="@string/clock"
+                android:textSize="15px"
+                android:textStyle="bold" />
+
+            <com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView
+                android:id="@+id/day_sleep_sw"
+                android:layout_width="50px"
+                android:layout_height="30px"
+                android:layout_alignParentRight="true" />
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="30px"
+            android:layout_height="wrap_content">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/shuim"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="3px"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sleep_jiuqin"
+                    android:textColor="@color/black_444444"
+                    android:textSize="18px" />
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/qcnz"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="3px"
+                    android:textColor="@color/black_444444"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sleep_getup"
+                    android:textSize="18px" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_height="wrap_content">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18px"
+                    android:textColor="@color/black_444444"
+                    android:text="@string/afternoon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:textColor="@color/black_444444"
+                    android:layout_height="wrap_content"
+                    android:text="11:30"
+                    android:textSize="18px" />
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moring"
+                    android:textColor="@color/black_444444"
+                    android:textSize="18px"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5px"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_444444"
+                    android:text="11:30"
+                    android:textSize="18px" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:src="@drawable/other_code"
+            android:layout_height="wrap_content" />
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="20px"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/jism"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/plan_sleep_time"
+                    android:textSize="12px"
+                    android:textColor="@color/black_444444"
+                    android:layout_marginLeft="5px"/>
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/jism"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/actual_sleep_time"
+                    android:textSize="12px"
+                    android:textColor="@color/black_444444"
+                    android:layout_marginLeft="5px"/>
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px">
+
+            <TextView
+                android:id="@+id/plan_sleep_time"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black_444444"
+                android:textSize="18px"
+                android:text="8小时30分"/>
+
+            <TextView
+                android:id="@+id/actual_sleep_time"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black_444444"
+                android:textSize="18px"
+                android:text="8小时30分"/>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25px"
+            android:layout_marginRight="25px"
+            android:layout_marginTop="25px"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:layout_marginTop="8px"
+                android:layout_weight="1"
+                android:background="@color/black_979797" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sleep_analysis"
+                android:textColor="@color/black_444444"
+                android:textSize="15px" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:layout_marginTop="8px"
+                android:layout_weight="1"
+                android:background="@color/black_979797" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+</com.jess.arms.widget.autolayout.AutoScrollView>

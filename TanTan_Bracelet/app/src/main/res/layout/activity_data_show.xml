@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/clock_list_titlebar"
+        layout="@layout/include_title" />
+
+    <RadioGroup
+        android:id="@+id/select_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="45px"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/day_radiobutton"
+            android:checked="true"
+            android:text="@string/day_radio_button"
+            android:textColor="@color/black_444444"
+            android:button="@null"
+            android:gravity="bottom|center_horizontal"
+            android:layout_width="wrap_content"
+            android:textSize="18dp"
+            android:drawablePadding="2px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <RadioButton
+            android:id="@+id/week_radiobutton"
+            android:text="@string/week_radio_button"
+            android:textSize="18dp"
+            android:button="@null"
+            android:gravity="bottom|center_horizontal"
+            android:textColor="@color/black_444444"
+            android:drawablePadding="2px"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <RadioButton
+            android:id="@+id/month_radiobutton"
+            android:text="@string/month_radio_button"
+            android:textSize="18dp"
+            android:textColor="@color/black_444444"
+            android:button="@null"
+            android:drawablePadding="2px"
+            android:gravity="bottom|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </RadioGroup>
+
+    <android.support.v4.view.ViewPager
+        android:layout_marginTop="20px"
+        android:id="@+id/content_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+
+</com.zhy.autolayout.AutoLinearLayout>

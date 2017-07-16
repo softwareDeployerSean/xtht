@@ -84,5 +84,7 @@
     <color name="lineColor">#e5e5e5</color>
     <color name="sleep_deep">#6A289A</color>
     <color name="sleep_normal">#7C2FC3</color>
+    <color name="green_7BBC2E">#7BBC2E</color>
+    <color name="black_979797">#979797</color>
 
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Button正常状态下的背景 -->
+    <item android:drawable="@drawable/button_line" android:state_checked="true" />
+    <!-- Button按下时的背景 -->
+    <item android:drawable="@color/transtwhite" android:state_checked="false" />
+
+</selector>
