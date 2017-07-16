@@ -157,5 +157,12 @@
     <string name="plan_sleep_time">计划睡眠</string>
     <string name="actual_sleep_time">实际睡眠</string>
     <string name="sleep_analysis">睡眠分析</string>
+    <string name="sleep_deep">深睡</string>
+    <string name="sleep_simple">浅睡</string>
+    <string name="sleep_aweak">清醒</string>
+    <string name="sleep_all_time">睡眠总时长</string>
+    <string name="sleep_average_day">每日平均睡眠时间</string>
+    <string name="sleep_score_week">睡眠评分(周)</string>
+    <string name="sleep_score_month">睡眠评分(月)</string>
 
 </resources>

@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="30px"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <com.zhy.autolayout.AutoRelativeLayout
@@ -229,6 +230,7 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
+                android:layout_marginRight="4px"
                 android:layout_marginTop="8px"
                 android:layout_weight="1"
                 android:background="@color/black_979797" />
@@ -238,14 +240,270 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sleep_analysis"
                 android:textColor="@color/black_444444"
-                android:textSize="15px" />
+                android:textSize="18px" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
+                android:layout_marginLeft="4px"
                 android:layout_marginTop="8px"
                 android:layout_weight="1"
                 android:background="@color/black_979797" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="15px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12px"
+                android:textColor="@color/black_444444"
+                android:layout_alignParentLeft="true"
+                android:layout_height="wrap_content"
+                android:text="23:30"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12px"
+                android:textColor="@color/black_444444"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"
+                android:text="8:30"/>
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/other_code_tao"
+            android:layout_height="wrap_content" />
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/gray_EEEEEE"
+            android:orientation="vertical"
+            android:layout_height="300px">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25px"
+                android:layout_marginLeft="15px"
+                android:layout_marginRight="15px"
+                android:layout_marginTop="40px">
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/shenshui"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/sleep_deep"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                    <TextView
+                        android:id="@+id/sleep_deep_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="50%"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/qianshui"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/sleep_simple"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                    <TextView
+                        android:id="@+id/sleep_simple_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="35%"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/qinxing"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/sleep_deep"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                    <TextView
+                        android:id="@+id/sleep_aweak_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="15%"
+                        android:textSize="12px"
+                        android:layout_marginLeft="5px"
+                        android:textColor="@color/black_444444"/>
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15px"
+                android:layout_marginRight="15px"
+                android:layout_marginTop="5px"
+                android:layout_height="18px">
+
+                <TextView
+                    android:id="@+id/sleep_deep_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="12px"
+                    android:text="3h30min"
+                    android:textColor="@color/black_444444"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/sleep_simple_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="12px"
+                    android:gravity="center"
+                    android:paddingLeft="5px"
+                    android:text="2h30min"
+                    android:textColor="@color/black_444444"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/sleep_aweak_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="12px"
+                    android:gravity="right"
+                    android:paddingRight="10px"
+                    android:paddingLeft="5px"
+                    android:text="30min"
+                    android:textColor="@color/black_444444"
+                    android:layout_height="match_parent" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:layout_marginTop="30px"
+                android:layout_marginLeft="15px"
+                android:layout_marginRight="15px"
+                android:orientation="vertical"
+                android:background="@color/white">
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45px"
+                    android:layout_marginTop="20px">
+
+                    <com.zhy.autolayout.AutoRelativeLayout
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45px">
+
+                        <TextView
+                            android:id="@+id/sleep_all_time_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="6.7"
+                            android:textSize="36px"
+                            android:textColor="@color/black_444444"/>
+
+                        <TextView
+                            android:layout_toRightOf="@id/sleep_all_time_tv"
+                            android:paddingTop="20px"
+                            android:layout_marginLeft="5px"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12px"
+                            android:text="h"
+                            />
+
+                    </com.zhy.autolayout.AutoRelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="45px"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="优秀"
+                        android:textSize="36px"
+                        android:textColor="@color/black_444444"/>
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20px">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="12px"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/black_444444"
+                        android:text="@string/sleep_all_time"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="12px"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/black_444444"
+                        android:text="@string/sleep_all_time"/>
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+            </com.zhy.autolayout.AutoLinearLayout>
 
         </com.zhy.autolayout.AutoLinearLayout>
 
