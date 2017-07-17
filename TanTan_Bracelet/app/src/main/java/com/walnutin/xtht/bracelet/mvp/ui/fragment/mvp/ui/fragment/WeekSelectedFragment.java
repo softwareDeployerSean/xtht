@@ -1,8 +1,10 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,19 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerWeekSelecte
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.WeekSelectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.WeekSelectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.WeekSelectedPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
+
+import java.util.Random;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> implements WeekSelectedContract.View {
 
+    @BindView(R.id.week_hv)
+    HistogramView weekHv;
 
     public static WeekSelectedFragment newInstance() {
         WeekSelectedFragment fragment = new WeekSelectedFragment();
@@ -45,6 +54,21 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
+
+        int[] datas = new int[7];
+        for (int i = 0; i < datas.length; i++) {
+            int r = new Random().nextInt(100);
+            datas[i] = r;
+        }
+
+        String[] xLables = new String[]{"一", "二", "三", "四", "五", "六", "日"};
+
+        weekHv.setxLables(xLables);
+        weekHv.setIntervalPercent(0.2f);
+        weekHv.setDatas(datas);
+        Log.d("TAG", "Color.RED=" + Color.RED);
+        weekHv.setStartColor(Color.parseColor("#6B289B"));
+        weekHv.setEndColor(Color.parseColor("#D0B3EB"));
 
     }
 

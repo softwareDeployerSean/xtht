@@ -13,11 +13,12 @@
         android:text="05月09日~06月09日" />
 
 
-    <ImageView
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView
+        android:id="@+id/month_hv"
+        android:layout_marginBottom="10px"
+        android:layout_marginTop="30px"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:src="@drawable/temp_week" />
+        android:layout_height="250px" />
 
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"

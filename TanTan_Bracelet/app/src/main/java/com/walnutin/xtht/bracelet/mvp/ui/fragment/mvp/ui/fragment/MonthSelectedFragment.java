@@ -1,8 +1,10 @@
 package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,19 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMonthSelect
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MonthSelectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MonthSelectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MonthSelectedPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
+
+import java.util.Calendar;
+import java.util.Random;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> implements MonthSelectedContract.View {
-
+    @BindView(R.id.month_hv)
+    HistogramView monthHv;
 
     public static MonthSelectedFragment newInstance() {
         MonthSelectedFragment fragment = new MonthSelectedFragment();
@@ -46,6 +55,28 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
     @Override
     public void initData(Bundle savedInstanceState) {
 
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+
+        String[] xLables = new String[maxDate];
+        for(int i = 0; i < maxDate; i++) {
+            xLables[i] = String.valueOf(i + 1);
+        }
+
+        int[] datas = new int[xLables.length];
+        for (int i = 0; i < datas.length; i++) {
+            int r = new Random().nextInt(100);
+            datas[i] = r;
+        }
+
+        monthHv.setxLables(xLables);
+        monthHv.setDatas(datas);
+        monthHv.setIntervalPercent(0.7f);
+        Log.d("TAG", "Color.RED=" + Color.RED);
+        monthHv.setStartColor(Color.parseColor("#6B289B"));
+        monthHv.setEndColor(Color.parseColor("#D0B3EB"));
     }
 
     /**
