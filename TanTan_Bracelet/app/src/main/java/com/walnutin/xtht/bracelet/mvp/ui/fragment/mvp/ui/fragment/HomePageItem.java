@@ -208,7 +208,7 @@ public class HomePageItem {
             homePagerAdapter.notifyDataSetChanged();
         }
 
-        homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
+      /*  homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
             @Override
             public void onImteClick(int type) {
                 if (type == 1) {
@@ -216,7 +216,7 @@ public class HomePageItem {
                     mContext.startActivity(intent);
                 }
             }
-        });
+        });*/
 
 //        healthRv.setNestedScrollingEnabled(false);
 

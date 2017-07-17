@@ -21,11 +21,13 @@ import com.walnutin.xtht.bracelet.ProductList.HardSdk;
 import com.walnutin.xtht.bracelet.ProductList.Jinterface.IHardSdkCallback;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.Utils;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
 import com.walnutin.xtht.bracelet.ProductList.eventbus.SyncStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.List;
 
@@ -215,22 +217,22 @@ public class LinkService extends Service implements IHardSdkCallback {
         }
     };
 
-//
-//    @Subscribe
-//    public void syncBraceletDev(StepChangeNotify.SyncData sync) {
-//        //   Utils.showToast(getApplicationContext(), getString(R.string.startSync));
-//        EventBus.getDefault().post(new SyncStatus(true));  // 同步开始
-//        MyApplication.isSyncing = true;
-//        stepSyncStarted = false;
-//        checkSyncStatus.cancel();
-//        checkSyncStatus.start();
-//        DeviceSharedPf.getInstance(getApplicationContext()).setString("lastsyncSleepTime" + MyApplication.deviceAddr,
-//                "2010"); // 设置同步日期
-//        findHandler.removeCallbacks(null);
-//        lastSyncTime = "2010"; // 设置同步日期
-//        HardSdk.getInstance().syncAllStepData();
-//
-//    }
+
+    @Subscriber
+    public void syncBraceletDev(StepChangeNotify.SyncData sync) {
+        //   Utils.showToast(getApplicationContext(), getString(R.string.startSync));
+        EventBus.getDefault().post(new SyncStatus(true));  // 同步开始
+        MyApplication.isSyncing = true;
+        stepSyncStarted = false;
+        checkSyncStatus.cancel();
+        checkSyncStatus.start();
+        DeviceSharedPf.getInstance(getApplicationContext()).setString("lastsyncSleepTime" + MyApplication.deviceAddr,
+                "2010"); // 设置同步日期
+        findHandler.removeCallbacks(null);
+        lastSyncTime = "2010"; // 设置同步日期
+        HardSdk.getInstance().syncAllStepData();
+
+    }
 
 
     Runnable findBattery = new Runnable() {

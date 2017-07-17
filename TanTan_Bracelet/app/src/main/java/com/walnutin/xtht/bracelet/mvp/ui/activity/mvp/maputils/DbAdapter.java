@@ -124,7 +124,7 @@ public class DbAdapter {
         args.put("calorie", calorie);
         args.put("altitude", altitude);
         args.put("sign", sign);
-        args.put("heartrate", heart);
+        args.put("heartrate", heart);//心率
         return db.insert(RECORD_TABLE, null, args);
     }
 

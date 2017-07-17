@@ -27,6 +27,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     String healthTable = "create table healthinfo(account varchar(20),date varchar(30), heartScore Integer,sleepScore Integer,stepScore Ingeger ,isUpLoad integer)";
 
+    String bloodPressureTable = "create table bloodPressureinfo(account varchar(20), diastolicPressure Integer, systolicPressure Integer,testMomentTime varchar(20),durationTime varchar(20))";
+
 
     String trackTable = "create table trackinfo(account varchar(20),durationTime Integer,date varchar(30),  distance Float,speed Float,trackRecord varchar(1000) ,type integer,isUpLoad integer,step integer)";
 
@@ -55,6 +57,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL(sleepTable);
         db.execSQL(healthTable);
         db.execSQL(trackTable);
+        db.execSQL(bloodPressureTable);
     }
 
     @Override

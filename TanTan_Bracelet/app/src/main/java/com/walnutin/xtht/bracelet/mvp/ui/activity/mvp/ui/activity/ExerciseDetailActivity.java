@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -63,6 +64,8 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
     TextView tvCal;
     @BindView(R.id.tv_height)
     TextView tvHeight;
+    @BindView(R.id.relative_exercise)
+    RelativeLayout relative_exercise;
 
     @BindView(R.id.tv_sudu)
     TextView tvSudu;
@@ -121,8 +124,8 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         initMap();
         type = getIntent().getIntExtra("type", -1);
         id = getIntent().getIntExtra("id", -1);
-        if (type == 4) {
-            mMapView.setVisibility(View.GONE);
+        if (type == 2) {
+            relative_exercise.setVisibility(View.GONE);
         }
     }
 

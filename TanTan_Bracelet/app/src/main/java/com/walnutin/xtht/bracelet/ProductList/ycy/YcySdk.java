@@ -1,7 +1,6 @@
 package com.walnutin.xtht.bracelet.ProductList.ycy;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -17,11 +16,13 @@ import com.walnutin.xtht.bracelet.ProductList.GlobalValue;
 import com.walnutin.xtht.bracelet.ProductList.Jinterface.ICommonSDKIntf;
 import com.walnutin.xtht.bracelet.ProductList.ThirdBaseSdk;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
+import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
 import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfo;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.yc.pedometer.info.BPVOneDayInfo;
 import com.yc.pedometer.info.RateOneDayInfo;
 import com.yc.pedometer.info.SleepTimeInfo;
 import com.yc.pedometer.info.StepOneDayAllInfo;
@@ -743,7 +744,7 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
     @Override
     public void syncBraceletDataToDb() {
         syncTodayHeartRate(); // 拉取心率数据
-
+        syncBloodPressureData(0);
         syncBraceletData(); // 拉取
     }
 
@@ -766,10 +767,12 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
                 syncStepData(gapDay);
                 syncSleepData(gapDay);
                 syncHeartData(gapDay);
+                syncBloodPressureData(gapDay);
             } else {       // 同步最近7天的数据
                 syncStepData(7);
                 syncSleepData(7);
                 syncHeartData(7);
+                syncBloodPressureData(7);
             }
             DeviceSharedPf.getInstance(mContext).setString(MyApplication.account + "_lastData_" + MyApplication.deviceAddr, TimeUtil.getCurrentDate());
         } catch (ParseException e) {
@@ -868,6 +871,26 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
             }
         }
         SqlHelper.instance().syncBraceletHeartData(heartRateModelList);
+
+        //   System.out.println("AsyncHistoryData syncHeartData  end:" + System.currentTimeMillis());
+    }
+
+    public void syncBloodPressureData(int gapDay) {
+        //    System.out.println("AsyncHistoryData syncHeartData  start:" + System.currentTimeMillis());
+
+        List<BloodPressure> heartRateModelList = new ArrayList<>();
+        for (int i = 1; i <= gapDay; i++) {
+            List<BPVOneDayInfo> bloodPressureOneDayInfo = mySQLOperate.queryBloodPressureOneDayInfo(CalendarUtils.getCalendar(-i));
+            for (BPVOneDayInfo b : bloodPressureOneDayInfo) {
+                BloodPressure bloodPressure = new BloodPressure();
+                bloodPressure.account = MyApplication.account;
+                bloodPressure.testMomentTime = TimeUtil.MinitueToDetailTime(-i, b.getBloodPressureTime()); // 测试时间
+                bloodPressure.systolicPressure = b.getLowBloodPressure();
+                bloodPressure.diastolicPressure = b.getHightBloodPressure();
+                heartRateModelList.add(0, bloodPressure);
+            }
+        }
+        SqlHelper.instance().syncBraceletBloodPressureData(heartRateModelList);
 
         //   System.out.println("AsyncHistoryData syncHeartData  end:" + System.currentTimeMillis());
     }

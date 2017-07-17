@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
+import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
 import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
@@ -255,12 +256,32 @@ public class SqlHelper {
         return false;
     }
 
+    public boolean isExitBloodPressure(SQLiteDatabase db, String account, String date) { // 排除最后秒信息
+        date = date.substring(0, date.lastIndexOf(":"));   // date = 2016-08-10 10:10
+        String sql = "select count(*) as num from bloodPressureinfo where account='" + account +
+                "' and testMomentTime like'" + date + "%'";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null) {
+            cursor.moveToNext();
+            if (cursor.getInt(cursor.getColumnIndex("num")) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     synchronized public void insertBraceletHeartRate(SQLiteDatabase db, HeartRateModel heartRateModel) { // 添加手环的数据到心率数据
         Gson gson = new Gson();
         String heartTrendMap = gson.toJson(heartRateModel.heartTrendMap); // 讲map集合转为json
         String sql = "insert into heartRateinfo values(?,?,?,?,?,?,?)";
         db.execSQL(sql, new Object[]{heartRateModel.account, heartRateModel.currentRate, heartRateModel.durationTime, heartRateModel.testMomentTime, heartTrendMap, heartRateModel.isRunning, 0});
+    }
+
+
+    synchronized public void insertBraceletBloodPressure(SQLiteDatabase db, BloodPressure bloodPressure) { // 添加手环的数据到心率数据
+        String sql = "insert into bloodPressureinfo values(?,?,?,?,?)";
+        db.execSQL(sql, new Object[]{bloodPressure.account, bloodPressure.diastolicPressure, bloodPressure.systolicPressure, bloodPressure.testMomentTime, bloodPressure.durationTime});
     }
 
     synchronized public void insertHeartRate(String account, HeartRateModel heartRateModel) { // 添加一次心率到数据库
@@ -401,6 +422,30 @@ public class SqlHelper {
         return heartRateModelList;
     }
 
+    synchronized public List getOneDayBloodPressureInfo(String account, String date) { // 得到某一天的血压集合数据
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        List<BloodPressure> bloodPressureList = new ArrayList<>();
+        String sql = "select * from bloodPressureinfo where account='" + account + "' and testMomentTime like '" + date + "%' order by testMomentTime";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                BloodPressure bloodPressure = new BloodPressure();
+                bloodPressure.diastolicPressure = cursor.getInt(cursor.getColumnIndex("diastolicPressure"));
+                if (bloodPressure.diastolicPressure > 0) {
+                    bloodPressure.account = account;
+                    bloodPressure.durationTime = cursor.getInt(cursor.getColumnIndex("durationTime"));
+                    bloodPressure.testMomentTime = cursor.getString(cursor.getColumnIndex("testMomentTime"));
+                    bloodPressure.diastolicPressure = cursor.getInt(cursor.getColumnIndex("diastolicPressure"));
+                    bloodPressure.systolicPressure = cursor.getInt(cursor.getColumnIndex("systolicPressure"));
+                    bloodPressureList.add(bloodPressure);
+                }
+            }
+            cursor.close();
+        }
+
+        return bloodPressureList;
+    }
+
     synchronized public HeartRateModel getOneDayRecentHeartRateInfo(String account, String date) { // 得到某一天的心率集合数据
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
         HeartRateModel heartRateModel = new HeartRateModel();
@@ -422,6 +467,29 @@ public class SqlHelper {
         }
 
         return heartRateModel;
+    }
+
+    synchronized public List getBloodPressureListByTime(String account, String startTime, String endTime) { // 得到指定日期的血压集合
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        List<BloodPressure> bloodPressureArrayList = new ArrayList<>();
+        String sql = "select * from bloodPressureinfo where account =? and testMomentTime between ? and ? order by testMomentTime";
+        Cursor cursor = db.rawQuery(sql, new String[]{account, startTime, endTime});
+
+        if (cursor != null) {
+            Gson gson = new Gson();
+            while (cursor.moveToNext()) {
+                BloodPressure bloodPressure = new BloodPressure();
+                bloodPressure.account = account;
+                bloodPressure.diastolicPressure = cursor.getInt(cursor.getColumnIndex("diastolicPressure"));
+                bloodPressure.systolicPressure = cursor.getInt(cursor.getColumnIndex("systolicPressure"));
+                bloodPressure.durationTime = cursor.getInt(cursor.getColumnIndex("durationTime"));
+                bloodPressure.testMomentTime = cursor.getString(cursor.getColumnIndex("testMomentTime"));
+                bloodPressureArrayList.add(bloodPressure);
+            }
+            cursor.close();
+        }
+
+        return bloodPressureArrayList;
     }
 
     synchronized public List getHeartRateListByTime(String account, String startTime, String endTime) { // 得到指定日期的心率集合
@@ -471,6 +539,28 @@ public class SqlHelper {
         }
 
         return heartRateModelList;
+    }
+
+    synchronized public List getMonthBloodPressureListByTime(String account, String month) { // 得到指定月的血压集合
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        List<BloodPressure> bloodPressureArrayList = new ArrayList<>();
+        String sql = "select * from bloodPressureinfo where account =? and testMomentTime like '" + month + "%' order by testMomentTime";
+        Cursor cursor = db.rawQuery(sql, new String[]{account});
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                BloodPressure bloodPressure = new BloodPressure();
+                bloodPressure.account = account;
+                bloodPressure.diastolicPressure = cursor.getInt(cursor.getColumnIndex("diastolicPressure"));
+                bloodPressure.systolicPressure = cursor.getInt(cursor.getColumnIndex("systolicPressure"));
+                bloodPressure.durationTime = cursor.getInt(cursor.getColumnIndex("durationTime"));
+                bloodPressure.testMomentTime = cursor.getString(cursor.getColumnIndex("testMomentTime"));
+                bloodPressureArrayList.add(bloodPressure);
+            }
+            cursor.close();
+        }
+
+        return bloodPressureArrayList;
     }
 
 
@@ -1010,6 +1100,32 @@ public class SqlHelper {
                     //     updateSleep(db, sleepModel.account, sleepModel);
                 } else {
                     insertBraceletHeartRate(db, heartRateModel);
+                }
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+        db.close();
+    }
+
+
+    synchronized public void syncBraceletBloodPressureData(List<BloodPressure> bloodPressureList) {
+        if (bloodPressureList == null || bloodPressureList.size() == 0) {
+            return;
+        }
+        SQLiteDatabase db = DBOpenHelper.getInstance().getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            for (BloodPressure bloodPressure : bloodPressureList) {
+                if (isExitBloodPressure(db, bloodPressure.account, bloodPressure.testMomentTime)) {
+                    //     updateSleep(db, sleepModel.account, sleepModel);
+                } else {
+                    insertBraceletBloodPressure(db, bloodPressure);
                 }
             }
             db.setTransactionSuccessful();

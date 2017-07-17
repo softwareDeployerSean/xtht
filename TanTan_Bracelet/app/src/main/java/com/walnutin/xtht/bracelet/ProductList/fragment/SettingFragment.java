@@ -85,7 +85,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         HardSdk.getInstance().setHardSdkCallback(this);
         topTitleLableView.getBackView().setVisibility(View.GONE);
         topTitleLableView.getTitleView().setTextColor(Color.WHITE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getActivity().getWindow();
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -96,7 +96,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             topTitleLableView.getTitleRl().setLayoutParams(layoutParams);
             topTitleLableView.getBackView().setPadding(DensityUtils.dip2px(getContext(), 14), DensityUtils.dip2px(getContext(), 22), 0, 0);
             topTitleLableView.getTitleView().setPadding(0, DensityUtils.dip2px(getContext(), 22), 0, 0);
-        }
+        }*/
 
         mySharedPf = DeviceSharedPf.getInstance(getContext());
 
