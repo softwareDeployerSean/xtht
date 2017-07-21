@@ -16,6 +16,8 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
+import com.walnutin.xtht.bracelet.ProductList.HardSdk;
+import com.walnutin.xtht.bracelet.ProductList.Jinterface.IHardSdkCallback;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
@@ -31,6 +33,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +47,7 @@ import butterknife.OnClick;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> implements RunningIndoorContract.View, OnItemClickListener, OnDismissListener {
+public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> implements RunningIndoorContract.View, OnItemClickListener, OnDismissListener, IHardSdkCallback {
 
     @BindView(R.id.layout)
     public CustomerRelativeLayout mCustomerRelativeLayout;
@@ -80,6 +83,18 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
     private DbAdapter DbHepler;
     private PathRecord record;
     private long mStartTime;
+    //手环部分
+
+    List<String> step_rate = new ArrayList<>();
+
+    List<Integer> heart_rate = new ArrayList<>();
+    List<Integer> heart_during = new ArrayList<>();
+    List<String> speed_rate = new ArrayList<>();
+    float distance_tmp_sudu;
+    float distance_tmp_sudu1;
+
+    //手环交互
+    HardSdk hardSdk;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -122,6 +137,35 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                     @Override
                     public void run() {
                         tvTime.setText(getStringTime(cnt++));
+                        if (cnt % 60 == 0) {
+                            step_rate.add(step_during + "");
+                            if (heart_during.size() > 0) {
+                                step_start = step_tmp;
+                                int rate_tmp = 0;
+                                for (int i : heart_during) {
+                                    rate_tmp += i;
+                                }
+                                rate_tmp = rate_tmp / heart_during.size();
+                                heart_rate.add(rate_tmp);
+                                heart_during.clear();
+                            }
+                        }
+                        if (cnt % 3 == 0) {
+                            float dis_3 = getDistance() - distance_tmp_sudu;//3s的距离
+                            if (dis_3 > 0) {
+                                Float f = new Float(3 / dis_3);
+                                int i = f.intValue();
+                                speed_rate.add(ConmonUtils.secToTime(i));
+                                distance_tmp_sudu = getDistance();
+                            }
+                        }
+                        float dis = getDistance() - distance_tmp_sudu1;//1s的距离
+                        if (dis > 0) {
+                            Float f = new Float(1 / dis);
+                            int i = f.intValue();
+                            tvSpeed.setText(ConmonUtils.secToTime(i));
+                            distance_tmp_sudu1 = getDistance();
+                        }
                     }
                 });
             }
@@ -132,6 +176,9 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         record = new PathRecord();
         mStartTime = System.currentTimeMillis();
         record.setDate(getcueDate(mStartTime));
+        //手环
+        hardSdk = HardSdk.getInstance();
+        hardSdk.setHardSdkCallback(this); //加入回调
     }
 
     private String getStringTime(int cnt) {
@@ -177,7 +224,7 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         switch (view.getId()) {
             case R.id.iv_jiesu:
                 distance = Double.parseDouble(tvLength.getText().toString().trim());
-                if (distance < 50) {
+                if (distance * 1000 < 50) {
                     short_distance();
                 } else {
                     exit();
@@ -188,6 +235,8 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                 if (timerTask != null) {
                     timerTask.cancel();  //将原任务从队列中移除
                 }
+                hardSdk.removeHardSdkCallback(this); //移除回调
+                tvSpeed.setText("0");
                 break;
             case R.id.iv_goin:
                 if (timerTask != null) {
@@ -200,12 +249,43 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                             @Override
                             public void run() {
                                 tvTime.setText(getStringTime(cnt++));
+                                if (cnt % 60 == 0) {
+                                    step_rate.add(step_during + "");
+                                    step_start = step_tmp;
+                                    if (heart_during.size() > 0) {
+                                        int rate_tmp = 0;
+                                        for (int i : heart_during) {
+                                            rate_tmp += i;
+                                        }
+                                        rate_tmp = rate_tmp / heart_during.size();
+                                        heart_rate.add(rate_tmp);
+                                        heart_during.clear();
+                                    }
+                                }
+                                if (cnt % 3 == 0) {
+                                    float dis_3 = getDistance() - distance_tmp_sudu;//3s的距离
+                                    if (dis_3 > 0) {
+                                        Float f = new Float(3 / dis_3);
+                                        int i = f.intValue();
+                                        speed_rate.add(ConmonUtils.secToTime(i));
+                                        distance_tmp_sudu = getDistance();
+                                    }
+                                }
+                                float dis = getDistance() - distance_tmp_sudu1;//1s的距离
+                                if (dis > 0) {
+                                    Float f = new Float(1 / dis);
+                                    int i = f.intValue();
+                                    tvSpeed.setText(ConmonUtils.secToTime(i));
+                                    distance_tmp_sudu1 = getDistance();
+                                }
                             }
                         });
                     }
                 };
                 timer1.schedule(timerTask, 0, 1000);
                 set_button_nomal();
+                hardSdk.setHardSdkCallback(this); //加入回调
+                isfirst = true;
                 break;
         }
     }
@@ -296,21 +376,50 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         String duration = getDuration();
         float distance = getDistance();
         String average = getAverage(distance);
-        mPresenter.post_sportdata(String.valueOf(distance), duration, average,
-                "", "", "", record.getDate(), getcalorie(), "0", "室内");
-
+       /* mPresenter.post_sportdata(String.valueOf(distance), duration, average,
+                "", "", "", record.getDate(), getcalorie(), "0", "室内");*/
+        String list_steprate = getstep_rateString();
+        String list_heartrate = getheart_rateString();
+        String list_speedrate = getspeed_rateString();
         DbHepler.createrecord(String.valueOf(distance), duration, average,
-                "", "", "", record.getDate(), getcalorie(), "0", "室内跑", "heart");
+                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "running_indoor", list_heartrate, list_steprate);
         DbHepler.close();
+        finish();
     }
 
     //上传
     protected void postdata() {
+        int rate_tmp = 0;
+        if (get_second() < 60) {
+            step_rate.add(step_during + "");
+            if (heart_during.size() > 0) {
+                for (int i : heart_during) {
+                    rate_tmp += i;
+                }
+                rate_tmp = rate_tmp / heart_during.size();
+                heart_rate.add(rate_tmp);
+            }
+
+        } else if (get_second() % 60 != 0) {
+            step_rate.add(step_during + "");
+            if (heart_during.size() > 0) {
+                for (int i : heart_during) {
+                    rate_tmp += i;
+                }
+                rate_tmp = rate_tmp / heart_during.size();
+                heart_rate.add(rate_tmp);
+
+            }
+
+        }
         String duration = getDuration();
         float distance = getDistance();
         String average = getAverage(distance);
+        String list_steprate = getstep_rateString();
+        String list_heartrate = getheart_rateString();
+        String list_speedrate = getspeed_rateString();
         mPresenter.post_sportdata(String.valueOf(distance), duration, average,
-                "", "", "", record.getDate(), getcalorie(), "0", "室内");
+                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "室内", list_steprate, list_heartrate);
     }
 
 
@@ -348,9 +457,111 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         return date;
     }
 
+    private String getstep_rateString() {
+        if (step_rate == null || step_rate.size() == 0) {
+            return "";
+        }
+        StringBuffer stepline = new StringBuffer();
+        for (int i = 0; i < step_rate.size(); i++) {
+            String step = step_rate.get(i);
+            stepline.append(step).append(";");
+        }
+        String pathLineString = stepline.toString();
+        pathLineString = pathLineString.substring(0,
+                pathLineString.length() - 1);
+        return pathLineString;
+    }
+
+    private String getheart_rateString() {
+        if (heart_rate == null || heart_rate.size() == 0) {
+            return "";
+        }
+        StringBuffer heartline = new StringBuffer();
+        for (int i = 0; i < heart_rate.size(); i++) {
+            String heart = heart_rate.get(i) + "";
+            heartline.append(heart).append(";");
+        }
+        String pathLineString = heartline.toString();
+        pathLineString = pathLineString.substring(0,
+                pathLineString.length() - 1);
+        return pathLineString;
+    }
+
+    private String getspeed_rateString() {
+        if (speed_rate == null || speed_rate.size() == 0) {
+            return "";
+        }
+        StringBuffer heartline = new StringBuffer();
+        for (int i = 0; i < speed_rate.size(); i++) {
+            String heart = speed_rate.get(i) + "";
+            heartline.append(heart).append(";");
+        }
+        String pathLineString = heartline.toString();
+        pathLineString = pathLineString.substring(0,
+                pathLineString.length() - 1);
+        return pathLineString;
+    }
+
     @Override
     public void post_success() {
         saveRecord();
-        finish();
+        hardSdk.removeHardSdkCallback(this); //移除回调
+    }
+
+    boolean isfirst = true;
+    float distance_begin = 0;
+    int calories_begin = 0;
+    int step_during = 0;
+    int step_start = 0;
+
+    int step_tmp = 0;
+
+    @Override
+    public void onCallbackResult(int flag, boolean state, Object obj) {
+
+    }
+
+
+    @Override
+    public void onStepChanged(int step, float distance, int calories, boolean finish_status) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                step_tmp = step;
+                if (isfirst) {
+                    step_start = step - 1;
+                    distance_begin = distance;
+                    calories_begin = calories;
+                    distance_tmp_sudu = distance;
+                    distance_tmp_sudu1 = distance;
+                    isfirst = false;
+                }
+                float distance_tmp = distance - distance_begin + getDistance();
+                LogUtils.debugInfo("距离==" + distance_tmp);
+                tvLength.setText(ConmonUtils.formatDouble(distance_tmp) + "");
+                int calor = calories - calories_begin + Integer.parseInt(getcalorie());
+                tvCalories.setText(calor + "");
+                step_during = step - step_start;
+            }
+        });
+        //计算速度
+
+
+    }
+
+    @Override
+    public void onSleepChanged(int lightTime, int deepTime, int sleepAllTime, int[] sleepStatusArray, int[] timePointArray, int[] duraionTimeArray) {
+
+    }
+
+    @Override
+    public void onHeartRateChanged(int rate, int status) {
+        heart_during.add(rate);
+    }
+
+    @Override
+    public void bloodPressureChange(int hightPressure, int lowPressure, int status) {
+
     }
 }

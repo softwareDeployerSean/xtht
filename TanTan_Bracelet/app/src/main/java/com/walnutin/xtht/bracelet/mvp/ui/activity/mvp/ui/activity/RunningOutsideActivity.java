@@ -45,6 +45,8 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
+import com.walnutin.xtht.bracelet.ProductList.HardSdk;
+import com.walnutin.xtht.bracelet.ProductList.Jinterface.IHardSdkCallback;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
@@ -78,7 +80,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter> implements RunningOutsideContract.View, LocationSource,
-        AMapLocationListener, OnItemClickListener, OnDismissListener, SensorEventListener {
+        AMapLocationListener, OnItemClickListener, OnDismissListener, SensorEventListener, IHardSdkCallback {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -150,6 +152,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     private TimerTask timerTask;
     GpsStatusProxy proxy;
     AlertView alertView;
+    //手环交互
+    HardSdk hardSdk;
+    List<String> step_rate = new ArrayList<>();
+    List<Integer> heart_rate = new ArrayList<>();
+    List<Integer> heart_during = new ArrayList<>();
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -233,6 +240,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         }
         proxy.unRegister();
         mAMap = null;
+        hardSdk.removeHardSdkCallback(this); //移除回调
     }
 
 
@@ -258,6 +266,20 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     @Override
                     public void run() {
                         timer.setText(getStringTime(cnt++));
+                        if (cnt % 60 == 0) {
+                            step_rate.add(step_during + "");
+                            step_start = step_tmp;
+                            if (heart_during.size() > 0) {
+                                int rate_tmp = 0;
+                                for (int i : heart_during) {
+                                    rate_tmp += i;
+                                }
+                                rate_tmp = rate_tmp / heart_during.size();
+                                heart_rate.add(rate_tmp);
+                                heart_during.clear();
+                            }
+
+                        }
                     }
                 });
             }
@@ -293,6 +315,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         proxy.register();
         set_button_nomal();
         setmap_gesture(false);
+        //手环
+        hardSdk = HardSdk.getInstance();
+        hardSdk.setHardSdkCallback(this); //加入回调
     }
 
     /**
@@ -309,6 +334,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
 
 
     protected void saveRecord(List<AMapLocation> list, String time) {
+
         if (list != null && list.size() > 0) {
             DbHepler = new DbAdapter(this);
             DbHepler.open();
@@ -322,15 +348,39 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             String endpoint = amapLocationToString(lastLocaiton);
             String height = getheight(list);
             LogUtils.debugInfo("平均速度=" + average);
+            String list_steprate = getstep_rateString();
+            String list_heartrate = getheart_rateString();
             DbHepler.createrecord(String.valueOf(distance), duration, average,
-                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, "heart");
+                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_heartrate, list_steprate);
             DbHepler.close();
+            finish();
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
+            finish();
         }
     }
 
     protected void postdata(List<AMapLocation> list, String time) {
+        int rate_tmp = 0;
+        if (get_second() < 60) {
+            step_rate.add(step_during + "");
+            if (heart_during.size()>0){
+                for (int i : heart_during) {
+                    rate_tmp += i;
+                }
+                rate_tmp = rate_tmp / heart_during.size();
+                heart_rate.add(rate_tmp);
+            }
+        } else if (get_second() % 60 != 0) {
+            step_rate.add(step_during + "");
+            if (heart_during.size()>0){
+                for (int i : heart_during) {
+                    rate_tmp += i;
+                }
+                rate_tmp = rate_tmp / heart_during.size();
+                heart_rate.add(rate_tmp);
+            }
+        }
         if (list != null && list.size() > 0) {
             String duration = getDuration();
             float distance = getDistance(list);
@@ -341,7 +391,9 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             String stratpoint = amapLocationToString(firstLocaiton);
             String endpoint = amapLocationToString(lastLocaiton);
             String height = getheight(list);
-            mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title);
+            String list_steprate = getstep_rateString();
+            String list_heartrate = getheart_rateString();
+            mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_steprate, list_heartrate);
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
         }
@@ -381,6 +433,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         return timer.getText().toString().trim();
     }
 
+
+    //获取秒数整数
     private int get_second() {
         String time = getDuration();
         String a[] = time.split(":");
@@ -409,6 +463,36 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             pathline.append(locString).append(";");
         }
         String pathLineString = pathline.toString();
+        pathLineString = pathLineString.substring(0,
+                pathLineString.length() - 1);
+        return pathLineString;
+    }
+
+    private String getstep_rateString() {
+        if (step_rate == null || step_rate.size() == 0) {
+            return "";
+        }
+        StringBuffer stepline = new StringBuffer();
+        for (int i = 0; i < step_rate.size(); i++) {
+            String step = step_rate.get(i);
+            stepline.append(step).append(";");
+        }
+        String pathLineString = stepline.toString();
+        pathLineString = pathLineString.substring(0,
+                pathLineString.length() - 1);
+        return pathLineString;
+    }
+
+    private String getheart_rateString() {
+        if (heart_rate == null || heart_rate.size() == 0) {
+            return "";
+        }
+        StringBuffer heartline = new StringBuffer();
+        for (int i = 0; i < heart_rate.size(); i++) {
+            String heart = heart_rate.get(i) + "";
+            heartline.append(heart).append(";");
+        }
+        String pathLineString = heartline.toString();
         pathLineString = pathLineString.substring(0,
                 pathLineString.length() - 1);
         return pathLineString;
@@ -594,7 +678,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 frameMap.setVisibility(View.GONE);
                 setmap_gesture(true);
                 break;
-            case R.id.iv_jiesu:
+            case R.id.iv_jiesu://结束
                 if (distance < 50) {
                     short_distance();
                 } else {
@@ -603,7 +687,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
 
 
                 break;
-            case R.id.iv_stop:
+            case R.id.iv_stop://暂停
                 if (timerTask != null) {
                     timerTask.cancel();  //将原任务从队列中移除
                 }
@@ -614,10 +698,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 marker_end = mAMap.addMarker(new MarkerOptions().position(latLng)
                         .icon(BitmapDescriptorFactory
                                 .fromResource(R.mipmap.jieshudian)));
-
+                hardSdk.removeHardSdkCallback(this); //移除回调
 
                 break;
-            case R.id.iv_goin:
+            case R.id.iv_goin://继续
+
                 if (timerTask != null) {
                     timerTask.cancel();  //将原任务从队列中移除
                 }
@@ -628,6 +713,20 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                             @Override
                             public void run() {
                                 timer.setText(getStringTime(cnt++));
+                                if (cnt % 60 == 0) {
+                                    step_rate.add(step_during + "");
+                                    step_start = step_tmp;
+                                    if (heart_during.size() > 0) {
+                                        int rate_tmp = 0;
+                                        for (int i : heart_during) {
+                                            rate_tmp += i;
+                                        }
+                                        rate_tmp = rate_tmp / heart_during.size();
+                                        heart_rate.add(rate_tmp);
+                                        heart_during.clear();
+                                    }
+
+                                }
                             }
                         });
                     }
@@ -636,6 +735,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 set_button_nomal();
                 startlocation();
                 marker_end.remove();
+                hardSdk.setHardSdkCallback(this); //加入回调
+                isfirst = true;
                 break;
         }
     }
@@ -737,10 +838,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 } else {
                     mEndTime = System.currentTimeMillis();
                     //这里记得取消注释==========
-                    //postdata(record.getPathline(), record.getDate());
+                    postdata(record.getPathline(), record.getDate());
                     //这里记得删掉==========
-                    saveRecord(record.getPathline(), record.getDate());
-                    finish();
+                    //saveRecord(record.getPathline(), record.getDate());
+
                 }
                 break;
 
@@ -786,6 +887,54 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     @Override
     public void post_success() {
         saveRecord(record.getPathline(), record.getDate());
-        finish();
+    }
+
+    //手环交互
+    int step_start = 0;//记录进来时的开始状态
+    int step_during = 0;
+    boolean isfirst = true;
+    int calories_start = 0;
+
+    @Override
+    public void onCallbackResult(int flag, boolean state, Object obj) {
+
+    }
+
+    int step_tmp = 0;
+
+    //一分钟统计一次
+    @Override
+    public void onStepChanged(int step, float distance, int calories, boolean finish_status) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                step_tmp = step;
+                if (isfirst) {
+                    step_start = step - 1;
+                    calories_start = calories;
+                    isfirst = false;
+                }
+                step_during = step - step_start;
+                int calor = calories - calories_start + Integer.parseInt(getcalorie());
+                tvCalories.setText(calor + "");
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onSleepChanged(int lightTime, int deepTime, int sleepAllTime, int[] sleepStatusArray, int[] timePointArray, int[] duraionTimeArray) {
+
+    }
+
+    @Override
+    public void onHeartRateChanged(int rate, int status) {
+        heart_during.add(rate);
+    }
+
+    @Override
+    public void bloodPressureChange(int hightPressure, int lowPressure, int status) {
+
     }
 }

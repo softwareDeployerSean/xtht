@@ -66,7 +66,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
     TextView innerRunCountTv;
     @BindView(R.id.dengshan_run_distance_tv)
     TextView dengshanRunDistanceTv;
-    @BindView(R.id.item_3_run_count)
+    @BindView(R.id.dengshan_run_count_tv)
     TextView item3RunCount;
     @BindView(R.id.qixing_run_distance_tv)
     TextView qixingRunDistanceTv;
@@ -142,6 +142,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
         initdata();
         DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
         dbhelper.open();
+        //LogUtils.debugInfo(dbhelper.queryRecordAll().size()+"大小");
         run_record = dbhelper.queryRecordBySign("running_out");
         indoor_record = dbhelper.queryRecordBySign("running_indoor");
         mountain_record = dbhelper.queryRecordBySign("mountaineering");
@@ -161,7 +162,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
             }
             indoor_number = indoor_record.size();
             innerRunDistanceTv.setText(ConmonUtils.shuzi(indoor_distance) + "");
-            item2RunCount.setText(indoor_number + "");
+            innerRunCountTv.setText(indoor_number + "");
         }
         if (mountain_record.size() > 0) {
             for (PathRecord p : mountain_record) {
@@ -179,7 +180,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
             qixingRunDistanceTv.setText(ConmonUtils.shuzi(riding_distance) + "");
             qixingRunCountTv.setText(riding_number + "");
         }
-
+        LogUtils.debugInfo("到底执行没有呢");
 
     }
 

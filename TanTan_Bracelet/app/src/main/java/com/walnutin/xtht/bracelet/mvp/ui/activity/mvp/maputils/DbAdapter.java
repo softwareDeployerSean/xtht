@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.jess.arms.utils.LogUtils;
@@ -32,6 +33,7 @@ public class DbAdapter {
     public static final String KEY_ALTITUDE = "altitude";
     public static final String KEY_CALORIE = "calorie";
     public static final String KEY_HEART = "heartrate";
+    public static final String KEY_STEPRATE = "steprate";
     private final static String DATABASE_PATH = android.os.Environment
             .getExternalStorageDirectory().getAbsolutePath() + "/recordPath";
     static final String DATABASE_NAME = "record.db";
@@ -50,6 +52,7 @@ public class DbAdapter {
             + "sign STRING,"
             + "averagespeed STRING,"
             + "heartrate STRING,"
+            + "steprate STRING,"
             + "date STRING" + ");";
 
     public static class DatabaseHelper extends SQLiteOpenHelper {
@@ -112,7 +115,7 @@ public class DbAdapter {
      */
     public long createrecord(String distance, String duration,
                              String averagespeed, String pathline, String stratpoint,
-                             String endpoint, String date, String calorie, String altitude, String sign, String heart) {
+                             String endpoint, String date, String calorie, String altitude, String sign, String heart_rate, String step_rate) {
         ContentValues args = new ContentValues();
         args.put("distance", distance);
         args.put("duration", duration);
@@ -124,7 +127,8 @@ public class DbAdapter {
         args.put("calorie", calorie);
         args.put("altitude", altitude);
         args.put("sign", sign);
-        args.put("heartrate", heart);//心率
+        args.put("heartrate", heart_rate);//心率
+        args.put("steprate", step_rate);//步率
         return db.insert(RECORD_TABLE, null, args);
     }
 
@@ -149,7 +153,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = allRecordCursor.getString(allRecordCursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
-            record.setPathline(Util.parseLocations(lines));
+            if (!TextUtils.isEmpty(lines)){
+                record.setPathline(Util.parseLocations(lines));
+            }
             record.setStartpoint(Util.parseLocation(allRecordCursor
                     .getString(allRecordCursor
                             .getColumnIndex(DbAdapter.KEY_STRAT))));
@@ -193,7 +199,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
-            record.setPathline(Util.parseLocations(lines));
+            if (!TextUtils.isEmpty(lines)){
+                record.setPathline(Util.parseLocations(lines));
+            }
             record.setStartpoint(Util.parseLocation(cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_STRAT))));
             record.setEndpoint(Util.parseLocation(cursor.getString(cursor
@@ -207,6 +215,7 @@ public class DbAdapter {
             record.setAveragespeed(cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_SPEED)));
             record.setHeartrate(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_HEART)));
+            record.setSteprate(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_STEPRATE)));
         }
         return record;
     }
@@ -236,7 +245,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
-            record.setPathline(Util.parseLocations(lines));
+            if (!TextUtils.isEmpty(lines)) {
+                record.setPathline(Util.parseLocations(lines));
+            }
             record.setStartpoint(Util.parseLocation(cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_STRAT))));
             record.setEndpoint(Util.parseLocation(cursor.getString(cursor
@@ -282,7 +293,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
-            record.setPathline(Util.parseLocations(lines));
+            if (!TextUtils.isEmpty(lines)) {
+                record.setPathline(Util.parseLocations(lines));
+            }
             record.setStartpoint(Util.parseLocation(cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_STRAT))));
             record.setEndpoint(Util.parseLocation(cursor.getString(cursor
@@ -306,15 +319,15 @@ public class DbAdapter {
      * @param
      * @return
      */
-    public String bytimegetdata(String begintime, String endtime) {
+    public String bytimegetdata(String begintime, String endtime, String sign) {
         double all_distance = 0;
 
-        String where = KEY_DATE + " Between ? and ?";
+        String where = KEY_DATE + " Between ? and ?" + "and " + KEY_SIGN + "=?";
 
-        String[] selectionArgs = new String[]{begintime + "T00:00:00", endtime + "T23:59:59"};
+        String[] selectionArgs = new String[]{begintime + "T00:00:00", endtime + "T23:59:59", sign};
         Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
                 selectionArgs, null, null, null, null);
-        if(cursor != null) {
+        if (cursor != null) {
             while (cursor.moveToNext()) {
                 String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
                 all_distance += Double.parseDouble(distance);
@@ -326,6 +339,6 @@ public class DbAdapter {
 
     private String[] getColumns() {
         return new String[]{KEY_ROWID, KEY_DISTANCE, KEY_DURATION, KEY_SPEED,
-                KEY_LINE, KEY_STRAT, KEY_END, KEY_DATE, KEY_SIGN, KEY_CALORIE, KEY_ALTITUDE, KEY_HEART};
+                KEY_LINE, KEY_STRAT, KEY_END, KEY_DATE, KEY_SIGN, KEY_CALORIE, KEY_ALTITUDE, KEY_HEART, KEY_STEPRATE};
     }
 }

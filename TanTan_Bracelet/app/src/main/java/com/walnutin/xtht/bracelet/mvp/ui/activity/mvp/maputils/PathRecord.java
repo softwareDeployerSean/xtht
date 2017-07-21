@@ -20,7 +20,7 @@ public class PathRecord {
     private String mDate;
     private String sign;
     private String altitude;
-    private String heartrate;
+    private String heartrate,steprate;
     private String calorie;
     private int mId = 0;
     private boolean isDisplayMonthTitle = false;
@@ -135,6 +135,14 @@ public class PathRecord {
 
     public void setHeartrate(String heartrate) {
         this.heartrate = heartrate;
+    }
+
+    public String getSteprate() {
+        return steprate;
+    }
+
+    public void setSteprate(String steprate) {
+        this.steprate = steprate;
     }
 
     @Override

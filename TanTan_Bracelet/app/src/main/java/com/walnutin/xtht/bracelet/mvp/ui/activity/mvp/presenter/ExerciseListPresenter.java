@@ -56,10 +56,10 @@ public class ExerciseListPresenter extends BasePresenter<ExerciseListContract.Mo
         return list;
     }
 
-    public String getAllByMonth(String firstDayOfMonth, String lastDayOfMonth) {
+    public String getAllByMonth(String firstDayOfMonth, String lastDayOfMonth,String sign) {
         DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
         dbhelper.open();
-        String total = dbhelper.bytimegetdata(firstDayOfMonth, lastDayOfMonth);
+        String total = dbhelper.bytimegetdata(firstDayOfMonth, lastDayOfMonth,sign);
 
         return total;
     }

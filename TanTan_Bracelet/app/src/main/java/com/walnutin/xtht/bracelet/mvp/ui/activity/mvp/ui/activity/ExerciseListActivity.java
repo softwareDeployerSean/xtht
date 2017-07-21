@@ -103,8 +103,17 @@ public class ExerciseListActivity extends BaseActivity<ExerciseListPresenter> im
                 calendar2.set(Calendar.DAY_OF_MONTH, calendar2.getActualMaximum(Calendar.DAY_OF_MONTH));
 
                 String lastDayOfMonth = sdf.format(calendar2.getTime());
+                String  total="";
+                if (type==1){
+                     total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth,"running_out");
+                }else if (type==2){
+                     total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth,"running_indoor");
+                }else if (type==3){
+                     total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth,"mountaineering");
+                }else if (type==4){
+                     total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth,"riding");
+                }
 
-                String total = mPresenter.getAllByMonth(firstDayOfMonth, lastDayOfMonth);
 
                 monthTotleMap.put(key, total);
 
