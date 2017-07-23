@@ -62,8 +62,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-      //  String sql = "alter table trackinfo add [step] integer";
-      //  db.execSQL(sql);
+        //  String sql = "alter table trackinfo add [step] integer";
+        //  db.execSQL(sql);
     }
 
 

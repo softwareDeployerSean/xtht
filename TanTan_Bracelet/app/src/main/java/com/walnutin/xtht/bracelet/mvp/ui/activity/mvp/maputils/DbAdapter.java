@@ -34,6 +34,7 @@ public class DbAdapter {
     public static final String KEY_CALORIE = "calorie";
     public static final String KEY_HEART = "heartrate";
     public static final String KEY_STEPRATE = "steprate";
+    public static final String KEY_SPEEDS = "speeds";
     private final static String DATABASE_PATH = android.os.Environment
             .getExternalStorageDirectory().getAbsolutePath() + "/recordPath";
     static final String DATABASE_NAME = "record.db";
@@ -53,6 +54,7 @@ public class DbAdapter {
             + "averagespeed STRING,"
             + "heartrate STRING,"
             + "steprate STRING,"
+            + "speeds STRING,"
             + "date STRING" + ");";
 
     public static class DatabaseHelper extends SQLiteOpenHelper {
@@ -115,7 +117,7 @@ public class DbAdapter {
      */
     public long createrecord(String distance, String duration,
                              String averagespeed, String pathline, String stratpoint,
-                             String endpoint, String date, String calorie, String altitude, String sign, String heart_rate, String step_rate) {
+                             String endpoint, String date, String calorie, String altitude, String sign, String heart_rate, String step_rate, String speeds) {
         ContentValues args = new ContentValues();
         args.put("distance", distance);
         args.put("duration", duration);
@@ -129,6 +131,7 @@ public class DbAdapter {
         args.put("sign", sign);
         args.put("heartrate", heart_rate);//心率
         args.put("steprate", step_rate);//步率
+        args.put("speeds", speeds);//步率
         return db.insert(RECORD_TABLE, null, args);
     }
 
@@ -153,6 +156,10 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = allRecordCursor.getString(allRecordCursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
+
+            String speeds = allRecordCursor.getString(allRecordCursor
+                    .getColumnIndex(DbAdapter.KEY_SPEEDS));
+            record.setSpeeds(speeds);
             if (!TextUtils.isEmpty(lines)){
                 record.setPathline(Util.parseLocations(lines));
             }
@@ -199,6 +206,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
+            String speeds = cursor.getString(cursor
+                    .getColumnIndex(DbAdapter.KEY_SPEEDS));
+            record.setSpeeds(speeds);
             if (!TextUtils.isEmpty(lines)){
                 record.setPathline(Util.parseLocations(lines));
             }
@@ -245,6 +255,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
+
+            String speeds = cursor.getString(cursor
+                    .getColumnIndex(DbAdapter.KEY_SPEEDS));
             if (!TextUtils.isEmpty(lines)) {
                 record.setPathline(Util.parseLocations(lines));
             }
@@ -293,6 +306,9 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_DATE)));
             String lines = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_LINE));
+
+            String speeds = cursor.getString(cursor
+                    .getColumnIndex(DbAdapter.KEY_SPEEDS));
             if (!TextUtils.isEmpty(lines)) {
                 record.setPathline(Util.parseLocations(lines));
             }
@@ -339,6 +355,6 @@ public class DbAdapter {
 
     private String[] getColumns() {
         return new String[]{KEY_ROWID, KEY_DISTANCE, KEY_DURATION, KEY_SPEED,
-                KEY_LINE, KEY_STRAT, KEY_END, KEY_DATE, KEY_SIGN, KEY_CALORIE, KEY_ALTITUDE, KEY_HEART, KEY_STEPRATE};
+                KEY_LINE, KEY_STRAT, KEY_END, KEY_DATE, KEY_SIGN, KEY_CALORIE, KEY_ALTITUDE, KEY_HEART, KEY_STEPRATE, KEY_SPEEDS};
     }
 }

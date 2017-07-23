@@ -58,6 +58,7 @@ public class RunningOutsidePresenter extends BasePresenter<RunningOutsideContrac
         hashMap.put("sign", tag_title);
         hashMap.put("steprate", steprate);
         hashMap.put("heartrate", heartrate);
+
         String jsonStr = JSONObject.toJSONString(hashMap);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);
         mModel.sportData(body)

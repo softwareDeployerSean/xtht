@@ -73,6 +73,7 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
 
         monthHv.setxLables(xLables);
         monthHv.setDatas(datas);
+        monthHv.setxDisplayType(1);
         monthHv.setIntervalPercent(0.7f);
         Log.d("TAG", "Color.RED=" + Color.RED);
         monthHv.setStartColor(Color.parseColor("#6B289B"));

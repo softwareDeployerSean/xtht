@@ -312,7 +312,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
         @Override
         public int getCount() {
-            return Integer.MAX_VALUE;
+            return 3;
         }
 
         @Override

@@ -261,15 +261,15 @@
         </com.zhy.autolayout.AutoRelativeLayout>
 
         <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:id="@+id/rate_rate_view"
             android:layout_width="match_parent"
-            android:layout_height="300px" />
+            android:layout_height="250px" />
         <!--配速-->
         <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="18px"
             android:layout_marginLeft="15px"
-            android:layout_marginRight="15px"
-            android:layout_marginTop="25px">
+            android:layout_marginRight="15px">
 
             <com.zhy.autolayout.AutoRelativeLayout
                 android:layout_width="wrap_content"
@@ -340,15 +340,15 @@
         </com.zhy.autolayout.AutoRelativeLayout>
 
         <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:id="@+id/speed_rate_view"
             android:layout_width="match_parent"
-            android:layout_height="300px" />
+            android:layout_height="250px" />
         <!--步频-->
         <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="18px"
             android:layout_marginLeft="15px"
-            android:layout_marginRight="15px"
-            android:layout_marginTop="25px">
+            android:layout_marginRight="15px">
 
             <com.zhy.autolayout.AutoRelativeLayout
                 android:layout_width="wrap_content"
@@ -419,9 +419,9 @@
         </com.zhy.autolayout.AutoRelativeLayout>
 
         <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+            android:id="@+id/buping_rate_view"
             android:layout_width="match_parent"
-            android:layout_height="300px"
-            android:layout_marginBottom="80px" />
+            android:layout_height="250px" />
 
     </com.zhy.autolayout.AutoLinearLayout>
 </com.jess.arms.widget.autolayout.AutoScrollView>

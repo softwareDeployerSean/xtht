@@ -157,6 +157,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     List<String> step_rate = new ArrayList<>();
     List<Integer> heart_rate = new ArrayList<>();
     List<Integer> heart_during = new ArrayList<>();
+    List<Float> speedList = new ArrayList<>();
+    List<Float> speedListTemp = new ArrayList<>();
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -277,7 +279,10 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                                 rate_tmp = rate_tmp / heart_during.size();
                                 heart_rate.add(rate_tmp);
                                 heart_during.clear();
+                            }else {
+                                heart_rate.add(0);
                             }
+
 
                         }
                     }
@@ -350,8 +355,11 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             LogUtils.debugInfo("平均速度=" + average);
             String list_steprate = getstep_rateString();
             String list_heartrate = getheart_rateString();
+
+            String speeds = getSpeedsString();
+
             DbHepler.createrecord(String.valueOf(distance), duration, average,
-                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_heartrate, list_steprate);
+                    pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_heartrate, list_steprate, speeds);
             DbHepler.close();
             finish();
         } else {
@@ -393,6 +401,7 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             String height = getheight(list);
             String list_steprate = getstep_rateString();
             String list_heartrate = getheart_rateString();
+
             mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_steprate, list_heartrate);
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
@@ -498,6 +507,21 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         return pathLineString;
     }
 
+    private String getSpeedsString() {
+        if(speedList == null || speedList.size() == 0) {
+            return "";
+        }
+        String ret = "";
+        for(int i = 0; i < speedList.size(); i++) {
+            if(i == speedList.size() - 1) {
+                ret += speedList.get(i);
+            }else {
+                ret += speedList.get(i) + ";";
+            }
+        }
+        return ret;
+    }
+
     private String amapLocationToString(AMapLocation location) {
         StringBuffer locString = new StringBuffer();
         locString.append(location.getLatitude()).append(",");
@@ -550,6 +574,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     LatLng mylocation;
     double distance = 0;
 
+    private float startTime = 0;
+
     /**
      * 定位结果回调
      *
@@ -591,6 +617,27 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                     mResultShow.setText(ConmonUtils.formatDouble(distance / 1000) + "");
                 }
                 proxy.notifyLocation(amapLocation);
+
+                if(startTime == 0) {
+                    startTime = amapLocation.getTime();
+                }
+
+                speedListTemp.add(amapLocation.getSpeed());
+
+                if(amapLocation.getTime() - startTime > 1 * 60 * 1000) {
+                    if(speedListTemp != null && speedListTemp.size() > 0) {
+                        float totalSpeed = 0;
+                        for(int i = 0; i < speedListTemp.size(); i++) {
+                            totalSpeed += speedListTemp.get(i);
+                        }
+                        speedList.add(totalSpeed / speedListTemp.size());
+                    }else {
+                        speedList.add(0f);
+                    }
+
+                    speedListTemp.clear();
+                    startTime = amapLocation.getTime();
+                }
 
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": "

@@ -11,13 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.jess.arms.utils.DataHelper;
-import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
-
-import java.util.Collections;
-
-import io.reactivex.internal.operators.maybe.MaybeNever;
 
 /**
  * Created by Leiht on 2017/7/3.
@@ -25,7 +19,6 @@ import io.reactivex.internal.operators.maybe.MaybeNever;
 
 public class RateView extends View {
 
-    private Context mContext;
     // 默认边距
     private int Margin = 70;
     // 原点坐标
@@ -33,58 +26,94 @@ public class RateView extends View {
     private int Ypoint;
     // X,Y轴的单位长度
     private int Xscale = 20;
-    private int Yscale = 20;
+    private float Yscale = 20;
+
     // X,Y轴上面的显示文字
-//    private String[] Xlabel = { "0", "1", "2", "3", "4", "5", "6", "7", "8" };
     private String[] Xlabel = {"0", "2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "22", "24"};
 
+    private int[] brolenLineDisplay = new int[]{};
+
+    /**
+     * Y轴的最大高度
+     * 此值原则上必须动态设置，并且大于等于Ylabel的最大值
+     */
+    private int maxYlabel = 150;
+
+    private int xDisplayInterval = 1;
+    private int xInterval = 0;
     private String[] Ylabel = new String[150];
 
-    // 标题文本
-    private String Title;
-    // 曲线数据
-    private int[] Data = {75, 89, 110, 68, 120, 87, 69, 98, 150, 123, 86, 145, 75};
+    private int[] yDisPlay;
 
-    public RateView(Context context, String[] xlabel, String[] ylabel,
-                    String title, int[] data) {
+    private int marginPer = 10;
+
+    /**
+     * 0:正常显示
+     * 1：秒换算成时分秒
+     */
+    private int yDisPlayType = 0;
+
+    /**
+     * X Y 虚线颜色
+     */
+    private int lineColor = Color.BLUE;
+
+    /**
+     * 折线的颜色
+     */
+    private int brokenLineColor = Color.BLUE;
+
+    // 曲线数据
+    private int[] datas = {75, 89, 110, 68, 120, 87, 69, 98, 150, 123, 86, 145, 75};
+
+    public RateView(Context context, String[] xlabel, String[] ylabel, int[] data) {
         super(context);
         this.Xlabel = xlabel;
         this.Ylabel = ylabel;
-        this.Title = title;
-        this.Data = data;
-        this.mContext = context;
+        this.datas = data;
     }
 
     public RateView(Context context) {
         super(context);
-        this.mContext = context;
     }
 
     public RateView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mContext = context;
     }
 
     public RateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.mContext = context;
     }
 
 
     // 初始化数据值
     public void init() {
 
-        for (int i = 0; i < 150; i++) {
-            Ylabel[i] = String.valueOf(i);
-        }
+//        for (int i = 0; i < 150; i++) {
+//            Ylabel[i] = String.valueOf(i);
+//        }
 
-        Margin = getWidth() / 10;
+        Margin = getWidth() / 8;
 
         Xpoint = this.Margin;
         Ypoint = this.getHeight() - this.Margin;
-        Xscale = (this.getWidth() - 2 * this.Margin) / (this.Xlabel.length - 1);
-        Yscale = (this.getHeight() - 2 * this.Margin)
-                / (this.Ylabel.length - 1);
+
+        if(Xlabel.length < xDisplayInterval) {
+            xInterval = this.Xlabel.length;
+        }else if(this.Xlabel.length % xDisplayInterval == 0) {
+            xInterval = this.Xlabel.length;
+        }else {
+            xInterval = this.Xlabel.length % xDisplayInterval + this.Xlabel.length;
+        }
+
+        Log.d("TAG", "xInterval=" + xInterval);
+
+        float f = (float)(Ylabel.length);
+
+        Xscale = (this.getWidth() - 2 * this.Margin) / xInterval;
+        Yscale = (this.getHeight() -  2 * this.Margin)
+                / f;
+        Log.d("TAG", "getWidth()=" + getWidth() + ",getHeight=" + getHeight() + ", Yscale=" + Yscale);
     }
 
     public int getMargin() {
@@ -98,23 +127,23 @@ public class RateView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
-        Paint p1 = new Paint();
-        p1.setStyle(Paint.Style.STROKE);
-        p1.setAntiAlias(true);
-        p1.setColor(mContext.getResources().getColor(R.color.blue_rate_line));
-        p1.setStrokeWidth(2);
+        Paint linePaint = new Paint();
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setAntiAlias(true);
+        linePaint.setColor(lineColor);
+        linePaint.setStrokeWidth(2);
         init();
-        this.drawXLine(canvas, p1);
-        this.drawYLine(canvas, p1);
+        this.drawXLine(canvas, linePaint);
+        this.drawYLine(canvas, linePaint);
         this.drawTable(canvas);
         this.drawData(canvas);
     }
 
 
     // 画横轴
-    private void drawXLine(Canvas canvas, Paint p) {
-        p.setStrokeWidth(3);
-        canvas.drawLine(Xpoint, Ypoint, this.Margin, this.Margin, p);
+    private void drawXLine(Canvas canvas, Paint linePaint) {
+        linePaint.setStrokeWidth(2);
+        canvas.drawLine(Xpoint, Ypoint, this.Margin, this.Margin, linePaint);
 //        canvas.drawLine(Xpoint, this.Margin, Xpoint - Xpoint / 3, this.Margin
 //                + this.Margin / 3, p);
 //        canvas.drawLine(Xpoint, this.Margin, Xpoint + Xpoint / 3, this.Margin
@@ -123,7 +152,7 @@ public class RateView extends View {
 
     // 画纵轴
     private void drawYLine(Canvas canvas, Paint p) {
-        p.setStrokeWidth(3);
+        p.setStrokeWidth(4);
         canvas.drawLine(Xpoint, Ypoint, this.getWidth() - this.Margin, Ypoint,
                 p);
 //        canvas.drawLine(this.getWidth() - this.Margin, Ypoint, this.getWidth()
@@ -135,10 +164,11 @@ public class RateView extends View {
     // 画表格
     private void drawTable(Canvas canvas) {
         Paint paint = new Paint();
-//        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.GRAY);
         Path path = new Path();
-
+        PathEffect effects = new DashPathEffect(new float[]{10, 5}, 1);
+        paint.setPathEffect(effects);
         // 纵向线
 //        for (int i = 1; i * Xscale <= (this.getWidth() - this.Margin); i++) {
 //            int startX = Xpoint + i * Xscale;
@@ -150,83 +180,171 @@ public class RateView extends View {
 //        }
         // 横向线
         paint.setColor(Color.BLUE);
-        paint.setTextSize(this.Margin * 2 / 5);
+        if(yDisPlayType == 1) {
+            paint.setTextSize(this.Margin * 2 / 8);
+        }else {
+            paint.setTextSize(this.Margin * 2 / 6);
+        }
         paint.setColor(Color.DKGRAY);
         for (int i = 1; (Ypoint - i * Yscale) >= this.Margin; i++) {
             int startX = Xpoint;
-            int startY = Ypoint - i * Yscale;
+            int startY = (int)(Ypoint - i * Yscale);
             int stopX = Xpoint + (this.Xlabel.length - 1) * Xscale;
 
-
-            if (i == 75) {
+            boolean isBrokenLineDisplay = false;
+            for(int j = 0; j < brolenLineDisplay.length; j++) {
+                if(brolenLineDisplay[j] == i) {
+                    isBrokenLineDisplay = true;
+                }
+            }
+            if (isBrokenLineDisplay) {
                 paint.setStyle(Paint.Style.STROKE);
-                PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
                 paint.setPathEffect(effects);
+                paint.setStrokeWidth(2);
+                paint.setColor(getResources().getColor(R.color.blue_6AD489));
                 path.moveTo(startX, startY);
-                path.lineTo(stopX, startY);
+                path.lineTo(this.getWidth() - Margin, startY);
                 canvas.drawPath(path, paint);
             }
-            paint.setStyle(Paint.Style.FILL);
-            paint.setPathEffect(null);
-            if (i == 30 || i == 60 || i == 90 || i == 120 || i == 149) {
-                if (i == 149) {
-                    canvas.drawText(String.valueOf(Integer.parseInt(this.Ylabel[i]) + 1), this.Margin / 4, startY
+
+            boolean isYDisPlay = false;
+            for(int z = 0; z < yDisPlay.length; z++) {
+                if(yDisPlay[z] == i) {
+                    isYDisPlay = true;
+                    break;
+                }
+            }
+            if (isYDisPlay) {
+                paint.setColor(Color.BLACK);
+                paint.setStyle(Paint.Style.FILL);
+                String text = "";
+                if(yDisPlayType == 1) {
+                    text = secToTime(Integer.parseInt(this.Ylabel[i]));
+                }else {
+                    text = this.Ylabel[i];
+                }
+                if (i == Ylabel.length-1) {
+
+                    canvas.drawText(text, this.Margin / 4, startY
                             + this.Margin / 4, paint);
                 } else {
-                    canvas.drawText(this.Ylabel[i], this.Margin / 4, startY
+                    canvas.drawText(text, this.Margin / 4, startY
                             + this.Margin / 4, paint);
                 }
             }
         }
     }
 
-    private void sortData(int[] datas) {
-        int min, max;
-        min = max = datas[0];
-        for (int i = 0; i < datas.length; i++) {
-            if (datas[i] > max)   // 判断最大值
-                max = datas[i];
-            if (datas[i] < min)   // 判断最小值
-                min = datas[i];
+    private String secToTime(int time) {
+        String timeStr = null;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        if (time <= 0)
+            return "00'00''";
+        else {
+            minute = time / 60;
+            if (minute < 60) {
+                second = time % 60;
+                timeStr = unitFormat(minute) + "'" + unitFormat(second) + "''";
+            } else {
+                hour = minute / 60;
+                if (hour > 99)
+                    return "99:59:59";
+                minute = minute % 60;
+                second = time - hour * 3600 - minute * 60;
+                timeStr = unitFormat(hour) + "'" + unitFormat(minute) + "''" + unitFormat(second) + "''";
+            }
         }
+        return timeStr;
+    }
+
+    public String unitFormat(int i) {
+        String retStr = null;
+        if (i >= 0 && i < 10)
+            retStr = "0" + Integer.toString(i);
+        else
+            retStr = "" + i;
+        return retStr;
     }
 
     // 画数据
     private void drawData(Canvas canvas) {
-        Paint p = new Paint();
-        p.setAntiAlias(true);
-        p.setColor(Color.BLUE);
-        p.setTextSize(this.Margin / 2);
-
-        int maxValue = Data[0];
-        int minValue = Data[0];
-        for (int i = 0; i < Data.length; i++) {
-            if (Data[i] > maxValue)   // 判断最大值
-                maxValue = Data[i];
-            if (Data[i] < minValue)   // 判断最小值
-                minValue = Data[i];
-        }
-
+        Paint brokenPaint = new Paint();
+        brokenPaint.setAntiAlias(true);
+        brokenPaint.setColor(brokenLineColor);
+        brokenPaint.setTextSize(this.Margin / 2);
+        brokenPaint.setStrokeWidth(3);
         // 纵向线
         for (int i = 0; i * Xscale <= (this.getWidth() - this.Margin * 2); i++) {
             int startX = Xpoint + i * Xscale;
-            if (i == 0) {
-                p.setColor(Color.BLACK);
-                p.setTextSize(this.Margin * 2 / 5);
-                canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
-                        this.getHeight() - this.Margin / 4, p);
-            } else {
-                p.setColor(Color.BLACK);
-                p.setTextSize(this.Margin * 2 / 5);
-                canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
-                        this.getHeight() - this.Margin / 4, p);
-                p.setColor(mContext.getResources().getColor(R.color.red_rate_line));
-                p.setTextSize(this.Margin / 2);
-                if (Data[i] == maxValue || Data[i] == minValue) {
-                    canvas.drawCircle(startX, calY(Data[i]), 10, p);
+            if (i < datas.length) {
+                if (i == 0) {
+                    brokenPaint.setColor(Color.BLACK);
+                    brokenPaint.setTextSize(this.Margin * 2 / 5);
+                    if (i % xDisplayInterval == 0) {
+                        canvas.drawText(this.Xlabel[i], startX - this.Margin / 4 + 5,
+                                this.getHeight() - this.Margin / 4, brokenPaint);
+                    }
+
+                    if (datas[0] != 0) {
+                        brokenPaint.setColor(brokenLineColor);
+                        brokenPaint.setTextSize(this.Margin / 2);
+                        canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                    }
+                } else if (i == datas.length - 1) {
+                    if (datas[datas.length - 1] != 0) {
+                        if(this.Xlabel.length % xDisplayInterval == 0) {
+                            brokenPaint.setColor(Color.BLACK);
+                            brokenPaint.setTextSize(this.Margin * 2 / 5);
+                            canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
+                                    this.getHeight() - this.Margin / 4, brokenPaint);
+                        }
+                        brokenPaint.setColor(brokenLineColor);
+                        brokenPaint.setTextSize(this.Margin / 2);
+                        if (i % xDisplayInterval == 0) {
+                            canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                        }
+                        if (datas[i - 1] != 0) {
+                            canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                            canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas[i - 1]), startX, calY(datas[i]), brokenPaint);
+                        }
+                    } else {
+                        brokenPaint.setColor(Color.BLACK);
+                        brokenPaint.setTextSize(this.Margin * 2 / 5);
+                        if (i % xDisplayInterval == 0) {
+                            canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
+                                    this.getHeight() - this.Margin / 4, brokenPaint);
+                        }
+
+                    }
+                } else {
+                    brokenPaint.setColor(Color.BLACK);
+                    brokenPaint.setTextSize(this.Margin * 2 / 5);
+                    if (i % xDisplayInterval == 0) {
+                        canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
+                                this.getHeight() - this.Margin / 4, brokenPaint);
+                    }
+                    brokenPaint.setColor(brokenLineColor);
+                    brokenPaint.setTextSize(this.Margin / 2);
+
+                    if (datas[i] == 0) {
+                        continue;
+                    }
+
+                    if (datas[i - 1] == 0) {
+                        canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                        continue;
+                    }
+
+                    canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                    canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas[i - 1]), startX, calY(datas[i]), brokenPaint);
                 }
-                p.setStrokeWidth(3);
-                canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(Data[i - 1]), startX, calY(Data[i]), p);
+            }else if(i == xInterval) {
+                brokenPaint.setColor(Color.BLACK);
+                brokenPaint.setTextSize(this.Margin * 2 / 5);
+                canvas.drawText(String.valueOf(xInterval), startX - this.Margin / 4 + 5,
+                        this.getHeight() - this.Margin / 4, brokenPaint);
             }
         }
     }
@@ -250,11 +368,56 @@ public class RateView extends View {
         }
         try {
             //Log.i("zzzz", "返回数据"+(Ypoint-(y-y0)*Yscale/(y1-y0)) );
-            return Ypoint - ((y - y0) * Yscale / (y1 - y0));
+            return (int)(Ypoint - ((y - y0) * Yscale / (y1 - y0)));
         } catch (Exception e) {
             //Log.i("zzzz", "return is err");
             return 0;
         }
     }
+
+    public void setLineColor(int lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public void setBrokenLineColor(int brokenLineColor) {
+        this.brokenLineColor = brokenLineColor;
+    }
+
+    public void setXlabel(String[] xlabel) {
+        this.Xlabel = xlabel;
+    }
+
+    public void setMaxYlabel(int maxYlabel) {
+        this.maxYlabel = maxYlabel;
+    }
+
+    public void setxDisplayInterval(int xDisplayInterval) {
+        this.xDisplayInterval = xDisplayInterval;
+    }
+
+    public void setDatas(int[] datas) {
+        this.datas = datas;
+    }
+
+    public void setBrolenLineDisplay(int[] brolenLineDisplay) {
+        this.brolenLineDisplay = brolenLineDisplay;
+    }
+
+    public void setyDisPlay(int[] yDisPlay) {
+        this.yDisPlay = yDisPlay;
+    }
+
+    public void setYlabel(String[] ylabel) {
+        this.Ylabel = ylabel;
+    }
+
+    public void setyDisPlayType(int type) {
+        this.yDisPlayType = type;
+    }
+
+    public void setMarginPer(int marginPer) {
+        this.marginPer = marginPer;
+    }
 }
+
 

@@ -46,6 +46,15 @@ public class HistogramView extends View {
 
     private String[] xLables;
 
+    /**
+     * X轴上显示方式
+     * 0：全显示
+     * 1：显示奇数
+     * 2：显示偶数
+     * 可持续添加
+     */
+    private int xDisplayType = 0;
+
     public HistogramView(Context context) {
         this(context, null);
     }
@@ -102,11 +111,26 @@ public class HistogramView extends View {
         textPaint.getTextBounds(h, 0, h.length(), rect);
         xTextHeight = rect.height();
         xTextWidth = rect.width();
-        float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
-        for (int i = 0; i < xLables.length; i++) {
-            String text = String.valueOf((xLables[i]));
-            canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+        if(xDisplayType == 0) {
+            float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
+            for (int i = 0; i < xLables.length; i++) {
+                String text = String.valueOf((xLables[i]));
+                canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
 
+            }
+        }else if(xDisplayType == 1) {//显示奇数
+            float interval;
+            if(xLables.length % 2 == 0) { //偶数
+                interval = (rightX - leftX - 80) / (xLables.length / 2) - 1;
+            }else {//奇数
+                interval = (rightX - leftX - 80) / ((xLables.length - 1) / 2);
+            }
+            for(int i = 0; i < xLables.length; i++) {
+                if((i + 1) % 2 != 0) {
+                    String text = String.valueOf(xLables[i]);
+                    canvas.drawText(text, leftX + interval * (i / 2), mHeight, textPaint);
+                }
+            }
         }
 
     }
@@ -180,5 +204,15 @@ public class HistogramView extends View {
      */
     public void setIntervalPercent(float intervalPercent) {
         this.intervalPercent = intervalPercent;
+    }
+
+    /**
+     * 设置X轴显示方式（主要考虑文字或数字太多显示太挤）
+     * 显示方式参考xDisplayType属性注释
+     * 不设置默认为0，显示全部
+     * @param xDisplayType
+     */
+    public void setxDisplayType(int xDisplayType) {
+        this.xDisplayType = xDisplayType;
     }
 }

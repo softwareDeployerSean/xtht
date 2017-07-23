@@ -23,6 +23,16 @@ public class PathRecord {
     private String heartrate,steprate;
     private String calorie;
     private int mId = 0;
+
+    public String getSpeeds() {
+        return speeds;
+    }
+
+    public void setSpeeds(String speeds) {
+        this.speeds = speeds;
+    }
+
+    private String speeds;
     private boolean isDisplayMonthTitle = false;
 
     public PathRecord() {

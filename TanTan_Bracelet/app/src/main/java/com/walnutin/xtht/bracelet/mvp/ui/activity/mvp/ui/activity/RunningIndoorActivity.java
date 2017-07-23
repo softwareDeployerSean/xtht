@@ -90,6 +90,8 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
     List<Integer> heart_rate = new ArrayList<>();
     List<Integer> heart_during = new ArrayList<>();
     List<String> speed_rate = new ArrayList<>();
+    List<Float> speedList = new ArrayList<>();
+    List<Float> speedListTemp = new ArrayList<>();
     float distance_tmp_sudu;
     float distance_tmp_sudu1;
 
@@ -161,8 +163,23 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                         }
                         float dis = getDistance() - distance_tmp_sudu1;//1s的距离
                         if (dis > 0) {
+
+                            if(cnt % 60 == 0) {
+                                float totalSpeed = 0;
+                                if(speedListTemp != null && speedListTemp.size() > 0) {
+                                    for (int i = 0; i < speedListTemp.size(); i++) {
+                                        totalSpeed += speedListTemp.get(i);
+                                    }
+                                    speedList.add(totalSpeed / speedListTemp.size());
+                                }else {
+                                    speedList.add(0f);
+                                }
+                                speedListTemp.clear();
+                            }
+
                             Float f = new Float(1 / dis);
                             int i = f.intValue();
+                            speedListTemp.add(f);
                             tvSpeed.setText(ConmonUtils.secToTime(i));
                             distance_tmp_sudu1 = getDistance();
                         }
@@ -381,10 +398,28 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         String list_steprate = getstep_rateString();
         String list_heartrate = getheart_rateString();
         String list_speedrate = getspeed_rateString();
+
+        String speeds = getSpeedsString();
+
         DbHepler.createrecord(String.valueOf(distance), duration, average,
-                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "running_indoor", list_heartrate, list_steprate);
+                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "running_indoor", list_heartrate, list_steprate, speeds);
         DbHepler.close();
         finish();
+    }
+
+    private String getSpeedsString() {
+        if(speedList == null || speedList.size() == 0) {
+            return "";
+        }
+        String ret = "";
+        for(int i = 0; i < speedList.size(); i++) {
+            if(i == speedList.size() - 1) {
+                ret += speedList.get(i);
+            }else {
+                ret += speedList.get(i) + ";";
+            }
+        }
+        return ret;
     }
 
     //上传

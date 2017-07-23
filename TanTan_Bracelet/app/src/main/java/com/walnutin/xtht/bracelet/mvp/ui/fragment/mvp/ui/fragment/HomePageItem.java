@@ -2,14 +2,21 @@ package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LevelListDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DataShowActivity;
@@ -51,6 +58,8 @@ public class HomePageItem {
 
     private RecyclerView healthRv;
 
+    private ListView healhListView;
+
     private List<HealthPageData> healthDatas;
 
     private HomePageAdapter homePagerAdapter;
@@ -61,6 +70,8 @@ public class HomePageItem {
 
     private String date;
 
+    private SqlHelper sqlHelper;
+
     public String getDate() {
         return this.date;
     }
@@ -68,6 +79,8 @@ public class HomePageItem {
     public HomePageItem(Context context, MainFragment mainFragment) {
         this.mContext = context;
         this.mainFragment = mainFragment;
+
+        sqlHelper = SqlHelper.instance();
 
         this.view = LayoutInflater.from(mContext).inflate(R.layout.fragment_main_item, null);
 
@@ -120,6 +133,15 @@ public class HomePageItem {
 
 //        healthRv.setHasFixedSize(true);
 //        healthRv.setNestedScrollingEnabled(false);
+
+        new Thread() {
+            @Override
+            public void run() {
+//                sqlHelper.getOneDateStep();
+            }
+        }.start();
+
+        healhListView = (ListView) view.findViewById(R.id.health_listview);
     }
 
     public void update(String date) {
@@ -127,7 +149,7 @@ public class HomePageItem {
         this.date = date;
 
         LogUtils.debugInfo("TAG", "update date = " + date);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
 
         Date d = null;
         try {
@@ -142,11 +164,11 @@ public class HomePageItem {
         calendar.setTime(d);
 
         //今天之前的数据
-        if(isNow(d)) {
+        if (isNow(d)) {
             currentDateTv.setText("今天");
-        }else if(isLast(d)) {
+        } else if (isLast(d)) {
             currentDateTv.setText("昨天");
-        }else {
+        } else {
             currentDateTv.setText(date);
         }
 
@@ -205,20 +227,9 @@ public class HomePageItem {
 
             healthRv.setAdapter(homePagerAdapter);
         } else {
-            homePagerAdapter.notifyDataSetChanged();
+            //homePagerAdapter.notifyDataSetChanged();
         }
 
-      /*  homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
-            @Override
-            public void onImteClick(int type) {
-                if (type == 1) {
-                    Intent intent = new Intent(mContext, RateDetailActivity.class);
-                    mContext.startActivity(intent);
-                }
-            }
-        });*/
-
-//        healthRv.setNestedScrollingEnabled(false);
 
     }
 
@@ -235,7 +246,7 @@ public class HomePageItem {
         try {
             Date nowDate = sf.parse(nowDay);
             Date comDate = sf.parse(day);
-            if((nowDate.getTime() - comDate.getTime())/1000 / 60 / 60 / 24 == 1) {
+            if ((nowDate.getTime() - comDate.getTime()) / 1000 / 60 / 60 / 24 == 1) {
                 return true;
             }
         } catch (ParseException e) {
@@ -349,6 +360,9 @@ public class HomePageItem {
         });
 
 //        healthRv.setNestedScrollingEnabled(false);
+
+        MyListViewAdapter listViewAdapter = new MyListViewAdapter(healthDatas);
+        healhListView.setAdapter(listViewAdapter);
     }
 
     public View getView() {
@@ -374,6 +388,194 @@ public class HomePageItem {
             e.printStackTrace();
         }
         return dft.format(endDate);
+    }
+
+    class MyListViewAdapter extends BaseAdapter {
+        private List<HealthPageData> healthDatas;
+
+        public MyListViewAdapter(List<HealthPageData> healthDatas) {
+            this.healthDatas = healthDatas;
+        }
+
+        @Override
+        public int getCount() {
+            return 100;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return healthDatas.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+        boolean isAllItemEnable=true;
+        @Override
+        public boolean isEnabled(int position) {
+            return false;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup viewGroup) {
+            ViewHolder holder;
+            if (convertView == null) {
+                holder = new ViewHolder();
+
+                convertView = LayoutInflater.from(
+                        mContext).inflate(R.layout.home_page_recyclerview_item, viewGroup,
+                        false);
+
+                holder.timeIconTv = (TextView) convertView.findViewById(R.id.tv_time_icon);
+//                holder.leftTopTv = (TextView) convertView.findViewById(R.id.tv_left_top);
+//                holder.leftButtomTv = (TextView) convertView.findViewById(R.id.tv_left_buttom);
+//                holder.rightTopTv = (TextView) convertView.findViewById(R.id.tv_right_top);
+//                holder.rightButtomTv = (TextView) convertView.findViewById(R.id.tv_right_buttom);
+//                holder.rightIconTv = (TextView) convertView.findViewById(R.id.tv_right_icon_text);
+//
+//                holder.parent = (RelativeLayout) convertView.findViewById(R.id.rl_parent);
+
+                convertView.setTag(holder);
+            }else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+//            HealthPageData data = healthDatas.get(position);
+
+       /* holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnItemClickListener != null) {
+                    mOnItemClickListener.onImteClick(data.getType());
+                }
+            }
+        });*/
+//            if(position==0||position==1){
+//                holder.parent.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(mContext, RateDetailActivity.class);
+//                        mContext.startActivity(intent);
+//                    }
+//                });
+//            }
+//
+//            holder.timeIconTv.setText(data.getTime());
+//            if (data.getType() == 1) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xinlv);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//
+//                holder.rightTopTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
+//                holder.rightIconTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
+//            } else if (data.getType() == 2) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xueya);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 3) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xueyang);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 4) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.jiuzuo);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 5) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.walk);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 6) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.run);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 7) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.sleep);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            } else if (data.getType() == 8) {
+//                Drawable drawable = mContext.getResources().getDrawable(R.mipmap.zhaixia);
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+//            }
+//
+//
+//            holder.leftTopTv.setText(data.getLeftTopName());
+//
+//            holder.leftButtomTv.setText(data.getLeftButtom());
+//
+//            if (data.getType() == 1) {
+//                String str = data.getRightTop() + "-" + data.getRightButtom() + "BPM";
+//                holder.rightTopTv.setText(str);
+//                holder.rightButtomTv.setText("");
+//                holder.rightIconTv.setText("查看");
+//                holder.rightIconTv.setTextSize(px2dip(mContext, 8));
+//            } else if (data.getType() == 2) {
+//                holder.rightTopTv.setText("高压  " + data.getRightTop() + " mmhg");
+//                holder.rightButtomTv.setText("低压  " + data.getRightButtom() + " mmhg");
+//                holder.rightIconTv.setText(data.getRightText());
+//                holder.rightIconTv.setTextSize(px2dip(mContext, 16));
+//            } else if (data.getType() == 4 || data.getType() == 5 || data.getType() == 6) {
+//                holder.rightTopTv.setText(data.getRightTop() + " min");
+//                holder.rightButtomTv.setText(data.getRightTop() + "大卡");
+//
+//                holder.rightIconTv.setText(data.getRightText() + "公里");
+//                holder.rightIconTv.setTextSize(px2dip(mContext, 16));
+//            } else {
+//                holder.rightTopTv.setText(data.getRightTop());
+//                holder.rightButtomTv.setText(data.getRightButtom());
+//                holder.rightIconTv.setText(data.getRightText());
+//                holder.rightIconTv.setTextSize(px2dip(mContext, 16));
+//            }
+//
+//            if (data.isRightIcon()) {
+//                Drawable drawable = null;
+//                if (data.getType() == 1) {
+//                    drawable = mContext.getResources().getDrawable(R.mipmap.fanhuijianhs);
+//                } else {
+//                    drawable = mContext.getResources().getDrawable(R.mipmap.fanhuijian_right);
+//                }
+//                /// 这一步必须要做,否则不会显示.
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                holder.rightIconTv.setCompoundDrawables(null, null, drawable, null);
+//            } else {
+//                holder.rightIconTv.setCompoundDrawables(null, null, null, null);
+//            }
+
+            return convertView;
+        }
+
+        /**
+         * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+         */
+        public int px2dip(Context context, float pxValue) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            return (int) (pxValue / scale + 0.5f);
+        }
+
+        private class ViewHolder {
+            TextView timeIconTv;
+
+//            TextView leftTopTv;
+//
+//            TextView leftButtomTv;
+//
+//            TextView rightTopTv;
+//
+//            TextView rightButtomTv;
+//
+//            TextView rightIconTv;
+//
+//            RelativeLayout parent;
+        }
     }
 
 }

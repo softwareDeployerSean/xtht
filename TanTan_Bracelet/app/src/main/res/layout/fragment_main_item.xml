@@ -113,12 +113,24 @@
         android:layout_marginRight="20px"
         android:descendantFocusability="blocksDescendants">
 
+
+        <com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.MyListView
+            android:id="@+id/health_listview"
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:visibility="gone"
+            android:divider="@drawable/listview_divider"
+            android:dividerHeight="1px"
+            android:layout_height="wrap_content"></com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.MyListView>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/health_rv"
             android:overScrollMode="never"
             android:scrollbars="none"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
 
     </com.zhy.autolayout.AutoRelativeLayout>
 

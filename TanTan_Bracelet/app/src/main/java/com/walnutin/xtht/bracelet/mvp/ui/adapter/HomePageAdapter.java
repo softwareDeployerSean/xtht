@@ -57,15 +57,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
                 }
             }
         });*/
-        if(position==0||position==1){
-            holder.parent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext, RateDetailActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
-        }
+//        if(position==0||position==1){
+//            holder.parent.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(mContext, RateDetailActivity.class);
+//                    mContext.startActivity(intent);
+//                }
+//            });
+//        }
 
         holder.timeIconTv.setText(data.getTime());
         if (data.getType() == 1) {

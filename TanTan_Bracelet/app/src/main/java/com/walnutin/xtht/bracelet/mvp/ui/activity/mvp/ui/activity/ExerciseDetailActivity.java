@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,9 +39,11 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Util;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.ExerciseDetailPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.RateView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +73,15 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
     @BindView(R.id.tv_sudu)
     TextView tvSudu;
 
+    @BindView(R.id.speed_rate_view)
+    RateView speedRateView;
+
+    @BindView(R.id.rate_rate_view)
+    RateView rateRateView;
+
+    @BindView(R.id.buping_rate_view)
+    RateView buPingRateView;
+
     private AMap mAMap;
     private DbAdapter mDataBaseHelper;
     private List<PathRecord> mAllRecord = new ArrayList<PathRecord>();
@@ -80,9 +92,16 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
     private List<LatLng> mOriginLatLngList;
     private List<LatLng> mGraspLatLngList;
 
+    List<AMapLocation> recordList;
+
     private final static int AMAP_LOADED = 2;
     int type = -1;
     int id = -1;
+
+    private String[] xLabels = null;
+    private int[] heartRateDatas = null;
+    private int[] stepDatas = null;
+    private int[] speedsDatas = null;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -102,13 +121,12 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case AMAP_LOADED:
-                    setupRecord();
+                    //setupRecord();
                     break;
                 default:
                     break;
@@ -127,6 +145,145 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         if (type == 2) {
             relative_exercise.setVisibility(View.GONE);
         }
+
+        setupRecord();
+
+        setSpeedRateView();
+
+        setRateRateView();
+
+        setBupingRateView();
+    }
+
+    private void setBupingRateView() {
+        buPingRateView.setLineColor(Color.parseColor("#6AD489"));
+        buPingRateView.setBrokenLineColor(Color.parseColor("#47BBC3"));
+
+        LogUtils.debugInfo("TAG", "========stepDatas.length=" + stepDatas.length);
+        LogUtils.debugInfo("TAG", "========xLabels.length=" + xLabels.length);
+
+        buPingRateView.setDatas(stepDatas);
+
+        LogUtils.debugInfo("TAG", "-----------setRateRateView:xLables=" + xLabels.length);
+
+        buPingRateView.setXlabel(xLabels);
+
+        buPingRateView.setxDisplayInterval(10);
+
+        int max = getMaxArray(stepDatas);
+        int min = getMinArray(stepDatas);
+
+        int linMax = ((int)((max + 20) / 5)) * 5 + 5;
+
+        String[] yLabels = new String[linMax + 20];
+        for(int i = 0; i < yLabels.length; i++) {
+            yLabels[i] = String.valueOf(i);
+        }
+        buPingRateView.setYlabel(yLabels);
+
+        int a = linMax / 4;
+
+        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        buPingRateView.setBrolenLineDisplay(brokenLineDisplay);
+
+        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        buPingRateView.setyDisPlay(yDisplay);
+    }
+
+    private void setRateRateView() {
+        rateRateView.setLineColor(Color.parseColor("#6AD489"));
+        rateRateView.setBrokenLineColor(Color.parseColor("#D53D49"));
+
+        LogUtils.debugInfo("TAG", "heartRateDatas.length=" + heartRateDatas.length);
+        LogUtils.debugInfo("TAG", "xLabels.length=" + xLabels.length);
+
+        rateRateView.setDatas(heartRateDatas);
+        rateRateView.setXlabel(xLabels);
+
+        String[] yLables = new String[230];
+        for(int i = 0; i < yLables.length; i++) {
+            yLables[i] = String.valueOf(i);
+        }
+
+        rateRateView.setYlabel(yLables);
+
+        rateRateView.setxDisplayInterval(10);
+
+        int[] brokenLineDisplay = new int[]{50, 100, 150, 200};
+        rateRateView.setBrolenLineDisplay(brokenLineDisplay);
+
+        int[] yDisplay = new int[]{50, 100, 150, 200};
+        rateRateView.setyDisPlay(yDisplay);
+    }
+
+    private void setSpeedRateView() {
+        speedRateView.setLineColor(Color.parseColor("#6AD489"));
+        speedRateView.setBrokenLineColor(Color.parseColor("#8CC44A"));
+
+        String[] yLables = new String[150];
+        for(int i = 0; i < yLables.length; i++) {
+            yLables[i] = String.valueOf(i);
+        }
+
+        speedRateView.setYlabel(yLables);
+
+        speedRateView.setDatas(speedsDatas);
+        speedRateView.setXlabel(xLabels);
+
+        speedRateView.setxDisplayInterval(10);
+
+        int max = getMaxArray(speedsDatas);
+        int min = getMinArray(speedsDatas);
+
+        int linMax = ((int)((max + 20) / 5)) * 5 + 5;
+
+        String[] yLabels = new String[linMax + linMax/5];
+        for(int i = 0; i < yLabels.length; i++) {
+            yLabels[i] = String.valueOf(i);
+        }
+        speedRateView.setYlabel(yLabels);
+        speedRateView.setyDisPlayType(1);
+        speedRateView.setMarginPer(8);
+
+        int a = linMax / 4;
+
+        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        speedRateView.setBrolenLineDisplay(brokenLineDisplay);
+
+        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        speedRateView.setyDisPlay(yDisplay);
+    }
+
+    private int getMaxArray(int [] array) {
+        int i,min,max;
+
+        min=max=array[0];
+        System.out.print("数组A的元素包括：");
+        for(i=0;i<array.length;i++)
+        {
+            System.out.print(array[i]+" ");
+            if(array[i]>max)   // 判断最大值
+                max=array[i];
+            if(array[i]<min)   // 判断最小值
+                min=array[i];
+        }
+        return max;
+    }
+
+    private int getMinArray(int [] array) {
+        int i,min,max;
+
+        min=max=array[0];
+        System.out.print("数组A的元素包括：");
+        for(i=0;i<array.length;i++)
+        {
+            System.out.print(array[i]+" ");
+            if(array[i]>max)   // 判断最大值
+                max=array[i];
+            if(array[i]<min)   // 判断最小值
+                min=array[i];
+        }
+        return min;
     }
 
     private void initMap() {
@@ -176,27 +333,91 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         mRecord = dbhelper.queryRecordById(id);
         dbhelper.close();
         if (mRecord != null) {
-            List<AMapLocation> recordList = mRecord.getPathline();
+            recordList = mRecord.getPathline();
             AMapLocation startLoc = mRecord.getStartpoint();
             AMapLocation endLoc = mRecord.getEndpoint();
-            if (recordList == null || startLoc == null || endLoc == null) {
-                return;
+            if (recordList != null && startLoc != null && endLoc != null) {
+                LatLng startLatLng = new LatLng(startLoc.getLatitude(),
+                        startLoc.getLongitude());
+                LatLng endLatLng = new LatLng(endLoc.getLatitude(),
+                        endLoc.getLongitude());
+                mOriginLatLngList = Util.parseLatLngList(recordList);
+                addOriginTrace(startLatLng, endLatLng, mOriginLatLngList);
+                tvLength.setText(mRecord.getDistance());
+                tvDuration.setText(mRecord.getDuration());
+                tvTime.setText(mRecord.getDate());
+                tvHeight.setText(mRecord.getAltitude() + "m");
+                tvSudu.setText(mRecord.getAveragespeed() + "km");
             }
-            LatLng startLatLng = new LatLng(startLoc.getLatitude(),
-                    startLoc.getLongitude());
-            LatLng endLatLng = new LatLng(endLoc.getLatitude(),
-                    endLoc.getLongitude());
-            mOriginLatLngList = Util.parseLatLngList(recordList);
-            addOriginTrace(startLatLng, endLatLng, mOriginLatLngList);
-            tvLength.setText(mRecord.getDistance());
-            tvDuration.setText(mRecord.getDuration());
-            tvTime.setText(mRecord.getDate());
-            tvHeight.setText(mRecord.getAltitude() + "m");
-            tvSudu.setText(mRecord.getAveragespeed() + "km");
 
+            LogUtils.debugInfo("TAG", "recordList.size()=" + recordList.size());
+
+            String duration = mRecord.getDuration();
+            LogUtils.debugInfo("TAG", "----------------duration=" + duration);
+
+            String[] times = duration.split(":");
+            int minutes = Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1]) + (Integer.parseInt(times[2]) > 0 ? 1 : 0);
+
+            LogUtils.debugInfo("TAG", "===========Integer.parseInt(times[0])=" + Integer.parseInt(times[0]));
+            LogUtils.debugInfo("TAG", "===========Integer.parseInt(times[1])=" + Integer.parseInt(times[1]));
+            LogUtils.debugInfo("TAG", "===========Integer.parseInt(times[2])=" + Integer.parseInt(times[2]));
+            LogUtils.debugInfo("TAG", "===========minutes=" + minutes);
+
+            xLabels = new String[minutes + 1];
+            xLabels[0] = "0";
+            for (int i = 0; i < xLabels.length - 1; i++) {
+                xLabels[i + 1] = String.valueOf(i + 1);
+            }
+
+            String heartTracte = mRecord.getHeartrate();
+
+            String[] heartRates = null;
+            if(heartTracte != null && heartTracte.length() > 0) {
+                heartRates = heartTracte.split(";");
+                LogUtils.debugInfo("TAG", "===============heartRates.length=" + heartRates.length);
+            }
+
+            heartRateDatas = new int[xLabels.length];
+            heartRateDatas[0] = 0;
+            if(heartRates != null && heartRates.length > 0) {
+                for (int i = 1; i < heartRateDatas.length; i++) {
+                    if(i <= heartRates.length) {
+                        heartRateDatas[i] = Integer.parseInt(heartRates[i - 1]);
+                    }else {
+                        heartRateDatas[i] = 0;
+                    }
+                }
+            }
+
+            String stepRate = mRecord.getSteprate();
+            stepDatas = new int[xLabels.length];
+            String[] steps = stepRate.split(";");
+            stepDatas[0] = 0;
+            if(steps != null && steps.length > 0) {
+                for(int i = 1; i < stepDatas.length; i++) {
+                    if(i <= steps.length) {
+                        stepDatas[i] = Integer.parseInt(steps[i - 1]);
+                    }else {
+                        stepDatas[i] = 0;
+                    }
+                }
+            }
+
+            String speeds = mRecord.getSpeeds();
+
+            String[] speedsTemp = speeds.split(";");
+            speedsDatas = new int[xLabels.length];
+            speedsDatas[0] = 0;
+            for(int i = 1; i < speedsDatas.length; i++) {
+                if(i <= speedsTemp.length && speedsTemp[i - 1].length() > 0) {
+                    speedsDatas[i] = (int)(Float.parseFloat(speedsTemp[i - 1]) * 1000 / 60);
+                }else {
+                    speedsDatas[i] = 0;
+                }
+            }
+            LogUtils.debugInfo("TAG", "stepRate=" + stepRate + ", heartTracte=" + heartTracte);
         } else {
         }
-
     }
 
 
