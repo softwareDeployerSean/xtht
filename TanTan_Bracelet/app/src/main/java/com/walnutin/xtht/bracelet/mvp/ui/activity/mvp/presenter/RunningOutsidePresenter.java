@@ -43,7 +43,7 @@ public class RunningOutsidePresenter extends BasePresenter<RunningOutsideContrac
         this.mAppManager = appManager;
     }
 
-    public void post_sportdata(String distance, String duration, String average, String pathlineSring, String stratpoint, String endpoint, String time, String calorie, String height, String tag_title,String steprate,String heartrate) {
+    public void post_sportdata(String distance, String duration, String average, String pathlineSring, String stratpoint, String endpoint, String time, String calorie, String height, String tag_title,String steprate,String heartrate,String speeds) {
         HashMap hashMap = new HashMap();
         hashMap.put("averagespeed", average);
         hashMap.put("date", time);
@@ -58,6 +58,7 @@ public class RunningOutsidePresenter extends BasePresenter<RunningOutsideContrac
         hashMap.put("sign", tag_title);
         hashMap.put("steprate", steprate);
         hashMap.put("heartrate", heartrate);
+        hashMap.put("speeds", speeds);
 
         String jsonStr = JSONObject.toJSONString(hashMap);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), jsonStr);

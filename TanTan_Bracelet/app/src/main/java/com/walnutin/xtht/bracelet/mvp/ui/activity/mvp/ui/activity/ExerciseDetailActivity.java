@@ -173,20 +173,20 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         int max = getMaxArray(stepDatas);
         int min = getMinArray(stepDatas);
 
-        int linMax = ((int)((max + 20) / 5)) * 5 + 5;
+        int linMax = ((int) ((max + 20) / 5)) * 5 + 5;
 
         String[] yLabels = new String[linMax + 20];
-        for(int i = 0; i < yLabels.length; i++) {
+        for (int i = 0; i < yLabels.length; i++) {
             yLabels[i] = String.valueOf(i);
         }
         buPingRateView.setYlabel(yLabels);
 
         int a = linMax / 4;
 
-        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
         buPingRateView.setBrolenLineDisplay(brokenLineDisplay);
 
-        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
         buPingRateView.setyDisPlay(yDisplay);
     }
 
@@ -201,7 +201,7 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         rateRateView.setXlabel(xLabels);
 
         String[] yLables = new String[230];
-        for(int i = 0; i < yLables.length; i++) {
+        for (int i = 0; i < yLables.length; i++) {
             yLables[i] = String.valueOf(i);
         }
 
@@ -221,7 +221,7 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         speedRateView.setBrokenLineColor(Color.parseColor("#8CC44A"));
 
         String[] yLables = new String[150];
-        for(int i = 0; i < yLables.length; i++) {
+        for (int i = 0; i < yLables.length; i++) {
             yLables[i] = String.valueOf(i);
         }
 
@@ -235,10 +235,10 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
         int max = getMaxArray(speedsDatas);
         int min = getMinArray(speedsDatas);
 
-        int linMax = ((int)((max + 20) / 5)) * 5 + 5;
+        int linMax = ((int) ((max + 20) / 5)) * 5 + 5;
 
-        String[] yLabels = new String[linMax + linMax/5];
-        for(int i = 0; i < yLabels.length; i++) {
+        String[] yLabels = new String[linMax + linMax / 5];
+        for (int i = 0; i < yLabels.length; i++) {
             yLabels[i] = String.valueOf(i);
         }
         speedRateView.setYlabel(yLabels);
@@ -247,41 +247,39 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
 
         int a = linMax / 4;
 
-        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        int[] brokenLineDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
         speedRateView.setBrolenLineDisplay(brokenLineDisplay);
 
-        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2*a, linMax - a, linMax};
+        int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
         speedRateView.setyDisPlay(yDisplay);
     }
 
-    private int getMaxArray(int [] array) {
-        int i,min,max;
+    private int getMaxArray(int[] array) {
+        int i, min, max;
 
-        min=max=array[0];
+        min = max = array[0];
         System.out.print("数组A的元素包括：");
-        for(i=0;i<array.length;i++)
-        {
-            System.out.print(array[i]+" ");
-            if(array[i]>max)   // 判断最大值
-                max=array[i];
-            if(array[i]<min)   // 判断最小值
-                min=array[i];
+        for (i = 0; i < array.length; i++) {
+            System.out.print(array[i] + " ");
+            if (array[i] > max)   // 判断最大值
+                max = array[i];
+            if (array[i] < min)   // 判断最小值
+                min = array[i];
         }
         return max;
     }
 
-    private int getMinArray(int [] array) {
-        int i,min,max;
+    private int getMinArray(int[] array) {
+        int i, min, max;
 
-        min=max=array[0];
+        min = max = array[0];
         System.out.print("数组A的元素包括：");
-        for(i=0;i<array.length;i++)
-        {
-            System.out.print(array[i]+" ");
-            if(array[i]>max)   // 判断最大值
-                max=array[i];
-            if(array[i]<min)   // 判断最小值
-                min=array[i];
+        for (i = 0; i < array.length; i++) {
+            System.out.print(array[i] + " ");
+            if (array[i] > max)   // 判断最大值
+                max = array[i];
+            if (array[i] < min)   // 判断最小值
+                min = array[i];
         }
         return min;
     }
@@ -372,18 +370,18 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
             String heartTracte = mRecord.getHeartrate();
 
             String[] heartRates = null;
-            if(heartTracte != null && heartTracte.length() > 0) {
+            if (heartTracte != null && heartTracte.length() > 0) {
                 heartRates = heartTracte.split(";");
                 LogUtils.debugInfo("TAG", "===============heartRates.length=" + heartRates.length);
             }
 
             heartRateDatas = new int[xLabels.length];
             heartRateDatas[0] = 0;
-            if(heartRates != null && heartRates.length > 0) {
+            if (heartRates != null && heartRates.length > 0) {
                 for (int i = 1; i < heartRateDatas.length; i++) {
-                    if(i <= heartRates.length) {
+                    if (i <= heartRates.length) {
                         heartRateDatas[i] = Integer.parseInt(heartRates[i - 1]);
-                    }else {
+                    } else {
                         heartRateDatas[i] = 0;
                     }
                 }
@@ -393,11 +391,11 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
             stepDatas = new int[xLabels.length];
             String[] steps = stepRate.split(";");
             stepDatas[0] = 0;
-            if(steps != null && steps.length > 0) {
-                for(int i = 1; i < stepDatas.length; i++) {
-                    if(i <= steps.length) {
+            if (steps != null && steps.length > 0) {
+                for (int i = 1; i < stepDatas.length; i++) {
+                    if (i <= steps.length) {
                         stepDatas[i] = Integer.parseInt(steps[i - 1]);
-                    }else {
+                    } else {
                         stepDatas[i] = 0;
                     }
                 }
@@ -408,14 +406,15 @@ public class ExerciseDetailActivity extends BaseActivity<ExerciseDetailPresenter
             String[] speedsTemp = speeds.split(";");
             speedsDatas = new int[xLabels.length];
             speedsDatas[0] = 0;
-            for(int i = 1; i < speedsDatas.length; i++) {
-                if(i <= speedsTemp.length && speedsTemp[i - 1].length() > 0) {
-                    speedsDatas[i] = (int)(Float.parseFloat(speedsTemp[i - 1]) * 1000 / 60);
-                }else {
+            for (int i = 1; i < speedsDatas.length; i++) {
+                if (i <= speedsTemp.length && speedsTemp[i - 1].length() > 0) {
+                    speedsDatas[i] = (int) (Float.parseFloat(speedsTemp[i - 1]) * 1000 / 60);
+                } else {
                     speedsDatas[i] = 0;
                 }
             }
             LogUtils.debugInfo("TAG", "stepRate=" + stepRate + ", heartTracte=" + heartTracte);
+            LogUtils.debugInfo("速度====" + speeds);
         } else {
         }
     }

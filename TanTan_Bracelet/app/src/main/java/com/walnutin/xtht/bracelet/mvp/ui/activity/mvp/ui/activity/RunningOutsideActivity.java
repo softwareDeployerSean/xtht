@@ -279,9 +279,21 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                                 rate_tmp = rate_tmp / heart_during.size();
                                 heart_rate.add(rate_tmp);
                                 heart_during.clear();
-                            }else {
+                            } else {
                                 heart_rate.add(0);
                             }
+                            //速度
+                            if (speedListTemp != null && speedListTemp.size() > 0) {
+                                float totalSpeed = 0;
+                                for (int i = 0; i < speedListTemp.size(); i++) {
+                                    totalSpeed += speedListTemp.get(i);
+                                }
+                                speedList.add(totalSpeed / speedListTemp.size());
+                            } else {
+                                speedList.add(0f);
+                            }
+
+                            speedListTemp.clear();
 
 
                         }
@@ -372,22 +384,44 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
         int rate_tmp = 0;
         if (get_second() < 60) {
             step_rate.add(step_during + "");
-            if (heart_during.size()>0){
+            if (heart_during.size() > 0) {
                 for (int i : heart_during) {
                     rate_tmp += i;
                 }
                 rate_tmp = rate_tmp / heart_during.size();
                 heart_rate.add(rate_tmp);
             }
+            if (speedListTemp != null && speedListTemp.size() > 0) {
+                float totalSpeed = 0;
+                for (int i = 0; i < speedListTemp.size(); i++) {
+                    totalSpeed += speedListTemp.get(i);
+                }
+                speedList.add(totalSpeed / speedListTemp.size());
+            } else {
+                speedList.add(0f);
+            }
+
+
         } else if (get_second() % 60 != 0) {
             step_rate.add(step_during + "");
-            if (heart_during.size()>0){
+            if (heart_during.size() > 0) {
                 for (int i : heart_during) {
                     rate_tmp += i;
                 }
                 rate_tmp = rate_tmp / heart_during.size();
                 heart_rate.add(rate_tmp);
             }
+            if (speedListTemp != null && speedListTemp.size() > 0) {
+                float totalSpeed = 0;
+                for (int i = 0; i < speedListTemp.size(); i++) {
+                    totalSpeed += speedListTemp.get(i);
+                }
+                speedList.add(totalSpeed / speedListTemp.size());
+            } else {
+                speedList.add(0f);
+            }
+
+
         }
         if (list != null && list.size() > 0) {
             String duration = getDuration();
@@ -401,8 +435,8 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
             String height = getheight(list);
             String list_steprate = getstep_rateString();
             String list_heartrate = getheart_rateString();
-
-            mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_steprate, list_heartrate);
+            String speeds = getSpeedsString();
+            mPresenter.post_sportdata(String.valueOf(distance), duration, average, pathlineSring, stratpoint, endpoint, time, getcalorie(), height, tag_title, list_steprate, list_heartrate, speeds);
         } else {
             ToastUtils.showToast(getString(R.string.no_path), this);
         }
@@ -508,14 +542,14 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
     }
 
     private String getSpeedsString() {
-        if(speedList == null || speedList.size() == 0) {
+        if (speedList == null || speedList.size() == 0) {
             return "";
         }
         String ret = "";
-        for(int i = 0; i < speedList.size(); i++) {
-            if(i == speedList.size() - 1) {
+        for (int i = 0; i < speedList.size(); i++) {
+            if (i == speedList.size() - 1) {
                 ret += speedList.get(i);
-            }else {
+            } else {
                 ret += speedList.get(i) + ";";
             }
         }
@@ -618,26 +652,12 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 }
                 proxy.notifyLocation(amapLocation);
 
-                if(startTime == 0) {
+                if (startTime == 0) {
                     startTime = amapLocation.getTime();
                 }
-
+                //位置发生变化
                 speedListTemp.add(amapLocation.getSpeed());
 
-                if(amapLocation.getTime() - startTime > 1 * 60 * 1000) {
-                    if(speedListTemp != null && speedListTemp.size() > 0) {
-                        float totalSpeed = 0;
-                        for(int i = 0; i < speedListTemp.size(); i++) {
-                            totalSpeed += speedListTemp.get(i);
-                        }
-                        speedList.add(totalSpeed / speedListTemp.size());
-                    }else {
-                        speedList.add(0f);
-                    }
-
-                    speedListTemp.clear();
-                    startTime = amapLocation.getTime();
-                }
 
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": "
@@ -772,6 +792,18 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                                         heart_rate.add(rate_tmp);
                                         heart_during.clear();
                                     }
+//速度
+                                    if (speedListTemp != null && speedListTemp.size() > 0) {
+                                        float totalSpeed = 0;
+                                        for (int i = 0; i < speedListTemp.size(); i++) {
+                                            totalSpeed += speedListTemp.get(i);
+                                        }
+                                        speedList.add(totalSpeed / speedListTemp.size());
+                                    } else {
+                                        speedList.add(0f);
+                                    }
+
+                                    speedListTemp.clear();
 
                                 }
                             }

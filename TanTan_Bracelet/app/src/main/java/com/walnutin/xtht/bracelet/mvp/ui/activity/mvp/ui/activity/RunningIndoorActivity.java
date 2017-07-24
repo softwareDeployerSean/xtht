@@ -91,7 +91,6 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
     List<Integer> heart_during = new ArrayList<>();
     List<String> speed_rate = new ArrayList<>();
     List<Float> speedList = new ArrayList<>();
-    List<Float> speedListTemp = new ArrayList<>();
     float distance_tmp_sudu;
     float distance_tmp_sudu1;
 
@@ -151,6 +150,17 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                                 heart_rate.add(rate_tmp);
                                 heart_during.clear();
                             }
+                            float totalSpeed = 0;
+                            if (speed_rate != null && speed_rate.size() > 0) {
+                                for (int i = 0; i < speed_rate.size(); i++) {
+                                    totalSpeed += Float.parseFloat(speed_rate.get(i));
+                                }
+                                speedList.add(totalSpeed / speed_rate.size());
+                            } else {
+                                speedList.add(0f);
+                            }
+                            speed_rate.clear();
+
                         }
                         if (cnt % 3 == 0) {
                             float dis_3 = getDistance() - distance_tmp_sudu;//3s的距离
@@ -163,23 +173,8 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                         }
                         float dis = getDistance() - distance_tmp_sudu1;//1s的距离
                         if (dis > 0) {
-
-                            if(cnt % 60 == 0) {
-                                float totalSpeed = 0;
-                                if(speedListTemp != null && speedListTemp.size() > 0) {
-                                    for (int i = 0; i < speedListTemp.size(); i++) {
-                                        totalSpeed += speedListTemp.get(i);
-                                    }
-                                    speedList.add(totalSpeed / speedListTemp.size());
-                                }else {
-                                    speedList.add(0f);
-                                }
-                                speedListTemp.clear();
-                            }
-
                             Float f = new Float(1 / dis);
                             int i = f.intValue();
-                            speedListTemp.add(f);
                             tvSpeed.setText(ConmonUtils.secToTime(i));
                             distance_tmp_sudu1 = getDistance();
                         }
@@ -278,6 +273,18 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
                                         heart_rate.add(rate_tmp);
                                         heart_during.clear();
                                     }
+                                    float totalSpeed = 0;
+                                    if (speed_rate != null && speed_rate.size() > 0) {
+                                        for (int i = 0; i < speed_rate.size(); i++) {
+                                            totalSpeed += Float.parseFloat(speed_rate.get(i));
+                                        }
+                                        speedList.add(totalSpeed / speed_rate.size());
+                                    } else {
+                                        speedList.add(0f);
+                                    }
+                                    speed_rate.clear();
+
+
                                 }
                                 if (cnt % 3 == 0) {
                                     float dis_3 = getDistance() - distance_tmp_sudu;//3s的距离
@@ -408,14 +415,14 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
     }
 
     private String getSpeedsString() {
-        if(speedList == null || speedList.size() == 0) {
+        if (speedList == null || speedList.size() == 0) {
             return "";
         }
         String ret = "";
-        for(int i = 0; i < speedList.size(); i++) {
-            if(i == speedList.size() - 1) {
+        for (int i = 0; i < speedList.size(); i++) {
+            if (i == speedList.size() - 1) {
                 ret += speedList.get(i);
-            }else {
+            } else {
                 ret += speedList.get(i) + ";";
             }
         }
@@ -453,8 +460,9 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         String list_steprate = getstep_rateString();
         String list_heartrate = getheart_rateString();
         String list_speedrate = getspeed_rateString();
+        String speeds = getSpeedsString();
         mPresenter.post_sportdata(String.valueOf(distance), duration, average,
-                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "室内", list_steprate, list_heartrate);
+                null, list_speedrate, "", record.getDate(), getcalorie(), "0", "室内", list_steprate, list_heartrate, speeds);
     }
 
 
