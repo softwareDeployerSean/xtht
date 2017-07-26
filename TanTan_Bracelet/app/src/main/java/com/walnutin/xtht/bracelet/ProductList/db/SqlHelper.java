@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
 import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
@@ -124,6 +125,9 @@ public class SqlHelper {
     public StepInfos getOneDateStep(String account, String date) {
         StepInfos dailyInfo = new StepInfos();
         String sql = "select * from stepinfo where account =? and dates =?";
+
+        LogUtils.debugInfo("TAG", "getOneDateStep sql=" + sql + ", account=" + account + ", date=" + date);
+
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{account, date});
         if (cursor != null) {
@@ -710,13 +714,14 @@ public class SqlHelper {
 
     synchronized public SleepModel getOneDaySleepListTime(String account, String date) { // 得到某一天时间内的睡眠
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
-        SleepModel sleepModel = new SleepModel();
+        SleepModel sleepModel = null;
         String sql = "select * from sleepinfo where account =? and date =?";
         Cursor cursor = db.rawQuery(sql, new String[]{account, date});
 
         if (cursor != null) {
             Gson gson = new Gson();
             while (cursor.moveToNext()) {
+                sleepModel = new SleepModel();
                 sleepModel.account = account;
                 sleepModel.date = cursor.getString(cursor.getColumnIndex("date"));
                 sleepModel.lightTime = cursor.getInt(cursor.getColumnIndex("lightTime"));

@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.jess.arms.utils.LogUtils;
+
 /**
  * 可以设置禁止滑动的 ViewPager(单向禁止：左滑动)
  * 核心方法：setScrollble()
@@ -84,6 +86,37 @@ public class CanotSlidingViewpager extends ViewPager {
 
     }
 
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent ev) {
+//        if(isCanScroll) {
+//            return super.onTouchEvent(ev);
+//        }else {
+//            switch (ev.getAction()) {
+//                case MotionEvent.ACTION_DOWN:
+//                    beforeX = ev.getX();
+//                    break;
+//                case MotionEvent.ACTION_HOVER_MOVE:
+//                    float motionValue = ev.getX() - beforeX;
+//                    LogUtils.debugInfo("---------------------motionValue=" + motionValue + "------------------------");
+//                    if(motionValue < 0) {
+//                        return false;
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//        return  super.onTouchEvent(ev);
+//    }
+//
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent arg0) {
+//        if (isCanScroll)
+//            return false;
+//        else
+//            return super.onInterceptTouchEvent(arg0);
+//    }
 
     public boolean isScrollble() {
         return isCanScroll;

@@ -93,7 +93,7 @@ public class RateView extends View {
 //            Ylabel[i] = String.valueOf(i);
 //        }
 
-        Margin = getWidth() / 8;
+        Margin = getWidth() / marginPer;
 
         Xpoint = this.Margin;
         Ypoint = this.getHeight() - this.Margin;
@@ -208,10 +208,12 @@ public class RateView extends View {
             }
 
             boolean isYDisPlay = false;
-            for(int z = 0; z < yDisPlay.length; z++) {
-                if(yDisPlay[z] == i) {
-                    isYDisPlay = true;
-                    break;
+            if(yDisPlay != null) {
+                for (int z = 0; z < yDisPlay.length; z++) {
+                    if (yDisPlay[z] == i) {
+                        isYDisPlay = true;
+                        break;
+                    }
                 }
             }
             if (isYDisPlay) {

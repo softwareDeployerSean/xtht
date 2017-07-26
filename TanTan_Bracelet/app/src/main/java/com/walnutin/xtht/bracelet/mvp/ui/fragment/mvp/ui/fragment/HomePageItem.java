@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,8 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
+import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
+import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
+import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfo;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DataShowActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
@@ -33,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Leiht on 2017/7/2.
@@ -60,6 +71,12 @@ public class HomePageItem {
 
     private ListView healhListView;
 
+    private TextView calorieTv;
+
+    private TextView distanceTv;
+
+    private TextView heartRateTv;
+
     private List<HealthPageData> healthDatas;
 
     private HomePageAdapter homePagerAdapter;
@@ -75,6 +92,18 @@ public class HomePageItem {
     public String getDate() {
         return this.date;
     }
+
+    private StepInfos stepInfos;
+
+    private List heartRateList;
+
+    private HeartRateModel latelyHeartRateModel;
+
+    private List bloodPressureList;
+
+    private BloodPressure latelyBloodPressure;
+
+    private SleepModel sleepModel;
 
     public HomePageItem(Context context, MainFragment mainFragment) {
         this.mContext = context;
@@ -131,68 +160,20 @@ public class HomePageItem {
 
         healthRv = (RecyclerView) view.findViewById(R.id.health_rv);
 
-//        healthRv.setHasFixedSize(true);
-//        healthRv.setNestedScrollingEnabled(false);
-
-        new Thread() {
-            @Override
-            public void run() {
-//                sqlHelper.getOneDateStep();
-            }
-        }.start();
-
         healhListView = (ListView) view.findViewById(R.id.health_listview);
-    }
 
-    public void update(String date) {
+        calorieTv = (TextView) view.findViewById(R.id.tv_calorie);
 
-        this.date = date;
+        distanceTv = (TextView) view.findViewById(R.id.tv_kilometre);
 
-        LogUtils.debugInfo("TAG", "update date = " + date);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
+        heartRateTv = (TextView) view.findViewById(R.id.tv_heart_rate);
 
-        Date d = null;
-        try {
-            d = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        LogUtils.debugInfo("TAG", "update d = " + d);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(d);
-
-        //今天之前的数据
-        if (isNow(d)) {
-            currentDateTv.setText("今天");
-        } else if (isLast(d)) {
-            currentDateTv.setText("昨天");
-        } else {
-            currentDateTv.setText(date);
-        }
-
-        //更新左上角当前的日
-        String tempDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        dayTv.setText(tempDate);
-
-        if (mainFragment.isArcOrLinder()) {
-            cylinderView.setVisibility(View.GONE);
-            stepArcView.setVisibility(View.VISIBLE);
-        } else {
-            stepArcView.setVisibility(View.GONE);
-            cylinderView.setVisibility(View.VISIBLE);
-        }
-
-        stepArcView.setCurrentCount(7000, 6000);
         if (healthDatas == null) {
             healthDatas = new ArrayList<>();
         }
-
         healthDatas.clear();
-
         //模拟从数据库查询当天对应的数据
-        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62", "78", "", true, 1);
+        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62-78", "78", "", true, 1);
         HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2);
         HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3);
         HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4);
@@ -204,33 +185,28 @@ public class HomePageItem {
         healthDatas.add(data1);
         healthDatas.add(data2);
         healthDatas.add(data3);
-        healthDatas.add(data4);
-        healthDatas.add(data5);
-        healthDatas.add(data6);
-        healthDatas.add(data7);
-        healthDatas.add(data8);
-
-        if (homePagerAdapter == null) {
-            homePagerAdapter = new HomePageAdapter(mContext, healthDatas);
-
-            mLayoutManager = new CustomLinearLayoutManager(mContext);
-
-            mLayoutManager.setSmoothScrollbarEnabled(true);
-            mLayoutManager.setAutoMeasureEnabled(true);
-
-            mLayoutManager.setScrollEnabled(false);
-            mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            healthRv.setLayoutManager(new LinearLayoutManager(mContext));
-
-            healthRv.addItemDecoration(new RecycleViewDivider(
-                    mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
-
-            healthRv.setAdapter(homePagerAdapter);
-        } else {
-            //homePagerAdapter.notifyDataSetChanged();
-        }
+//        healthDatas.add(data4);
+//        healthDatas.add(data5);
+//        healthDatas.add(data6);
+//        healthDatas.add(data7);
+//        healthDatas.add(data8);
 
 
+        homePagerAdapter = new HomePageAdapter(mContext, healthDatas, latelyHeartRateModel, latelyBloodPressure);
+
+        mLayoutManager = new CustomLinearLayoutManager(mContext);
+
+        mLayoutManager.setSmoothScrollbarEnabled(true);
+        mLayoutManager.setAutoMeasureEnabled(true);
+
+        mLayoutManager.setScrollEnabled(false);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        healthRv.setLayoutManager(new LinearLayoutManager(mContext));
+
+        healthRv.addItemDecoration(new RecycleViewDivider(
+                mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
+
+        healthRv.setAdapter(homePagerAdapter);
     }
 
     private boolean isLast(Date date) {
@@ -274,18 +250,174 @@ public class HomePageItem {
 
     }
 
-    public void update(int position) {
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int stepGoal = stepInfos.getStepGoal();
+            int actualStep = stepInfos.getStep();
+            LogUtils.debugInfo("TAG", "stepGoal=" + stepGoal + ", actualStep=" + actualStep);
+            if (stepGoal == 0) {
+                stepGoal = 7000;
+                actualStep = new Random().nextInt(6000);
+            }
+            stepArcView.setCurrentCount(stepGoal, actualStep);
 
-        //更新页面最上端中间显示日期
-        String currentDate = "";
-        if (position == 1001) {
-            currentDate = "今天";
-        } else if (position == 1000) {
-            currentDate = "昨天";
-        } else {
-            currentDate = getDistanceDate(position - 1001);
+            Map<Integer, Integer> stepOneHourInfo = stepInfos.getStepOneHourInfo();
+            int[] stepDatas = new int[24];
+            if (stepOneHourInfo != null) {
+                for (int i = 0; i < stepDatas.length; i++) {
+                    if (stepOneHourInfo.containsKey(60 * (i + 1))) {
+                        stepDatas[i] = stepOneHourInfo.get(60 * (i + 1));
+                    } else {
+                        stepDatas[i] = 0;
+                    }
+                }
+            } else {
+                for (int i = 0; i < stepDatas.length; i++) {
+//                    stepDatas[i] = 0;
+                    int r = new Random().nextInt(100);
+                    stepDatas[i] = r;
+                }
+            }
+            cylinderView.setDatas(stepDatas);
+
+            int calories = stepInfos.getCalories();
+            calorieTv.setText(calories == 0 ? "--" : String.valueOf(calories));
+
+            float distance = stepInfos.getDistance();
+            distanceTv.setText(distance == 0 ? "--" : String.valueOf(distance));
+
+            int rate = 0;
+            if (heartRateList != null && heartRateList.size() > 0) {
+                int totalRate = 0;
+                HeartRateModel heartRateModel = null;
+                for (int i = 0; i < heartRateList.size(); i++) {
+                    heartRateModel = (HeartRateModel) heartRateList.get(i);
+                    totalRate += heartRateModel.getCurrentRate();
+                }
+                rate = totalRate / heartRateList.size();
+
+                latelyHeartRateModel = (HeartRateModel) heartRateList.get(heartRateList.size() - 1);
+            } else {
+                rate = 0;
+            }
+            heartRateTv.setText(rate == 0 ? "--" : String.valueOf(rate));
+
+            if (bloodPressureList != null && bloodPressureList.size() > 0) {
+                latelyBloodPressure = (BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1);
+            }
+
+            //清除除心率，血压，血氧之外其它的数据，后面再动态添加
+            if(healthDatas != null && healthDatas.size() > 3) {
+                for (int i = 3; i < healthDatas.size(); i++) {
+                    healthDatas.remove(i);
+                }
+            }
+
+            if (sleepModel != null) {
+                HealthPageData sleepPageData = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7);
+                String topText = "";
+                int allDurationTime = sleepModel.getAllDurationTime();
+                if(allDurationTime > 1 * 60 * 60) {
+                    topText = (allDurationTime/1 * 60 * 60) + "h " +  ((allDurationTime % (1 * 60 * 60)) / 60) + "min";
+                }else {
+                    topText = (allDurationTime / 60) + "min";
+                }
+                sleepPageData.setRightTop(topText);
+                String sleepStatusText = "";
+                switch (sleepModel.getSleepStatus()) {
+                    case 0:
+                        sleepStatusText = "优秀";
+                        break;
+                    case 1:
+                        sleepStatusText = "良好";
+                        break;
+                    case 2:
+                        sleepStatusText = "一般";
+                        break;
+                    default:
+                        sleepStatusText = "及格";
+                        break;
+                }
+                sleepPageData.setRightButtom(sleepStatusText);
+                healthDatas.add(sleepPageData);
+            }
+
+            //设置心率数据
+            if (latelyHeartRateModel != null) {
+                healthDatas.get(0).setRightTop(latelyHeartRateModel.getLowRate() + "-" + latelyHeartRateModel.getHighRate());
+            } else {
+                healthDatas.get(0).setRightTop("-- ");
+            }
+
+            //设置血压数据
+            if (latelyBloodPressure != null) {
+                healthDatas.get(1).setRightTop(String.valueOf(latelyBloodPressure.getSystolicPressure()));
+                healthDatas.get(1).setRightButtom(String.valueOf(latelyBloodPressure.getDiastolicPressure()));
+            } else {
+                healthDatas.get(1).setRightTop("--");
+                healthDatas.get(1).setRightButtom("--");
+            }
+
+            //设置心氧数据
+            healthDatas.get(2).setRightTop("--");
+
+            homePagerAdapter.notifyDataSetChanged();
+
         }
-//        currentDateTv.setText(currentDate);
+    };
+
+    private void loadDatas() {
+        stepInfos = null;
+        heartRateList = null;
+        latelyHeartRateModel = null;
+        bloodPressureList = null;
+        latelyBloodPressure = null;
+        sleepModel = null;
+
+        new Thread() {
+            @Override
+            public void run() {
+                stepInfos = sqlHelper.getOneDateStep(MyApplication.account, TimeUtil.getCurrentDate());
+
+                heartRateList = sqlHelper.getOneDayHeartRateInfo(MyApplication.account, TimeUtil.getCurrentDate());
+
+                bloodPressureList = sqlHelper.getOneDayBloodPressureInfo(MyApplication.account, TimeUtil.getCurrentDate());
+
+                sleepModel = sqlHelper.getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
+
+                mHandler.sendEmptyMessage(0);
+            }
+        }.start();
+    }
+
+    public void update(String date) {
+        LogUtils.debugInfo("TAG", "---------------------------------update call ----------------------");
+        this.date = date;
+
+        LogUtils.debugInfo("TAG", "update date = " + date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
+
+        Date d = null;
+        try {
+            d = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        LogUtils.debugInfo("TAG", "update d = " + d);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+
+        //今天之前的数据
+        if (isNow(d)) {
+            currentDateTv.setText("今天");
+        } else if (isLast(d)) {
+            currentDateTv.setText("昨天");
+        } else {
+            currentDateTv.setText(date);
+        }
 
         if (mainFragment.isArcOrLinder()) {
             cylinderView.setVisibility(View.GONE);
@@ -296,73 +428,10 @@ public class HomePageItem {
         }
 
         //更新左上角当前的日
-        String tempDate = getDistanceDate(position - 1001);
-        tempDate = tempDate.substring(tempDate.length() - 2, tempDate.length());
-        if (tempDate.startsWith("0")) {
-            tempDate = tempDate.substring(1, tempDate.length());
-        }
+        String tempDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         dayTv.setText(tempDate);
 
-        stepArcView.setCurrentCount(7000, 6000);
-        if (healthDatas == null) {
-            healthDatas = new ArrayList<>();
-        }
-
-        healthDatas.clear();
-
-        //模拟从数据库查询当天对应的数据
-        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62", "78", "", true, 1);
-        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2);
-        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3);
-        HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4);
-        HealthPageData data5 = new HealthPageData(5, "14:25", "散步", "12", "12", "42", "100", false, 5);
-        HealthPageData data6 = new HealthPageData(6, "14:25", "跑步", "12", "48", "42", "100", false, 6);
-        HealthPageData data7 = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7);
-        HealthPageData data8 = new HealthPageData(8, "14:25", "摘下", "", "5h42min", "", "", false, 8);
-
-        healthDatas.add(data1);
-        healthDatas.add(data2);
-        healthDatas.add(data3);
-        healthDatas.add(data4);
-        healthDatas.add(data5);
-        healthDatas.add(data6);
-        healthDatas.add(data7);
-        healthDatas.add(data8);
-
-        if (homePagerAdapter == null) {
-            homePagerAdapter = new HomePageAdapter(mContext, healthDatas);
-
-            mLayoutManager = new CustomLinearLayoutManager(mContext);
-
-            mLayoutManager.setSmoothScrollbarEnabled(true);
-            mLayoutManager.setAutoMeasureEnabled(true);
-
-            mLayoutManager.setScrollEnabled(false);
-            mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            healthRv.setLayoutManager(new LinearLayoutManager(mContext));
-
-            healthRv.addItemDecoration(new RecycleViewDivider(
-                    mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
-
-            healthRv.setAdapter(homePagerAdapter);
-        } else {
-            homePagerAdapter.notifyDataSetChanged();
-        }
-
-        homePagerAdapter.setOnItemClickListener(new HomePageAdapter.OnItemClickListener() {
-            @Override
-            public void onImteClick(int type) {
-                if (type == 1) {
-                    Intent intent = new Intent(mContext, RateDetailActivity.class);
-                    mContext.startActivity(intent);
-                }
-            }
-        });
-
-//        healthRv.setNestedScrollingEnabled(false);
-
-        MyListViewAdapter listViewAdapter = new MyListViewAdapter(healthDatas);
-        healhListView.setAdapter(listViewAdapter);
+        loadDatas();
     }
 
     public View getView() {
@@ -411,7 +480,9 @@ public class HomePageItem {
         public long getItemId(int position) {
             return position;
         }
-        boolean isAllItemEnable=true;
+
+        boolean isAllItemEnable = true;
+
         @Override
         public boolean isEnabled(int position) {
             return false;
@@ -437,7 +508,7 @@ public class HomePageItem {
 //                holder.parent = (RelativeLayout) convertView.findViewById(R.id.rl_parent);
 
                 convertView.setTag(holder);
-            }else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 

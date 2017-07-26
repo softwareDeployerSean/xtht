@@ -83,13 +83,13 @@ public class CylinderView extends View {
         textPaint.setStrokeWidth(DensityUtil.dip2px(context, 1));
 
 
-        datas = new int[24];
-        for (int i = 0; i < 24; i++) {
-            int r = new Random().nextInt(100);
-            datas[i] = r;
-            totalStep += r;
-            maxStep = Math.max(maxStep, r);
-        }
+//        datas = new int[24];
+//        for (int i = 0; i < 24; i++) {
+//            int r = new Random().nextInt(100);
+//            datas[i] = r;
+//            totalStep += r;
+//            maxStep = Math.max(maxStep, r);
+//        }
     }
 
     @Override
@@ -149,22 +149,24 @@ public class CylinderView extends View {
 
     //柱子
     private void drawCylinder(Canvas canvas) {
-        float startY = mHeight - hourTextHeight - DensityUtil.dip2px(ctx, 10);//起始y坐标
-        float maxHeight = mHeight - hourTextHeight - stepTextHeight - DensityUtil.dip2px(ctx, 30);
-        float intervalX = (rightX - leftX - 80) / 24;//数据宽度比最外层线要靠内
-        float intervalY = maxHeight / maxStep;//根据最大步数,分割y轴
-        //值需要计算起始x坐标和终止y坐标即可
-        float startX = leftX;
-        float endY;
-        cylinderPaint.setStrokeWidth((float) (intervalX * 0.7));
-        for (int i = 0; i < 24; i++) {
-            startX += intervalX;
-            endY = startY - datas[i] * intervalY;//向上画y轴变小
-            canvas.drawLine(startX, startY, startX, endY, cylinderPaint);
+        if(datas != null && datas.length > 0) {
+            float startY = mHeight - hourTextHeight - DensityUtil.dip2px(ctx, 10);//起始y坐标
+            float maxHeight = mHeight - hourTextHeight - stepTextHeight - DensityUtil.dip2px(ctx, 30);
+            float intervalX = (rightX - leftX - 80) / 24;//数据宽度比最外层线要靠内
+            float intervalY = maxHeight / maxStep;//根据最大步数,分割y轴
+            //值需要计算起始x坐标和终止y坐标即可
+            float startX = leftX;
+            float endY;
+            cylinderPaint.setStrokeWidth((float) (intervalX * 0.7));
+            for (int i = 0; i < 24; i++) {
+                startX += intervalX;
+                endY = startY - datas[i] * intervalY;//向上画y轴变小
+                canvas.drawLine(startX, startY, startX, endY, cylinderPaint);
+            }
         }
     }
 
-    private void setDatas(int[] datas) {
+    public void setDatas(int[] datas) {
         this.datas = datas;
         for (int i = 0; i < 24; i++) {
             int r = datas[i];

@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
+import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
@@ -32,9 +34,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
     private List<HealthPageData> healthDatas;
 
-    public HomePageAdapter(Context context, List<HealthPageData> healthDatas) {
+    private HeartRateModel heartRateModel;
+
+    private BloodPressure bloodPressure;
+
+    public HomePageAdapter(Context context, List<HealthPageData> healthDatas, HeartRateModel heartRateModel, BloodPressure bloodPressure) {
         this.mContext = context;
         this.healthDatas = healthDatas;
+        this.heartRateModel = heartRateModel;
+        this.bloodPressure = bloodPressure;
     }
 
     @Override
@@ -57,15 +65,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
                 }
             }
         });*/
-//        if(position==0||position==1){
-//            holder.parent.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(mContext, RateDetailActivity.class);
-//                    mContext.startActivity(intent);
-//                }
-//            });
-//        }
+        if(position==0||position==1){
+            holder.parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, RateDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
 
         holder.timeIconTv.setText(data.getTime());
         if (data.getType() == 1) {
@@ -119,7 +127,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
         holder.leftButtomTv.setText(data.getLeftButtom());
 
         if (data.getType() == 1) {
-            String str = data.getRightTop() + "-" + data.getRightButtom() + "BPM";
+            String str = data.getRightTop() + "BPM";
             holder.rightTopTv.setText(str);
             holder.rightButtomTv.setText("");
             holder.rightIconTv.setText("查看");

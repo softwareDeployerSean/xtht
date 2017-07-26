@@ -11,9 +11,9 @@
         layout="@layout/include_title" />
 
     <com.walnutin.xtht.bracelet.mvp.ui.widget.RateView
+        android:id="@+id/heart_rate_detail_view"
         android:layout_width="match_parent"
-        android:layout_height="300px"
-        android:layout_marginTop="30px" />
+        android:layout_height="300px" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginLeft="10px"

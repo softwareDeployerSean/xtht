@@ -203,12 +203,6 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
         mPresenter.getBindBracelet(token);
 
-        homeViewPagerAdapter = new HomeViewPagerAdapter(items);
-        vp.setAdapter(homeViewPagerAdapter);
-        vp.setCurrentItem(1001);
-        HomePageItem item = items[1001 % 3];
-        item.update(1001);
-
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         currentDate = sdf.format(c.getTime());
@@ -232,6 +226,9 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
             }
         });
+        homeViewPagerAdapter = new HomeViewPagerAdapter(items);
+        vp.setAdapter(homeViewPagerAdapter);
+        vp.setCurrentItem(1001);
 
 
     }
@@ -312,7 +309,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
         @Override
         public int getCount() {
-            return 3;
+            return Integer.MAX_VALUE;
         }
 
         @Override
@@ -324,9 +321,5 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         public void destroyItem(ViewGroup container, int position, Object object) {
             ((ViewPager) container).removeView((View) container);
         }
-
-//        public V[] getAllItems() {
-//            return views;
-//        }
     }
 }
