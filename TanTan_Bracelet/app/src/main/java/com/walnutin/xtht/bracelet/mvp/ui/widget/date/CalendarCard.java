@@ -110,15 +110,13 @@ public class CalendarCard extends View {
         mRatePaint.setStyle(Paint.Style.FILL);
         mRatePaint.setColor(mContext.getResources().getColor(R.color.blue_7CBC30));
 
-        rateMap = new HashMap<>();
-        rateMap.put(new Integer(1), (float)0.4);
-        rateMap.put(new Integer(15), (float)0.2);
-        rateMap.put(new Integer(20), (float)0.8);
-        rateMap.put(new Integer(26), (float)0.6);
-        rateMap.put(new Integer(12), (float)0.9);
-        rateMap.put(new Integer(3), (float)0.2);
 
         initDate();
+    }
+
+    public void setRateMap(Map<Integer, Float> rateMap) {
+        this.rateMap = rateMap;
+        postInvalidate();
     }
 
     private void initDate() {
@@ -371,7 +369,7 @@ public class CalendarCard extends View {
                     mCirclePaint);
 
             if(state == State.CURRENT_MONTH_DAY || state == State.UNREACH_DAY || state == State.TODAY) {
-                if(rateMap.containsKey(new Integer(date.getDay()))) {
+                if(rateMap != null && rateMap.containsKey(new Integer(date.getDay()))) {
                     float pointX = (float) (mXCellSpace * (i + 0.5));
                     float pointY = (float) ((j + 0.45) * mYCellSpace);
                     float rudio = (Math.min(mXCellSpace, mYCellSpace)) * 9 / 20;

@@ -15,12 +15,109 @@
         android:layout_width="match_parent"
         android:layout_height="300px" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginLeft="10px"
-        android:layout_marginRight="10px"
-        android:id="@+id/recycle"
+    <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250px"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10px">
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/text_left"
+                android:text="@string/rate_avg"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+            <TextView
+                android:id="@+id/rate_avg_tv"
+                android:layout_marginTop="10px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="85 bpm  "
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rate_low"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+            <TextView
+                android:layout_marginTop="10px"
+                android:id="@+id/rate_low_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="78 bpm"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rate_hight"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+            <TextView
+                android:layout_marginTop="10px"
+                android:id="@+id/rate_hight_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="128 bpm"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="20px"
+        android:id="@+id/rate_detail_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px">
+    </android.support.v7.widget.RecyclerView>
 
 
 </com.zhy.autolayout.AutoLinearLayout>

@@ -72,8 +72,9 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
                 .inject(this);
     }
 
-    public void toDateActivity() {
+    public void toDateActivity(String date) {
         Intent intent = new Intent(getActivity(), DateSelectActivity.class);
+        intent.putExtra("date", date);
         getActivity().startActivityForResult(intent, DATE_REQUEST_ID);
     }
 

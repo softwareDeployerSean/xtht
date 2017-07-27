@@ -56,20 +56,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         HealthPageData data = healthDatas.get(position);
-
-       /* holder.parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mOnItemClickListener != null) {
-                    mOnItemClickListener.onImteClick(data.getType());
-                }
-            }
-        });*/
         if(position==0||position==1){
             holder.parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext, RateDetailActivity.class);
+                    intent.putExtra("date", data.getDate());
+                    intent.putExtra("type", String.valueOf(position));
                     mContext.startActivity(intent);
                 }
             });

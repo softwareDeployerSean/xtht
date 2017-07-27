@@ -85,7 +85,7 @@ public class HomePageItem {
 
     private MainFragment mainFragment;
 
-    private String date;
+    private String date = "";
 
     private SqlHelper sqlHelper;
 
@@ -120,7 +120,7 @@ public class HomePageItem {
         dayTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainFragment.toDateActivity();
+                mainFragment.toDateActivity(date);
             }
         });
 
@@ -173,14 +173,14 @@ public class HomePageItem {
         }
         healthDatas.clear();
         //模拟从数据库查询当天对应的数据
-        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62-78", "78", "", true, 1);
-        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2);
-        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3);
-        HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4);
-        HealthPageData data5 = new HealthPageData(5, "14:25", "散步", "12", "12", "42", "100", false, 5);
-        HealthPageData data6 = new HealthPageData(6, "14:25", "跑步", "12", "48", "42", "100", false, 6);
-        HealthPageData data7 = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7);
-        HealthPageData data8 = new HealthPageData(8, "14:25", "摘下", "", "5h42min", "", "", false, 8);
+        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62-78", "78", "", true, 1, "");
+        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2, "");
+        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3, "");
+        HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4, "");
+        HealthPageData data5 = new HealthPageData(5, "14:25", "散步", "12", "12", "42", "100", false, 5, "");
+        HealthPageData data6 = new HealthPageData(6, "14:25", "跑步", "12", "48", "42", "100", false, 6, "");
+        HealthPageData data7 = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7, "");
+        HealthPageData data8 = new HealthPageData(8, "14:25", "摘下", "", "5h42min", "", "", false, 8, "");
 
         healthDatas.add(data1);
         healthDatas.add(data2);
@@ -315,7 +315,7 @@ public class HomePageItem {
             }
 
             if (sleepModel != null) {
-                HealthPageData sleepPageData = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7);
+                HealthPageData sleepPageData = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7, date);
                 String topText = "";
                 int allDurationTime = sleepModel.getAllDurationTime();
                 if(allDurationTime > 1 * 60 * 60) {
@@ -325,20 +325,14 @@ public class HomePageItem {
                 }
                 sleepPageData.setRightTop(topText);
                 String sleepStatusText = "";
-                switch (sleepModel.getSleepStatus()) {
-                    case 0:
-                        sleepStatusText = "优秀";
-                        break;
-                    case 1:
-                        sleepStatusText = "良好";
-                        break;
-                    case 2:
-                        sleepStatusText = "一般";
-                        break;
-                    default:
-                        sleepStatusText = "及格";
-                        break;
+                if(allDurationTime >= 7 * 60 * 60 && allDurationTime <= 10 * 60 * 60) {
+                    sleepStatusText = "优秀";
+                }else if(allDurationTime >=5 * 60 * 60 && allDurationTime < 7 * 60 * 60) {
+                    sleepStatusText = "良好";
+                }else {
+                    sleepStatusText = "一般";
                 }
+
                 sleepPageData.setRightButtom(sleepStatusText);
                 healthDatas.add(sleepPageData);
             }
@@ -346,21 +340,26 @@ public class HomePageItem {
             //设置心率数据
             if (latelyHeartRateModel != null) {
                 healthDatas.get(0).setRightTop(latelyHeartRateModel.getLowRate() + "-" + latelyHeartRateModel.getHighRate());
+                healthDatas.get(0).setDate(date);
             } else {
                 healthDatas.get(0).setRightTop("-- ");
+                healthDatas.get(0).setDate(date);
             }
 
             //设置血压数据
             if (latelyBloodPressure != null) {
                 healthDatas.get(1).setRightTop(String.valueOf(latelyBloodPressure.getSystolicPressure()));
                 healthDatas.get(1).setRightButtom(String.valueOf(latelyBloodPressure.getDiastolicPressure()));
+                healthDatas.get(1).setDate(date);
             } else {
                 healthDatas.get(1).setRightTop("--");
                 healthDatas.get(1).setRightButtom("--");
+                healthDatas.get(1).setDate(date);
             }
 
             //设置心氧数据
             healthDatas.get(2).setRightTop("--");
+            healthDatas.get(2).setDate(date);
 
             homePagerAdapter.notifyDataSetChanged();
 
@@ -392,7 +391,6 @@ public class HomePageItem {
     }
 
     public void update(String date) {
-        LogUtils.debugInfo("TAG", "---------------------------------update call ----------------------");
         this.date = date;
 
         LogUtils.debugInfo("TAG", "update date = " + date);

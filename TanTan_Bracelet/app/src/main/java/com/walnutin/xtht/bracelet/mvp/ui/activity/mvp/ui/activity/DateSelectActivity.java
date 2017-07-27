@@ -11,6 +11,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.UiUtils;
 
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerDateSelectComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.DateSelectModule;
@@ -21,6 +22,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarViewAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CustomDate;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.DatePageImte;
 
+
+import java.util.List;
 
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
@@ -34,6 +37,9 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
     private DatePageImte[] mShowViews;
     private CalendarViewAdapter adapter;
     private SildeDirection mDirection = SildeDirection.NO_SILDE;
+
+    private String date;
+    private String monthDate;
 
     DatePageImte[] items = new DatePageImte[3];
 
@@ -71,7 +77,8 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
         updateNearPage(498);
 
-
+        Intent intent = getIntent();
+        date = intent.getStringExtra("date");
     }
 
     private void setViewPager() {

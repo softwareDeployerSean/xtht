@@ -2,6 +2,8 @@ package com.walnutin.xtht.bracelet.mvp.ui.widget.date;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -12,13 +14,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfo;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Leiht on 2017/7/8.
@@ -60,6 +70,12 @@ public class DatePageImte {
      */
     private LinearLayout nextMonthParent;
 
+    private List<StepInfos> currentMonthStepList;
+
+    private List<StepInfos> nextMonthStepList;
+
+    private Map<Integer, Float> currentMonthRateMap;
+    private Map<Integer, Float> nextMonthRateMap;
 
 
     public DatePageImte(Context context) {
@@ -112,6 +128,200 @@ public class DatePageImte {
         nextTv.setTextColor(Color.BLACK);
         nextTv.setText(nextCalendar.getShowDate().getMonth() + "月");
 
+//        Map<Integer, Float> rateMap;
+//
+//        rateMap = new HashMap<>();
+//        rateMap.put(new Integer(1), (float)0.4);
+//        rateMap.put(new Integer(15), (float)0.2);
+//        rateMap.put(new Integer(20), (float)0.8);
+//        rateMap.put(new Integer(26), (float)0.6);
+//        rateMap.put(new Integer(12), (float)0.9);
+//        rateMap.put(new Integer(3), (float)0.2);
+//        currentCalendar.setRateMap(rateMap);
+//
+//        nextCalendar.setRateMap(rateMap);
+
+        loadStepDatas();
+
+    }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+//            currentMonthStepList = new ArrayList<>();
+//            nextMonthStepList = new ArrayList<>();
+//            StepInfos dailyInfo1 = new StepInfos();
+//            String account = MyApplication.account;
+//            dailyInfo1.setAccount(account);
+//            dailyInfo1.setStep(6000);
+//            dailyInfo1.setStepGoal(7000);
+//            dailyInfo1.setCalories(100);
+//            dailyInfo1.setDistance(100);
+//            dailyInfo1.setUpLoad(100);
+//            dailyInfo1.setDates(currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth() + "-08");
+//
+//            currentMonthStepList.add(dailyInfo1);
+//
+//            StepInfos dailyInfo2 = new StepInfos();
+//            dailyInfo2.setAccount(account);
+//            dailyInfo2.setStep(6000);
+//            dailyInfo2.setStepGoal(7000);
+//            dailyInfo2.setCalories(100);
+//            dailyInfo2.setDistance(100);
+//            dailyInfo2.setUpLoad(100);
+//            dailyInfo2.setDates(currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth() + "-20");
+//
+//            currentMonthStepList.add(dailyInfo2);
+//
+//            StepInfos dailyInfo3 = new StepInfos();
+//            dailyInfo3.setAccount(account);
+//            dailyInfo3.setStep(6000);
+//            dailyInfo3.setStepGoal(7000);
+//            dailyInfo3.setCalories(100);
+//            dailyInfo3.setDistance(100);
+//            dailyInfo3.setUpLoad(100);
+//            dailyInfo3.setDates(nextCalendar.getShowDate().getYear() + "-" + nextCalendar.getShowDate().getMonth() + "-08");
+//
+//            nextMonthStepList.add(dailyInfo3);
+//
+//            StepInfos dailyInfo4 = new StepInfos();
+//            dailyInfo4.setAccount(account);
+//            dailyInfo4.setStep(6000);
+//            dailyInfo4.setStepGoal(7000);
+//            dailyInfo4.setCalories(100);
+//            dailyInfo4.setDistance(100);
+//            dailyInfo4.setUpLoad(100);
+//            dailyInfo4.setDates(nextCalendar.getShowDate().getYear() + "-" + nextCalendar.getShowDate().getMonth() + "-20");
+//
+//            nextMonthStepList.add(dailyInfo4);
+
+            if(currentMonthStepList != null && currentMonthStepList.size() > 0) {
+                currentMonthRateMap = new HashMap<>();
+                StepInfos stepInfos = null;
+                String preDate = "";
+                int dayOfStep = 0;
+                int day = 0;
+                int goal = 0;
+                for (int i = 0; i < currentMonthStepList.size(); i++) {
+                    stepInfos = currentMonthStepList.get(i);
+                    if(i == 0) {
+                        preDate = stepInfos.getDates();
+                        dayOfStep += stepInfos.getStep();
+                        day = getDayByDate(stepInfos.getDates());
+                        goal = stepInfos.getStepGoal();
+                        if(currentMonthStepList.size() == 1) {
+                            currentMonthRateMap.put(getDayByDate(stepInfos.getDates()), (float)dayOfStep/goal);
+                        }
+                    }else {
+                        if(preDate.equals(stepInfos.getDates())) {
+                            preDate = stepInfos.getDates();
+                            dayOfStep += stepInfos.getStep();
+                            day = getDayByDate(stepInfos.getDates());
+                            goal = stepInfos.getStepGoal();
+
+                            if(i == currentMonthStepList.size() - 1) {
+                                currentMonthRateMap.put(day, (float)dayOfStep/goal);
+                            }
+                        }else {
+                            currentMonthRateMap.put(day, (float)dayOfStep / goal);
+
+                            preDate = stepInfos.getDates();
+                            day = getDayByDate(stepInfos.getDates());
+                            dayOfStep = stepInfos.getStep();
+                            goal = stepInfos.getStepGoal();
+
+                            if(i == currentMonthStepList.size() - 1) {
+                                currentMonthRateMap.put(day, (float)dayOfStep/goal);
+                            }
+                        }
+                    }
+                }
+                currentCalendar.setRateMap(currentMonthRateMap);
+            }
+
+            if(nextMonthStepList != null && nextMonthStepList.size() > 0) {
+                nextMonthRateMap = new HashMap<>();
+                StepInfos stepInfos = null;
+                String preDate = "";
+                int dayOfStep = 0;
+                int day = 0;
+                int goal = 0;
+                for (int i = 0; i < nextMonthStepList.size(); i++) {
+                    stepInfos = nextMonthStepList.get(i);
+                    if(i == 0) {
+                        preDate = stepInfos.getDates();
+                        dayOfStep += stepInfos.getStep();
+                        day = getDayByDate(stepInfos.getDates());
+                        goal = stepInfos.getStepGoal();
+                        if(nextMonthStepList.size() == 1) {
+                            nextMonthRateMap.put(getDayByDate(stepInfos.getDates()), (float)dayOfStep/goal);
+                        }
+                    }else {
+                        if(preDate.equals(stepInfos.getDates())) {
+                            preDate = stepInfos.getDates();
+                            dayOfStep += stepInfos.getStep();
+                            day = getDayByDate(stepInfos.getDates());
+                            goal = stepInfos.getStepGoal();
+
+                            if(i == nextMonthStepList.size() - 1) {
+                                nextMonthRateMap.put(day, (float)dayOfStep/goal);
+                            }
+
+                        }else {
+                            nextMonthRateMap.put(day, (float)dayOfStep / goal);
+                            preDate = stepInfos.getDates();
+                            day = getDayByDate(stepInfos.getDates());
+                            dayOfStep = stepInfos.getStep();
+                            goal = stepInfos.getStepGoal();
+
+                            if(i == nextMonthStepList.size() - 1) {
+                                nextMonthRateMap.put(day, (float)dayOfStep/goal);
+                            }
+                        }
+                    }
+
+                }
+                nextCalendar.setRateMap(nextMonthRateMap);
+            }
+        }
+    };
+
+    private void formateData() {
+
+    }
+
+    private void loadStepDatas() {
+        new Thread() {
+            @Override
+            public void run() {
+                currentMonthStepList = null;
+                nextMonthStepList = null;
+                String currentMonth = currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth();
+
+                String nextMonth = currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth();
+
+                currentMonthStepList = SqlHelper.instance().getMonthStepListByMonth(MyApplication.account, currentMonth);
+
+                nextMonthStepList = SqlHelper.instance().getMonthStepListByMonth(MyApplication.account, nextMonth);
+
+                mHandler.sendEmptyMessage(0);
+            }
+        }.start();
+    }
+
+    private int getDayByDate(String date) {
+        int day = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            Date d = sdf.parse(date);
+            calendar.setTime(d);
+
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return day;
     }
 
     private int getWeekByDate(String date) {

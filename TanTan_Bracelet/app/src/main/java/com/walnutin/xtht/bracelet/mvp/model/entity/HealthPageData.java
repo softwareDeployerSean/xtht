@@ -34,10 +34,20 @@ public class HealthPageData {
 
     private long sortTime;
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private String date;
+
     public HealthPageData() {
     }
 
-    public HealthPageData(int type, String time, String leftTopName, String leftButtom, String rightTop, String rightButtom, String rightText, boolean isRightIcon, long sortTime) {
+    public HealthPageData(int type, String time, String leftTopName, String leftButtom, String rightTop, String rightButtom, String rightText, boolean isRightIcon, long sortTime, String date) {
         this.type = type;
         this.time = time;
         this.leftTopName = leftTopName;
@@ -47,6 +57,7 @@ public class HealthPageData {
         this.rightText = rightText;
         this.isRightIcon = isRightIcon;
         this.sortTime = sortTime;
+        this.date = date;
     }
 
     public int getType() {

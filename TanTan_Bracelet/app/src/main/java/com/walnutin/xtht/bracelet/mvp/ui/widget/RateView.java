@@ -47,6 +47,8 @@ public class RateView extends View {
 
     private int marginPer = 10;
 
+    private boolean isDrawVLine = false;
+
     /**
      * 0:正常显示
      * 1：秒换算成时分秒
@@ -65,6 +67,10 @@ public class RateView extends View {
 
     // 曲线数据
     private int[] datas = {75, 89, 110, 68, 120, 87, 69, 98, 150, 123, 86, 145, 75};
+
+    private int[] datas2 = null;
+
+    private int brokenLineColor2 = Color.BLUE;
 
     public RateView(Context context, String[] xlabel, String[] ylabel, int[] data) {
         super(context);
@@ -170,14 +176,18 @@ public class RateView extends View {
         PathEffect effects = new DashPathEffect(new float[]{10, 5}, 1);
         paint.setPathEffect(effects);
         // 纵向线
-//        for (int i = 1; i * Xscale <= (this.getWidth() - this.Margin); i++) {
-//            int startX = Xpoint + i * Xscale;
-//            int startY = Ypoint;
-//            int stopY = Ypoint - (this.Ylabel.length - 1) * Yscale;
-//            path.moveTo(startX, startY);
-//            path.lineTo(startX, stopY);
-//            canvas.drawPath(path, paint);
-//        }
+        if(isDrawVLine) {
+            for (int i = 1; i * Xscale <= (this.getWidth() - 2 * this.Margin); i++) {
+                if(i % xDisplayInterval == 0) {
+                    int startX = Xpoint + i * Xscale;
+                    int startY = Ypoint;
+                    int stopY = (int) (Ypoint - (this.Ylabel.length - 1) * Yscale);
+                    path.moveTo(startX, startY);
+                    path.lineTo(startX, stopY);
+                    canvas.drawPath(path, paint);
+                }
+            }
+        }
         // 横向线
         paint.setColor(Color.BLUE);
         if(yDisPlayType == 1) {
@@ -289,14 +299,19 @@ public class RateView extends View {
                                 this.getHeight() - this.Margin / 4, brokenPaint);
                     }
 
-                    if (datas[0] != 0) {
+                    if (datas != null && datas[0] != 0) {
                         brokenPaint.setColor(brokenLineColor);
                         brokenPaint.setTextSize(this.Margin / 2);
                         canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
                     }
+                    if(datas2 != null && datas2[0] != 0) {
+                        brokenPaint.setColor(brokenLineColor2);
+                        brokenPaint.setTextSize(this.Margin / 2);
+                        canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+                    }
                 } else if (i == datas.length - 1) {
                     if (datas[datas.length - 1] != 0) {
-                        if(this.Xlabel.length % xDisplayInterval == 0) {
+                        if(i % xDisplayInterval == 0) {
                             brokenPaint.setColor(Color.BLACK);
                             brokenPaint.setTextSize(this.Margin * 2 / 5);
                             canvas.drawText(this.Xlabel[i], startX - this.Margin / 4,
@@ -305,11 +320,23 @@ public class RateView extends View {
                         brokenPaint.setColor(brokenLineColor);
                         brokenPaint.setTextSize(this.Margin / 2);
                         if (i % xDisplayInterval == 0) {
+                            brokenPaint.setColor(brokenLineColor);
                             canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                            if(datas2 != null) {
+                                brokenPaint.setColor(brokenLineColor2);
+                                canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+                            }
                         }
-                        if (datas[i - 1] != 0) {
+                        if (datas != null && datas[i - 1] != 0) {
+                            brokenPaint.setColor(brokenLineColor);
                             canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
                             canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas[i - 1]), startX, calY(datas[i]), brokenPaint);
+                        }
+
+                        if (datas2 != null && datas2[i - 1] != 0) {
+                            brokenPaint.setColor(brokenLineColor2);
+                            canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+                            canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas2[i - 1]), startX, calY(datas2[i]), brokenPaint);
                         }
                     } else {
                         brokenPaint.setColor(Color.BLACK);
@@ -330,17 +357,32 @@ public class RateView extends View {
                     brokenPaint.setColor(brokenLineColor);
                     brokenPaint.setTextSize(this.Margin / 2);
 
-                    if (datas[i] == 0) {
+                    if (datas[i] == 0 && (datas2 != null && datas[i] == 0)) {
                         continue;
                     }
-
-                    if (datas[i - 1] == 0) {
-                        canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
-                        continue;
+                    if(datas[i] != 0) {
+                        brokenPaint.setColor(brokenLineColor);
+                        if (datas[i - 1] == 0) {
+                            canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+//                            continue;
+                        }else {
+                            canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                            canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
+                            canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas[i - 1]), startX, calY(datas[i]), brokenPaint);
+                        }
                     }
 
-                    canvas.drawCircle(startX, calY(datas[i]), 4, brokenPaint);
-                    canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas[i - 1]), startX, calY(datas[i]), brokenPaint);
+                    if(datas2 != null && datas2[i] != 0) {
+                        brokenPaint.setColor(brokenLineColor2);
+                        if (datas2[i - 1] == 0) {
+                            canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+//                            continue;
+                        }else {
+                            canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+                            canvas.drawCircle(startX, calY(datas2[i]), 4, brokenPaint);
+                            canvas.drawLine(Xpoint + (i - 1) * Xscale, calY(datas2[i - 1]), startX, calY(datas2[i]), brokenPaint);
+                        }
+                    }
                 }
             }else if(i == xInterval) {
                 brokenPaint.setColor(Color.BLACK);
@@ -419,6 +461,18 @@ public class RateView extends View {
 
     public void setMarginPer(int marginPer) {
         this.marginPer = marginPer;
+    }
+
+    public void setDatas2(int[] datas2) {
+     this.datas2 = datas2;
+    }
+
+    public void setBrokenLineColor2(int brokenLineColor2) {
+        this.brokenLineColor2 = brokenLineColor2;
+    }
+
+    public void setDrawVLine(boolean isDrawVLine) {
+        this.isDrawVLine = isDrawVLine;
     }
 }
 
