@@ -256,10 +256,10 @@ public class HomePageItem {
             int stepGoal = stepInfos.getStepGoal();
             int actualStep = stepInfos.getStep();
             LogUtils.debugInfo("TAG", "stepGoal=" + stepGoal + ", actualStep=" + actualStep);
-            if (stepGoal == 0) {
-                stepGoal = 7000;
-                actualStep = new Random().nextInt(6000);
-            }
+//            if (stepGoal == 0) {
+//                stepGoal = 7000;
+//                actualStep = new Random().nextInt(6000);
+//            }
             stepArcView.setCurrentCount(stepGoal, actualStep);
 
             Map<Integer, Integer> stepOneHourInfo = stepInfos.getStepOneHourInfo();
@@ -275,8 +275,8 @@ public class HomePageItem {
             } else {
                 for (int i = 0; i < stepDatas.length; i++) {
 //                    stepDatas[i] = 0;
-                    int r = new Random().nextInt(100);
-                    stepDatas[i] = r;
+//                    int r = new Random().nextInt(100);
+                    stepDatas[i] = 0;
                 }
             }
             cylinderView.setDatas(stepDatas);
