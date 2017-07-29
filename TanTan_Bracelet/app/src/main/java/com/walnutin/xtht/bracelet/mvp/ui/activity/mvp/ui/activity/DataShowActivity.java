@@ -1,5 +1,6 @@
 package com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -55,6 +56,8 @@ public class DataShowActivity extends FragmentActivity {
     @BindView(R.id.toolbar_right)
     public TextView rightTv;
 
+    private String date;
+
     /**
      * 0:睡眠数据
      * 1:运动数据
@@ -82,6 +85,9 @@ public class DataShowActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_show);
 
+        Intent intent = getIntent();
+        date = intent.getStringExtra("date");
+
         ButterKnife.bind(this);
 
         buttomLineChange(0);
@@ -106,10 +112,13 @@ public class DataShowActivity extends FragmentActivity {
         });
 
         daySelectedFragment = new DaySelectedFragment();
+        daySelectedFragment.setDate(date);
 
         weekSelectedFragment = new WeekSelectedFragment();
+        weekSelectedFragment.setDate(date);
 
         monthSelectedFragment = new MonthSelectedFragment();
+        monthSelectedFragment.setDate(date);
 
         sportDaySelectedFragment = new SportDaySelectedFragment();
 

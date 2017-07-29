@@ -130,6 +130,7 @@ public class HomePageItem {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, DataShowActivity.class);
+                intent.putExtra("date", date);
                 mContext.startActivity(intent);
             }
         });

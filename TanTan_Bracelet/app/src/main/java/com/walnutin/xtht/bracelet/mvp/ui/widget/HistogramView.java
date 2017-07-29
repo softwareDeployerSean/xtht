@@ -191,10 +191,11 @@ public class HistogramView extends View {
     public void setDatas(int[] datas) {
         this.datas = datas;
         for (int i = 0; i < datas.length; i++) {
-            int r = new Random().nextInt(100);
-            datas[i] = r;
-            maxY = Math.max(maxY, r);
+//            int r = new Random().nextInt(100);
+//            datas[i] = r;
+            maxY = Math.max(maxY, datas[i]);
         }
+        postInvalidate();
     }
 
     /**

@@ -102,6 +102,7 @@
                     android:textSize="18px" />
 
                 <TextView
+                    android:id="@+id/sleep_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5px"
@@ -123,6 +124,7 @@
                     android:textSize="18px" />
 
                 <TextView
+                    android:id="@+id/sleep_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5px"
@@ -260,6 +262,7 @@
             android:layout_marginTop="15px">
 
             <TextView
+                android:id="@+id/line_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -268,6 +271,7 @@
                 android:textSize="12px" />
 
             <TextView
+                android:id="@+id/line_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -323,7 +327,7 @@
                         android:textSize="12px" />
 
                     <TextView
-                        android:id="@+id/sleep_deep_tv"
+                        android:id="@+id/sleep_deep_per_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5px"
@@ -353,7 +357,7 @@
                         android:textSize="12px" />
 
                     <TextView
-                        android:id="@+id/sleep_simple_tv"
+                        android:id="@+id/sleep_simple_per_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5px"
@@ -378,12 +382,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5px"
-                        android:text="@string/sleep_deep"
+                        android:text="@string/sleep_aweak"
                         android:textColor="@color/black_444444"
                         android:textSize="12px" />
 
                     <TextView
-                        android:id="@+id/sleep_aweak_tv"
+                        android:id="@+id/sleep_aweak_per_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5px"
@@ -476,6 +480,7 @@
                     </com.zhy.autolayout.AutoRelativeLayout>
 
                     <TextView
+                        android:id="@+id/sleep_level_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="45px"
                         android:layout_weight="1"
