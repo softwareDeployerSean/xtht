@@ -16,6 +16,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.PathRecord;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -89,7 +90,10 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if (monthTotleMap != null && monthTotleMap.containsKey(data.getDate())) {
                         holder.month_distance.setVisibility(View.VISIBLE);
-                        holder.month_distance.setText(monthTotleMap.get(data.getDate()) + "公里");
+                        float f = Float.parseFloat(monthTotleMap.get(data.getDate()));
+                        DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                        String p=decimalFormat.format(f);
+                        holder.month_distance.setText(p + "公里");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
