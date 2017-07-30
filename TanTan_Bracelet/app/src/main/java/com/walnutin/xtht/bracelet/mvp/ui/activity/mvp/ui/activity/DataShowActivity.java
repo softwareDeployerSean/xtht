@@ -121,11 +121,13 @@ public class DataShowActivity extends FragmentActivity {
         monthSelectedFragment.setDate(date);
 
         sportDaySelectedFragment = new SportDaySelectedFragment();
+        sportDaySelectedFragment.setDate(date);
 
         sportWeekSelectedFragment = new SportWeekSelectedFragment();
+        sportWeekSelectedFragment.setDate(date);
 
         sportMonthSelectedFragment = new SportMonthSelectedFragment();
-
+        sportMonthSelectedFragment.setDate(date);
         changeViewPagerData(0);
 
         viewPagerAdapter = new MyViewPagerAdapter(fragments, getSupportFragmentManager());

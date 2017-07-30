@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.util.DensityUtil;
 
 import java.util.Random;
@@ -45,6 +46,8 @@ public class HistogramView extends View {
     private int[] datas;
 
     private String[] xLables;
+
+    private int xDisplayInterval = -1;
 
     /**
      * X轴上显示方式
@@ -111,7 +114,29 @@ public class HistogramView extends View {
         textPaint.getTextBounds(h, 0, h.length(), rect);
         xTextHeight = rect.height();
         xTextWidth = rect.width();
-        if(xDisplayType == 0) {
+
+        if(xDisplayInterval != -1) {
+            int xInterval = 0;
+            if(xLables.length < xDisplayInterval) {
+                xInterval = this.xLables.length;
+            }else if(this.xLables.length % xDisplayInterval == 0) {
+                xInterval = this.xLables.length;
+            }else {
+                xInterval = this.xLables.length / xDisplayInterval + 1;
+            }
+
+
+
+            float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
+
+            for(int i = 0; i < xLables.length; i++) {
+                if(i % xDisplayInterval == 0 || i == xLables.length-1) {
+                    String text = String.valueOf((xLables[i]));
+                    canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+                }
+            }
+
+        }else if(xDisplayType == 0) {
             float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
             for (int i = 0; i < xLables.length; i++) {
                 String text = String.valueOf((xLables[i]));
@@ -149,11 +174,12 @@ public class HistogramView extends View {
         histogramPaint.setColor(startColor);
         LinearGradient mColorShader = new LinearGradient(0, 500, 10, 0, startColor, endColor, Shader.TileMode.MIRROR);
         histogramPaint.setShader(mColorShader);
-
-        for (int i = 0; i < datas.length; i++) {
-            startX = leftX + xTextWidth / 2 + intervalX * i;
-            endY = startY - datas[i] * intervalY;
-            canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+        if(datas != null && datas.length > 0) {
+            for (int i = 0; i < datas.length; i++) {
+                startX = leftX + xTextWidth / 2 + intervalX * i;
+                endY = startY - datas[i] * intervalY;
+                canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+            }
         }
     }
 
@@ -215,5 +241,9 @@ public class HistogramView extends View {
      */
     public void setxDisplayType(int xDisplayType) {
         this.xDisplayType = xDisplayType;
+    }
+
+    public void setxDisplayInterval(int xDisplayInterval) {
+        this.xDisplayInterval = xDisplayInterval;
     }
 }

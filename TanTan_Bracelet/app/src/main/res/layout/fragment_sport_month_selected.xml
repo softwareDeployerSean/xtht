@@ -25,150 +25,29 @@
         android:textColor="@color/black_444444"
         android:textSize="32px" />
 
-    <TextView
-        android:layout_width="wrap_content"
+
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView
+        android:id="@+id/sport_month_hv"
+        android:layout_width="match_parent"
         android:layout_height="160px"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48px"
-        android:text="空吧"
-        android:textColor="@color/black_444444"
-        android:textSize="32px" />
+        android:layout_marginBottom="10px"
+        android:layout_marginTop="10px" />
 
     <com.zhy.autolayout.AutoLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12px"
-        android:background="#EDEDED"
-        android:gravity="center"
-        android:paddingBottom="10px"
-        android:paddingTop="10px">
-
-        <com.zhy.autolayout.AutoLinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="15px"
-                android:layout_height="15px"
-                android:layout_marginLeft="3px"
-                android:background="@mipmap/kaluli_hei" />
-
-            <TextView
-                android:id="@+id/tv_cal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2px"
-                android:gravity="center"
-                android:text="33cal"
-                android:textColor="@color/black_444444"
-                android:textSize="14px" />
-
-
-        </com.zhy.autolayout.AutoLinearLayout>
-
-        <com.zhy.autolayout.AutoLinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="15px"
-                android:layout_height="15px"
-                android:background="@mipmap/weizhi_hei" />
-
-            <TextView
-                android:id="@+id/tv_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2px"
-                android:gravity="center"
-                android:text="33cal"
-                android:textColor="@color/black_444444"
-                android:textSize="14px" />
-
-        </com.zhy.autolayout.AutoLinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_rate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3px"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="33cal"
-            android:textColor="@color/black_444444"
-            android:textSize="14px" />
-
-
-    </com.zhy.autolayout.AutoLinearLayout>
-
-    <com.zhy.autolayout.AutoLinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#EDEDED"
-        android:gravity="center"
-        android:paddingBottom="10px">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2px"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="大卡/天"
-            android:textColor="@color/black_444444"
-            android:textSize="12px" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2px"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="公里／天"
-            android:textColor="@color/black_444444"
-            android:textSize="12px" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3px"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="达标率"
-            android:textColor="@color/black_444444"
-            android:textSize="12px" />
-
-
-    </com.zhy.autolayout.AutoLinearLayout>
-
-    <com.zhy.autolayout.AutoRelativeLayout
-        android:layout_width="335px"
-        android:layout_height="94px"
-        android:background="@drawable/btn_white_bg_normal"
-        android:gravity="center">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/gray_EEEEEE"
+        android:orientation="vertical">
 
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="32px"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_stepbyhour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="2000"
-                android:textColor="@color/black_444444"
-                android:textSize="32px" />
+            android:layout_marginTop="12px"
+            android:background="#EDEDED"
+            android:gravity="center"
+            android:paddingBottom="10px"
+            android:paddingTop="10px">
 
             <com.zhy.autolayout.AutoLinearLayout
                 android:layout_width="0dp"
@@ -177,178 +56,311 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/iv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/jian" />
+                    android:layout_width="15px"
+                    android:layout_height="15px"
+                    android:layout_marginLeft="3px"
+                    android:background="@mipmap/kaluli_hei" />
 
                 <TextView
-                    android:id="@+id/tv_contrast"
+                    android:id="@+id/tv_cal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="92%"
+                    android:layout_marginLeft="2px"
+                    android:gravity="center"
+                    android:text="33cal"
+                    android:textColor="@color/black_444444"
+                    android:textSize="14px" />
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15px"
+                    android:layout_height="15px"
+                    android:background="@mipmap/weizhi_hei" />
+
+                <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2px"
+                    android:gravity="center"
+                    android:text="33cal"
+                    android:textColor="@color/black_444444"
+                    android:textSize="14px" />
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_rate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="33cal"
+                android:textColor="@color/black_444444"
+                android:textSize="14px" />
+
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10px">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="大卡/天"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="公里／天"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="达标率"
+                android:textColor="@color/black_444444"
+                android:textSize="12px" />
+
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="94px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:background="@drawable/btn_white_bg_normal"
+            android:gravity="center">
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@color/white"
+                android:layout_marginTop="32px"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_stepbyhour"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="2000"
                     android:textColor="@color/black_444444"
                     android:textSize="32px" />
+
+                <com.zhy.autolayout.AutoLinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/jian" />
+
+                    <TextView
+                        android:id="@+id/tv_contrast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="92%"
+                        android:textColor="@color/black_444444"
+                        android:textSize="32px" />
+
+
+                </com.zhy.autolayout.AutoLinearLayout>
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="14px"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="每小时平均步数"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="相比上月"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
 
 
             </com.zhy.autolayout.AutoLinearLayout>
 
 
-        </com.zhy.autolayout.AutoLinearLayout>
+        </com.zhy.autolayout.AutoRelativeLayout>
 
-        <com.zhy.autolayout.AutoLinearLayout
+        <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="14px"
+            android:layout_height="94px"
+            android:layout_marginTop="14px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:background="@drawable/btn_white_bg_normal"
             android:gravity="center">
 
-            <TextView
-                android:layout_width="0dp"
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="每小时平均步数"
-                android:textColor="@color/black_444444"
-                android:textSize="12px" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="30px"
+                android:gravity="center">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="相比昨日"
-                android:textColor="@color/black_444444"
-                android:textSize="12px" />
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32px"
+                    android:layout_weight="1">
 
+                    <TextView
+                        android:id="@+id/tv_cishu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/black_444444"
+                        android:textSize="32px" />
 
-        </com.zhy.autolayout.AutoLinearLayout>
-
-
-    </com.zhy.autolayout.AutoRelativeLayout>
-
-    <com.zhy.autolayout.AutoRelativeLayout
-        android:layout_width="335px"
-        android:layout_height="94px"
-        android:layout_marginTop="14px"
-        android:background="@drawable/btn_white_bg_normal"
-        android:gravity="center">
-
-        <com.zhy.autolayout.AutoLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="30px"
-            android:gravity="center">
-
-            <com.zhy.autolayout.AutoRelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="32px"
-                android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_toRightOf="@id/tv_cishu"
+                        android:text="次"
+                        android:textColor="@color/black_444444"
+                        android:textSize="12px" />
+                </com.zhy.autolayout.AutoRelativeLayout>
 
                 <TextView
-                    android:id="@+id/tv_cishu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="0dp"
+                    android:id="@+id/tv_time"
+                    android:layout_width="0dp"
+                    android:layout_height="32px"
+                    android:layout_weight="1"
+                    android:drawablePadding="0dp"
                     android:gravity="center"
-                    android:text="1"
+                    android:text="92%"
                     android:textColor="@color/black_444444"
                     android:textSize="32px" />
 
+                <com.zhy.autolayout.AutoRelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32px"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_juli"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/black_444444"
+                        android:textSize="32px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_toRightOf="@id/tv_juli"
+                        android:text="km"
+                        android:textColor="@color/black_444444"
+                        android:textSize="12px" />
+                </com.zhy.autolayout.AutoRelativeLayout>
+
+
+            </com.zhy.autolayout.AutoLinearLayout>
+
+            <com.zhy.autolayout.AutoLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="14px"
+                android:gravity="center">
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_toRightOf="@id/tv_cishu"
-                    android:text="次"
-                    android:textColor="@color/black_444444"
-                    android:textSize="12px" />
-            </com.zhy.autolayout.AutoRelativeLayout>
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="0dp"
-                android:layout_height="32px"
-                android:layout_weight="1"
-                android:drawablePadding="0dp"
-                android:gravity="center"
-                android:text="92%"
-                android:textColor="@color/black_444444"
-                android:textSize="32px" />
-
-            <com.zhy.autolayout.AutoRelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="32px"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_juli"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="1"
-                    android:textColor="@color/black_444444"
-                    android:textSize="32px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_toRightOf="@id/tv_juli"
-                    android:text="km"
+                    android:text="运动次数（天）"
                     android:textColor="@color/black_444444"
                     android:textSize="12px" />
-            </com.zhy.autolayout.AutoRelativeLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="累计时间"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="累计距离"
+                    android:textColor="@color/black_444444"
+                    android:textSize="12px" />
 
 
-        </com.zhy.autolayout.AutoLinearLayout>
-
-        <com.zhy.autolayout.AutoLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="14px"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="运动次数（天）"
-                android:textColor="@color/black_444444"
-                android:textSize="12px" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="累计时间"
-                android:textColor="@color/black_444444"
-                android:textSize="12px" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="累计距离"
-                android:textColor="@color/black_444444"
-                android:textSize="12px" />
+            </com.zhy.autolayout.AutoLinearLayout>
 
 
-        </com.zhy.autolayout.AutoLinearLayout>
-
-
-    </com.zhy.autolayout.AutoRelativeLayout>
+        </com.zhy.autolayout.AutoRelativeLayout>
+    </com.zhy.autolayout.AutoLinearLayout>
 
 </com.zhy.autolayout.AutoLinearLayout>

@@ -305,16 +305,19 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
     }
 
     public List<Date> dateToWeek(Date mdate) {
-        int b = mdate.getDay();
-        Date fdate;
-        List<Date> list = new ArrayList<Date>();
-        Long fTime = mdate.getTime() - b * 24 * 3600000;
-        for (int a = 1; a <= 7; a++) {
-            fdate = new Date();
-            fdate.setTime(fTime + (a * 24 * 3600000));
-            list.add(a - 1, fdate);
+        List<Date> datas = new ArrayList();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mdate);
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DATE, -1);
         }
-        return list;
+        for (int i = 0; i < 7; i++) {
+            datas.add(calendar.getTime());
+            calendar.add(Calendar.DATE, 1);
+        }
+        return datas;
     }
 
     /**
