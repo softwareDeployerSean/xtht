@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 
 import com.jess.arms.utils.LogUtils;
 
@@ -21,6 +22,13 @@ public class CanotSlidingViewpager extends ViewPager {
      */
     private float beforeX;
 
+    /**
+     * 上一次Y坐标
+     */
+    private float beforeY;
+
+    private int touchSlop = 0;
+
 
     public CanotSlidingViewpager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,8 +36,8 @@ public class CanotSlidingViewpager extends ViewPager {
     }
 
     public CanotSlidingViewpager(Context context) {
-
         super(context);
+        touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
     private boolean isCanScroll = true;
@@ -69,11 +77,15 @@ public class CanotSlidingViewpager extends ViewPager {
                 //按下如果‘仅’作为‘上次坐标’，不妥，因为可能存在左滑，motionValue大于0的情况（来回滑，只要停止坐标在按下坐标的右边，左滑仍然能滑过去）
                 case MotionEvent.ACTION_DOWN:
                     beforeX = ev.getX();
+                    beforeY = ev.getY();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    float motionValue = ev.getX() - beforeX;
-                    Log.d("TAG", "motionValue=" + motionValue);
-                    if (motionValue < 0) {//禁止左滑
+                    float motionXValue = ev.getX() - beforeX;
+
+                    float motionYValue = ev.getY() - beforeY;
+
+                    Log.d("TAG", "motionValue=" + motionXValue);
+                    if (motionXValue < 0 && Math.abs(motionYValue) < Math.abs(motionXValue)) {//禁止左滑
                         return false;
                     }
                     beforeX = ev.getX();//手指移动时，再把当前的坐标作为下一次的‘上次坐标’，解决上述问题
