@@ -44,7 +44,6 @@ public class SleepLinearlayout extends AutoLinearLayout {
     public SleepLinearlayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
-
         if (sleepModel != null) {
             sleep_during = sleepModel.getDuraionTimeArray();
             sleep_status = sleepModel.getSleepStatusArray();

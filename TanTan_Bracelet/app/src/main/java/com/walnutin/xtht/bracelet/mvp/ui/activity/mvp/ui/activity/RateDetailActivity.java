@@ -36,7 +36,11 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RateView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -119,9 +123,9 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
             rateLowTv.setVisibility(View.VISIBLE);
             rateHightTv.setVisibility(View.VISIBLE);
         }else if(type.equals("1")) {
-            leftTextView.setText(getResources().getString(R.string.blood_time));
+            leftTextView.setText("  " + "时" + "  " + "间" + "  ");
             middleTextView.setText(getResources().getString(R.string.blood_low));
-            rightTextView.setText(getResources().getString(R.string.blood_hight));
+            rightTextView.setText(getResources().getString(R.string.blood_hight) + "  ");
 
             rateAvgTv.setVisibility(View.GONE);
             rateLowTv.setVisibility(View.GONE);
@@ -203,7 +207,64 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
 
             for (int i = 0; i < xLabels.length; i++) {
                 xLabels[i] = String.valueOf(i);
-                datas[i] = new Random().nextInt(120) % (120 - 80 + 1) + 80;
+            }
+
+//            heartRateList = new ArrayList();
+//            HeartRateModel heartRateModel1 = new HeartRateModel();
+//            heartRateModel1.setCurrentRate(100);
+//            heartRateModel1.setTestMomentTime("2017-07-10 15:30:30");
+//            heartRateList.add(heartRateModel1);
+//
+//            HeartRateModel heartRateModel2 = new HeartRateModel();
+//            heartRateModel2.setCurrentRate(90);
+//            heartRateModel2.setTestMomentTime("2017-07-10 15:20:30");
+//            heartRateList.add(heartRateModel2);
+//
+//            HeartRateModel heartRateModel3 = new HeartRateModel();
+//            heartRateModel3.setCurrentRate(100);
+//            heartRateModel3.setTestMomentTime("2017-07-10 16:30:30");
+//            heartRateList.add(heartRateModel3);
+//
+//            HeartRateModel heartRateModel4 = new HeartRateModel();
+//            heartRateModel4.setCurrentRate(90);
+//            heartRateModel4.setTestMomentTime("2017-07-10 16:20:30");
+//            heartRateList.add(heartRateModel4);
+
+            if(heartRateList != null && heartRateList.size() > 0) {
+                HeartRateModel heartRateModel = null;
+                int hourOfTotal = 0;
+                int hour = 0;
+                int oneHourCount = 0;
+                for(int i = 0; i < heartRateList.size(); i++) {
+                    heartRateModel = (HeartRateModel) heartRateList.get(i);
+                    if(i == 0) {
+                        hourOfTotal = heartRateModel.getCurrentRate();
+                        hour = getHourByDate(heartRateModel.getTestMomentTime());
+                        oneHourCount++;
+                        if(heartRateList.size() == 1) {
+                            datas[hour] = hourOfTotal;
+                        }
+                    }else {
+                        if(hour == getHourByDate(heartRateModel.getTestMomentTime())) {
+                            hour = getHourByDate(heartRateModel.getTestMomentTime());
+                            hourOfTotal += heartRateModel.getCurrentRate();
+                            oneHourCount ++;
+                            if(i == heartRateList.size() - 1){
+                                datas[hour] = hourOfTotal / oneHourCount;
+                            }
+                        }else {
+                            datas[hour] = hourOfTotal / oneHourCount;
+
+                            hourOfTotal = heartRateModel.getCurrentRate();
+                            hour = getHourByDate(heartRateModel.getTestMomentTime());
+                            oneHourCount = 1;
+
+                            if(i == heartRateList.size() - 1) {
+                                datas[hour] = hourOfTotal / oneHourCount;
+                            }
+                        }
+                    }
+                }
             }
 
             heartRateView.setDatas(datas);
@@ -224,11 +285,17 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
             int a = linMax / 4;
 
             int total = 0;
+            int countLength = 0;
             for (int i = 0; i < datas.length; i++) {
                 total += datas[i];
+                if(datas[i] != 0) {
+                    countLength += 1;
+                }
             }
-            int[] brokenLineDisplay = new int[]{total / datas.length};
-            heartRateView.setBrolenLineDisplay(brokenLineDisplay);
+            if(countLength > 0) {
+                int[] brokenLineDisplay = new int[]{total / countLength};
+                heartRateView.setBrolenLineDisplay(brokenLineDisplay);
+            }
 
             int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
             heartRateView.setyDisPlay(yDisplay);
@@ -245,13 +312,84 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
 
             String[] xLabels = new String[24];
             int[] datas = new int[24];
+            int[] datas2 = new int[24];
 
             for (int i = 0; i < xLabels.length; i++) {
                 xLabels[i] = String.valueOf(i);
-                datas[i] = new Random().nextInt(120) % (120 - 80 + 1) + 80;
+            }
+
+//            bloodPressureList = new ArrayList();
+//            BloodPressure bloodPressure1 = new BloodPressure();
+//            bloodPressure1.setTestMomentTime("2017--7-10 15:30:30");
+//            bloodPressure1.setDiastolicPressure(120);
+//            bloodPressure1.setSystolicPressure(80);
+//            bloodPressureList.add(bloodPressure1);
+//
+//            BloodPressure bloodPressure2 = new BloodPressure();
+//            bloodPressure2.setTestMomentTime("2017--7-10 15:20:30");
+//            bloodPressure2.setDiastolicPressure(110);
+//            bloodPressure2.setSystolicPressure(70);
+//            bloodPressureList.add(bloodPressure2);
+//
+//            BloodPressure bloodPressure3 = new BloodPressure();
+//            bloodPressure3.setTestMomentTime("2017--7-10 16:20:30");
+//            bloodPressure3.setDiastolicPressure(110);
+//            bloodPressure3.setSystolicPressure(70);
+//            bloodPressureList.add(bloodPressure3);
+//
+//            BloodPressure bloodPressure4 = new BloodPressure();
+//            bloodPressure4.setTestMomentTime("2017--7-10 16:30:30");
+//            bloodPressure4.setDiastolicPressure(100);
+//            bloodPressure4.setSystolicPressure(90);
+//            bloodPressureList.add(bloodPressure4);
+
+            if(bloodPressureList != null && bloodPressureList.size() > 0) {
+                BloodPressure bloodPressure = null;
+                int diaHourOfBlood = 0;
+                int sysHourOfBlood = 0;
+                int hour = 0;
+                int oneHourCount = 0;
+                for(int i = 0; i < bloodPressureList.size(); i++) {
+                    bloodPressure = (BloodPressure) bloodPressureList.get(i);
+                    if(i == 0) {
+                        diaHourOfBlood = bloodPressure.getDiastolicPressure();
+                        sysHourOfBlood = bloodPressure.getSystolicPressure();
+                        hour = getHourByDate(bloodPressure.getTestMomentTime());
+                        oneHourCount++;
+                        if(bloodPressureList.size() == 1) {
+                            datas[hour] = diaHourOfBlood;
+                            datas2[hour] = sysHourOfBlood;
+                        }
+                    }else {
+                        if(hour == getHourByDate(bloodPressure.getTestMomentTime())) {
+                            hour = getHourByDate(bloodPressure.getTestMomentTime());
+                            diaHourOfBlood += bloodPressure.getDiastolicPressure();
+                            sysHourOfBlood += bloodPressure.getSystolicPressure();
+                            oneHourCount ++;
+                            if(i == bloodPressureList.size() - 1){
+                                datas[hour] = diaHourOfBlood / oneHourCount;
+                                datas2[hour] = sysHourOfBlood / oneHourCount;
+                            }
+                        }else {
+                            datas[hour] = diaHourOfBlood / oneHourCount;
+                            datas2[hour] = sysHourOfBlood / oneHourCount;
+
+                            hour = getHourByDate(bloodPressure.getTestMomentTime());
+                            diaHourOfBlood += bloodPressure.getDiastolicPressure();
+                            sysHourOfBlood += bloodPressure.getSystolicPressure();
+                            oneHourCount = 1;
+
+                            if(i == bloodPressureList.size() - 1){
+                                datas[hour] = diaHourOfBlood / oneHourCount;
+                                datas2[hour] = sysHourOfBlood / oneHourCount;
+                            }
+                        }
+                    }
+                }
             }
 
             heartRateView.setDatas(datas);
+            heartRateView.setDatas2(datas2);
             heartRateView.setXlabel(xLabels);
 
             int max = getMaxArray(datas);
@@ -269,27 +407,39 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
             int a = linMax / 4;
 
             int total = 0;
+            int countTotal = 0;
             for (int i = 0; i < datas.length; i++) {
                 total += datas[i];
+                if(datas[i] != 0) {
+                    countTotal += 1;
+                }
             }
-            int[] brokenLineDisplay = new int[]{total / datas.length};
-            heartRateView.setBrolenLineDisplay(brokenLineDisplay);
+            if(countTotal > 0) {
+                int[] brokenLineDisplay = new int[]{total / countTotal};
+                heartRateView.setBrolenLineDisplay(brokenLineDisplay);
+            }
 
             int[] yDisplay = new int[]{linMax - 3 * a, linMax - 2 * a, linMax - a, linMax};
             heartRateView.setyDisPlay(yDisplay);
-
-            int[] datas2 = new int[24];
-
-            for (int i = 0; i < xLabels.length; i++) {
-
-                datas2[i] = new Random().nextInt(70) % (70 - 40 + 1) + 40;
-            }
-
-            heartRateView.setDatas2(datas2);
             heartRateView.setBrokenLineColor2(Color.parseColor("#8BE1D0"));
 
             heartRateView.setDrawVLine(true);
         }
+    }
+
+    private int getHourByDate(String date) {
+        int hour = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            Date d = sdf.parse(date);
+            calendar.setTime(d);
+
+            hour = calendar.get(Calendar.HOUR_OF_DAY);
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return hour;
     }
 
     private int getMaxArray(int[] array) {
@@ -380,18 +530,33 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
             if(type.equals("0")) {
                 holder.middleTv.setTextColor(Color.WHITE);
                 HeartRateModel heartRateModel = (HeartRateModel) this.heartRateList.get(position);
-                holder.leftTv.setText(heartRateModel.getTestMomentTime());
+                holder.leftTv.setText(getHourAndMin(heartRateModel.getTestMomentTime()));
                 holder.rightTv.setText(heartRateModel.getCurrentRate() + " bpm");
             }else if(type.equals("1")) {
                 holder.middleTv.setTextColor(getResources().getColor(R.color.black_444444));
 
                 BloodPressure bloodPressure = (BloodPressure) bloodPressureList.get(position);
-                holder.leftTv.setText(bloodPressure.getTestMomentTime());
-                holder.middleTv.setText(bloodPressure.getSystolicPressure());
-                holder.rightTv.setText(bloodPressure.getDiastolicPressure());
+                holder.leftTv.setText(getHourAndMin(bloodPressure.getTestMomentTime()));
+                holder.middleTv.setText(String.valueOf(bloodPressure.getSystolicPressure()));
+                holder.rightTv.setText(String.valueOf(bloodPressure.getDiastolicPressure()));
             }
 
 
+        }
+
+        private String getHourAndMin(String data) {
+            String ret = "";
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Calendar calendar = Calendar.getInstance();
+                Date d = sdf.parse(data);
+                calendar.setTime(d);
+
+                ret = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+            }catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return ret;
         }
 
         @Override
