@@ -17,6 +17,7 @@ import android.util.Base64;
 import com.amap.api.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 
@@ -29,6 +30,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -252,20 +254,38 @@ public class ConmonUtils {
         return retStr;
     }
 
-    public static String shuzi(Double d){
-        DecimalFormat decimalFormat=new DecimalFormat("##############0.0");
-        String tmp=decimalFormat.format(d);
+    public static String shuzi(Double d) {
+        DecimalFormat decimalFormat = new DecimalFormat("##############0.0");
+        String tmp = decimalFormat.format(d);
         return tmp;
     }
 
 
+    public static String getweek_day(String time) {
+        Calendar cal = Calendar.getInstance();
 
+        try {
+            cal.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        int d = 0;
+        if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
+            d = -6;
+        } else {
+            d = 2 - cal.get(Calendar.DAY_OF_WEEK);
+        }
+        cal.add(Calendar.DAY_OF_WEEK, d);
+        String begin = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        String end = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+        //所在周开始日期
+        LogUtils.debugInfo("开始日期" + begin + "借宿日志" + end);
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        return begin + "|" + end;
 
-
-
-
-
+    }
 
 
 }

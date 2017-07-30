@@ -11,9 +11,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -160,7 +164,7 @@ public class DbAdapter {
             String speeds = allRecordCursor.getString(allRecordCursor
                     .getColumnIndex(DbAdapter.KEY_SPEEDS));
             record.setSpeeds(speeds);
-            if (!TextUtils.isEmpty(lines)){
+            if (!TextUtils.isEmpty(lines)) {
                 record.setPathline(Util.parseLocations(lines));
             }
             record.setStartpoint(Util.parseLocation(allRecordCursor
@@ -209,7 +213,7 @@ public class DbAdapter {
             String speeds = cursor.getString(cursor
                     .getColumnIndex(DbAdapter.KEY_SPEEDS));
             record.setSpeeds(speeds);
-            if (!TextUtils.isEmpty(lines)){
+            if (!TextUtils.isEmpty(lines)) {
                 record.setPathline(Util.parseLocations(lines));
             }
             record.setStartpoint(Util.parseLocation(cursor.getString(cursor
@@ -352,6 +356,130 @@ public class DbAdapter {
         return all_distance + "";
     }
 
+    /**
+     * 查今天的
+     *
+     * @param
+     * @return
+     */
+    public Data_run gettody_data() {
+        Data_run data_run = new Data_run();
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tody = sdf.format(d);
+        double all_distance = 0;
+        int cishu = 0;
+        int during = 0;
+        String during_time = "";
+        String where = KEY_DATE + " Between ? and ?";
+
+        String[] selectionArgs = new String[]{tody + "T00:00:00", tody + "T23:59:59"};
+        Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
+                selectionArgs, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
+                during += get_second(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DURATION)));
+                all_distance += Double.parseDouble(distance);
+                ++cishu;
+            }
+        }
+        during_time = ConmonUtils.secToTime(during);
+        data_run.setCishu(cishu);
+        data_run.setDistances(all_distance);
+        data_run.setTime(during_time);
+        return data_run;
+    }
+
+    /**
+     * 查本周的
+     *
+     * @param
+     * @return
+     */
+    public Data_run getweek_data() {
+        Data_run data_run = new Data_run();
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tody = sdf.format(d);
+        String time = ConmonUtils.getweek_day(tody);
+        String begin_end[] = time.split("|");
+        double all_distance = 0;
+        int cishu = 0;
+        int during = 0;
+        String during_time = "";
+        String where = KEY_DATE + " Between ? and ?";
+        String[] selectionArgs = new String[]{begin_end[0] + "T00:00:00", begin_end[1] + "T23:59:59"};
+        Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
+                selectionArgs, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
+                during += get_second(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DURATION)));
+                all_distance += Double.parseDouble(distance);
+                ++cishu;
+            }
+        }
+        during_time = ConmonUtils.secToTime(during);
+        data_run.setCishu(cishu);
+        data_run.setDistances(all_distance);
+        data_run.setTime(during_time);
+        return data_run;
+    }
+
+    /**
+     * 查本月的
+     *
+     * @param
+     * @return
+     */
+    public Data_run getmonth_data() {
+        Calendar cale = Calendar.getInstance();
+        // 获取当月第一天和最后一天
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String firstday, lastday;
+        // 获取前月的第一天
+        cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 0);
+        cale.set(Calendar.DAY_OF_MONTH, 1);
+        firstday = format.format(cale.getTime());
+        // 获取前月的最后一天
+        cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+        lastday = format.format(cale.getTime());
+        LogUtils.debugInfo("本月第一天" + firstday + "最后一天" + lastday);
+        Data_run data_run = new Data_run();
+        double all_distance = 0;
+        int cishu = 0;
+        int during = 0;
+        String during_time = "";
+        String where = KEY_DATE + " Between ? and ?";
+        String[] selectionArgs = new String[]{firstday + "T00:00:00", lastday + "T23:59:59"};
+        Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
+                selectionArgs, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String distance = cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DISTANCE));
+                during += get_second(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DURATION)));
+                all_distance += Double.parseDouble(distance);
+                ++cishu;
+            }
+        }
+        during_time = ConmonUtils.secToTime(during);
+        data_run.setCishu(cishu);
+        data_run.setDistances(all_distance);
+        data_run.setTime(during_time);
+        return data_run;
+    }
+
+
+    //获取秒数整数
+    private int get_second(String time) {
+        String a[] = time.split(":");
+        int sec = Integer.parseInt(a[0]) * 60 * 60 + Integer.parseInt(a[1]) * 60 + Integer.parseInt(a[2]);
+        return sec;
+    }
 
     private String[] getColumns() {
         return new String[]{KEY_ROWID, KEY_DISTANCE, KEY_DURATION, KEY_SPEED,

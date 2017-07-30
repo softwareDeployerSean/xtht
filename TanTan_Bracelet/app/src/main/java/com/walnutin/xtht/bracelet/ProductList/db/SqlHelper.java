@@ -12,8 +12,10 @@ import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1141,6 +1143,106 @@ public class SqlHelper {
         }
 
         db.close();
+    }
+
+    /**
+     * 得到最佳日
+     */
+
+    public StepInfos getBestDayStep(String account) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tody = sdf.format(d);
+        StepInfos dailyInfos = new StepInfos();
+        String sql = "select max(step) from stepinfo where dates < ='" + tody + "'";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, new String[]{account});
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                StepInfos dailyInfo = new StepInfos();
+                dailyInfo.setAccount(account);
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("step")));
+                dailyInfo.setCalories(cursor.getInt(cursor.getColumnIndex("calories")));
+                dailyInfo.setDistance(cursor.getFloat(cursor.getColumnIndex("distance")));
+                dailyInfo.setUpLoad(cursor.getInt(cursor.getColumnIndex("isUpLoad")));
+                String mapJson = cursor.getString(cursor.getColumnIndex("stepOneHourInfo"));
+                Gson gson = new Gson();
+                dailyInfo.stepOneHourInfo = gson.fromJson(mapJson, new TypeToken<Map<Integer, Integer>>() {
+                }.getType());
+
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("dates")));
+                dailyInfos = dailyInfo;
+                //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
+                //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
+            }
+        }
+        return dailyInfos;
+    }
+
+    /**
+     * 得到最佳月
+     */
+
+    public StepInfos getBestMonthStep(String account) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tody = sdf.format(d);
+        StepInfos dailyInfos = new StepInfos();
+        String sql = "select max(steps) from (select sum(step) as steps from stepinfo group by date_format(dates, '%Y-%m')) t";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, new String[]{account});
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                StepInfos dailyInfo = new StepInfos();
+                dailyInfo.setAccount(account);
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("step")));
+                dailyInfo.setCalories(cursor.getInt(cursor.getColumnIndex("calories")));
+                dailyInfo.setDistance(cursor.getFloat(cursor.getColumnIndex("distance")));
+                dailyInfo.setUpLoad(cursor.getInt(cursor.getColumnIndex("isUpLoad")));
+                String mapJson = cursor.getString(cursor.getColumnIndex("stepOneHourInfo"));
+                Gson gson = new Gson();
+                dailyInfo.stepOneHourInfo = gson.fromJson(mapJson, new TypeToken<Map<Integer, Integer>>() {
+                }.getType());
+
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("dates")));
+                dailyInfos = dailyInfo;
+                //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
+                //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
+            }
+        }
+        return dailyInfos;
+    }
+
+    /**
+     * 得到最佳周
+     */
+
+    public StepInfos getBestWeekStep(String account) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tody = sdf.format(d);
+        StepInfos dailyInfos = new StepInfos();
+        String sql = "select * from " +
+                "(select sum(step) as steps, strftime(dates,'%Y%u') " +
+                " as week from stepinfo GROUP BY  strftime(dates,'%Y%u') ) tt where tt.steps = " +
+                "(" +
+                "select max(steps) from (" +
+                "select sum(step) as steps, strftime(dates,'%Y%u')  as week_of_year from stepinfo GROUP BY  strftime(dates,'%Y%u') ) t);";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                StepInfos dailyInfo = new StepInfos();
+                dailyInfo.setAccount(account);
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("steps")));
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("week")));
+                dailyInfos = dailyInfo;
+                LogUtils.debugInfo("步数"+cursor.getInt(cursor.getColumnIndex("steps"))+"日期=="+cursor.getString(cursor.getColumnIndex("week")));
+                //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
+                //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
+            }
+        }
+        return dailyInfos;
     }
 
 

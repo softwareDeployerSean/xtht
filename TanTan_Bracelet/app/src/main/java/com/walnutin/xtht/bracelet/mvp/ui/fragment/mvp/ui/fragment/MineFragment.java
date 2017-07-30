@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,18 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
+import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.BitmapHandler;
 import com.walnutin.xtht.bracelet.app.utils.BitmapUtil;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Data_run;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BindbyPhoneActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
-import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadingActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.Personal_dataActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMineComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.MineModule;
@@ -38,6 +40,10 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomProgressDialog;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.AlertView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnDismissListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListener;
+import com.zhy.autolayout.AutoLinearLayout;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +65,49 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     TextView tvBindAccount;
     Unbinder unbinder;
     AlertView alertView_exit;
+    @BindView(R.id.iv_day)
+    ImageView ivDay;
+    @BindView(R.id.tv_day)
+    TextView tvDay;
+    @BindView(R.id.tv_best_day)
+    TextView tvBestDay;
+    @BindView(R.id.tv_best_day_step)
+    TextView tvBestDayStep;
+    @BindView(R.id.iv_week)
+    ImageView ivWeek;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_best_week_begin)
+    TextView tvBestWeekBegin;
+    @BindView(R.id.tv_best_week_end)
+    TextView tvBestWeekEnd;
+    @BindView(R.id.tv_bestweek_step)
+    TextView tvBestweekStep;
+    @BindView(R.id.iv_month)
+    ImageView ivMonth;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
+    @BindView(R.id.tv_best_month)
+    TextView tvBestMonth;
+    @BindView(R.id.tv_best_month_step)
+    TextView tvBestMonthStep;
+    @BindView(R.id.iv_goin)
+    ImageView ivGoin;
+    @BindView(R.id.tv_goin)
+    TextView tvGoin;
+    @BindView(R.id.tv_rate_begin)
+    TextView tvRateBegin;
+    @BindView(R.id.tv_rate_end)
+    TextView tvRateEnd;
+    @BindView(R.id.tv_weekbygoin)
+    TextView tvWeekbygoin;
+    @BindView(R.id.tv_rate_day)
+    TextView tvRateDay;
+    @BindView(R.id.tv_exit)
+    TextView tvExit;
+    @BindView(R.id.linear_out)
+    AutoLinearLayout linearOut;
+    Unbinder unbinder1;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -111,7 +160,36 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
         super.onResume();
         Bundle bundle = new Bundle();
         initData(bundle);
+        setdata();
     }
+
+    StepInfos stepInfosday;
+
+    public void setdata() {
+
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tody = sdf.format(d);
+
+        ConmonUtils.getweek_day(tody);
+        DbAdapter dbHepler = new DbAdapter(getActivity());
+        dbHepler.open();
+        Data_run data_run = dbHepler.getmonth_data();
+        LogUtils.debugInfo("aaa" + data_run.toString());
+
+
+        //SqlHelper.instance().getBestDayStep(MyApplication.account);
+        //SqlHelper.instance().getBestMonthStep(MyApplication.account);
+        stepInfosday = new StepInfos();
+        stepInfosday.setStep(5000);
+        stepInfosday.setDates(tody);
+        SqlHelper.instance().insertOrUpdateTodayStep(stepInfosday);
+
+        StepInfos stepInfos = SqlHelper.instance().getBestWeekStep(MyApplication.account);
+        LogUtils.debugInfo("0+数组" +
+                "" + tody);
+    }
+
 
     private void init_refresh() {
         refresh.setLoadMore(true);
@@ -232,4 +310,5 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     public void down_success() {
         onResume();
     }
+
 }
