@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.cjj.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refresh"
@@ -405,4 +405,4 @@
 
 
     </com.zhy.autolayout.AutoLinearLayout>
-</com.cjj.MaterialRefreshLayout>
+</com.zhy.autolayout.AutoLinearLayout>

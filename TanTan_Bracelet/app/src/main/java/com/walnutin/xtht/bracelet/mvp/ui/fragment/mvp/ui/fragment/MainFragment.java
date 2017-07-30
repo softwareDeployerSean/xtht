@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 
@@ -17,6 +19,8 @@ import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.veepoo.protocol.VPOperateManager;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
+import com.walnutin.xtht.bracelet.ProductList.entity.SyncStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.ExerciserData;
@@ -27,6 +31,9 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.MainContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MainPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -51,6 +58,8 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     @BindView(R.id.home_viewpager)
     public CanotSlidingViewpager vp;
 
+    @BindView(R.id.refresh)
+    MaterialRefreshLayout refresh;
     private HomePageItem[] items = new HomePageItem[3];
 
     private HomeViewPagerAdapter homeViewPagerAdapter;
@@ -78,6 +87,36 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         getActivity().startActivityForResult(intent, DATE_REQUEST_ID);
     }
 
+    private void init_refresh() {
+        refresh.setLoadMore(false);
+        refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                EventBus.getDefault().post(new StepChangeNotify.SyncData());
+            }
+
+            @Override
+            public void onfinish() {
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+
+            }
+        });
+        refresh.autoRefresh();
+    }
+
+    @Subscriber
+    public void backgroundSyncStatus(SyncStatus syncStatus) {
+        if (!syncStatus.isSync) {
+            refresh.finishRefresh();
+            updateUi(position_tag);
+        }
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -85,7 +124,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         if (requestCode == DATE_REQUEST_ID && data != null) {
             String date = data.getStringExtra("selectedDate");
 
-            if(date == null || "".equals(date)) {
+            if (date == null || "".equals(date)) {
                 return;
             }
 
@@ -169,12 +208,12 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
             currentIndexItem = position;
             currentDate = item.getDate();
 
-            if(isNow(currentDate)) {
+            if (isNow(currentDate)) {
                 vp.setScrollble(false);
-            }else {
+            } else {
                 vp.setScrollble(true);
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -196,6 +235,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     private String currentDate;
 
     private int currentIndexItem = 1001;
+    int position_tag = 1001;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -204,7 +244,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         String token = DataHelper.getStringSF(MyApplication.getAppContext(), "token");
         mPresenter.getBindBracelet(token);
 
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         currentDate = sdf.format(c.getTime());
 
@@ -212,6 +252,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                position_tag = position;
                 Log.d("--------------", "------------------------" + position);
                 updateUi(position);
 
@@ -230,7 +271,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         homeViewPagerAdapter = new HomeViewPagerAdapter(items);
         vp.setAdapter(homeViewPagerAdapter);
         vp.setCurrentItem(1001);
-
+        init_refresh();
 
     }
 

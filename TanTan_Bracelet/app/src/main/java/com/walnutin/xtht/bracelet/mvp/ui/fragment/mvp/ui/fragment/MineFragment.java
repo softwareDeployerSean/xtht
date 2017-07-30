@@ -56,8 +56,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class MineFragment extends BaseFragment<MinePresenter> implements MineContract.View, OnItemClickListener, OnDismissListener {
 
 
-    @BindView(R.id.refresh)
-    MaterialRefreshLayout refresh;
     @BindView(R.id.check_head_photo)
     ImageView check_head_photo;
     SharedPreferences sharedPreferences = DataHelper.getSharedPerference(MyApplication.getAppContext());
@@ -190,7 +188,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
                 "" + tody);
     }
 
-
+/*
     private void init_refresh() {
         refresh.setLoadMore(true);
         refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
@@ -212,7 +210,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             }
         });
         refresh.autoRefresh();
-    }
+    }*/
 
 
     /**

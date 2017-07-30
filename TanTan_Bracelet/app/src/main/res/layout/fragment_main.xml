@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cjj.MaterialRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -8,7 +9,6 @@
     <com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager
         android:id="@+id/home_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager>
+        android:layout_height="match_parent"></com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager>
 
-</com.zhy.autolayout.AutoRelativeLayout>
+</com.cjj.MaterialRefreshLayout>
