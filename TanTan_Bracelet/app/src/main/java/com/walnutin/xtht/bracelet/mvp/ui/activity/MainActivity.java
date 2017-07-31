@@ -49,11 +49,13 @@ import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.walnutin.xtht.bracelet.ProductList.DeviceSharedPf;
 import com.walnutin.xtht.bracelet.ProductList.GlobalValue;
 import com.walnutin.xtht.bracelet.ProductList.ModelConfig;
+import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
 import com.walnutin.xtht.bracelet.ProductList.fragment.SettingFragment;
 import com.walnutin.xtht.bracelet.ProductList.ycy.LinkService;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.MyFragmentViewPagerAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.CountdownActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
@@ -221,46 +223,69 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 switch (index) {
                     case 1:
                         //骑行
-                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
-                            if (ConmonUtils.initGPS(MainActivity.this)) {
-                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                                intent.putExtra("tag", "riding");
-                                startActivity(intent);
-                            } else {
-                                set_gps();
+                        if (MyApplication.isDevConnected) {
+                            if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                                if (ConmonUtils.initGPS(MainActivity.this)) {
+                                    Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                    intent.putExtra("tag", "riding");
+                                    startActivity(intent);
+                                } else {
+                                    set_gps();
+                                }
                             }
+                        } else {
+                            ToastUtils.showToast(getString(R.string.no_connecte), MainActivity.this);
                         }
                         break;
                     case 2:
-                        //登山
-                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
-                            if (ConmonUtils.initGPS(MainActivity.this)) {
-                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                                intent.putExtra("tag", "mountaineering");
-                                startActivity(intent);
-                            } else {
-                                set_gps();
+
+                        if (MyApplication.isDevConnected) {
+                            if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                                if (ConmonUtils.initGPS(MainActivity.this)) {
+                                    Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                    intent.putExtra("tag", "mountaineering");
+                                    startActivity(intent);
+                                } else {
+                                    set_gps();
+                                }
                             }
+
+                        } else {
+                            ToastUtils.showToast(getString(R.string.no_connecte), MainActivity.this);
                         }
+                        //登山
+
                         break;
                     case 3:
-                        //健身
-                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
-                            Intent intent_door = new Intent(MainActivity.this, CountdownActivity.class);
-                            intent_door.putExtra("tag", "running_indoor");
-                            startActivity(intent_door);
+                        if (MyApplication.isDevConnected) {
+                            if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                                Intent intent_door = new Intent(MainActivity.this, CountdownActivity.class);
+                                intent_door.putExtra("tag", "running_indoor");
+                                startActivity(intent_door);
+                            }
+
+                        } else {
+                            ToastUtils.showToast(getString(R.string.no_connecte), MainActivity.this);
                         }
+                        //健身
+
                         break;
                     case 4:
-                        //跑步
-                        if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
-                            if (ConmonUtils.initGPS(MainActivity.this)) {
-                                Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
-                                intent.putExtra("tag", "running_out");
-                                startActivity(intent);
-                            } else {
-                                set_gps();
+                        if (MyApplication.isDevConnected) {
+                            //跑步
+                            if (ConmonUtils.hasNetwork(MyApplication.getAppContext())) {
+                                if (ConmonUtils.initGPS(MainActivity.this)) {
+                                    Intent intent = new Intent(MainActivity.this, CountdownActivity.class);
+                                    intent.putExtra("tag", "running_out");
+                                    startActivity(intent);
+                                } else {
+                                    set_gps();
+                                }
                             }
+
+
+                        } else {
+                            ToastUtils.showToast(getString(R.string.no_connecte), MainActivity.this);
                         }
 
                         break;
@@ -441,9 +466,9 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
             return false;
         } else {
             String factoryName = DeviceSharedPf.getInstance(getApplicationContext()).getString("device_factory");
-            System.out.println("checkBLE: "+factoryName);
+            System.out.println("checkBLE: " + factoryName);
             if (factoryName != null && !factoryName.equals("null")) {
-            //    ModelConfig.getInstance().initBleOperateByUUID(getApplicationContext(), factoryName);
+                //    ModelConfig.getInstance().initBleOperateByUUID(getApplicationContext(), factoryName);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -623,7 +648,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                       Intent serviceIntent = new Intent(getApplicationContext(), LinkService.class);
+                        Intent serviceIntent = new Intent(getApplicationContext(), LinkService.class);
                         startService(serviceIntent);
                     }
                 }, 1500);

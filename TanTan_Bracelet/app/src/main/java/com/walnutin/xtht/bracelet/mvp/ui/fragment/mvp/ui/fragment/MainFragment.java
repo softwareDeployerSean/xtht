@@ -23,6 +23,7 @@ import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
 import com.walnutin.xtht.bracelet.ProductList.entity.SyncStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.ExerciserData;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerMainComponent;
@@ -87,12 +88,35 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         getActivity().startActivityForResult(intent, DATE_REQUEST_ID);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        init_refresh();
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        LogUtils.debugInfo("有吗" + isVisibleToUser);
+        if (getUserVisibleHint()) {
+            LogUtils.debugInfo("我是可见");
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     private void init_refresh() {
-        refresh.setLoadMore(false);
         refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
-                EventBus.getDefault().post(new StepChangeNotify.SyncData());
+                if (MyApplication.isDevConnected) {
+                    EventBus.getDefault().post(new StepChangeNotify.SyncData());
+                } else {
+                    refresh.finishRefresh();
+                    refresh.finishRefreshLoadMore();
+                    refresh.finishRefreshing();
+                    ToastUtils.showToast(getString(R.string.no_connecte), getActivity());
+                }
+
             }
 
             @Override
@@ -105,7 +129,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
             }
         });
-        refresh.autoRefresh();
+        //refresh.autoRefresh();
     }
 
     @Subscriber
@@ -271,7 +295,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         homeViewPagerAdapter = new HomeViewPagerAdapter(items);
         vp.setAdapter(homeViewPagerAdapter);
         vp.setCurrentItem(1001);
-        init_refresh();
+
 
     }
 
