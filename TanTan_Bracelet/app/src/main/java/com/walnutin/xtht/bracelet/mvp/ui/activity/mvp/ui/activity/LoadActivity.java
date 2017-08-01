@@ -94,6 +94,7 @@ public class LoadActivity extends BaseActivity<LoadPresenter> implements LoadCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        //我在测试
         DataHelper.setStringSF(MyApplication.getAppContext(), "connect_state", "0"); //连接失败
         DataHelper.setStringSF(MyApplication.getAppContext(), "connected_address", "null");
         if (Build.VERSION.SDK_INT >= 23) {
