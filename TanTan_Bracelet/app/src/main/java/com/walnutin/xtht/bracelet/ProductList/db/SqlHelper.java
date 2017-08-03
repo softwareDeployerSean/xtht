@@ -1245,5 +1245,4 @@ public class SqlHelper {
         return dailyInfos;
     }
 
-
 }

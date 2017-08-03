@@ -57,10 +57,10 @@
 
     </RadioGroup>
 
-    <android.support.v4.view.ViewPager
+    <com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager
         android:layout_marginTop="20px"
         android:id="@+id/content_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+        android:layout_height="wrap_content"></com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager>
 
 </com.zhy.autolayout.AutoLinearLayout>

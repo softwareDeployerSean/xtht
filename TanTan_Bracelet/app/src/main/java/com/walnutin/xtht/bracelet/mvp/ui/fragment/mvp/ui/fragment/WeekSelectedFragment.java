@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +23,13 @@ import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SleepDayPageItem;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SleepWeekPageItem;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerWeekSelectedComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.WeekSelectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.WeekSelectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.WeekSelectedPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
 import java.text.DecimalFormat;
@@ -44,39 +49,17 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> implements WeekSelectedContract.View {
 
-    @BindView(R.id.week_hv)
-    HistogramView weekHv;
-
     private String date;
+    private String currentDate;
 
-    private List sleepModelList;
+    private int currentIndexItem = 1001;
+    int position_tag = 1001;
 
-    private List<Date> weeks;
+    @BindView(R.id.sleep_week_viewpger)
+    public CanotSlidingViewpager viewpager;
+    private SleepWeekPageItem[] items = new SleepWeekPageItem[3];
 
-    @BindView(R.id.time_slot_tv)
-    public TextView timeSlotTv;
-
-    @BindView(R.id.sleep_deep_per_tv)
-    public TextView deepSleepPerTv;
-
-    @BindView(R.id.sleep_simple_per_tv)
-    public TextView simpleSleepPerTv;
-
-    @BindView(R.id.sleep_aweak_per_tv)
-    public TextView awakeSleepPerTv;
-
-    @BindView(R.id.sleep_deep_value_tv)
-    public TextView deepSleepValueTv;
-    @BindView(R.id.sleep_simple_value_tv)
-    public TextView simpleSleepValueTv;
-    @BindView(R.id.sleep_aweak_value_tv)
-    public TextView aweakSleepValueTv;
-
-    @BindView(R.id.sleep_all_time_tv)
-    public TextView sleepAllTimeTv;
-
-    @BindView(R.id.sleep_level_tv)
-    public TextView sleepLevelTv;
+    private SleepWeekAdapter viewPagerAdapter;
 
     public static WeekSelectedFragment newInstance() {
         WeekSelectedFragment fragment = new WeekSelectedFragment();
@@ -99,225 +82,124 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SleepWeekPageItem item = null;
+        for (int i = 0; i < items.length; i++) {
+            item = new SleepWeekPageItem(this.getActivity());
+            items[i] = item;
+        }
         return inflater.inflate(R.layout.fragment_week_selected, container, false);
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        String[] xLables = new String[]{"一", "二", "三", "四", "五", "六", "日"};
+        currentDate = this.date;
 
-        weekHv.setxLables(xLables);
-        weekHv.setIntervalPercent(0.2f);
-        Log.d("TAG", "Color.RED=" + Color.RED);
-        weekHv.setStartColor(Color.parseColor("#6B289B"));
-        weekHv.setEndColor(Color.parseColor("#D0B3EB"));
-        loadDatas();
-    }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            int[] datas = new int[7];
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-//            sleepModelList = new ArrayList();
-//            SleepModel s1 = new SleepModel();
-//            s1.setTotalTime(380);
-//            s1.setDate(sdf1.format(weeks.get(0)));
-//            s1.setDuraionTimeArray(new int[]{30, 15, 45, 30, 30, 30, 45, 30, 30, 15, 15, 15, 45, 15, 15});
-//            s1.setTimePointArray(new int[]{1438, 13, 58, 88, 118, 148, 193, 223, 253, 268, 283, 298, 343, 373, 388});
-//            s1.setSleepStatusArray(new int[]{1, 0, 1, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 1, 2});
-//            sleepModelList.add(s1);
-
-//            SleepModel s2 = new SleepModel();
-//            s2.setTotalTime(390);
-//            s2.setDate(sdf1.format(weeks.get(1)));
-//            s2.setDuraionTimeArray(new int[] {30,15,45,30,30,30,45,30,30,15,15,15,45,15,15});
-//            s2.setTimePointArray(new int[] {1438,13,58,88,118,148,193,223,253,268,283,298,343,373,388});
-//            s2.setSleepStatusArray(new int[] {1,0,1,0,2,0,1,2,1,0,1,0,1,1,2});
-//            sleepModelList.add(s2);
-
-//            SleepModel s3 = new SleepModel();
-//            s3.setTotalTime(400);
-//            s3.setDuraionTimeArray(new int[] {30,15,45,30,30,30,45,30,30,15,15,15,45,15,15});
-//            s3.setTimePointArray(new int[] {1438,13,58,88,118,148,193,223,253,268,283,298,343,373,388});
-//            s3.setSleepStatusArray(new int[] {1,0,1,0,2,0,1,2,1,0,1,0,1,1,2});
-//            s3.setDate(sdf1.format(weeks.get(2)));
-//            sleepModelList.add(s3);
-
-//            SleepModel s4 = new SleepModel();
-//            s4.setTotalTime(370);
-//            s4.setDate(sdf1.format(weeks.get(3)));
-//            s4.setDuraionTimeArray(new int[]{30, 15, 45, 30, 30, 30, 45, 30, 30, 15, 15, 15, 45, 15, 15});
-//            s4.setTimePointArray(new int[]{1438, 13, 58, 88, 118, 148, 193, 223, 253, 268, 283, 298, 343, 373, 388});
-//            s4.setSleepStatusArray(new int[]{1, 0, 1, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 1, 2});
-//            sleepModelList.add(s4);
-//
-//            SleepModel s5 = new SleepModel();
-//            s5.setTotalTime(200);
-//            s5.setDuraionTimeArray(new int[]{30, 15, 45, 30, 30, 30, 45, 30, 30, 15, 15, 15, 45, 15, 15});
-//            s5.setTimePointArray(new int[]{1438, 13, 58, 88, 118, 148, 193, 223, 253, 268, 283, 298, 343, 373, 388});
-//            s5.setSleepStatusArray(new int[]{1, 0, 1, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 1, 2});
-//            s5.setDate(sdf1.format(weeks.get(4)));
-//            sleepModelList.add(s5);
-//
-//            SleepModel s6 = new SleepModel();
-//            s6.setTotalTime(120);
-//            s6.setDuraionTimeArray(new int[]{30, 15, 45, 30, 30, 30, 45, 30, 30, 15, 15, 15, 45, 15, 15});
-//            s6.setTimePointArray(new int[]{1438, 13, 58, 88, 118, 148, 193, 223, 253, 268, 283, 298, 343, 373, 388});
-//            s6.setSleepStatusArray(new int[]{1, 0, 1, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 1, 2});
-//            s6.setDate(sdf1.format(weeks.get(5)));
-//            sleepModelList.add(s6);
-//
-//            SleepModel s7 = new SleepModel();
-//            s7.setTotalTime(50);
-//            s7.setDuraionTimeArray(new int[]{30, 15, 45, 30, 30, 30, 45, 30, 30, 15, 15, 15, 45, 15, 15});
-//            s7.setTimePointArray(new int[]{1438, 13, 58, 88, 118, 148, 193, 223, 253, 268, 283, 298, 343, 373, 388});
-//            s7.setSleepStatusArray(new int[]{1, 0, 1, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 1, 2});
-//            s7.setDate(sdf1.format(weeks.get(6)));
-//            sleepModelList.add(s7);
-
-            int deepSleepTotal = 0;
-            int simpleSleepTotal = 0;
-            int awakeSleepTotal = 0;
-            int totalSleepTime = 0;
-            if (sleepModelList != null && sleepModelList.size() > 0) {
-                SleepModel sleepModel = null;
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                for (int i = 0; i < sleepModelList.size(); i++) {
-                    sleepModel = (SleepModel) sleepModelList.get(i);
-                    totalSleepTime += sleepModel.getTotalTime();
-                    String sleepDate = sleepModel.getDate();
-                    String weekDate = sdf.format(weeks.get(i));
-                    int a = -1;
-                    for (int z = 0; i < weeks.size(); z++) {
-                        if (sdf.format(weeks.get(z)).equals(sleepModel.getDate())) {
-                            a = z;
-                            break;
-                        }
-                    }
-                    if (a != -1) {
-
-                        datas[a] = sleepModel.getTotalTime();
-
-                        int[] duraionTimeArray = sleepModel.getDuraionTimeArray();
-                        int[] timePointArray = sleepModel.getTimePointArray();
-                        int[] sleepStatusArray = sleepModel.getSleepStatusArray();
-
-                        for (int j = 0; j < sleepStatusArray.length; j++) {
-                            if (sleepStatusArray[i] == 2) {
-                                awakeSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 1) {
-                                deepSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 0) {
-                                simpleSleepTotal += duraionTimeArray[i];
-                            }
-                        }
-                    }
-                }
-
-                if ((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
-                    int a1 = (int) ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    int b1 = (int) ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    String a = a1 + "%";
-                    String b = b1 + "%";
-                    String c = (100 - a1 - b1) + "%";
-                    deepSleepPerTv.setText(a);
-                    simpleSleepPerTv.setText(b);
-                    awakeSleepPerTv.setText(c);
-                } else {
-                    deepSleepPerTv.setText("");
-                    simpleSleepPerTv.setText("");
-                    awakeSleepPerTv.setText("");
-                }
-
-                deepSleepValueTv.setText(deepSleepTotal > 60 ? (deepSleepTotal / 60 + "h" + (deepSleepTotal % 60 > 0 ? deepSleepTotal % 60 + "min" : "")) : deepSleepTotal + "min");
-                simpleSleepValueTv.setText(simpleSleepTotal > 60 ? (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
-                aweakSleepValueTv.setText(awakeSleepTotal > 60 ? (awakeSleepTotal / 60 + "h" + (awakeSleepTotal % 60 > 0 ? awakeSleepTotal % 60 + "min" : "")) : awakeSleepTotal + "min");
-
-                DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                String p=decimalFormat.format(totalSleepTime / (float) 60);
-                sleepAllTimeTv.setText(p);
-
-                float t = Float.parseFloat(p);
-                String level = "";
-                if(t <= 10 && t >- 7) {
-                    level = "优秀";
-                }else if(t < 7 && t >= 5){
-                    level = "良好";
-                }else {
-                    level = "较差";
-                }
-                sleepLevelTv.setText(level);
-
-//                for (int i = 0; i < datas.length; i++) {
-//                    int r = new Random().nextInt(100);
-//                    datas[i] = r;
-//                }
-
-                weekHv.setDatas(datas);
-            }else {
-                for(int i = 0; i < datas.length; i++) {
-                    datas[i] = 0;
-                }
-                weekHv.setDatas(datas);
-
-                deepSleepPerTv.setText("");
-                simpleSleepPerTv.setText("");
-                awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("");
-                simpleSleepValueTv.setText("");
-                aweakSleepValueTv.setText("");
-                sleepAllTimeTv.setText("");
-                sleepLevelTv.setText("");
-            }
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            timeSlotTv.setText(sdf.format(weeks.get(0)) + "~" + sdf.format(weeks.get(weeks.size() - 1)));
-
-        }
-    };
-
-    private void loadDatas() {
-        new Thread() {
+        viewpager.setScrollble(false);
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void run() {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date mdate = sdf.parse(date);
-                    weeks = dateToWeek(mdate);
-                    LogUtils.debugInfo("ATG", ("今天的日期: " + sdf.format(mdate)));
-                    for (Date date1 : weeks) {
-                        LogUtils.debugInfo("TAG", sdf.format(date1));
-                    }
-
-                    String startTime = sdf.format(weeks.get(0)) + " 00:00:00";
-                    String endTime = sdf.format(weeks.get(weeks.size() - 1)) + " 23:59:59";
-
-                    sleepModelList = SqlHelper.instance().getWeekSleepListByTime(MyApplication.account, startTime, endTime);
-
-                    mHandler.sendEmptyMessage(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onPageSelected(int position) {
+                position_tag = position;
+                updateUi(position);
             }
-        }.start();
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+        });
+        viewPagerAdapter = new SleepWeekAdapter(items);
+        viewpager.setAdapter(viewPagerAdapter);
+        viewpager.setCurrentItem(1001);
     }
 
-    public List<Date> dateToWeek(Date mdate) {
-        List<Date> datas = new ArrayList();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private void updateUi(int position) {
+        try {
+            //获取当前显示的HomePageItem
+            SleepWeekPageItem item = items[position % 3];
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mdate);
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DATE, -1);
+            String updateDate = "";
+            if (position > currentIndexItem) {
+                updateDate = getNextWeekToday(date);
+            } else if (position < currentIndexItem) {
+                updateDate = getLastWeekToday(date);
+            }
+
+            item.update(updateDate);
+
+            currentIndexItem = position;
+            currentDate = item.getDate();
+
+            if (isNow(currentDate)) {
+                viewpager.setScrollble(false);
+            } else {
+                viewpager.setScrollble(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        for (int i = 0; i < 7; i++) {
-            datas.add(calendar.getTime());
-            calendar.add(Calendar.DATE, 1);
+    }
+
+    private String getLastWeekToday(String da) {
+        // 日期格式转换
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = format.parse(da);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        return datas;
+        // 当前日期
+        Calendar instance = Calendar.getInstance();
+
+        instance.setTime(d);
+
+
+        // 调整到上周1
+        instance.set(Calendar.WEEK_OF_MONTH, 0);
+
+       return format.format(instance.getTime());
+    }
+
+    private String getNextWeekToday(String da) {
+        // 日期格式转换
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = format.parse(da);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // 当前日期
+        Calendar instance = Calendar.getInstance();
+
+        instance.setTime(d);
+
+
+        // 调整到上周1
+        instance.set(Calendar.WEEK_OF_MONTH, 2);
+
+        return format.format(instance.getTime());
+    }
+
+    private boolean isNow(String date) {
+        //当前时间
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取今天的日期
+        String nowDay = sf.format(now);
+
+        LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + date);
+        LogUtils.debugInfo("day.equals(nowDay)=" + date.equals(nowDay));
+
+        return date.equals(nowDay);
+
     }
 
     /**
@@ -363,6 +245,43 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
     @Override
     public void killMyself() {
 
+    }
+
+    private class SleepWeekAdapter<V> extends PagerAdapter {
+
+        private V[] items;
+
+        public SleepWeekAdapter(V[] items) {
+            super();
+            this.items = items;
+        }
+
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            if (((ViewPager) container).getChildCount() == items.length) {
+                ((ViewPager) container).removeView(((SleepWeekPageItem) items[position % items.length]).getView());
+            }
+
+            ((ViewPager) container).addView(((SleepWeekPageItem) items[position % items.length]).getView(), 0);
+            return ((SleepWeekPageItem) items[position % items.length]).getView();
+        }
+
+        @Override
+        public int getCount() {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((View) object);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            ((ViewPager) container).removeView((View) container);
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
@@ -23,10 +26,13 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Data_run;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SleepDayPageItem;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SportDayPageItem;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerSportDaySelectedComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.SportDaySelectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.SportDaySelectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.SportDaySelectedPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
 import org.w3c.dom.Text;
@@ -48,52 +54,17 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class SportDaySelectedFragment extends BaseFragment<SportDaySelectedPresenter> implements SportDaySelectedContract.View {
 
-    @BindView(R.id.sport_day_hv)
-    public HistogramView histogramView;
-
     private String date;
 
-    private String lastDate;
+    @BindView(R.id.sport_day_viewpger)
+    public CanotSlidingViewpager viewpager;
+    private SportDayPageItem[] items = new SportDayPageItem[3];
 
-    private StepInfos stepinfos;
+    private SportDayAdapter viewPagerAdapter;
+    private String currentDate;
 
-    private Data_run dataRun;
-
-    private StepInfos lastDayStepInfos;
-
-    @BindView(R.id.tv_day)
-    public TextView dayTv;
-
-    @BindView(R.id.tv_step)
-    public TextView stepTv;
-
-    @BindView(R.id.tv_cal)
-    public TextView calTv;
-
-    @BindView(R.id.tv_distance)
-    public TextView distanceTv;
-
-    @BindView(R.id.tv_rate)
-    public TextView standardTv;
-
-    @BindView(R.id.tv_stepbyhour)
-    public TextView stepByHour;
-
-    @BindView(R.id.tv_cishu)
-    public TextView sportCountTv;
-
-    @BindView(R.id.tv_time)
-    public TextView sportCountTime;
-
-    @BindView(R.id.tv_juli)
-    public TextView sportCountDistance;
-
-    @BindView(R.id.tv_contrast)
-    public TextView contrastTv;
-
-    @BindView(R.id.iv_status)
-    public ImageView statusIv;
-
+    private int currentIndexItem = 1001;
+    int position_tag = 1001;
 
     public static SportDaySelectedFragment newInstance() {
         SportDaySelectedFragment fragment = new SportDaySelectedFragment();
@@ -112,194 +83,92 @@ public class SportDaySelectedFragment extends BaseFragment<SportDaySelectedPrese
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SportDayPageItem item = null;
+        for (int i = 0; i < items.length; i++) {
+            item = new SportDayPageItem(this.getActivity());
+            items[i] = item;
+        }
+
         return inflater.inflate(R.layout.fragment_sport_day_selected, container, false);
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        String[] xLables = new String[24];
-        for (int i = 0; i < xLables.length; i++) {
-            xLables[i] = String.valueOf(i);
-        }
-        histogramView.setxLables(xLables);
-        histogramView.setIntervalPercent(0.7f);
-        histogramView.setxDisplayType(1);
-        Log.d("TAG", "Color.RED=" + Color.RED);
-        histogramView.setStartColor(Color.parseColor("#72FF00"));
-        histogramView.setEndColor(Color.parseColor("#72FF00"));
-        histogramView.setxDisplayInterval(6);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar c = Calendar.getInstance();
+//        currentDate = sdf.format(c.getTime());
+        currentDate = this.date;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        viewpager.setScrollble(false);
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                position_tag = position;
+                updateUi(position);
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+        });
+        viewPagerAdapter = new SportDayAdapter(items);
+        viewpager.setAdapter(viewPagerAdapter);
+        viewpager.setCurrentItem(1001);
+    }
+    private void updateUi(int position) {
         try {
-            Date d = sdf.parse(date);
-            Calendar c = Calendar.getInstance();
-            c.setTime(d);
-            dayTv.setText(c.get(Calendar.MONTH) + "月" + c.get(Calendar.DAY_OF_MONTH) + "日");
-        } catch (ParseException e) {
+            //获取当前显示的HomePageItem
+            SportDayPageItem item = items[position % 3];
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(currentDate));
+            int day = calendar.get(Calendar.DATE);
+            if (position > currentIndexItem) {
+                calendar.set(Calendar.DATE, day + 1);
+            } else if (position < currentIndexItem) {
+                calendar.set(Calendar.DATE, day - 1);
+            }
+
+            String updateDate = sdf.format(calendar.getTime());
+
+            item.update(updateDate);
+
+            currentIndexItem = position;
+            currentDate = item.getDate();
+
+            if (isNow(currentDate)) {
+                viewpager.setScrollble(false);
+            } else {
+                viewpager.setScrollble(true);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        loadDatas();
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (stepTv != null) {
-                int totalStep = stepinfos.getStep();
-                stepTv.setText(String.valueOf(totalStep));
+    private boolean isNow(String date) {
+        //当前时间
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取今天的日期
+        String nowDay = sf.format(now);
 
-                int[] datas = new int[24];
-                Map<Integer, Integer> step4Hours = stepinfos.getStepOneHourInfo();
+        LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + date);
+        LogUtils.debugInfo("day.equals(nowDay)=" + date.equals(nowDay));
 
-//                if (step4Hours == null || step4Hours.size() <= 0) {
-//                    step4Hours = new HashMap<Integer, Integer>();
-//                    step4Hours.put(17, 100);
-//                    step4Hours.put(18, 100);
-//                    step4Hours.put(19, 100);
-//                    step4Hours.put(20, 100);
-//                    step4Hours.put(21, 100);
-//                    step4Hours.put(23, 100);
-//                }
+        return date.equals(nowDay);
 
-                int averageStepHour = 0;
-                int allStep = 0;
-                int count = 0;
-                if (step4Hours != null && step4Hours.size() > 0) {
-                    Set<Integer> set = step4Hours.keySet();
-                    for (Integer in : set) {
-                        allStep += step4Hours.get(in);
-                        count++;
-                        datas[in] = step4Hours.get(in);
-                    }
-                }
-                if (count > 0) {
-                    averageStepHour = allStep / count;
-                }
-                histogramView.setDatas(datas);
-
-                Map<Integer, Integer> step4HoursLast = lastDayStepInfos.getStepOneHourInfo();
-                int averageStepHourLast = 0;
-                if (step4HoursLast != null && step4HoursLast.size() > 0) {
-                    int allStepLast = 0;
-                    int countLast = 0;
-                    Set<Integer> set = step4HoursLast.keySet();
-                    for (Integer in : set) {
-                        allStepLast += step4HoursLast.get(in);
-                        allStepLast++;
-                    }
-                    if (allStepLast > 0) {
-                        averageStepHourLast = allStepLast / allStepLast;
-                    }
-                }
-                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                float upOrDownRate = 0;
-                boolean upOrDown = false;
-                if((averageStepHour - averageStepHourLast) > 0) {
-                    upOrDown = true;
-                }
-                if(averageStepHour > 0 && averageStepHourLast > 0) {
-                    upOrDownRate = (averageStepHour - averageStepHourLast) / averageStepHourLast;
-                }
-                String rate = "0%";
-                if(upOrDownRate != 0) {
-                    rate =decimalFormat.format(upOrDownRate * 100) + "%";
-                }
-                contrastTv.setText(rate);
-                statusIv.setVisibility(View.VISIBLE);
-                if(upOrDown && (averageStepHour > 0 && averageStepHourLast > 0) ) {
-                    statusIv.setImageResource(R.mipmap.jia);
-                }else if(!upOrDown && (averageStepHour > 0 && averageStepHourLast > 0)){
-                    statusIv.setImageResource(R.mipmap.jian);
-                }else {
-                    statusIv.setVisibility(View.GONE);
-                }
-
-                int calories = stepinfos.getCalories();
-                calTv.setText(String.valueOf(calories));
-
-                float distance = stepinfos.getDistance();
-                String p = "";
-
-                if (distance != 0) {
-                    p = decimalFormat.format(distance);
-                } else {
-                    p = "0";
-                }
-                distanceTv.setText(p);
-
-                if(stepinfos.getStepGoal() != 0) {
-                float standard = (float) stepinfos.getStep() / stepinfos.getStepGoal();
-                    standardTv.setText(decimalFormat.format(standard * 100) + "%");
-                }else {
-                    standardTv.setText("0%");
-                }
-
-                stepByHour.setText(String.valueOf(averageStepHour));
-
-                sportCountTv.setText("10");
-                sportCountTime.setText("0h30min");
-
-                sportCountDistance.setText(p);
-
-
-            } else {
-                stepTv.setText("");
-                calTv.setText("");
-                calTv.setText("");
-                stepByHour.setText("");
-                sportCountDistance.setText("");
-                standardTv.setText("0%");
-                contrastTv.setText("0%");
-            }
-
-            if(dataRun != null) {
-                sportCountTv.setText(String.valueOf(dataRun.getCishu()));
-                sportCountTime.setText(String.valueOf(dataRun.getTime()));
-                sportCountDistance.setText(String.valueOf(dataRun.getDistances()));
-            }else {
-                sportCountTv.setText("0");
-                sportCountTime.setText("0");
-                sportCountDistance.setText("0");
-            }
-        }
-    };
-
-    private void loadDatas() {
-        new Thread() {
-            @Override
-            public void run() {
-                stepinfos = SqlHelper.instance().getOneDateStep(MyApplication.account, date);
-                lastDayStepInfos = SqlHelper.instance().getOneDateStep(MyApplication.account, lastDate);
-
-                DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
-                dbhelper.open();
-                dataRun = dbhelper.gettody_data();
-
-                mHandler.sendEmptyMessage(0);
-            }
-        }.start();
     }
 
     public void setDate(String date) {
         this.date = date;
-        lastDate = getLastDateaa(date);
-    }
-
-    private static String getLastDateaa(String d) {
-        String ret = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date de = sdf.parse(d);
-            Calendar c = Calendar.getInstance();
-            c.setTime(de);
-            c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DATE) - 1);
-            ret = sdf.format(c.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 
     /**
@@ -345,6 +214,43 @@ public class SportDaySelectedFragment extends BaseFragment<SportDaySelectedPrese
     @Override
     public void killMyself() {
 
+    }
+
+    private class SportDayAdapter<V> extends PagerAdapter {
+
+        private V[] items;
+
+        public SportDayAdapter(V[] items) {
+            super();
+            this.items = items;
+        }
+
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            if (((ViewPager) container).getChildCount() == items.length) {
+                ((ViewPager) container).removeView(((SportDayPageItem) items[position % items.length]).getView());
+            }
+
+            ((ViewPager) container).addView(((SportDayPageItem) items[position % items.length]).getView(), 0);
+            return ((SportDayPageItem) items[position % items.length]).getView();
+        }
+
+        @Override
+        public int getCount() {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((View) object);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            ((ViewPager) container).removeView((View) container);
+        }
     }
 
 }

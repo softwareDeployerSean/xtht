@@ -25,6 +25,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.SportDaySelect
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.SportMonthSelectedFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.SportWeekSelectedFragment;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment.WeekSelectedFragment;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class DataShowActivity extends FragmentActivity {
     public RadioButton monthButton;
 
     @BindView(R.id.content_viewpager)
-    public ViewPager contentViewPager;
+    public ContainerViewPager contentViewPager;
 
     @BindView(R.id.iv_back)
     public ImageView backIV;
@@ -134,33 +135,33 @@ public class DataShowActivity extends FragmentActivity {
 
         contentViewPager.setAdapter(viewPagerAdapter);
 
-        contentViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                buttomLineChange(position);
-                switch (position) {
-                    case 0:
-                        selectRG.check(R.id.day_radiobutton);
-                        break;
-                    case 1:
-                        selectRG.check(R.id.week_radiobutton);
-                        break;
-                    case 2:
-                        selectRG.check(R.id.month_radiobutton);
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+//        contentViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                buttomLineChange(position);
+//                switch (position) {
+//                    case 0:
+//                        selectRG.check(R.id.day_radiobutton);
+//                        break;
+//                    case 1:
+//                        selectRG.check(R.id.week_radiobutton);
+//                        break;
+//                    case 2:
+//                        selectRG.check(R.id.month_radiobutton);
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
         backIV.setOnClickListener(new View.OnClickListener() {
             @Override

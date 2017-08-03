@@ -114,46 +114,46 @@ public class HistogramView extends View {
         textPaint.getTextBounds(h, 0, h.length(), rect);
         xTextHeight = rect.height();
         xTextWidth = rect.width();
+        if (xLables != null && xLables.length > 0) {
+            if (xDisplayInterval != -1) {
+                int xInterval = 0;
+                if (xLables.length < xDisplayInterval) {
+                    xInterval = this.xLables.length;
+                } else if (this.xLables.length % xDisplayInterval == 0) {
+                    xInterval = this.xLables.length;
+                } else {
+                    xInterval = this.xLables.length / xDisplayInterval + 1;
+                }
 
-        if(xDisplayInterval != -1) {
-            int xInterval = 0;
-            if(xLables.length < xDisplayInterval) {
-                xInterval = this.xLables.length;
-            }else if(this.xLables.length % xDisplayInterval == 0) {
-                xInterval = this.xLables.length;
-            }else {
-                xInterval = this.xLables.length / xDisplayInterval + 1;
-            }
 
+                float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
 
+                for (int i = 0; i < xLables.length; i++) {
+                    if (i % xDisplayInterval == 0 || i == xLables.length - 1) {
+                        String text = String.valueOf((xLables[i]));
+                        canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+                    }
+                }
 
-            float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
-
-            for(int i = 0; i < xLables.length; i++) {
-                if(i % xDisplayInterval == 0 || i == xLables.length-1) {
+            } else if (xDisplayType == 0) {
+                float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
+                for (int i = 0; i < xLables.length; i++) {
                     String text = String.valueOf((xLables[i]));
                     canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+
                 }
-            }
-
-        }else if(xDisplayType == 0) {
-            float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
-            for (int i = 0; i < xLables.length; i++) {
-                String text = String.valueOf((xLables[i]));
-                canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
-
-            }
-        }else if(xDisplayType == 1) {//显示奇数
-            float interval;
-            if(xLables.length % 2 == 0) { //偶数
-                interval = (rightX - leftX - 80) / (xLables.length / 2) - 1;
-            }else {//奇数
-                interval = (rightX - leftX - 80) / ((xLables.length - 1) / 2);
-            }
-            for(int i = 0; i < xLables.length; i++) {
-                if((i + 1) % 2 != 0) {
-                    String text = String.valueOf(xLables[i]);
-                    canvas.drawText(text, leftX + interval * (i / 2), mHeight, textPaint);
+            } else if (xDisplayType == 1) {//显示奇数
+                float interval;
+                if (xLables.length % 2 == 0) { //偶数
+                    interval = (rightX - leftX - 80) / (xLables.length / 2) - 1;
+                } else {//奇数
+                    interval = (rightX - leftX - 80) / ((xLables.length - 1) / 2);
+                }
+                for (int i = 0; i < xLables.length; i++) {
+                    if ((i + 1) % 2 != 0) {
+                        String text = String.valueOf(xLables[i]);
+                        canvas.drawText(text, leftX + interval * (i / 2), mHeight, textPaint);
+                    }
                 }
             }
         }
@@ -162,23 +162,24 @@ public class HistogramView extends View {
 
     //画柱状图
     private void drawCylinder(Canvas canvas) {
-
-        float startY = mHeight - xTextHeight - DensityUtil.dip2px(ctx, 15);//起始y坐标
-        float maxHeight = mHeight - xTextHeight - DensityUtil.dip2px(ctx, 30);
-        float intervalX = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
-        float intervalY = maxHeight / maxY;//根据最大步数,分割y轴
-        //值需要计算起始x坐标和终止y坐标即可
-        float startX = leftX;
-        float endY;
-        histogramPaint.setStrokeWidth((float) (intervalX * intervalPercent));
-        histogramPaint.setColor(startColor);
-        LinearGradient mColorShader = new LinearGradient(0, 500, 10, 0, startColor, endColor, Shader.TileMode.MIRROR);
-        histogramPaint.setShader(mColorShader);
-        if(datas != null && datas.length > 0) {
-            for (int i = 0; i < datas.length; i++) {
-                startX = leftX + xTextWidth / 2 + intervalX * i;
-                endY = startY - datas[i] * intervalY;
-                canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+        if (xLables != null) {
+            float startY = mHeight - xTextHeight - DensityUtil.dip2px(ctx, 15);//起始y坐标
+            float maxHeight = mHeight - xTextHeight - DensityUtil.dip2px(ctx, 30);
+            float intervalX = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
+            float intervalY = maxHeight / maxY;//根据最大步数,分割y轴
+            //值需要计算起始x坐标和终止y坐标即可
+            float startX = leftX;
+            float endY;
+            histogramPaint.setStrokeWidth((float) (intervalX * intervalPercent));
+            histogramPaint.setColor(startColor);
+            LinearGradient mColorShader = new LinearGradient(0, 500, 10, 0, startColor, endColor, Shader.TileMode.MIRROR);
+            histogramPaint.setShader(mColorShader);
+            if (datas != null && datas.length > 0) {
+                for (int i = 0; i < datas.length; i++) {
+                    startX = leftX + xTextWidth / 2 + intervalX * i;
+                    endY = startY - datas[i] * intervalY;
+                    canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+                }
             }
         }
     }
@@ -186,6 +187,7 @@ public class HistogramView extends View {
     /**
      * 设置柱状渐变起始颜色
      * 格式：0xffxxxxxx
+     *
      * @param startColor
      */
     public void setStartColor(int startColor) {
@@ -195,6 +197,7 @@ public class HistogramView extends View {
     /**
      * 设置柱状渐变色结尾颜色
      * 格式：0xffxxxxxx
+     *
      * @param endColor
      */
     public void setEndColor(int endColor) {
@@ -203,6 +206,7 @@ public class HistogramView extends View {
 
     /**
      * 设置X轴显示文字的数组
+     *
      * @param xLables
      */
     public void setxLables(String[] xLables) {
@@ -212,6 +216,7 @@ public class HistogramView extends View {
     /**
      * 设置数据
      * 注意，此数据的长度必须和xLables相同
+     *
      * @param datas
      */
     public void setDatas(int[] datas) {
@@ -227,6 +232,7 @@ public class HistogramView extends View {
     /**
      * 设置柱子占平分后距离的百分比
      * 如果不设置默认为0.5
+     *
      * @param intervalPercent
      */
     public void setIntervalPercent(float intervalPercent) {
@@ -237,6 +243,7 @@ public class HistogramView extends View {
      * 设置X轴显示方式（主要考虑文字或数字太多显示太挤）
      * 显示方式参考xDisplayType属性注释
      * 不设置默认为0，显示全部
+     *
      * @param xDisplayType
      */
     public void setxDisplayType(int xDisplayType) {
