@@ -120,9 +120,11 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
 
             String updateDate = "";
             if (position > currentIndexItem) {
-//                updateDate = getNextWeekToday(date);
+                updateDate = getNextMonthToday(currentDate);
             } else if (position < currentIndexItem) {
-//                updateDate = getLastWeekToday(date);
+                updateDate = getLastMonthToday(currentDate);
+            }else {
+                updateDate = this.date;
             }
 
             item.update(updateDate);
@@ -138,6 +140,77 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getNextMonthToday(String da) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try{
+            date = format.parse("2017-08-31");
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("当前时间是：" + format.format(date));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date); // 设置为当前时间
+
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        System.out.println("day=" + day);
+        System.out.println("month=" + month);
+
+        if(month == 1) {
+            if(day == 29 || day == 30 || day == 31) {
+                calendar.set(Calendar.DAY_OF_MONTH, 28);
+            }
+        }
+        if(month == 3 || month == 5 || month == 8 || month == 10) {
+            if(day == 31) {
+                calendar.set(Calendar.DAY_OF_MONTH, 30);
+            }
+        }
+
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1); // 设置为上一个月
+        date = calendar.getTime();
+
+       return format.format(date);
+    }
+
+    private String getLastMonthToday(String da) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try{
+            date = format.parse(da);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("当前时间是：" + format.format(date));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date); // 设置为当前时间
+
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        System.out.println("day=" + day);
+        System.out.println("month=" + month);
+
+        if(month == 3) {
+            if(day == 31 || day == 30 || day == 29) {
+                calendar.set(Calendar.DAY_OF_MONTH, 28);
+            }
+        }
+        if(month == 5 || month == 7 || month == 10 || month == 12) {
+            if(day == 31) {
+                calendar.set(Calendar.DAY_OF_MONTH, 30);
+            }
+        }
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+        date = calendar.getTime();
+
+        return format.format(date);
     }
 
     private boolean isNow(String date) {

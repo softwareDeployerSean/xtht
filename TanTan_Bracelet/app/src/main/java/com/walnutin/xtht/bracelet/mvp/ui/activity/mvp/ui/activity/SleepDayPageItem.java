@@ -70,6 +70,8 @@ public class SleepDayPageItem {
 
     public TextView sleepLevelTv;
 
+    public TextView sleepHTv;
+
     public RelativeLayout clockRelativeLayout;
 
     public RelativeLayout dayTimeRelativeLayout;
@@ -112,6 +114,7 @@ public class SleepDayPageItem {
         aweakSleepValueTv = (TextView) view.findViewById(R.id.sleep_aweak_value_tv);
         sleepAllTimeTv = (TextView) view.findViewById(R.id.sleep_all_time_tv);
         sleepLevelTv = (TextView) view.findViewById(R.id.sleep_level_tv);
+        sleepHTv = (TextView) view.findViewById(R.id.sleep_h_tv);
 
         clockRelativeLayout = (RelativeLayout) view.findViewById(R.id.clock_relativelayout);
         dayTimeRelativeLayout = (RelativeLayout) view.findViewById(R.id.day_time_relativelayout);
@@ -142,6 +145,7 @@ public class SleepDayPageItem {
 //            sleepModel.setTimePointArray(new int[] {1438,13,58,88,118,148,193,223,253,268,283,298,343,373,388});
 //            sleepModel.setSleepStatusArray(new int[] {1,0,1,0,2,0,1,2,1,0,1,0,1,1,2});
             if(sleepModel != null) {
+                sleepHTv.setText("h");
                 sleepLinearlayout.setVisibility(View.VISIBLE);
                 sleepTagLinearlayout.setVisibility(View.VISIBLE);
                 noDataLinearLayout.setVisibility(View.GONE);
@@ -193,7 +197,7 @@ public class SleepDayPageItem {
 
                 deepSleepValueTv.setText(deepSleepTotal > 60 ?  (deepSleepTotal / 60 + "h" + (deepSleepTotal % 60 > 0 ? deepSleepTotal % 60 + "min" : "")) : deepSleepTotal + "min");
                 simpleSleepValueTv.setText(simpleSleepTotal > 60 ?  (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
-                aweakSleepValueTv.setText(awakeSleepTotal > 60 ?  (awakeSleepTotal / 60 + "h" + (awakeSleepTotal % 60 > 0 ? awakeSleepTotal % 60 + "min" : "")) : awakeSleepTotal + "min");
+                aweakSleepValueTv.setText(awakeSleepTotal + "min");
 
                 DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 String p=decimalFormat.format(totalSleepTime / (float) 60);
@@ -222,11 +226,12 @@ public class SleepDayPageItem {
                 deepSleepPerTv.setText("");
                 simpleSleepPerTv.setText("");
                 awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("");
-                simpleSleepValueTv.setText("");
-                aweakSleepValueTv.setText("");
-                sleepAllTimeTv.setText("");
-                sleepLevelTv.setText("");
+                deepSleepValueTv.setText("-h-m");
+                simpleSleepValueTv.setText("-h-m");
+                aweakSleepValueTv.setText("-m");
+                sleepAllTimeTv.setText("   "+ "--");
+                sleepHTv.setText("h" + "  ");
+                sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
             }
         }
     };

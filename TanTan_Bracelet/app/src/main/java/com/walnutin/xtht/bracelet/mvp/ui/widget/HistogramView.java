@@ -129,7 +129,7 @@ public class HistogramView extends View {
                 float interval = (rightX - leftX - 80) / (xLables.length - 1);//数据宽度比最外层线要靠内
 
                 for (int i = 0; i < xLables.length; i++) {
-                    if (i % xDisplayInterval == 0 || i == xLables.length - 1) {
+                    if ((i % xDisplayInterval == 0 && ((xLables.length - 1) - i) > xDisplayInterval) || i == xLables.length - 1) {
                         String text = String.valueOf((xLables[i]));
                         canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
                     }

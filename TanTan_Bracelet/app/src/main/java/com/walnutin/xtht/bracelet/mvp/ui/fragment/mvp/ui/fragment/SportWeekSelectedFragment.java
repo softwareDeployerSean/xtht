@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
@@ -23,10 +26,13 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Data_run;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SportDayPageItem;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.SportWeekPageItem;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.component.DaggerSportWeekSelectedComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.di.module.SportWeekSelectedModule;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.contract.SportWeekSelectedContract;
 import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.SportWeekSelectedPresenter;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
 import java.text.DecimalFormat;
@@ -45,54 +51,18 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class SportWeekSelectedFragment extends BaseFragment<SportWeekSelectedPresenter> implements SportWeekSelectedContract.View {
 
-    @BindView(R.id.sport_week_hv)
-    public HistogramView histogramView;
-
     private String date;
 
-    private String monday;
-    private String sunday;
+    @BindView(R.id.sport_week_viewpger)
+    public CanotSlidingViewpager viewpager;
+    private SportWeekPageItem[] items = new SportWeekPageItem[3];
 
-    private Data_run dataRun;
+    private SportWeekAdapter viewPagerAdapter;
+    private String currentDate;
 
-    private List<Date> weeks;
-    private List<String> lastWeeks = null;
+    private int currentIndexItem = 1001;
+    int position_tag = 1001;
 
-    private List<StepInfos> stepInfosList;
-    private List<StepInfos> lastWeekStepInfosList;
-
-    @BindView(R.id.tv_day)
-    public TextView dayTv;
-
-    @BindView(R.id.tv_step)
-    public TextView stepTv;
-
-    @BindView(R.id.tv_cal)
-    public TextView calTv;
-
-    @BindView(R.id.tv_distance)
-    public TextView distanceTv;
-
-    @BindView(R.id.tv_rate)
-    public TextView standardTv;
-
-    @BindView(R.id.tv_stepbyhour)
-    public TextView stepByHour;
-
-    @BindView(R.id.tv_cishu)
-    public TextView sportCountTv;
-
-    @BindView(R.id.tv_time)
-    public TextView sportCountTime;
-
-    @BindView(R.id.tv_juli)
-    public TextView sportCountDistance;
-
-    @BindView(R.id.tv_contrast)
-    public TextView contrastTv;
-
-    @BindView(R.id.iv_status)
-    public ImageView statusIv;
 
     public static SportWeekSelectedFragment newInstance() {
         SportWeekSelectedFragment fragment = new SportWeekSelectedFragment();
@@ -111,218 +81,131 @@ public class SportWeekSelectedFragment extends BaseFragment<SportWeekSelectedPre
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SportWeekPageItem item = null;
+        for (int i = 0; i < items.length; i++) {
+            item = new SportWeekPageItem(this.getActivity());
+            items[i] = item;
+        }
         return inflater.inflate(R.layout.fragment_sport_week_selected, container, false);
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        currentDate = this.date;
 
-        String[] xLables = new String[]{"一", "二", "三", "四", "五", "六", "日"};
+        viewpager.setScrollble(false);
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                position_tag = position;
+                updateUi(position);
+            }
 
-        histogramView.setxLables(xLables);
-        histogramView.setIntervalPercent(0.2f);
-        Log.d("TAG", "Color.RED=" + Color.RED);
-        histogramView.setStartColor(Color.parseColor("#72FF00"));
-        histogramView.setEndColor(Color.parseColor("#72FF00"));
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
 
+            }
 
-        monday = getMonday(date);
-        sunday = getSunday(date);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date mdate = null;
-        try {
-            mdate = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        weeks = dateToWeek(mdate);
-        lastWeeks = getLastWeek(date);
-        dayTv.setText(monday + "~" + sunday);
-        loadDatas();
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+        });
+        viewPagerAdapter = new SportWeekAdapter(items);
+        viewpager.setAdapter(viewPagerAdapter);
+        viewpager.setCurrentItem(1001);
+
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int[] datas = new int[7];
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            int totalStep = 0;
-            int totalGol = 0;
-            int totalCal = 0;
-            int totalDistance = 0;
-            if(stepInfosList != null && stepInfosList.size() > 0) {
-                StepInfos stepInfos = null;
-                for(int i = 0; i < stepInfosList.size(); i++) {
-                    stepInfos = stepInfosList.get(i);
-                    int a = -1;
-                    for (int z = 0; i < weeks.size(); z++) {
-                        if (sdf.format(weeks.get(z)).equals(stepInfos.getDates())) {
-                            a = z;
-                            break;
-                        }
-                    }
-                    if(a != -1) {
-                        datas[a] = stepInfos.getStep();
+    private void updateUi(int position) {
+        try {
+            //获取当前显示的HomePageItem
+            SportWeekPageItem item = items[position % 3];
 
-                        totalCal += stepInfos.getCalories();
-                        totalDistance += stepInfos.getDistance();
-                        totalStep += stepInfos.getStep();
-                        totalGol += stepInfos.getStepGoal();
-                    }
-                }
-            }
-            histogramView.setDatas(datas);
-
-            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            calTv.setText(String.valueOf(totalCal/7));
-            distanceTv.setText(totalDistance > 0? String.valueOf(decimalFormat.format((float)totalDistance / 7)) : "0");
-            stepTv.setText(String.valueOf(totalStep));
-
-
-            if(totalGol != 0) {
-                float standard = (float) totalStep / totalGol;
-                standardTv.setText(decimalFormat.format(standard * 100) + "%");
-            }else {
-                standardTv.setText("0");
-            }
-            if(totalStep != 0) {
-                stepByHour.setText(String.valueOf(totalStep / 7));
-            }else {
-                stepByHour.setText("0");
+            String updateDate = "";
+            if (position > currentIndexItem) {
+                updateDate = getNextWeekToday(currentDate);
+            } else if (position < currentIndexItem) {
+                updateDate = getLastWeekToday(currentDate);
+            }else if(position == currentIndexItem) {
+                updateDate = date;
             }
 
-            int lastWeekSteps = 0;
-            if(lastWeekStepInfosList != null && lastWeekStepInfosList.size() > 0) {
-                StepInfos lastStepInfos = null;
-                for (int i = 0; i < lastWeekStepInfosList.size(); i++) {
-                    lastStepInfos = lastWeekStepInfosList.get(i);
-                    lastWeekSteps += lastStepInfos.getStep();
-                }
-            }
-            String rate = "0%";
-            boolean upOrDown = false;
-            if(lastWeekSteps > 0) {
-                if((totalStep - lastWeekSteps) > 0) {
-                    upOrDown = true;
-                }else {
-                    upOrDown = false;
-                }
-                rate =decimalFormat.format(Math.abs(totalStep - lastWeekSteps) / (float)lastWeekSteps * 100) + "%";
-            }
-            statusIv.setVisibility(View.VISIBLE);
-            if(upOrDown && lastWeekSteps > 0) {
-                statusIv.setImageResource(R.mipmap.jia);
-            }else if(!upOrDown && lastWeekSteps > 0){
-                statusIv.setImageResource(R.mipmap.jian);
-            }else{
-                statusIv.setVisibility(View.GONE);
-            }
-            contrastTv.setText(rate);
+            item.update(updateDate);
 
-            if(dataRun != null) {
-                sportCountTv.setText(String.valueOf(dataRun.getCishu()));
-                sportCountTime.setText(String.valueOf(dataRun.getTime()));
-                sportCountDistance.setText(String.valueOf(dataRun.getDistances()));
-            }else {
-                sportCountTv.setText("0");
-                sportCountTime.setText("0");
-                sportCountDistance.setText("0");
+            currentIndexItem = position;
+            currentDate = item.getDate();
+
+            if (isNow(currentDate)) {
+                viewpager.setScrollble(false);
+            } else {
+                viewpager.setScrollble(true);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    };
+    }
 
-    private void loadDatas() {
-        new Thread() {
-            @Override
-            public void run() {
-                stepInfosList = SqlHelper.instance().getWeekLastDateStep(MyApplication.account, monday, sunday);
-                lastWeekStepInfosList = SqlHelper.instance().getWeekLastDateStep(MyApplication.account, lastWeeks.get(0), lastWeeks.get(lastWeeks.size() - 1));
+    private String getLastWeekToday(String da) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = format.parse(da);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // 当前日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
 
-                DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
-                dbhelper.open();
-                dataRun = dbhelper.getweek_data();
+        long time = calendar.getTimeInMillis();
+        System.out.println("time =" + time);
+        long time1 = time - 7 * 24 * 60 * 60 * 1000;
+        System.out.println("time1=" + time1);
+        calendar.setTimeInMillis(time1);
 
-                mHandler.sendEmptyMessage(0);
-            }
-        }.start();
+        return format.format(calendar.getTime());
+    }
+
+    private String getNextWeekToday(String da) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = format.parse(da);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // 当前日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+
+        long time = calendar.getTimeInMillis();
+        System.out.println("time =" + time);
+        long time1 = time + 7 * 24 * 60 * 60 * 1000;
+        System.out.println("time1=" + time1);
+        calendar.setTimeInMillis(time1);
+
+        return format.format(calendar.getTime());
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    private List<String> getLastWeek(String dateStr) {
-        List<String> lastWeeks = new ArrayList<>();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = null;
-        try {
-            d = format.parse(dateStr);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // 当前日期
-        Calendar instance = Calendar.getInstance();
+    private boolean isNow(String date) {
+        //当前时间
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取今天的日期
+        String nowDay = sf.format(now);
 
-        instance.setTime(d);
-        instance.add(Calendar.WEEK_OF_YEAR, -1);
+        LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + date);
+        LogUtils.debugInfo("day.equals(nowDay)=" + date.equals(nowDay));
 
-        // 调整到上周1
-        instance.set(Calendar.DAY_OF_WEEK, 2);
-        //循环打印
-        for (int i = 1; i <= 7; i++) {
-            lastWeeks.add(format.format(instance.getTime()));
-            instance.add(Calendar.DAY_OF_WEEK, 1);
-        }
-        return lastWeeks;
-    }
+        return date.equals(nowDay);
 
-    public List<Date> dateToWeek(Date mdate) {
-        List<Date> datas = new ArrayList();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mdate);
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DATE, -1);
-        }
-        for (int i = 0; i < 7; i++) {
-            datas.add(calendar.getTime());
-            calendar.add(Calendar.DATE, 1);
-        }
-        return datas;
-    }
-
-    private String getMonday(String d) {
-        String monday = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date dat = sdf.parse(d);
-            Calendar c = Calendar.getInstance();
-            c.setFirstDayOfWeek(Calendar.MONDAY);
-            c.setTimeInMillis(dat.getTime());
-            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            monday = sdf.format(c.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return monday;
-    }
-
-    private String getSunday(String d) {
-        String sunday = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date dat = sdf.parse(d);
-            Calendar c = Calendar.getInstance();
-            c.setFirstDayOfWeek(Calendar.MONDAY);
-            c.setTimeInMillis(dat.getTime());
-            c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-            sunday = sdf.format(c.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sunday;
     }
 
     /**
@@ -368,6 +251,43 @@ public class SportWeekSelectedFragment extends BaseFragment<SportWeekSelectedPre
     @Override
     public void killMyself() {
 
+    }
+
+    private class SportWeekAdapter<V> extends PagerAdapter {
+
+        private V[] items;
+
+        public SportWeekAdapter(V[] items) {
+            super();
+            this.items = items;
+        }
+
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            if (((ViewPager) container).getChildCount() == items.length) {
+                ((ViewPager) container).removeView(((SportWeekPageItem) items[position % items.length]).getView());
+            }
+
+            ((ViewPager) container).addView(((SportWeekPageItem) items[position % items.length]).getView(), 0);
+            return ((SportWeekPageItem) items[position % items.length]).getView();
+        }
+
+        @Override
+        public int getCount() {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((View) object);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            ((ViewPager) container).removeView((View) container);
+        }
     }
 
 }

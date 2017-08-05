@@ -61,6 +61,8 @@ public class SleepWeekPageItem {
 
     public TextView sleepLevelTv;
 
+    public TextView sleepHTv;
+
     public SleepWeekPageItem(Context context) {
         this.mContext = context;
         this.view = LayoutInflater.from(mContext).inflate(R.layout.sleep_week_selected_item, null);
@@ -75,6 +77,7 @@ public class SleepWeekPageItem {
         aweakSleepValueTv = (TextView) view.findViewById(R.id.sleep_aweak_value_tv);
         sleepAllTimeTv = (TextView) view.findViewById(R.id.sleep_all_time_tv);
         sleepLevelTv = (TextView) view.findViewById(R.id.sleep_level_tv);
+        sleepHTv = (TextView) view.findViewById(R.id.sleep_h_tv);
         String[] xLables = new String[]{"一", "二", "三", "四", "五", "六", "日"};
 
         weekHv.setxLables(xLables);
@@ -158,6 +161,7 @@ public class SleepWeekPageItem {
             int awakeSleepTotal = 0;
             int totalSleepTime = 0;
             if (sleepModelList != null && sleepModelList.size() > 0) {
+                sleepHTv.setText("h");
                 SleepModel sleepModel = null;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 for (int i = 0; i < sleepModelList.size(); i++) {
@@ -209,7 +213,7 @@ public class SleepWeekPageItem {
 
                 deepSleepValueTv.setText(deepSleepTotal > 60 ? (deepSleepTotal / 60 + "h" + (deepSleepTotal % 60 > 0 ? deepSleepTotal % 60 + "min" : "")) : deepSleepTotal + "min");
                 simpleSleepValueTv.setText(simpleSleepTotal > 60 ? (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
-                aweakSleepValueTv.setText(awakeSleepTotal > 60 ? (awakeSleepTotal / 60 + "h" + (awakeSleepTotal % 60 > 0 ? awakeSleepTotal % 60 + "min" : "")) : awakeSleepTotal + "min");
+                aweakSleepValueTv.setText(awakeSleepTotal + "min");
 
                 DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 String p=decimalFormat.format(totalSleepTime / (float) 60);
@@ -241,11 +245,12 @@ public class SleepWeekPageItem {
                 deepSleepPerTv.setText("");
                 simpleSleepPerTv.setText("");
                 awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("");
-                simpleSleepValueTv.setText("");
-                aweakSleepValueTv.setText("");
-                sleepAllTimeTv.setText("");
-                sleepLevelTv.setText("");
+                deepSleepValueTv.setText("-h-m");
+                simpleSleepValueTv.setText("-h-m");
+                aweakSleepValueTv.setText("-m");
+                sleepAllTimeTv.setText("   "+ "--");
+                sleepHTv.setText("h" + "  ");
+                sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -124,9 +124,11 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
 
             String updateDate = "";
             if (position > currentIndexItem) {
-                updateDate = getNextWeekToday(date);
+                updateDate = getNextWeekToday(currentDate);
             } else if (position < currentIndexItem) {
-                updateDate = getLastWeekToday(date);
+                updateDate = getLastWeekToday(currentDate);
+            }else if(position == currentIndexItem) {
+                updateDate = date;
             }
 
             item.update(updateDate);
@@ -145,7 +147,6 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
     }
 
     private String getLastWeekToday(String da) {
-        // 日期格式转换
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
         try {
@@ -155,19 +156,19 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
             e.printStackTrace();
         }
         // 当前日期
-        Calendar instance = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
 
-        instance.setTime(d);
+        long time = calendar.getTimeInMillis();
+        System.out.println("time =" + time);
+        long time1 = time - 7 * 24 * 60 * 60 * 1000;
+        System.out.println("time1=" + time1);
+        calendar.setTimeInMillis(time1);
 
-
-        // 调整到上周1
-        instance.set(Calendar.WEEK_OF_MONTH, 0);
-
-       return format.format(instance.getTime());
+        return format.format(calendar.getTime());
     }
 
     private String getNextWeekToday(String da) {
-        // 日期格式转换
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
         try {
@@ -177,15 +178,16 @@ public class WeekSelectedFragment extends BaseFragment<WeekSelectedPresenter> im
             e.printStackTrace();
         }
         // 当前日期
-        Calendar instance = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
 
-        instance.setTime(d);
+        long time = calendar.getTimeInMillis();
+        System.out.println("time =" + time);
+        long time1 = time + 7 * 24 * 60 * 60 * 1000;
+        System.out.println("time1=" + time1);
+        calendar.setTimeInMillis(time1);
 
-
-        // 调整到上周1
-        instance.set(Calendar.WEEK_OF_MONTH, 2);
-
-        return format.format(instance.getTime());
+        return format.format(calendar.getTime());
     }
 
     private boolean isNow(String date) {

@@ -129,7 +129,7 @@ public class DataShowActivity extends FragmentActivity {
 
         sportMonthSelectedFragment = new SportMonthSelectedFragment();
         sportMonthSelectedFragment.setDate(date);
-        changeViewPagerData(0);
+        changeViewPagerData(1);
 
         viewPagerAdapter = new MyViewPagerAdapter(fragments, getSupportFragmentManager());
 
@@ -170,9 +170,9 @@ public class DataShowActivity extends FragmentActivity {
             }
         });
 
-        titleTv.setText(getResources().getString(R.string.sleep_data));
-        rightTv.setText(getResources().getString(R.string.sports));
-        currentShowType = 0;
+        titleTv.setText(getResources().getString(R.string.sports_data));
+        rightTv.setText(getResources().getString(R.string.sleep));
+        currentShowType = 1;
         rightTv.setTextSize(14);
 
         rightTv.setOnClickListener(new View.OnClickListener() {
@@ -188,8 +188,6 @@ public class DataShowActivity extends FragmentActivity {
                     rightTv.setText(getResources().getString(R.string.sleep));
 
                     viewPagerAdapter.notifyDataSetChanged();
-
-                    contentViewPager.setCurrentItem(0);
                 }else if(currentShowType ==1) {
                     changeViewPagerData(0);
 
@@ -198,9 +196,8 @@ public class DataShowActivity extends FragmentActivity {
                     rightTv.setText(getResources().getString(R.string.sports));
 
                     viewPagerAdapter.notifyDataSetChanged();
-
-                    contentViewPager.setCurrentItem(0);
                 }
+
             }
         });
     }
