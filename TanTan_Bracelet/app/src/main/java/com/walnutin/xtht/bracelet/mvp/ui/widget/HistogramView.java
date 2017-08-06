@@ -178,7 +178,9 @@ public class HistogramView extends View {
                 for (int i = 0; i < datas.length; i++) {
                     startX = leftX + xTextWidth / 2 + intervalX * i;
                     endY = startY - datas[i] * intervalY;
-                    canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+                    if(datas[i] > 0) {
+                        canvas.drawLine(startX, startY, startX, endY, histogramPaint);
+                    }
                 }
             }
         }
