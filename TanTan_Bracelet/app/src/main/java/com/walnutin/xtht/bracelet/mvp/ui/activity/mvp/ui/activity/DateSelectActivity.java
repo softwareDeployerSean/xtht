@@ -6,9 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
@@ -21,10 +23,17 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarViewAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CustomDate;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.DatePageImte;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.CanotSlidingVerticalViewpager;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import butterknife.BindView;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -32,7 +41,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implements DateSelectContract.View, View.OnClickListener, CalendarCard.OnCellClickListener {
 
-    private VerticalViewPager mViewPager;
+    private CanotSlidingVerticalViewpager mViewPager;
     private int mCurrentIndex = 498;
     private DatePageImte[] mShowViews;
     private CalendarViewAdapter adapter;
@@ -42,6 +51,10 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
     private String monthDate;
 
     DatePageImte[] items = new DatePageImte[3];
+    DatePageImte currentItem = null;
+
+    @BindView(R.id.toolbar_title)
+    public TextView toolBarTitle;
 
     enum SildeDirection {
         RIGHT, LEFT, NO_SILDE;
@@ -64,7 +77,7 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        mViewPager = (VerticalViewPager) this.findViewById(R.id.vp_calendar);
+        mViewPager = (CanotSlidingVerticalViewpager) this.findViewById(R.id.vp_calendar);
 
         for (int i = 0; i < 3; i++) {
             DatePageImte item = new DatePageImte(this);
@@ -79,6 +92,8 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
         Intent intent = getIntent();
         date = intent.getStringExtra("date");
+
+        mViewPager.setScrollble(false);
     }
 
     private void setViewPager() {
@@ -103,16 +118,38 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         });
     }
 
+    private boolean isCurrentMonth(String date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = sf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+
+        LogUtils.debugInfo("now=" + now.get(Calendar.YEAR) + "-" + now.get(Calendar.MONTH));
+
+        LogUtils.debugInfo("calendar=" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH));
+
+        return  calendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) && calendar.get(Calendar.YEAR) == now.get(Calendar.YEAR);
+    }
+
     private void updateNearPage(int position) {
         measureDirection(position);
         updateCalendarView(position);
 
-        DatePageImte item = items[position % items.length];
-        CustomDate currentShowDate = item.getCurrentCalendar().getShowDate();
+        currentItem = items[position % items.length];
+        CustomDate currentShowDate = currentItem.getCurrentCalendar().getShowDate();
 
         Log.d("TAG", "currentShowDate.day=" + currentShowDate.day);
 
-        item.update(position);
+        currentItem.update(position);
 
         //更新下一个页面
         DatePageImte nextPage = items[(position + 1) % items.length];
@@ -127,6 +164,20 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         prePage.getCurrentCalendar().getShowDate().day = currentShowDate.day;
 
         Log.d("TAG", "---------after currentShowDate month=" + currentShowDate.getMonth());
+
+        CalendarCard currentCalendarCard = currentItem.getCurrentCalendar();
+        CalendarCard nextCalendarCard = currentItem.getNextCalendar();
+
+        String firstShowDate = currentCalendarCard.getShowDate().getYear() + "-" + currentCalendarCard.getShowDate().getMonth() + "-01";
+        String secondShowDate = nextCalendarCard.getShowDate().getYear() + "-" + nextCalendarCard.getShowDate().getMonth() + "-01";
+
+        if (isCurrentMonth(firstShowDate) || isCurrentMonth(secondShowDate)) {
+            mViewPager.setScrollble(false);
+        } else {
+            mViewPager.setScrollble(true);
+        }
+
+        toolBarTitle.setText(String.valueOf(currentItem.getCurrentCalendar().getShowDate().getYear()));
     }
 
     @Override
@@ -139,10 +190,34 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
 
     @Override
     public void clickDate(CustomDate date) {
-        Intent intent = new Intent();
-        intent.putExtra("selectedDate", date.toString());
-        setResult(1001, intent);
-        finish();
+        boolean canClick = false;
+
+        Map<Integer, Float> currentMonthRateMap = currentItem.getCurrentMonthRateMap();
+        Map<Integer, Float> nextMonthRateMap = currentItem.getNextMonthRateMap();
+
+        CalendarCard currentCalendarCard = currentItem.getCurrentCalendar();
+        CalendarCard nextCalendarCard = currentItem.getNextCalendar();
+
+        if(date.getYear() == currentCalendarCard.getShowDate().getYear()
+                && date.getMonth() == currentCalendarCard.getShowDate().getMonth()) {
+            if(currentMonthRateMap != null && currentMonthRateMap.containsKey(date.getDay()) && currentMonthRateMap.get(date.day) > 0) {
+                canClick = true;
+            }
+        }else if(date.getYear() == nextCalendarCard.getShowDate().getYear()
+                && date.getMonth() == nextCalendarCard.getShowDate().getMonth()) {
+            if(nextMonthRateMap != null && nextMonthRateMap.containsKey(date.day) && nextMonthRateMap.get(date.day) > 0) {
+                canClick = true;
+            }
+        }
+
+        if(canClick) {
+            Intent intent = new Intent();
+            intent.putExtra("selectedDate", date.toString());
+            setResult(1001, intent);
+            finish();
+        }else {
+            LogUtils.debugInfo("No data can't be click.");
+        }
     }
 
     @Override

@@ -348,6 +348,10 @@ public class DatePageImte {
         return this.currentCalendar;
     }
 
+    public CalendarCard getNextCalendar() {
+        return this.nextCalendar;
+    }
+
     public int getContentHeight() {
         return ((DateSelectActivity)mContext).getWindow().findViewById(Window.ID_ANDROID_CONTENT).getHeight();
     }
@@ -376,6 +380,14 @@ public class DatePageImte {
                 .getSystemService(Context.WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         return display.getHeight();
+    }
+
+    public Map<Integer, Float> getCurrentMonthRateMap() {
+        return this.currentMonthRateMap;
+    }
+
+    public Map<Integer, Float> getNextMonthRateMap() {
+        return this.nextMonthRateMap;
     }
 
 }

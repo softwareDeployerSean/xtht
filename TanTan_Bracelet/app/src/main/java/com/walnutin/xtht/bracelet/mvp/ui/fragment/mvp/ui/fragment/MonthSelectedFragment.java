@@ -33,6 +33,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,7 +133,7 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
             currentIndexItem = position;
             currentDate = item.getDate();
 
-            if (isNow(currentDate)) {
+            if (isCurrentMonth(currentDate)) {
                 viewpager.setScrollble(false);
             } else {
                 viewpager.setScrollble(true);
@@ -146,7 +147,7 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try{
-            date = format.parse("2017-08-31");
+            date = format.parse(da);
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -225,6 +226,28 @@ public class MonthSelectedFragment extends BaseFragment<MonthSelectedPresenter> 
 
         return date.equals(nowDay);
 
+    }
+
+    private boolean isCurrentMonth(String date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = sf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+
+        LogUtils.debugInfo("now=" + now.get(Calendar.YEAR) + "-" + now.get(Calendar.MONTH));
+
+        LogUtils.debugInfo("calendar=" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH));
+
+        return  calendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) && calendar.get(Calendar.YEAR) == now.get(Calendar.YEAR);
     }
 
     public void setDate(String date) {
