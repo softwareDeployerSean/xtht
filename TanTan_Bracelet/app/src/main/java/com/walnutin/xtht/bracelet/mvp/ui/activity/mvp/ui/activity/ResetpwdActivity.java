@@ -95,7 +95,7 @@ public class ResetpwdActivity extends BaseActivity<ResetpwdPresenter> implements
             } else if (!new_pwd.equals(firm_pwd)) {
                 ToastUtils.showToast(getString(R.string.wrong_password), this);
             } else {
-                mPresenter.check_password(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(new_pwd)));
+                mPresenter.check_password(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(new_pwd)).trim());
             }
         }
     }

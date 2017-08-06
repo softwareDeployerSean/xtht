@@ -25,13 +25,16 @@ import java.io.UnsupportedEncodingException;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -283,9 +286,153 @@ public class ConmonUtils {
         //所在周开始日期
         LogUtils.debugInfo("开始日期" + begin + "借宿日志" + end);
         cal.add(Calendar.DAY_OF_WEEK, 6);
-        return begin + "|" + end;
+        return begin + "," + end;
 
     }
 
+    private static Calendar getCalendarFormYear(int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.YEAR, year);
+        return cal;
+    }
 
+    // 获取某年的第几周的开始日期
+    public static String getFirstDayOfWeek(int year, int week) {
+        Calendar cal = getCalendarFormYear(year);
+        cal.set(Calendar.WEEK_OF_YEAR, week);
+        return cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" +
+                cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    // 获取某年的第几周的结束日期
+    public static String getLastDayOfWeek(int year, int week) {
+        Calendar cal = getCalendarFormYear(year);
+        cal.set(Calendar.WEEK_OF_YEAR, week);
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        return cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" +
+                cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 计算两天之间的天数
+     *
+     * @param startStr
+     * @param endStr
+     * @return
+     */
+    public static int daysBetween(String startStr, String endStr) {
+        int daysBetween = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date1 = sdf.parse(startStr);
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(date1);
+
+            Date date2 = sdf.parse(endStr);
+            Calendar endDate = Calendar.getInstance();
+            endDate.setTime(date2);
+
+            Calendar date = (Calendar) startDate.clone();
+
+            while (date.before(endDate)) {
+                date.add(Calendar.DAY_OF_MONTH, 1);
+                daysBetween++;
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return daysBetween;
+    }
+
+    public static String getbeforeday(String date) {
+        String before_day = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(date);
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(date1);
+
+            startDate.add(Calendar.DATE, -1); //得到前一天
+            Date date_tmp = startDate.getTime();
+            before_day = sdf.format(date_tmp);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return before_day;
+    }
+
+    public static String getnextday(String date) {
+        String before_day = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(date);
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(date1);
+
+            startDate.add(Calendar.DATE, 1); //得到前一天
+            Date date_tmp = startDate.getTime();
+            before_day = sdf.format(date_tmp);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return before_day;
+    }
+
+    public static Date getTimesWeekDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        return cal.getTime();
+    }
+
+    // 获得本周一0点时间
+    public static String getTimesWeekmorning() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String time = sdf.format(cal.getTime());
+        return time;
+    }
+
+    // 获得本周日24点时间
+    public static String getTimesWeeknight() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getTimesWeekDate());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String time = sdf.format(cal.getTime());
+        return time;
+    }
+
+    /**
+     * 根据日期获得所在周的日期
+     *
+     * @param mdate
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+    public static List<String> dateToWeek(Date mdate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int b = mdate.getDay();
+        Date fdate;
+        List<String> list = new ArrayList<String>();
+        Long fTime = mdate.getTime() - b * 24 * 3600000;
+        for (int a = 1; a <= 7; a++) {
+            fdate = new Date();
+            fdate.setTime(fTime + (a * 24 * 3600000));
+            list.add(a - 1, sdf.format(fdate));
+        }
+        return list;
+    }
 }

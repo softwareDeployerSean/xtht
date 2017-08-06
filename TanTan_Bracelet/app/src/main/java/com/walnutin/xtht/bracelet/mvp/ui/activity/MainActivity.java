@@ -334,7 +334,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
         mineFragment = MineFragment.newInstance();
         epConnectedFragment = EpConnectedFragment.newInstance();
         equipmentFragment = EquipmentFragment.newInstance();
-        fragments.add(mainfragment);
+        fragments.add(MainFragment.newInstance());
         fragments.add(exerciseFragment);
         fragments.add(new SettingFragment());
 //        if (thirdItem == 0) {
@@ -344,7 +344,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 //        }
 
         fragments.add(mineFragment);
-        this.viewpager.setOffscreenPageLimit(0);
+        this.viewpager.setOffscreenPageLimit(fragments.size());
 
 
         MyFragmentViewPagerAdapter adapter = new MyFragmentViewPagerAdapter(this.getSupportFragmentManager(), viewpager, fragments);

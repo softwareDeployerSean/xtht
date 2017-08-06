@@ -115,7 +115,7 @@ public class RegistbyEailActivity extends BaseActivity<RegistbyEailPresenter> im
                     } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
                         ToastUtils.showToast(getString(R.string.pwd), this);
                     } else {
-                        mPresenter.regist(email, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                        mPresenter.regist(email, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)).trim());
                     }
                 }
 

@@ -41,17 +41,17 @@
         <service
             android:name="com.yc.pedometer.sdk.BluetoothLeService"
             android:enabled="true" />
-        <service android:name="com.realsil.android.blehub.dfu.DfuService" >
-        </service>
-<service android:name=".ProductList.ycy.LinkService"></service>
+        <service android:name="com.realsil.android.blehub.dfu.DfuService"></service>
+        <service android:name=".ProductList.ycy.LinkService" />
+
         <meta-data
             android:name="YCAPPKEY"
             android:value="f0b520cdb42c7103f6683977793ae81c" />
 
-        <activity android:name=".ProductList.fragment.SearchActivity"></activity>
-        <activity android:name=".ProductList.fragment.BasicSettingActivity"></activity>
+        <activity android:name=".ProductList.fragment.SearchActivity" />
+        <activity android:name=".ProductList.fragment.BasicSettingActivity" />
         <activity
-            android:name=".mvp.ui.activity.GuildActivity"
+            android:name=".mvp.ui.activity.mvp.ui.activity.Guild_changeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppStartLoadTranslucent">
             <intent-filter>
@@ -276,12 +276,12 @@
             android:label="@string/date"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".mvp.ui.activity.mvp.ui.activity.DataShowActivity"
+        <activity
+            android:name=".mvp.ui.activity.mvp.ui.activity.DataShowActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/sleep_data"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

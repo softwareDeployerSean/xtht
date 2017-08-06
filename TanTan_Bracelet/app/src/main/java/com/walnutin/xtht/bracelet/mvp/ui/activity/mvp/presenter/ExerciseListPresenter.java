@@ -53,6 +53,7 @@ public class ExerciseListPresenter extends BasePresenter<ExerciseListContract.Mo
         } else if (type == 4) {
             list.addAll(dbhelper.queryRecordBySign_andpage("riding", nextPage));
         }
+        dbhelper.close();
         return list;
     }
 
@@ -60,7 +61,7 @@ public class ExerciseListPresenter extends BasePresenter<ExerciseListContract.Mo
         DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
         dbhelper.open();
         String total = dbhelper.bytimegetdata(firstDayOfMonth, lastDayOfMonth,sign);
-
+        dbhelper.close();
         return total;
     }
 

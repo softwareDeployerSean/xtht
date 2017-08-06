@@ -5,12 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
 import com.walnutin.xtht.bracelet.ProductList.entity.HeartRateModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.SleepModel;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
+import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.app.utils.ConmonUtils;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1154,23 +1158,18 @@ public class SqlHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tody = sdf.format(d);
         StepInfos dailyInfos = new StepInfos();
-        String sql = "select max(step) from stepinfo where dates < ='" + tody + "'";
+        String sql = "select * from (SELECT strftime('%Y-%m-%d',  date(dates)) as count_month, " +
+                "sum(stepinfo.step) as total_step from stepinfo  GROUP BY " +
+                "strftime('%Y-%m-%d',  date(dates))) order by total_step desc limit 0,1";
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql, new String[]{account});
+        Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 StepInfos dailyInfo = new StepInfos();
                 dailyInfo.setAccount(account);
-                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("step")));
-                dailyInfo.setCalories(cursor.getInt(cursor.getColumnIndex("calories")));
-                dailyInfo.setDistance(cursor.getFloat(cursor.getColumnIndex("distance")));
-                dailyInfo.setUpLoad(cursor.getInt(cursor.getColumnIndex("isUpLoad")));
-                String mapJson = cursor.getString(cursor.getColumnIndex("stepOneHourInfo"));
-                Gson gson = new Gson();
-                dailyInfo.stepOneHourInfo = gson.fromJson(mapJson, new TypeToken<Map<Integer, Integer>>() {
-                }.getType());
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("total_step")));
 
-                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("dates")));
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("count_month")));
                 dailyInfos = dailyInfo;
                 //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
                 //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
@@ -1188,23 +1187,15 @@ public class SqlHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tody = sdf.format(d);
         StepInfos dailyInfos = new StepInfos();
-        String sql = "select max(steps) from (select sum(step) as steps from stepinfo group by date_format(dates, '%Y-%m')) t";
+        String sql = "select * from (SELECT strftime('%Y-%m',  date(dates)) as count_month, sum(stepinfo.step) as total_step from stepinfo  GROUP BY strftime('%Y-%m',  date(dates))) order by total_step desc limit 0,1";
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql, new String[]{account});
+        Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 StepInfos dailyInfo = new StepInfos();
                 dailyInfo.setAccount(account);
-                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("step")));
-                dailyInfo.setCalories(cursor.getInt(cursor.getColumnIndex("calories")));
-                dailyInfo.setDistance(cursor.getFloat(cursor.getColumnIndex("distance")));
-                dailyInfo.setUpLoad(cursor.getInt(cursor.getColumnIndex("isUpLoad")));
-                String mapJson = cursor.getString(cursor.getColumnIndex("stepOneHourInfo"));
-                Gson gson = new Gson();
-                dailyInfo.stepOneHourInfo = gson.fromJson(mapJson, new TypeToken<Map<Integer, Integer>>() {
-                }.getType());
-
-                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("dates")));
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("total_step")));
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("count_month")));
                 dailyInfos = dailyInfo;
                 //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
                 //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
@@ -1222,27 +1213,111 @@ public class SqlHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tody = sdf.format(d);
         StepInfos dailyInfos = new StepInfos();
-        String sql = "select * from " +
-                "(select sum(step) as steps, strftime(dates,'%Y%u') " +
-                " as week from stepinfo GROUP BY  strftime(dates,'%Y%u') ) tt where tt.steps = " +
-                "(" +
-                "select max(steps) from (" +
-                "select sum(step) as steps, strftime(dates,'%Y%u')  as week_of_year from stepinfo GROUP BY  strftime(dates,'%Y%u') ) t);";
+        String sql = "select * from (SELECT   strftime('%Y-%W',  date(dates)) as week, sum(stepinfo.step) as total_step from stepinfo  GROUP BY strftime('%Y-%W',  date(dates)))  order by total_step desc limit 0,1";
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 StepInfos dailyInfo = new StepInfos();
                 dailyInfo.setAccount(account);
-                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("steps")));
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("total_step")));
                 dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("week")));
                 dailyInfos = dailyInfo;
-                LogUtils.debugInfo("步数"+cursor.getInt(cursor.getColumnIndex("steps"))+"日期=="+cursor.getString(cursor.getColumnIndex("week")));
+                LogUtils.debugInfo("有没有日期" + cursor.getString(cursor.getColumnIndex("week")));
                 //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
                 //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
             }
         }
         return dailyInfos;
     }
+
+    /**
+     * 得到所有的步数
+     */
+
+    public List<StepInfos> getAllstep(String account) {
+        List<StepInfos> dailyInfos = new ArrayList<>();
+        String sql = "select * from (SELECT strftime('%Y-%m-%d',  date(dates)) as count_month, sum(stepinfo.step) as total_step from stepinfo  GROUP BY strftime('%Y-%m-%d',  date(dates))) order by count_month";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                StepInfos dailyInfo = new StepInfos();
+                dailyInfo.setAccount(account);
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("total_step")));
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("count_month")));
+                dailyInfos.add(dailyInfo);
+                //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
+                //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
+            }
+        }
+        return dailyInfos;
+    }
+
+    /**
+     * 得到本周的步数
+     */
+
+    public int getweekstep(String begin, String end) {
+        int total = 0;
+        List<StepInfos> dailyInfos = new ArrayList<>();
+        String sql = "select sum(step) as total_step from stepinfo where dates between ? and ? ";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, new String[]{begin, end});
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                total = cursor.getInt(cursor.getColumnIndex("total_step"));
+            }
+        }
+        return total;
+    }
+
+    /**
+     * 得到达标天
+     */
+    public List<StepInfos> getStandardstep() {
+        List<StepInfos> dailyInfos = getAllstep(MyApplication.account);
+        List<StepInfos> Standard_step = new ArrayList<>();
+        UserBean userBean = DataHelper.getDeviceData(MyApplication.getContext(), "UserBean");
+        int dairy = userBean.getDailyGoals();
+        if (dairy == 0) {
+            dairy = 7000;
+        }
+        if (dailyInfos.size() > 0) {
+            for (int i = 0; i < dailyInfos.size(); i++) {
+                if (dailyInfos.get(i).getStep() > dairy) {
+                    Standard_step.add(dailyInfos.get(i));
+                }
+            }
+        }
+        return Standard_step;
+    }
+
+
+    public ArrayList<StepInfos> getMaxContinuousNumber() {
+        List<StepInfos> dailyInfos = getStandardstep();
+        ArrayList<StepInfos> maxArrays = new ArrayList<StepInfos>();
+        ArrayList<StepInfos> nowArrays = new ArrayList<StepInfos>();
+        if (dailyInfos.size() > 0) {
+
+            String max = ConmonUtils.getbeforeday(dailyInfos.get(0).getDates());
+            for (int i = 0; i < dailyInfos.size(); i++) {
+                if (!dailyInfos.get(i).getDates().equals(ConmonUtils.getnextday(max))) {
+                    max = ConmonUtils.getbeforeday(dailyInfos.get(i).getDates());
+                    nowArrays.clear();
+                }
+                nowArrays.add(dailyInfos.get(i));
+                max = dailyInfos.get(i).getDates();
+                if (nowArrays.size() >= maxArrays.size()) {
+                    //maxArrays=nowArrays;这种情况是吧nowdays的地址赋值给了maxarrays的地址，这样以后只要nowarrays的地址改变，maxarrays的值也会改变
+                    maxArrays = (ArrayList<StepInfos>) nowArrays.clone();
+                }
+            }
+
+
+        }
+        return maxArrays;
+    }
+
 
 }

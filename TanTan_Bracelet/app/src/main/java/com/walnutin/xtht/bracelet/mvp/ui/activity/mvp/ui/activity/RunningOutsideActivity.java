@@ -760,11 +760,14 @@ public class RunningOutsideActivity extends BaseActivity<RunningOutsidePresenter
                 }
                 set_button_click();
                 stopLocation();
-                Location location = record.getPathline().get(record.getPathline().size() - 1);
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                marker_end = mAMap.addMarker(new MarkerOptions().position(latLng)
-                        .icon(BitmapDescriptorFactory
-                                .fromResource(R.mipmap.jieshudian)));
+                if (record.getPathline().size()>0){
+                    Location location = record.getPathline().get(record.getPathline().size() - 1);
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    marker_end = mAMap.addMarker(new MarkerOptions().position(latLng)
+                            .icon(BitmapDescriptorFactory
+                                    .fromResource(R.mipmap.jieshudian)));
+                }
+
                 hardSdk.removeHardSdkCallback(this); //移除回调
 
                 break;

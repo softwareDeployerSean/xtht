@@ -33,6 +33,9 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
     private ImageLoader mImageLoader;
     private AppManager mAppManager;
 
+    public LoadingPresenter() {
+    }
+
     @Inject
     public LoadingPresenter(LoadingContract.Model model, LoadingContract.View rootView
             , RxErrorHandler handler, Application application
@@ -62,9 +65,9 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.Model, Loadi
                     @Override
                     public void onNext(UserBean users) {
                         mRootView.hideLoading();
-                        LogUtils.debugInfo("进来"+users.toString());
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "username", name);
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "userpassword", password);
                         if (ConmonUtils.checkEmail(name)) {
                             DataHelper.setStringSF(MyApplication.getAppContext(), "load_tag", "email");
                         } else {

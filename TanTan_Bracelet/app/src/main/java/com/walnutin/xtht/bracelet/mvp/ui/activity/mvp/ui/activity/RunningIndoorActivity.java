@@ -236,11 +236,12 @@ public class RunningIndoorActivity extends BaseActivity<RunningIndoorPresenter> 
         switch (view.getId()) {
             case R.id.iv_jiesu:
                 distance = Double.parseDouble(tvLength.getText().toString().trim());
-                if (distance * 1000 < 50) {
+               /* if (distance * 1000 < 50) {
                     short_distance();
                 } else {
                     exit();
-                }
+                }*/
+                exit();
                 break;
             case R.id.iv_stop:
                 set_button_click();

@@ -108,9 +108,9 @@ public class SportWeekPageItem {
             int totalGol = 0;
             int totalCal = 0;
             int totalDistance = 0;
-            if(stepInfosList != null && stepInfosList.size() > 0) {
+            if (stepInfosList != null && stepInfosList.size() > 0) {
                 StepInfos stepInfos = null;
-                for(int i = 0; i < stepInfosList.size(); i++) {
+                for (int i = 0; i < stepInfosList.size(); i++) {
                     stepInfos = stepInfosList.get(i);
                     int a = -1;
                     for (int z = 0; i < weeks.size(); z++) {
@@ -119,7 +119,7 @@ public class SportWeekPageItem {
                             break;
                         }
                     }
-                    if(a != -1) {
+                    if (a != -1) {
                         datas[a] = stepInfos.getStep();
 
                         totalCal += stepInfos.getCalories();
@@ -132,25 +132,25 @@ public class SportWeekPageItem {
             histogramView.setDatas(datas);
 
             DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            calTv.setText(String.valueOf(totalCal/7));
-            distanceTv.setText(totalDistance > 0? String.valueOf(decimalFormat.format((float)totalDistance / 7)) : "0");
+            calTv.setText(String.valueOf(totalCal / 7));
+            distanceTv.setText(totalDistance > 0 ? String.valueOf(decimalFormat.format((float) totalDistance / 7)) : "0");
             stepTv.setText(String.valueOf(totalStep));
 
 
-            if(totalGol != 0) {
+            if (totalGol != 0) {
                 float standard = (float) totalStep / totalGol;
                 standardTv.setText(decimalFormat.format(standard * 100) + "%");
-            }else {
+            } else {
                 standardTv.setText("0");
             }
-            if(totalStep != 0) {
+            if (totalStep != 0) {
                 stepByHour.setText(String.valueOf(totalStep / 7));
-            }else {
+            } else {
                 stepByHour.setText("0");
             }
 
             int lastWeekSteps = 0;
-            if(lastWeekStepInfosList != null && lastWeekStepInfosList.size() > 0) {
+            if (lastWeekStepInfosList != null && lastWeekStepInfosList.size() > 0) {
                 StepInfos lastStepInfos = null;
                 for (int i = 0; i < lastWeekStepInfosList.size(); i++) {
                     lastStepInfos = lastWeekStepInfosList.get(i);
@@ -159,29 +159,29 @@ public class SportWeekPageItem {
             }
             String rate = "0%";
             boolean upOrDown = false;
-            if(lastWeekSteps > 0) {
-                if((totalStep - lastWeekSteps) > 0) {
+            if (lastWeekSteps > 0) {
+                if ((totalStep - lastWeekSteps) > 0) {
                     upOrDown = true;
-                }else {
+                } else {
                     upOrDown = false;
                 }
-                rate =decimalFormat.format(Math.abs(totalStep - lastWeekSteps) / (float)lastWeekSteps * 100) + "%";
+                rate = decimalFormat.format(Math.abs(totalStep - lastWeekSteps) / (float) lastWeekSteps * 100) + "%";
             }
             statusIv.setVisibility(View.VISIBLE);
-            if(upOrDown && lastWeekSteps > 0) {
+            if (upOrDown && lastWeekSteps > 0) {
                 statusIv.setImageResource(R.mipmap.jia);
-            }else if(!upOrDown && lastWeekSteps > 0){
+            } else if (!upOrDown && lastWeekSteps > 0) {
                 statusIv.setImageResource(R.mipmap.jian);
-            }else{
+            } else {
                 statusIv.setVisibility(View.GONE);
             }
             contrastTv.setText(rate);
 
-            if(dataRun != null) {
+            if (dataRun != null) {
                 sportCountTv.setText(String.valueOf(dataRun.getCishu()));
                 sportCountTime.setText(String.valueOf(dataRun.getTime()));
                 sportCountDistance.setText(String.valueOf(dataRun.getDistances()));
-            }else {
+            } else {
                 sportCountTv.setText("0");
                 sportCountTime.setText("0");
                 sportCountDistance.setText("0");
@@ -307,7 +307,7 @@ public class SportWeekPageItem {
         return this.date;
     }
 
-    public View getView(){
+    public View getView() {
         return this.view;
     }
 }

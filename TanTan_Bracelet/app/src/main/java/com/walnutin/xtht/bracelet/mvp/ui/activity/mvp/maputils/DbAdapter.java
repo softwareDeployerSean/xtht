@@ -94,7 +94,9 @@ public class DbAdapter {
     }
 
     public void close() {
-        dbHelper.close();
+        if (dbHelper!=null){
+            dbHelper.close();
+        }
     }
 
     public Cursor getall() {
@@ -184,6 +186,7 @@ public class DbAdapter {
             allRecord.add(record);
         }
         Collections.reverse(allRecord);
+        allRecordCursor.close();
         return allRecord;
     }
 
@@ -231,6 +234,7 @@ public class DbAdapter {
             record.setHeartrate(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_HEART)));
             record.setSteprate(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_STEPRATE)));
         }
+        cursor.close();
         return record;
     }
 
@@ -281,6 +285,7 @@ public class DbAdapter {
             signRecord.add(record);
         }
         Collections.reverse(signRecord);
+        cursor.close();
         return signRecord;
     }
 
@@ -330,6 +335,8 @@ public class DbAdapter {
                     .getColumnIndex(DbAdapter.KEY_SPEED)));
             signRecord.add(record);
         }
+        cursor.close();
+
         return signRecord;
     }
 
@@ -353,6 +360,7 @@ public class DbAdapter {
                 all_distance += Double.parseDouble(distance);
             }
         }
+        cursor.close();
         return all_distance + "";
     }
 
@@ -388,6 +396,7 @@ public class DbAdapter {
         data_run.setCishu(cishu);
         data_run.setDistances(all_distance);
         data_run.setTime(during_time);
+        cursor.close();
         return data_run;
     }
 
@@ -403,7 +412,7 @@ public class DbAdapter {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String tody = sdf.format(d);
         String time = ConmonUtils.getweek_day(tody);
-        String begin_end[] = time.split("|");
+        String begin_end[] = time.split(",");
         double all_distance = 0;
         int cishu = 0;
         int during = 0;
@@ -424,7 +433,50 @@ public class DbAdapter {
         data_run.setCishu(cishu);
         data_run.setDistances(all_distance);
         data_run.setTime(during_time);
+        cursor.close();
         return data_run;
+    }
+
+    /**
+     * 查本周的活跃天数
+     *
+     * @param
+     * @return
+     */
+    public int getweek_active() {
+        List<String> active_list = new ArrayList<>();
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tody = sdf.format(d);
+        String time = ConmonUtils.getweek_day(tody);
+        String begin_end[] = time.split(",");
+        String where = KEY_DATE + " Between ? and ?";
+        String[] selectionArgs = new String[]{begin_end[0] + "T00:00:00", begin_end[1] + "T23:59:59"};
+        Cursor cursor = db.query(RECORD_TABLE, getColumns(), where,
+                selectionArgs, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                active_list.add(cursor.getString(cursor.getColumnIndex(DbAdapter.KEY_DATE)));
+            }
+        }
+        int tag = 0;
+        Date currentDate = new Date();
+        List<String> dayforweek = ConmonUtils.dateToWeek(currentDate);
+
+
+        for (int i = 0; i < dayforweek.size(); i++) {
+            for (int j = 0; j < active_list.size(); j++) {
+                if (active_list.get(j).contains(dayforweek.get(i))) {
+                    ++tag;
+                    break;
+                }
+            }
+
+        }
+
+        cursor.close();
+
+        return tag;
     }
 
     /**
@@ -470,6 +522,7 @@ public class DbAdapter {
         data_run.setCishu(cishu);
         data_run.setDistances(all_distance);
         data_run.setTime(during_time);
+        cursor.close();
         return data_run;
     }
 

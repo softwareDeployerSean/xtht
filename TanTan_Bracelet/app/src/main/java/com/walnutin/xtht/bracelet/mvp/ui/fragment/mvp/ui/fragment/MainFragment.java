@@ -3,6 +3,7 @@ package com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -18,6 +19,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.veepoo.protocol.VPOperateManager;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
 import com.walnutin.xtht.bracelet.ProductList.entity.SyncStatus;
@@ -60,7 +63,8 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     public CanotSlidingViewpager vp;
 
     @BindView(R.id.refresh)
-    MaterialRefreshLayout refresh;
+    public RefreshLayout refresh;
+
     private HomePageItem[] items = new HomePageItem[3];
 
     private HomeViewPagerAdapter homeViewPagerAdapter;
@@ -91,8 +95,6 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     @Override
     public void onResume() {
         super.onResume();
-        init_refresh();
-
     }
 
     @Override
@@ -104,37 +106,36 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         super.setUserVisibleHint(isVisibleToUser);
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+
+
     private void init_refresh() {
-        refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
+        refresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+            public void onRefresh(RefreshLayout refreshlayout) {
                 if (MyApplication.isDevConnected) {
                     EventBus.getDefault().post(new StepChangeNotify.SyncData());
                 } else {
-                    refresh.finishRefresh();
-                    refresh.finishRefreshLoadMore();
-                    refresh.finishRefreshing();
+                    refresh.finishRefresh(false);
                     ToastUtils.showToast(getString(R.string.no_connecte), getActivity());
                 }
 
-            }
-
-            @Override
-            public void onfinish() {
-
-            }
-
-            @Override
-            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
 
             }
         });
-        //refresh.autoRefresh();
     }
 
     @Subscriber
     public void backgroundSyncStatus(SyncStatus syncStatus) {
+        LogUtils.debugInfo("同步完成啊");
         if (!syncStatus.isSync) {
+            LogUtils.debugInfo("同步完成啊啊啊");
             refresh.finishRefresh();
             updateUi(position_tag);
         }
@@ -295,7 +296,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         homeViewPagerAdapter = new HomeViewPagerAdapter(items);
         vp.setAdapter(homeViewPagerAdapter);
         vp.setCurrentItem(1001);
-
+        init_refresh();
 
     }
 

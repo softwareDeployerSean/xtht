@@ -74,8 +74,8 @@
     <string name="dianliang">100%</string>
 
     <!--我的 -->
-    <string name="active_day">活跃天数6 </string>
-    <string name="rate">达标率60% </string>
+    <string name="active_day">活跃天数- </string>
+    <string name="rate">达标率- </string>
     <string name="stepbyweek">本周步数 </string>
     <string name="best_day">最佳日 </string>
     <string name="best_week">最佳周 </string>

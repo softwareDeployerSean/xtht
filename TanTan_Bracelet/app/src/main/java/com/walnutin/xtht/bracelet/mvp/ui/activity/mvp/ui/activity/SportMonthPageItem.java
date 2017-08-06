@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
@@ -111,17 +112,17 @@ public class SportMonthPageItem {
         loadDatas();
     }
 
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int totalSteps = 0;
             int totalDistance = 0;
             int totalGol = 0;
             int totalCal = 0;
-            if(stepInfosList != null && stepInfosList.size() > 0) {
+            if (stepInfosList != null && stepInfosList.size() > 0) {
                 StepInfos stepInfos = null;
                 int[] datas = new int[months.size()];
-                for(int i = 0; i < stepInfosList.size(); i++) {
+                for (int i = 0; i < stepInfosList.size(); i++) {
                     stepInfos = stepInfosList.get(i);
                     int a = -1;
                     for (int z = 0; i < months.size(); z++) {
@@ -131,7 +132,7 @@ public class SportMonthPageItem {
                         }
                     }
 
-                    if(a != -1) {
+                    if (a != -1) {
                         datas[a] = stepInfos.getStep();
                     }
 
@@ -143,26 +144,26 @@ public class SportMonthPageItem {
 
                 DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 stepTv.setText(String.valueOf(totalSteps));
-                calTv.setText(String.valueOf(totalCal/months.size()));
-                distanceTv.setText(String.valueOf(decimalFormat.format((float)totalDistance / months.size())));
+                calTv.setText(String.valueOf(totalCal / months.size()));
+                distanceTv.setText(String.valueOf(decimalFormat.format((float) totalDistance / months.size())));
 
-                if(totalGol != 0) {
+                if (totalGol != 0) {
                     float standard = (float) totalSteps / totalGol;
                     standardTv.setText(decimalFormat.format(standard * 100) + "%");
-                }else {
+                } else {
                     standardTv.setText("0");
                 }
 
-                if(totalSteps != 0) {
+                if (totalSteps != 0) {
                     stepByHour.setText(String.valueOf(totalSteps / months.size()));
-                }else {
+                } else {
                     stepByHour.setText("0");
                 }
 
                 int lastMonthStepTatal = 0;
-                if(lastMonthStepInfosList != null && lastMonthStepInfosList.size() > 0) {
+                if (lastMonthStepInfosList != null && lastMonthStepInfosList.size() > 0) {
                     StepInfos lastMonthStepInfos = null;
-                    for(int i = 0; i < lastMonthStepInfosList.size(); i++) {
+                    for (int i = 0; i < lastMonthStepInfosList.size(); i++) {
                         lastMonthStepInfos = lastMonthStepInfosList.get(i);
                         lastMonthStepTatal += lastMonthStepInfos.getStep();
                     }
@@ -170,27 +171,27 @@ public class SportMonthPageItem {
 
                 String rate = "0%";
                 statusIv.setVisibility(View.VISIBLE);
-                if(lastMonthStepTatal == 0 && totalSteps == 0) {
+                if (lastMonthStepTatal == 0 && totalSteps == 0) {
                     statusIv.setVisibility(View.GONE);
                     rate = "0%";
-                }else if(lastMonthStepTatal == 0 && totalSteps > 0) {
+                } else if (lastMonthStepTatal == 0 && totalSteps > 0) {
                     statusIv.setVisibility(View.VISIBLE);
                     statusIv.setImageResource(R.mipmap.jia);
                     rate = "100%";
-                }else if(lastMonthStepTatal > 0 && totalSteps > 0 && lastMonthStepTatal >= totalSteps) {
+                } else if (lastMonthStepTatal > 0 && totalSteps > 0 && lastMonthStepTatal >= totalSteps) {
                     statusIv.setVisibility(View.VISIBLE);
                     statusIv.setImageResource(R.mipmap.jian);
 
-                    rate = decimalFormat.format(Math.abs(lastMonthStepTatal - totalSteps) / (float)lastMonthStepTatal * 100) + "%";
-                }else if(lastMonthStepTatal > 0 && totalSteps > 0 && lastMonthStepTatal < totalSteps) {
+                    rate = decimalFormat.format(Math.abs(lastMonthStepTatal - totalSteps) / (float) lastMonthStepTatal * 100) + "%";
+                } else if (lastMonthStepTatal > 0 && totalSteps > 0 && lastMonthStepTatal < totalSteps) {
                     statusIv.setVisibility(View.VISIBLE);
                     statusIv.setImageResource(R.mipmap.jia);
-                    rate = decimalFormat.format(Math.abs(totalSteps - lastMonthStepTatal) / (float)lastMonthStepTatal * 100) + "%";
+                    rate = decimalFormat.format(Math.abs(totalSteps - lastMonthStepTatal) / (float) lastMonthStepTatal * 100) + "%";
                 }
                 contrastTv.setText(rate);
 
                 histogramView.setDatas(datas);
-            }else {
+            } else {
                 stepTv.setText("0");
                 calTv.setText("0");
                 distanceTv.setText("0");
@@ -202,11 +203,11 @@ public class SportMonthPageItem {
                 histogramView.setDatas(datas);
             }
 
-            if(dataRun != null) {
+            if (dataRun != null) {
                 sportCountTv.setText(String.valueOf(dataRun.getCishu()));
                 sportCountTime.setText(String.valueOf(dataRun.getTime()));
                 sportCountDistance.setText(String.valueOf(dataRun.getDistances()));
-            }else {
+            } else {
                 sportCountTv.setText("0");
                 sportCountTime.setText("0");
                 sportCountDistance.setText("0");
@@ -236,15 +237,15 @@ public class SportMonthPageItem {
         try {
             months = getMonthList(sdf.parse(date));
             lastMonths = getMonthList(sdf.parse(lastDate));
-            for(int i = 0; i < months.size(); i++) {
+            for (int i = 0; i < months.size(); i++) {
                 Log.d("TAG", months.get(i) + "============");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String[] xLables = new String[months.size()];
-        for(int i = 0; i < months.size(); i++) {
+        for (int i = 0; i < months.size(); i++) {
             xLables[i] = String.valueOf(i + 1);
         }
 
@@ -256,12 +257,15 @@ public class SportMonthPageItem {
         dayTv.setText(months.get(0) + "~" + months.get(months.size() - 1));
         stepInfosList = null;
         lastMonthStepInfosList = null;
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
-                if(months != null && months.size() > 0 && lastMonths != null && lastMonths.size() > 0) {
+                if (months != null && months.size() > 0 && lastMonths != null && lastMonths.size() > 0) {
                     stepInfosList = SqlHelper.instance().getLastDateStep(MyApplication.account, months.get(0), months.get(months.size() - 1));
                     lastMonthStepInfosList = SqlHelper.instance().getLastDateStep(MyApplication.account, lastMonths.get(0), lastMonths.get(lastMonths.size() - 1));
+                    LogUtils.debugInfo("我是数据一" + stepInfosList.toString());
+                    LogUtils.debugInfo("我是数据二" + lastMonthStepInfosList.toString());
+
 
                     DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
                     dbhelper.open();
@@ -276,9 +280,9 @@ public class SportMonthPageItem {
     private String getLastMonthToday(String da) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
-        try{
+        try {
             date = format.parse(da);
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -292,13 +296,13 @@ public class SportMonthPageItem {
         System.out.println("day=" + day);
         System.out.println("month=" + month);
 
-        if(month == 3) {
-            if(day == 31 || day == 30 || day == 29) {
+        if (month == 3) {
+            if (day == 31 || day == 30 || day == 29) {
                 calendar.set(Calendar.DAY_OF_MONTH, 28);
             }
         }
-        if(month == 5 || month == 7 || month == 10 || month == 12) {
-            if(day == 31) {
+        if (month == 5 || month == 7 || month == 10 || month == 12) {
+            if (day == 31) {
                 calendar.set(Calendar.DAY_OF_MONTH, 30);
             }
         }
@@ -329,7 +333,7 @@ public class SportMonthPageItem {
                 tempStart.add(Calendar.DAY_OF_YEAR, 1);
                 begin = tempStart.getTime();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;

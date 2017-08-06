@@ -10,10 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.cjj.MaterialRefreshLayout;
-import com.cjj.MaterialRefreshListener;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
@@ -43,7 +42,9 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.OnItemClickListene
 import com.zhy.autolayout.AutoLinearLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,6 +107,17 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
     @BindView(R.id.linear_out)
     AutoLinearLayout linearOut;
     Unbinder unbinder1;
+    @BindView(R.id.tv_active_day)
+    TextView tvActiveDay;
+    @BindView(R.id.progress)
+    ProgressBar progress;
+    @BindView(R.id.tv_rate)
+    TextView tvRate;
+    @BindView(R.id.tv_day_week)
+    TextView tvDayWeek;
+    @BindView(R.id.refresh)
+    AutoLinearLayout refresh;
+    Unbinder unbinder2;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -161,31 +173,72 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
         setdata();
     }
 
-    StepInfos stepInfosday;
+    StepInfos stepInfosday;//最佳日
+    StepInfos stepInfosweek;//最佳周
+    StepInfos stepInfosmonth;//最佳月
+    List<StepInfos> continuous = new ArrayList<>();
 
     public void setdata() {
 
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String tody = sdf.format(d);
+        String time = ConmonUtils.getweek_day(tody);
+        String begin_end[] = time.split(",");
 
-        ConmonUtils.getweek_day(tody);
+        int sum_stepbyweek = 0;
+        int all_day = 0;
+        int standard = 0;
+        all_day = SqlHelper.instance().getAllstep(MyApplication.account).size();
+        standard = SqlHelper.instance().getStandardstep().size();
         DbAdapter dbHepler = new DbAdapter(getActivity());
         dbHepler.open();
-        Data_run data_run = dbHepler.getmonth_data();
-        LogUtils.debugInfo("aaa" + data_run.toString());
+        stepInfosday = SqlHelper.instance().getBestDayStep(MyApplication.account);
+        stepInfosweek = SqlHelper.instance().getBestWeekStep(MyApplication.account);
+        stepInfosmonth = SqlHelper.instance().getBestMonthStep(MyApplication.account);
+        continuous = SqlHelper.instance().getMaxContinuousNumber();
+        int active = dbHepler.getweek_active();
+        sum_stepbyweek = SqlHelper.instance().getweekstep(begin_end[0], begin_end[1]);
+        if (!TextUtils.isEmpty(stepInfosday.getDates())) {
+            tvBestDay.setText(stepInfosday.getDates());
+            tvBestDayStep.setText(stepInfosday.getStep() + "");
+        }
+        if (!TextUtils.isEmpty(stepInfosweek.getDates())) {
+            String data[] = stepInfosweek.getDates().split("-");
+            tvBestWeekBegin.setText(ConmonUtils.getFirstDayOfWeek(Integer.parseInt(data[0]), Integer.parseInt(data[1])));
+            tvBestWeekEnd.setText(ConmonUtils.getLastDayOfWeek(Integer.parseInt(data[0]), Integer.parseInt(data[1])));
+            tvBestweekStep.setText(stepInfosweek.getStep() + "");
+        }
+        if (!TextUtils.isEmpty(stepInfosmonth.getDates())) {
+            tvBestMonth.setText(stepInfosmonth.getDates());
+            tvBestMonthStep.setText(stepInfosmonth.getStep() + "");
+        }
+        if (continuous.size() > 0) {
+            tvWeekbygoin.setText(continuous.size() + "");
+            tvRateBegin.setText(continuous.get(0).getDates());
+            tvRateEnd.setText(continuous.get(continuous.size() - 1).getDates());
+        }
+        if (sum_stepbyweek != 0) {
+            UserBean userBean = DataHelper.getDeviceData(MyApplication.getContext(), "UserBean");
+            int dairy = userBean.getDailyGoals();
+            if (dairy == 0) {
+                dairy = 7000;
+            }
+            dairy = dairy * 7;
+            tvDayWeek.setText(sum_stepbyweek + "/" + dairy);
+        }
+        if (all_day != 0 && standard != 0) {
+            String rate = (standard / all_day * 100) + "%";
+            tvRate.setText("达标率" + rate);
+            progress.setMax(all_day);
+            progress.setProgress(standard);
+        }
+        if (active > 0) {
+            tvActiveDay.setText("活跃天数" + active);
+        }
+        dbHepler.close();
 
 
-        //SqlHelper.instance().getBestDayStep(MyApplication.account);
-        //SqlHelper.instance().getBestMonthStep(MyApplication.account);
-        stepInfosday = new StepInfos();
-        stepInfosday.setStep(5000);
-        stepInfosday.setDates(tody);
-        SqlHelper.instance().insertOrUpdateTodayStep(stepInfosday);
-
-        StepInfos stepInfos = SqlHelper.instance().getBestWeekStep(MyApplication.account);
-        LogUtils.debugInfo("0+数组" +
-                "" + tody);
     }
 
 /*

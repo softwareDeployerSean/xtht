@@ -12,6 +12,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.presenter.LoadingPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
 
 /**
@@ -21,7 +22,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.LoadActivity;
 public class GuildActivity extends BaseActivity {
 
     String isload = "";
-
+    LoadingPresenter loadingPresenter;
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
 
@@ -38,7 +39,7 @@ public class GuildActivity extends BaseActivity {
     @Override
     public void initData(Bundle savedInstanceState) {
         isload = DataHelper.getStringSF(MyApplication.getAppContext(), "isload");
-
+        loadingPresenter=new LoadingPresenter();
         new Thread() {
             @Override
             public void run() {
@@ -52,6 +53,13 @@ public class GuildActivity extends BaseActivity {
                     startActivity(new Intent(GuildActivity.this, LoadActivity.class));
                     finish();
                 } else {
+                    if (!DataHelper.getStringSF(MyApplication.getAppContext(), "username").equals("default")&&!DataHelper.getStringSF(MyApplication.getAppContext(), "userpassword").equals("default")){
+
+
+
+                    }
+
+
                     startActivity(new Intent(GuildActivity.this, MainActivity.class));
                     finish();
                 }

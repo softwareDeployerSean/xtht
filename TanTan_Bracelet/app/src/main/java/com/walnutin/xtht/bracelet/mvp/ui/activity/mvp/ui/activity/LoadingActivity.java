@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
@@ -127,7 +128,7 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                     } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
                         ToastUtils.showToast(getString(R.string.pwd), this);
                     } else {
-                        mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                        mPresenter.load(username, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)).trim());
                     }
                 }
                 break;

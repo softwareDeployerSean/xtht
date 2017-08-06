@@ -84,7 +84,6 @@ public class CanotSlidingViewpager extends ViewPager {
 
                     float motionYValue = ev.getY() - beforeY;
 
-                    Log.d("TAG", "motionValue=" + motionXValue);
                     if (motionXValue < 0 && Math.abs(motionYValue) < Math.abs(motionXValue)) {//禁止左滑
                         return false;
                     }

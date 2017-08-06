@@ -103,7 +103,7 @@ public class RegistbyPhoneActivity extends BaseActivity<RegistbyPhonePresenter> 
                 if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
                     ToastUtils.showToast(getString(R.string.pwd), this);
                 } else {
-                    mPresenter.regist(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                    mPresenter.regist(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)).trim());
                 }
 
 

@@ -147,6 +147,7 @@ public class ExerciseFragment extends BaseFragment<ExercisePresenter> implements
         indoor_record = dbhelper.queryRecordBySign("running_indoor");
         mountain_record = dbhelper.queryRecordBySign("mountaineering");
         ride_record = dbhelper.queryRecordBySign("riding");
+        dbhelper.close();
         if (run_record.size() > 0) {
             for (PathRecord p : run_record) {
                 run_distance += Double.parseDouble(p.getDistance());
