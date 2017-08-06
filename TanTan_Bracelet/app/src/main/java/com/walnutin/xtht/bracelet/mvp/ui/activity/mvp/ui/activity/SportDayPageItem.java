@@ -98,6 +98,11 @@ public class SportDayPageItem {
     public void update(String date) {
         this.date = date;
         lastDate = getLastDateaa(date);
+
+        stepinfos = null;
+        lastDayStepInfos = null;
+        stepinfos = null;
+
         loadDatas();
     }
 
@@ -248,9 +253,7 @@ public class SportDayPageItem {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        stepinfos = null;
-        lastDayStepInfos = null;
-        stepinfos = null;
+
         new Thread() {
             @Override
             public void run() {

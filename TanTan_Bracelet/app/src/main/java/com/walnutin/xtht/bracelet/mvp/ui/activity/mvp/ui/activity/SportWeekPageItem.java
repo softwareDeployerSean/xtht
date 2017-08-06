@@ -96,6 +96,9 @@ public class SportWeekPageItem {
 
     public void update(String date) {
         this.date = date;
+
+        stepInfosList = null;
+        lastWeekStepInfosList = null;
         loadDatas();
     }
 
@@ -128,54 +131,65 @@ public class SportWeekPageItem {
                         totalGol += stepInfos.getStepGoal();
                     }
                 }
-            }
-            histogramView.setDatas(datas);
+                histogramView.setDatas(datas);
 
-            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            calTv.setText(String.valueOf(totalCal / 7));
-            distanceTv.setText(totalDistance > 0 ? String.valueOf(decimalFormat.format((float) totalDistance / 7)) : "0");
-            stepTv.setText(String.valueOf(totalStep));
+                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                calTv.setText(String.valueOf(totalCal / 7));
+                distanceTv.setText(totalDistance > 0 ? String.valueOf(decimalFormat.format((float) totalDistance / 7)) : "0");
+                stepTv.setText(String.valueOf(totalStep));
 
 
-            if (totalGol != 0) {
-                float standard = (float) totalStep / totalGol;
-                standardTv.setText(decimalFormat.format(standard * 100) + "%");
-            } else {
-                standardTv.setText("0");
-            }
-            if (totalStep != 0) {
-                stepByHour.setText(String.valueOf(totalStep / 7));
-            } else {
-                stepByHour.setText("0");
-            }
-
-            int lastWeekSteps = 0;
-            if (lastWeekStepInfosList != null && lastWeekStepInfosList.size() > 0) {
-                StepInfos lastStepInfos = null;
-                for (int i = 0; i < lastWeekStepInfosList.size(); i++) {
-                    lastStepInfos = lastWeekStepInfosList.get(i);
-                    lastWeekSteps += lastStepInfos.getStep();
-                }
-            }
-            String rate = "0%";
-            boolean upOrDown = false;
-            if (lastWeekSteps > 0) {
-                if ((totalStep - lastWeekSteps) > 0) {
-                    upOrDown = true;
+                if (totalGol != 0) {
+                    float standard = (float) totalStep / totalGol;
+                    standardTv.setText(decimalFormat.format(standard * 100) + "%");
                 } else {
-                    upOrDown = false;
+                    standardTv.setText("0");
                 }
-                rate = decimalFormat.format(Math.abs(totalStep - lastWeekSteps) / (float) lastWeekSteps * 100) + "%";
-            }
-            statusIv.setVisibility(View.VISIBLE);
-            if (upOrDown && lastWeekSteps > 0) {
-                statusIv.setImageResource(R.mipmap.jia);
-            } else if (!upOrDown && lastWeekSteps > 0) {
-                statusIv.setImageResource(R.mipmap.jian);
-            } else {
+                if (totalStep != 0) {
+                    stepByHour.setText(String.valueOf(totalStep / 7));
+                } else {
+                    stepByHour.setText("0");
+                }
+
+                int lastWeekSteps = 0;
+                if (lastWeekStepInfosList != null && lastWeekStepInfosList.size() > 0) {
+                    StepInfos lastStepInfos = null;
+                    for (int i = 0; i < lastWeekStepInfosList.size(); i++) {
+                        lastStepInfos = lastWeekStepInfosList.get(i);
+                        lastWeekSteps += lastStepInfos.getStep();
+                    }
+                }
+                String rate = "0%";
+                boolean upOrDown = false;
+                if (lastWeekSteps > 0) {
+                    if ((totalStep - lastWeekSteps) > 0) {
+                        upOrDown = true;
+                    } else {
+                        upOrDown = false;
+                    }
+                    rate = decimalFormat.format(Math.abs(totalStep - lastWeekSteps) / (float) lastWeekSteps * 100) + "%";
+                }
+                statusIv.setVisibility(View.VISIBLE);
+                if (upOrDown && lastWeekSteps > 0) {
+                    statusIv.setImageResource(R.mipmap.jia);
+                } else if (!upOrDown && lastWeekSteps > 0) {
+                    statusIv.setImageResource(R.mipmap.jian);
+                } else {
+                    statusIv.setVisibility(View.GONE);
+                }
+                contrastTv.setText(rate);
+            }else {
+                stepTv.setText("0");
+                calTv.setText("0");
+                distanceTv.setText("0");
+                standardTv.setText("0");
+                stepByHour.setText("0");
                 statusIv.setVisibility(View.GONE);
+                contrastTv.setText("0%");
+                int[] datas1 = new int[7];
+                histogramView.setDatas(datas1);
             }
-            contrastTv.setText(rate);
+
 
             if (dataRun != null) {
                 sportCountTv.setText(String.valueOf(dataRun.getCishu()));
@@ -212,8 +226,7 @@ public class SportWeekPageItem {
         weeks = dateToWeek(mdate);
         lastWeeks = getLastWeek(date);
         dayTv.setText(monday + "~" + sunday);
-        stepInfosList = null;
-        lastWeekStepInfosList = null;
+
         new Thread() {
             @Override
             public void run() {

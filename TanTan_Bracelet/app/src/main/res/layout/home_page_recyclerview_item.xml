@@ -3,8 +3,9 @@
     android:id="@+id/rl_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="15px"
-    android:layout_marginTop="50px"
+    android:layout_marginBottom="25px"
+    android:layout_marginTop="25px"
+    android:layout_centerVertical="true"
     android:gravity="center">
 
     <com.zhy.autolayout.AutoRelativeLayout
@@ -32,6 +33,7 @@
         android:layout_marginBottom="0px"
         android:layout_marginLeft="30px"
         android:layout_toRightOf="@+id/left_est_rl"
+        android:layout_centerVertical="true"
         android:paddingBottom="0px">
 
         <TextView
@@ -59,6 +61,7 @@
         android:layout_marginBottom="0px"
         android:layout_marginLeft="20px"
         android:layout_toRightOf="@+id/left_rl"
+        android:layout_centerVertical="true"
         android:paddingBottom="0px">
 
         <TextView
@@ -83,8 +86,7 @@
         style="@style/home_fragment_style4"
         android:layout_alignParentRight="true"
         android:drawablePadding="10px"
-        android:layout_marginTop="5px"
+        android:layout_marginTop="10px"
         android:gravity="center_vertical|right"
-        android:text="0公里"
-        android:textSize="16px" />
+        android:text="0公里" />
 </com.zhy.autolayout.AutoRelativeLayout>

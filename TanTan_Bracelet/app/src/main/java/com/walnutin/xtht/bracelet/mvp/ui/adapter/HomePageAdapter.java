@@ -113,7 +113,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
         }
-
+        holder.leftButtomTv.setVisibility(View.VISIBLE);
+        holder.rightButtomTv.setVisibility(View.VISIBLE);
 
         holder.leftTopTv.setText(data.getLeftTopName());
 
@@ -125,18 +126,26 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             holder.rightButtomTv.setText("");
             holder.rightIconTv.setText("查看");
             holder.rightIconTv.setTextSize(px2dip(mContext, 8));
+            holder.leftButtomTv.setVisibility(View.GONE);
+            holder.rightButtomTv.setVisibility(View.GONE);
         } else if (data.getType() == 2) {
             holder.rightTopTv.setText("高压  " + data.getRightTop() + " mmhg");
             holder.rightButtomTv.setText("低压  " + data.getRightButtom() + " mmhg");
             holder.rightIconTv.setText(data.getRightText());
             holder.rightIconTv.setTextSize(px2dip(mContext, 16));
+            holder.leftButtomTv.setVisibility(View.GONE);
         } else if (data.getType() == 4 || data.getType() == 5 || data.getType() == 6) {
             holder.rightTopTv.setText(data.getRightTop() + " min");
             holder.rightButtomTv.setText(data.getRightTop() + "大卡");
 
             holder.rightIconTv.setText(data.getRightText() + "公里");
             holder.rightIconTv.setTextSize(px2dip(mContext, 16));
-        } else {
+            if(data.getType() == 4) {
+                holder.leftButtomTv.setVisibility(View.GONE);
+            }
+        } else if(data.getType() == 3) {
+            holder.leftButtomTv.setVisibility(View.GONE);
+        }else {
             holder.rightTopTv.setText(data.getRightTop());
             holder.rightButtomTv.setText(data.getRightButtom());
             holder.rightIconTv.setText(data.getRightText());
