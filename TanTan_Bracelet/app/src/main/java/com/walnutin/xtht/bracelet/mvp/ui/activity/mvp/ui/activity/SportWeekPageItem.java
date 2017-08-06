@@ -212,7 +212,8 @@ public class SportWeekPageItem {
         weeks = dateToWeek(mdate);
         lastWeeks = getLastWeek(date);
         dayTv.setText(monday + "~" + sunday);
-
+        stepInfosList = null;
+        lastWeekStepInfosList = null;
         new Thread() {
             @Override
             public void run() {
@@ -222,7 +223,7 @@ public class SportWeekPageItem {
                 DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
                 dbhelper.open();
                 dataRun = dbhelper.getweek_data();
-
+                dbhelper.close();
                 mHandler.sendEmptyMessage(0);
             }
         }.start();

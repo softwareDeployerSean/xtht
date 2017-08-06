@@ -136,7 +136,7 @@ public class SportMonthSelectedFragment extends BaseFragment<SportMonthSelectedP
             currentIndexItem = position;
             currentDate = item.getDate();
 
-            if (isNow(currentDate)) {
+            if (isCurrentMonth(currentDate)) {
                 viewpager.setScrollble(false);
             } else {
                 viewpager.setScrollble(true);
@@ -150,7 +150,7 @@ public class SportMonthSelectedFragment extends BaseFragment<SportMonthSelectedP
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try{
-            date = format.parse("2017-08-31");
+            date = format.parse(da);
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -232,7 +232,29 @@ public class SportMonthSelectedFragment extends BaseFragment<SportMonthSelectedP
         LogUtils.debugInfo("day.equals(nowDay)=" + date.equals(nowDay));
 
         return date.equals(nowDay);
+    }
 
+
+    private boolean isCurrentMonth(String date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+        try {
+            d = sf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+
+        LogUtils.debugInfo("now=" + now.get(Calendar.YEAR) + "-" + now.get(Calendar.MONTH));
+
+        LogUtils.debugInfo("calendar=" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH));
+
+        return  calendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) && calendar.get(Calendar.YEAR) == now.get(Calendar.YEAR);
     }
 
     /**

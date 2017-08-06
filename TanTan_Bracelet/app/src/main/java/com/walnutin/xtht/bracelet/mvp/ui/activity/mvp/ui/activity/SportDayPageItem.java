@@ -104,7 +104,7 @@ public class SportDayPageItem {
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (stepTv != null) {
+            if (stepinfos != null) {
                 int totalStep = stepinfos.getStep();
                 stepTv.setText(String.valueOf(totalStep));
 
@@ -210,6 +210,8 @@ public class SportDayPageItem {
                 sportCountDistance.setText("");
                 standardTv.setText("0%");
                 contrastTv.setText("0%");
+                int[] datas = new int[24];
+                histogramView.setDatas(datas);
             }
 
             if(dataRun != null) {
@@ -246,7 +248,9 @@ public class SportDayPageItem {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        stepinfos = null;
+        lastDayStepInfos = null;
+        stepinfos = null;
         new Thread() {
             @Override
             public void run() {
@@ -256,7 +260,7 @@ public class SportDayPageItem {
                 DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
                 dbhelper.open();
                 dataRun = dbhelper.gettody_data();
-
+                dbhelper.close();
                 mHandler.sendEmptyMessage(0);
             }
         }.start();

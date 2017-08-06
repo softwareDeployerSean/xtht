@@ -198,6 +198,8 @@ public class SportMonthPageItem {
                 stepByHour.setText("0");
                 statusIv.setVisibility(View.GONE);
                 contrastTv.setText("0%");
+                int[] datas = new int[months.size()];
+                histogramView.setDatas(datas);
             }
 
             if(dataRun != null) {
@@ -252,7 +254,8 @@ public class SportMonthPageItem {
         histogramView.setStartColor(Color.parseColor("#72FF00"));
         histogramView.setEndColor(Color.parseColor("#72FF00"));
         dayTv.setText(months.get(0) + "~" + months.get(months.size() - 1));
-
+        stepInfosList = null;
+        lastMonthStepInfosList = null;
         new Thread(){
             @Override
             public void run() {
@@ -263,7 +266,7 @@ public class SportMonthPageItem {
                     DbAdapter dbhelper = new DbAdapter(MyApplication.getAppContext());
                     dbhelper.open();
                     dataRun = dbhelper.getmonth_data();
-
+                    dbhelper.close();
                     mHandler.sendEmptyMessage(0);
                 }
             }
