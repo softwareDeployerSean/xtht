@@ -27,7 +27,14 @@ import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.app.utils.ToastUtils;
 import com.walnutin.xtht.bracelet.mvp.model.entity.EpMenue;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.BasicSettingsActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.ClockListActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.HardUpdateActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.KnownCallActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.MessagePushActivity;
+import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.QuestionHandlerActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpConnectedMenueAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.EpSearchListAdapter;
+import com.walnutin.xtht.bracelet.mvp.ui.adapter.OnItemClickListener;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CustomGridLayoutManager;
 import com.zhy.autolayout.AutoRelativeLayout;
 
@@ -118,6 +125,64 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     private void setadatper() {
         epMenue.setLayoutManager(new CustomGridLayoutManager(getActivity(), 3, false));
+//        EpConnectedMenueAdapter adapter = new EpConnectedMenueAdapter(getMenues(), getContext());
+//        epMenue.setAdapter(adapter);
+//        adapter.setmOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                switch (position) {
+//                    case 0:
+//                        Intent callIntent = new Intent(getActivity(), KnownCallActivity_New.class);
+//                        startActivity(callIntent);
+//                        break;
+//                    case 1:
+//                        Intent clockIntent = new Intent(getActivity(), ClockListActivity.class);
+//                        startActivity(clockIntent);
+//                        break;
+//                    case 2:
+//                        Intent messageIntent = new Intent(getActivity(), MessagePushActivity.class);
+//                        startActivity(messageIntent);
+//                        break;
+//                    case 3:
+//                        Intent questionIntent = new Intent(getActivity(), QuestionHandlerActivity.class);
+//                        startActivity(questionIntent);
+//                        break;
+//                    case 4:
+//                        Intent updateIntent = new Intent(getActivity(), HardUpdateActivity.class);
+//                        startActivity(updateIntent);
+//                        break;
+//                }
+//            }
+//        });
+        EpConnectedMenueAdapter adapter = new EpConnectedMenueAdapter(getMenues(), getContext());
+        epMenue.setAdapter(adapter);
+//        adapter.setmOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                switch (position) {
+//                    case 0:
+//                        Intent callIntent = new Intent(getActivity(), KnownCallActivity.class);
+//                        startActivity(callIntent);
+//                        break;
+//                    case 1:
+//                        Intent clockIntent = new Intent(getActivity(), ClockListActivity.class);
+//                        startActivity(clockIntent);
+//                        break;
+//                    case 2:
+//                        Intent messageIntent = new Intent(getActivity(), MessagePushActivity.class);
+//                        startActivity(messageIntent);
+//                        break;
+//                    case 3:
+//                        Intent questionIntent = new Intent(getActivity(), QuestionHandlerActivity.class);
+//                        startActivity(questionIntent);
+//                        break;
+//                    case 4:
+//                        Intent updateIntent = new Intent(getActivity(), HardUpdateActivity.class);
+//                        startActivity(updateIntent);
+//                        break;
+//                }
+//            }
+//        });
         epMenue.setAdapter(new EpConnectedMenueAdapter(getMenues(), getContext()));
 
     }

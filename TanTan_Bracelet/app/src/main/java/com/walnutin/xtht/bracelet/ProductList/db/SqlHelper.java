@@ -160,8 +160,8 @@ public class SqlHelper {
     /**
      * 得到指定日期 的
      */
-
-    public List<StepInfos> getWeekLastDateStep(String account, String startTime, String endTime) { //不用 每个时辰的详细步数
+//得到 startTime -endTime对应时间、
+    public List<StepInfos> getWeekLastDateStep(String account, String startTime, String endTime) { //startTime和endTime格式yyy-MM-dd
         List<StepInfos> dailyInfos = new ArrayList<>();
         String sql = "select * from stepinfo where account =? and dates between ? and ? order by dates";
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
@@ -191,7 +191,7 @@ public class SqlHelper {
      * 得到指定月份的详细步数情况
      */
 
-    public List<StepInfos> getMonthStepListByMonth(String account, String time) {
+    public List<StepInfos> getMonthStepListByMonth(String account, String time) { //得到 time对应月的步数情况、 time格式 2017-07
         List<StepInfos> dailyInfos = new ArrayList<>();
         String sql = "select * from stepinfo where account =? and dates like '" + time + "%' order by dates";
         SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();

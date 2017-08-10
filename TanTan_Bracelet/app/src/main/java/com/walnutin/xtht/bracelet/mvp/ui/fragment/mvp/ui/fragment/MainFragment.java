@@ -36,8 +36,8 @@ import com.walnutin.xtht.bracelet.mvp.ui.fragment.mvp.presenter.MainPresenter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.CanotSlidingViewpager;
 
 
-import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -113,7 +113,11 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     private void init_refresh() {
         refresh.setOnRefreshListener(new OnRefreshListener() {
@@ -131,7 +135,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
         });
     }
 
-    @Subscriber
+    @Subscribe
     public void backgroundSyncStatus(SyncStatus syncStatus) {
         LogUtils.debugInfo("同步完成啊");
         if (!syncStatus.isSync) {
@@ -198,8 +202,13 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
     }
 
     @Override
-    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = null;
         HomePageItem item;
         for (int i = 0; i < items.length; i++) {

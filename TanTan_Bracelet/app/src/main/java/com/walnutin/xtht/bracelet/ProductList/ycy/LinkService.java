@@ -22,14 +22,13 @@ import com.walnutin.xtht.bracelet.ProductList.Jinterface.IHardSdkCallback;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.Utils;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepChangeNotify;
-import com.walnutin.xtht.bracelet.ProductList.eventbus.SyncStatus;
+import com.walnutin.xtht.bracelet.ProductList.entity.SyncStatus;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 
-import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-import java.util.List;
 
 /**
  * 作者：MrJiang on 2017/4/10
@@ -63,7 +62,7 @@ public class LinkService extends Service implements IHardSdkCallback {
         MyApplication.tmpFactoryName = mySharedPf.getString("device_factory");
         linkTime = new LinkTime(FINISH_TIME, ONE_TRY);
         checkSyncStatus = new SycnStatusListener(1000 * 30, 1000);
-        deviceOtherInfoManager =DeviceOtherInfoManager.getInstance(getApplicationContext());
+        deviceOtherInfoManager = DeviceOtherInfoManager.getInstance(getApplicationContext());
         EventBus.getDefault().register(this);
         HardSdk.getInstance().setHardSdkCallback(this);
         if (MyApplication.tmpFactoryName != null && !MyApplication.tmpFactoryName.equals("null")) {
@@ -79,7 +78,7 @@ public class LinkService extends Service implements IHardSdkCallback {
             isStartingLinking = true;
             isAttempLinking = false;
             linkTime.cancel();
-            System.out.println("onStartCommand:"+MyApplication.tmpDeviceAddr);
+            System.out.println("onStartCommand:" + MyApplication.tmpDeviceAddr);
             HardSdk.getInstance().connect(MyApplication.tmpDeviceAddr);
         }
         if (mySharedPf.getBoolean("isFirstRunApp", true) && MyApplication.isDevConnected == true) {
@@ -218,9 +217,10 @@ public class LinkService extends Service implements IHardSdkCallback {
     };
 
 
-    @Subscriber
+    @Subscribe
     public void syncBraceletDev(StepChangeNotify.SyncData sync) {
         //   Utils.showToast(getApplicationContext(), getString(R.string.startSync));
+        Log.i(TAG, "syncBraceletDev");
         EventBus.getDefault().post(new SyncStatus(true));  // 同步开始
         MyApplication.isSyncing = true;
         stepSyncStarted = false;
@@ -249,7 +249,6 @@ public class LinkService extends Service implements IHardSdkCallback {
 
 
     Handler findHandler = new Handler();
-
 
 
     @Override
@@ -311,7 +310,7 @@ public class LinkService extends Service implements IHardSdkCallback {
                 if (lostIndex >= 3) {
                     if (lostIndex >= 3) {
                         Intent intent = new Intent("lost_alarm");
-                      //  MyApplication.getContext().sendBroadcast(intent);
+                        //  MyApplication.getContext().sendBroadcast(intent);
                     }
                 }
                 lostIndex = 0;
