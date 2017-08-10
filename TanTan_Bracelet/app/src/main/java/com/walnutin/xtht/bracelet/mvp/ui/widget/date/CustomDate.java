@@ -36,7 +36,7 @@ public class CustomDate implements Serializable{
     }
     @Override
     public String toString() {
-        return year+"-"+month+"-"+day;
+        return year+"-"+ (month < 10 ? "0" + month : month) +"-" + (day < 10 ? "0" + day : day);
     }
 
     public int getYear() {

@@ -142,7 +142,7 @@ public class SportMonthPageItem {
                     totalCal += stepInfos.getCalories();
                 }
 
-                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 stepTv.setText(String.valueOf(totalSteps));
                 calTv.setText(String.valueOf(totalCal / months.size()));
                 distanceTv.setText(String.valueOf(decimalFormat.format((float) totalDistance / months.size())));

@@ -172,10 +172,20 @@ public class MainFragment extends BaseFragment<MainPresenter> implements MainCon
             int currentPosition = vp.getCurrentItem();
             LogUtils.debugInfo(TAG, "-------------currentPosition=" + currentPosition);
 
+            currentIndexItem = currentPosition;
+
             HomePageItem item = items[currentPosition % 3];
+            currentDate = date;
 
             item.update(date);
-            currentDate = date;
+
+            currentDate = item.getDate();
+
+            if (isNow(currentDate)) {
+                vp.setScrollble(false);
+            } else {
+                vp.setScrollble(true);
+            }
         }
     }
 

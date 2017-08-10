@@ -315,7 +315,7 @@
                 android:layout_marginTop="60px"
                 android:layout_width="90px"
                 android:layout_height="90px"
-                android:src="@drawable/no_data"/>
+                android:src="@mipmap/no_sleep_data"/>
 
         </com.zhy.autolayout.AutoRelativeLayout>
 

@@ -156,7 +156,7 @@ public class SportDayPageItem {
                         averageStepHourLast = allStepLast / allStepLast;
                     }
                 }
-                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 float upOrDownRate = 0;
                 boolean upOrDown = false;
                 if((averageStepHour - averageStepHourLast) > 0) {
@@ -249,7 +249,7 @@ public class SportDayPageItem {
             Date d = sdf.parse(date);
             Calendar c = Calendar.getInstance();
             c.setTime(d);
-            dayTv.setText(c.get(Calendar.MONTH) + "月" + c.get(Calendar.DAY_OF_MONTH) + "日");
+            dayTv.setText((c.get(Calendar.MONTH) + 1) + "月" + c.get(Calendar.DAY_OF_MONTH) + "日");
         } catch (ParseException e) {
             e.printStackTrace();
         }

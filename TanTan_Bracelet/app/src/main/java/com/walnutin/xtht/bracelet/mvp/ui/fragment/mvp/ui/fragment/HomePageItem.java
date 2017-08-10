@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
@@ -28,6 +29,7 @@ import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.model.entity.HealthPageData;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DataShowActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.RateDetailActivity;
 import com.walnutin.xtht.bracelet.mvp.ui.adapter.HomePageAdapter;
@@ -36,6 +38,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.CylinderView;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.RecycleViewDivider;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.StepArcView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,6 +258,9 @@ public class HomePageItem {
         @Override
         public void handleMessage(Message msg) {
             int stepGoal = stepInfos.getStepGoal();
+            if(stepGoal <= 0) {
+                stepGoal = ((UserBean)DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+            }
             int actualStep = stepInfos.getStep();
             LogUtils.debugInfo("TAG", "stepGoal=" + stepGoal + ", actualStep=" + actualStep);
 //            if (stepGoal == 0) {
@@ -281,12 +287,13 @@ public class HomePageItem {
                 }
             }
             cylinderView.setDatas(stepDatas);
-
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
             int calories = stepInfos.getCalories();
             calorieTv.setText(calories == 0 ? "--" : String.valueOf(calories));
 
             float distance = stepInfos.getDistance();
-            distanceTv.setText(distance == 0 ? "--" : String.valueOf(distance));
+            String distanceStr =decimalFormat.format(distance);
+            distanceTv.setText(distance == 0 ? "--" : distanceStr);
 
             int rate = 0;
             if (heartRateList != null && heartRateList.size() > 0) {
@@ -378,13 +385,14 @@ public class HomePageItem {
         new Thread() {
             @Override
             public void run() {
-                stepInfos = sqlHelper.getOneDateStep(MyApplication.account, TimeUtil.getCurrentDate());
+                String currentDate = TimeUtil.getCurrentDate();
+                stepInfos = sqlHelper.getOneDateStep(MyApplication.account, date);
 
-                heartRateList = sqlHelper.getOneDayHeartRateInfo(MyApplication.account, TimeUtil.getCurrentDate());
+                heartRateList = sqlHelper.getOneDayHeartRateInfo(MyApplication.account, date);
 
-                bloodPressureList = sqlHelper.getOneDayBloodPressureInfo(MyApplication.account, TimeUtil.getCurrentDate());
+                bloodPressureList = sqlHelper.getOneDayBloodPressureInfo(MyApplication.account, date);
 
-                sleepModel = sqlHelper.getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
+                sleepModel = sqlHelper.getOneDaySleepListTime(MyApplication.account, date);
 
                 mHandler.sendEmptyMessage(0);
             }

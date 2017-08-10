@@ -13,12 +13,14 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfo;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.ui.activity.DateSelectActivity;
 
 import java.text.ParseException;
@@ -209,6 +211,9 @@ public class DatePageImte {
                         dayOfStep += stepInfos.getStep();
                         day = getDayByDate(stepInfos.getDates());
                         goal = stepInfos.getStepGoal();
+                        if(goal <= 0) {
+                            goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                        }
                         if(currentMonthStepList.size() == 1) {
                             currentMonthRateMap.put(getDayByDate(stepInfos.getDates()), (float)dayOfStep/goal);
                         }
@@ -218,7 +223,9 @@ public class DatePageImte {
                             dayOfStep += stepInfos.getStep();
                             day = getDayByDate(stepInfos.getDates());
                             goal = stepInfos.getStepGoal();
-
+                            if(goal <= 0) {
+                                goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                            }
                             if(i == currentMonthStepList.size() - 1) {
                                 currentMonthRateMap.put(day, (float)dayOfStep/goal);
                             }
@@ -229,7 +236,9 @@ public class DatePageImte {
                             day = getDayByDate(stepInfos.getDates());
                             dayOfStep = stepInfos.getStep();
                             goal = stepInfos.getStepGoal();
-
+                            if(goal <= 0) {
+                                goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                            }
                             if(i == currentMonthStepList.size() - 1) {
                                 currentMonthRateMap.put(day, (float)dayOfStep/goal);
                             }
@@ -253,6 +262,9 @@ public class DatePageImte {
                         dayOfStep += stepInfos.getStep();
                         day = getDayByDate(stepInfos.getDates());
                         goal = stepInfos.getStepGoal();
+                        if(goal <= 0) {
+                            goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                        }
                         if(nextMonthStepList.size() == 1) {
                             nextMonthRateMap.put(getDayByDate(stepInfos.getDates()), (float)dayOfStep/goal);
                         }
@@ -262,7 +274,9 @@ public class DatePageImte {
                             dayOfStep += stepInfos.getStep();
                             day = getDayByDate(stepInfos.getDates());
                             goal = stepInfos.getStepGoal();
-
+                            if(goal <= 0) {
+                                goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                            }
                             if(i == nextMonthStepList.size() - 1) {
                                 nextMonthRateMap.put(day, (float)dayOfStep/goal);
                             }
@@ -273,7 +287,9 @@ public class DatePageImte {
                             day = getDayByDate(stepInfos.getDates());
                             dayOfStep = stepInfos.getStep();
                             goal = stepInfos.getStepGoal();
-
+                            if(goal <= 0) {
+                                goal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                            }
                             if(i == nextMonthStepList.size() - 1) {
                                 nextMonthRateMap.put(day, (float)dayOfStep/goal);
                             }
@@ -296,9 +312,10 @@ public class DatePageImte {
             public void run() {
                 currentMonthStepList = null;
                 nextMonthStepList = null;
-                String currentMonth = currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth();
+                String currentMonth = currentCalendar.getShowDate().getYear() + "-" + (currentCalendar.getShowDate().getMonth() < 10 ? "0" + currentCalendar.getShowDate().getMonth() : currentCalendar.getShowDate().getMonth());
 
-                String nextMonth = currentCalendar.getShowDate().getYear() + "-" + currentCalendar.getShowDate().getMonth();
+                String nextMonth = nextCalendar.getShowDate().getYear() + "-" + (nextCalendar.getShowDate().getMonth() < 10 ? "0" + nextCalendar.getShowDate().getMonth() : nextCalendar.getShowDate().getMonth());
+
 
                 currentMonthStepList = SqlHelper.instance().getMonthStepListByMonth(MyApplication.account, currentMonth);
 
