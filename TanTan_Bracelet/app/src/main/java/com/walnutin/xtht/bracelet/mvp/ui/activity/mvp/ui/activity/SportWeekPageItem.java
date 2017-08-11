@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Data_run;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
@@ -128,7 +130,11 @@ public class SportWeekPageItem {
                         totalCal += stepInfos.getCalories();
                         totalDistance += stepInfos.getDistance();
                         totalStep += stepInfos.getStep();
-                        totalGol += stepInfos.getStepGoal();
+                        int tempGoal = stepInfos.getStepGoal();
+                        if(tempGoal <= 0) {
+                            tempGoal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                        }
+                        totalGol += tempGoal;
                     }
                 }
                 histogramView.setDatas(datas);

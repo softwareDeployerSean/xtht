@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
+import com.walnutin.xtht.bracelet.mvp.model.entity.UserBean;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.Data_run;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.maputils.DbAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
@@ -192,8 +194,12 @@ public class SportDayPageItem {
                 }
                 distanceTv.setText(p);
 
-                if(stepinfos.getStepGoal() != 0) {
-                    float standard = (float) stepinfos.getStep() / stepinfos.getStepGoal();
+                int tempGoal = stepinfos.getStepGoal();
+                if(tempGoal <= 0) {
+                    tempGoal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
+                }
+                if(tempGoal != 0) {
+                    float standard = (float) stepinfos.getStep() / tempGoal;
                     standardTv.setText(decimalFormat.format(standard * 100) + "%");
                 }else {
                     standardTv.setText("0%");
