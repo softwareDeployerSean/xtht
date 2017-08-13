@@ -154,7 +154,7 @@
 
         <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="94px"
+            android:layout_height="102px"
             android:layout_marginLeft="15px"
             android:layout_marginRight="15px"
             android:background="@drawable/btn_white_bg_normal"
@@ -207,6 +207,7 @@
             <com.zhy.autolayout.AutoLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8px"
                 android:background="@color/white"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="14px"
@@ -238,7 +239,7 @@
 
         <com.zhy.autolayout.AutoRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="94px"
+            android:layout_height="102px"
             android:layout_marginTop="14px"
             android:layout_marginLeft="15px"
             android:layout_marginRight="15px"
@@ -325,6 +326,7 @@
             <com.zhy.autolayout.AutoLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8px"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="14px"
                 android:gravity="center">

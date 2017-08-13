@@ -240,7 +240,7 @@ public class SportDayPageItem {
     private void loadDatas() {
         String[] xLables = new String[24];
         for (int i = 0; i < xLables.length; i++) {
-            xLables[i] = String.valueOf(i);
+            xLables[i] = String.valueOf(i + 1);
         }
         histogramView.setxLables(xLables);
         histogramView.setIntervalPercent(0.7f);
