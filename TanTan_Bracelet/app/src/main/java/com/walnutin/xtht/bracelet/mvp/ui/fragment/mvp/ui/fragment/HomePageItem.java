@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
+import com.walnutin.xtht.bracelet.ProductList.HardSdk;
+import com.walnutin.xtht.bracelet.ProductList.Jinterface.IHardSdkCallback;
 import com.walnutin.xtht.bracelet.ProductList.TimeUtil;
 import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.BloodPressure;
@@ -52,7 +54,7 @@ import java.util.Random;
  * Created by Leiht on 2017/7/2.
  */
 
-public class HomePageItem {
+public class HomePageItem implements IHardSdkCallback {
 
     private Context mContext;
 
@@ -107,6 +109,9 @@ public class HomePageItem {
     private BloodPressure latelyBloodPressure;
 
     private SleepModel sleepModel;
+
+    //手环交互
+    HardSdk hardSdk;
 
     public HomePageItem(Context context, MainFragment mainFragment) {
         this.mContext = context;
@@ -211,6 +216,10 @@ public class HomePageItem {
                 mContext, LinearLayoutManager.HORIZONTAL, R.drawable.divider_mileage));
 
         healthRv.setAdapter(homePagerAdapter);
+
+        //手环
+        hardSdk = HardSdk.getInstance();
+        hardSdk.setHardSdkCallback(this); //加入回调
     }
 
     private boolean isLast(Date date) {
@@ -464,6 +473,31 @@ public class HomePageItem {
             e.printStackTrace();
         }
         return dft.format(endDate);
+    }
+
+    @Override
+    public void onCallbackResult(int flag, boolean state, Object obj) {
+
+    }
+
+    @Override
+    public void onStepChanged(int step, float distance, int calories, boolean finish_status) {
+
+    }
+
+    @Override
+    public void onSleepChanged(int lightTime, int deepTime, int sleepAllTime, int[] sleepStatusArray, int[] timePointArray, int[] duraionTimeArray) {
+
+    }
+
+    @Override
+    public void onHeartRateChanged(int rate, int status) {
+
+    }
+
+    @Override
+    public void bloodPressureChange(int hightPressure, int lowPressure, int status) {
+
     }
 
     class MyListViewAdapter extends BaseAdapter {

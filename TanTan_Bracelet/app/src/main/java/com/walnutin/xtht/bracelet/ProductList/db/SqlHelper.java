@@ -97,6 +97,37 @@ public class SqlHelper {
         db.close();
     }
 
+    public boolean exitsStepsByDate(String account, String date) {
+        List<StepInfos> dailyInfos = null;
+        String sql = "select * from stepinfo where account =? and dates < ?  order by dates";
+        SQLiteDatabase db = DBOpenHelper.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, new String[]{account, date});
+        if (cursor != null) {
+            dailyInfos =  new ArrayList<>();
+            while (cursor.moveToNext()) {
+                StepInfos dailyInfo = new StepInfos();
+                dailyInfo.setAccount(account);
+                dailyInfo.setStep(cursor.getInt(cursor.getColumnIndex("step")));
+                dailyInfo.setCalories(cursor.getInt(cursor.getColumnIndex("calories")));
+                dailyInfo.setDistance(cursor.getFloat(cursor.getColumnIndex("distance")));
+                dailyInfo.setUpLoad(cursor.getInt(cursor.getColumnIndex("isUpLoad")));
+                String mapJson = cursor.getString(cursor.getColumnIndex("stepOneHourInfo"));
+                Gson gson = new Gson();
+                dailyInfo.stepOneHourInfo = gson.fromJson(mapJson, new TypeToken<Map<Integer, Integer>>() {
+                }.getType());
+
+                dailyInfo.setDates(cursor.getString(cursor.getColumnIndex("dates")));
+                dailyInfos.add(dailyInfo);
+                //      dailyInfo.setWeekOfYear(cursor.getInt(cursor.getColumnIndex("weekOfYear")));
+                //        dailyInfo.setWeekDateFormat(cursor.getString(cursor.getColumnIndex("weekDateFormat")));
+            }
+        }
+        if(dailyInfos != null && dailyInfos.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 得到某一段日期 的详细步数情况
      */

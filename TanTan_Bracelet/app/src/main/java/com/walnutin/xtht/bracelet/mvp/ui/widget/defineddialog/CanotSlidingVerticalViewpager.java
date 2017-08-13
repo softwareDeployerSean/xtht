@@ -26,7 +26,8 @@ public class CanotSlidingVerticalViewpager extends VerticalViewPager {
 
     private int touchSlop = 0;
 
-    private boolean isCanScroll = true;
+    private boolean isCanScrollButton = true;
+    private boolean isCanScrollTop = true;
 
     public CanotSlidingVerticalViewpager(Context context) {
         super(context);
@@ -39,9 +40,11 @@ public class CanotSlidingVerticalViewpager extends VerticalViewPager {
     //-----禁止左滑-------左滑：上一次坐标 > 当前坐标
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (isCanScroll) {
+        if (isCanScrollButton && isCanScrollTop) {
             return super.dispatchTouchEvent(ev);
-        } else {
+        } else if(!isCanScrollButton && !isCanScrollTop) {
+            return false;
+        }else {
             switch (ev.getAction()) {
                 //按下如果‘仅’作为‘上次坐标’，不妥，因为可能存在左滑，motionValue大于0的情况（来回滑，只要停止坐标在按下坐标的右边，左滑仍然能滑过去）
                 case MotionEvent.ACTION_DOWN:
@@ -54,10 +57,19 @@ public class CanotSlidingVerticalViewpager extends VerticalViewPager {
                     float motionYValue = ev.getY() - beforeY;
 
                     Log.d("TAG", "motionValue=" + motionXValue);
-                    if (motionYValue < 0) {//禁止左滑
-                        return false;
+                    if(!isCanScrollButton) {
+                        if (motionYValue < 0) {//禁止左滑
+                            return false;
+                        }
+                    }
+
+                    if(!isCanScrollTop) {
+                        if (motionYValue > 0) {//禁止左滑
+                            return false;
+                        }
                     }
                     beforeX = ev.getX();//手指移动时，再把当前的坐标作为下一次的‘上次坐标’，解决上述问题
+                    beforeY = ev.getY();
                     break;
                 default:
                     break;
@@ -66,16 +78,20 @@ public class CanotSlidingVerticalViewpager extends VerticalViewPager {
         }
 
     }
-    public boolean isScrollble() {
-        return isCanScroll;
+    public boolean isScrollbleButton() {
+        return isCanScrollButton;
     }
 
     /**
      * 设置 是否可以滑动
      *
-     * @param isCanScroll
+     * @param isCanScrollButton
      */
-    public void setScrollble(boolean isCanScroll) {
-        this.isCanScroll = isCanScroll;
+    public void setScrollbleButton(boolean isCanScrollButton) {
+        this.isCanScrollButton = isCanScrollButton;
+    }
+
+    public void setCanScrollTop(boolean isCanScrollTop) {
+        this.isCanScrollTop = isCanScrollTop;
     }
 }

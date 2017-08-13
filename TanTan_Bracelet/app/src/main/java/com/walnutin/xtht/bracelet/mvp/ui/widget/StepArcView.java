@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.inuker.bluetooth.library.utils.hook.utils.Validate;
 import com.walnutin.xtht.bracelet.R;
 
 /**
@@ -47,7 +48,7 @@ public class StepArcView extends View {
     /**
      * 动画时长
      */
-    private int animationLength = 3000;
+    private int animationLength = 100;
 
     private int[] gradientColorArray = new int[]{Color.parseColor("#32CD32"), Color.parseColor("#7FFF00"), Color.parseColor("#FFD700")};
 
@@ -222,7 +223,8 @@ public class StepArcView extends View {
         /**换算成弧度最后要到达的角度的长度-->弧长*/
         float currentAngleLength = scale * angleLength;
         /**开始执行动画*/
-        setAnimation(0, currentAngleLength, animationLength);
+//        setAnimation(0, currentAngleLength, animationLength);
+        invalidate();
     }
 
     /**

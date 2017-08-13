@@ -13,8 +13,10 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.UiUtils;
 
+import com.walnutin.xtht.bracelet.ProductList.db.SqlHelper;
 import com.walnutin.xtht.bracelet.ProductList.entity.StepInfos;
 import com.walnutin.xtht.bracelet.R;
+import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.component.DaggerDateSelectComponent;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.di.module.DateSelectModule;
 import com.walnutin.xtht.bracelet.mvp.ui.activity.mvp.contract.DateSelectContract;
@@ -56,6 +58,8 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
     @BindView(R.id.toolbar_title)
     public TextView toolBarTitle;
 
+    private SqlHelper sqlHelper;
+
     enum SildeDirection {
         RIGHT, LEFT, NO_SILDE;
     }
@@ -93,7 +97,9 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         Intent intent = getIntent();
         date = intent.getStringExtra("date");
 
-        mViewPager.setScrollble(false);
+        mViewPager.setScrollbleButton(false);
+
+        sqlHelper = SqlHelper.instance();
     }
 
     private void setViewPager() {
@@ -172,12 +178,20 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         String secondShowDate = nextCalendarCard.getShowDate().getYear() + "-" + nextCalendarCard.getShowDate().getMonth() + "-01";
 
         if (isCurrentMonth(firstShowDate) || isCurrentMonth(secondShowDate)) {
-            mViewPager.setScrollble(false);
+            mViewPager.setScrollbleButton(false);
         } else {
-            mViewPager.setScrollble(true);
+            mViewPager.setScrollbleButton(true);
         }
 
         toolBarTitle.setText(String.valueOf(currentItem.getCurrentCalendar().getShowDate().getYear()));
+
+        String queryDate = currentCalendarCard.getShowDate().getYear() + "-" + (currentCalendarCard.getShowDate().getMonth() < 10 ? "0" + currentCalendarCard.getShowDate().getMonth() : currentCalendarCard.getShowDate().getMonth()) + "-01";
+        boolean isScroll = SqlHelper.instance().exitsStepsByDate(MyApplication.account, queryDate);
+        if(isScroll) {
+            mViewPager.setCanScrollTop(true);
+        }else {
+            mViewPager.setCanScrollTop(false);
+        }
     }
 
     @Override
