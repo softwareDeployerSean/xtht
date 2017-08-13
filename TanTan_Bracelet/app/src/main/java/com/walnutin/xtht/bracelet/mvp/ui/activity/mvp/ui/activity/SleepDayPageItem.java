@@ -20,6 +20,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.SleepLinearlayout;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.SleepTagLinearlayout;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.SwitchView;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -88,7 +89,7 @@ public class SleepDayPageItem {
 
     public SleepLinearlayout sleepLinearlayout;
     public SleepTagLinearlayout sleepTagLinearlayout;
-    public RelativeLayout noDataLinearLayout;
+    public LinearLayout noDataLinearLayout;
 
     private String date;
 
@@ -126,7 +127,7 @@ public class SleepDayPageItem {
 
         sleepLinearlayout = (SleepLinearlayout) view.findViewById(R.id.sleep_data_linearlayout);
         sleepTagLinearlayout = (SleepTagLinearlayout) view.findViewById(R.id.sleep_data_linearlayout2);
-        noDataLinearLayout = (RelativeLayout) view.findViewById(R.id.no_data_linearlayout);
+        noDataLinearLayout = (LinearLayout) view.findViewById(R.id.no_data_linearlayout);
 
     }
 
@@ -159,32 +160,38 @@ public class SleepDayPageItem {
                 lineStartTime.setText((timePointArray[0] - duraionTimeArray[0]) / 60 + ":" + (timePointArray[0] - duraionTimeArray[0]) % 60);
 
                 int totalSleepTime = 0;
-                if(duraionTimeArray != null && duraionTimeArray.length > 0) {
-                    for (int i = 0; i < duraionTimeArray.length; i++) {
-                        totalSleepTime += duraionTimeArray[i];
-                    }
-                }
+//                if(duraionTimeArray != null && duraionTimeArray.length > 0) {
+//                    for (int i = 0; i < duraionTimeArray.length; i++) {
+//                        totalSleepTime += duraionTimeArray[i];
+//                    }
+//                }
+                totalSleepTime = sleepModel.getTotalTime();
                 actualSleepTime.setText(totalSleepTime > 60 ? (totalSleepTime / 60 + "小时" + (totalSleepTime % 60 > 0 ? totalSleepTime % 60 + "分" : "")) : totalSleepTime + "分");
 
                 int deepSleepTotal = 0;
                 int simpleSleepTotal = 0;
                 int awakeSleepTotal = 0;
-                if(sleepStatusArray != null && sleepStatusArray.length > 0) {
-                    for(int i = 0; i < sleepStatusArray.length; i++) {
-                        if(sleepStatusArray[i] == 2) {
-                            awakeSleepTotal += duraionTimeArray[i];
-                        }else if(sleepStatusArray[i] == 1) {
-                            deepSleepTotal += duraionTimeArray[i];
-                        }else if(sleepStatusArray[i] == 0) {
-                            simpleSleepTotal += duraionTimeArray[i];
-                        }
-                    }
-                }
+//                if(sleepStatusArray != null && sleepStatusArray.length > 0) {
+//                    for(int i = 0; i < sleepStatusArray.length; i++) {
+//                        if(sleepStatusArray[i] == 2) {
+//                            awakeSleepTotal += duraionTimeArray[i];
+//                        }else if(sleepStatusArray[i] == 1) {
+//                            deepSleepTotal += duraionTimeArray[i];
+//                        }else if(sleepStatusArray[i] == 0) {
+//                            simpleSleepTotal += duraionTimeArray[i];
+//                        }
+//                    }
+//                }
+                deepSleepTotal = sleepModel.getDeepTime();
+                simpleSleepTotal = sleepModel.getLightTime();
+                awakeSleepTotal = sleepModel.getSoberTime();
                 if((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
-                    int a1 = (int)((((float)deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    int b1 = (int)((((float)simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    String a = a1 + "%";
-                    String b = b1 + "%";
+                    float a1 = ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+                    float b1 = ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+                    String a2 = new BigDecimal(a1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String a = a2 + "%";
+                    String b = b2 + "%";
                     String c = (100 -  a1 - b1) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
@@ -228,7 +235,7 @@ public class SleepDayPageItem {
                 awakeSleepPerTv.setText("");
                 deepSleepValueTv.setText("-h-m");
                 simpleSleepValueTv.setText("-h-m");
-                aweakSleepValueTv.setText("-m");
+                aweakSleepValueTv.setText("--m");
                 sleepAllTimeTv.setText("   "+ "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
@@ -240,7 +247,7 @@ public class SleepDayPageItem {
         new Thread(){
             @Override
             public void run() {
-                sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
+                sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
                 mHandler.sendEmptyMessage(0);
             }
         }.start();

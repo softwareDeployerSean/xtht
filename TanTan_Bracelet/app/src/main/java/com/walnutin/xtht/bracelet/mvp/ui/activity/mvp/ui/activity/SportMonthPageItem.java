@@ -260,7 +260,16 @@ public class SportMonthPageItem {
         histogramView.setxDisplayInterval(7);
         histogramView.setStartColor(Color.parseColor("#72FF00"));
         histogramView.setEndColor(Color.parseColor("#72FF00"));
-        dayTv.setText(months.get(0) + "~" + months.get(months.size() - 1));
+
+
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dayTv.setText(c.get(Calendar.YEAR) + "-" + (c.get(Calendar.MONTH) + 1));
+
         stepInfosList = null;
         lastMonthStepInfosList = null;
         new Thread() {

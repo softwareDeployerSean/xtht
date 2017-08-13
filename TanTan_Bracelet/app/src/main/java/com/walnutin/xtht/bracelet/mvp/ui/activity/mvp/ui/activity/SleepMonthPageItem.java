@@ -15,7 +15,9 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -175,23 +177,33 @@ public class SleepMonthPageItem {
                         int[] timePointArray = sleepModel.getTimePointArray();
                         int[] sleepStatusArray = sleepModel.getSleepStatusArray();
 
-                        for (int j = 0; j < sleepStatusArray.length; j++) {
-                            if (sleepStatusArray[i] == 2) {
-                                awakeSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 1) {
-                                deepSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 0) {
-                                simpleSleepTotal += duraionTimeArray[i];
-                            }
-                        }
+//                        if(sleepStatusArray != null) {
+//                            for (int j = 0; j < sleepStatusArray.length; j++) {
+//                                if (sleepStatusArray[i] == 2) {
+//                                    awakeSleepTotal += duraionTimeArray[i];
+//                                } else if (sleepStatusArray[i] == 1) {
+//                                    deepSleepTotal += duraionTimeArray[i];
+//                                } else if (sleepStatusArray[i] == 0) {
+//                                    simpleSleepTotal += duraionTimeArray[i];
+//                                }
+//                            }
+//                        }
+                        deepSleepTotal += sleepModel.getDeepTime();
+                        simpleSleepTotal += sleepModel.getLightTime();
+                        awakeSleepTotal += sleepModel.getSoberTime();
                     }
                 }
 
                 if ((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
-                    int a1 = (int) ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    int b1 = (int) ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    String a = a1 + "%";
-                    String b = b1 + "%";
+                    //new BigDecimal("2").setScale(0, BigDecimal.ROUND_HALF_UP))
+                    //new BigDecimal("2").setScale(0, BigDecimal.ROUND_HALF_UP))
+                    float a1 = ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+                    float b1 = ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+
+                    String a2 = new BigDecimal(a1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String a = a2 + "%";
+                    String b = b2 + "%";
                     String c = (100 - a1 - b1) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
@@ -253,15 +265,11 @@ public class SleepMonthPageItem {
                 awakeSleepPerTv.setText("");
                 deepSleepValueTv.setText("-h-m");
                 simpleSleepValueTv.setText("-h-m");
-                aweakSleepValueTv.setText("-m");
+                aweakSleepValueTv.setText("--m");
                 sleepAllTimeTv.setText("   "+ "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
             }
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            timeSlotTv.setText(months.get(0) + "~" + months.get(months.size() - 1));
-
         }
     };
 
@@ -289,8 +297,8 @@ public class SleepMonthPageItem {
 //        Log.d("TAG", "Color.RED=" + Color.RED);
 //        monthHv.setStartColor(Color.parseColor("#6B289B"));
 //        monthHv.setEndColor(Color.parseColor("#D0B3EB"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             months = getMonthList(sdf.parse(date));
             for(int i = 0; i < months.size(); i++) {
                 Log.d("TAG", months.get(i) + "============");
@@ -304,11 +312,20 @@ public class SleepMonthPageItem {
             xLables[i] = String.valueOf(i + 1);
         }
         monthHv.setxLables(xLables);
-        monthHv.setxDisplayType(1);
+//        monthHv.setxDisplayType(1);
+        monthHv.setxDisplayInterval(7);
         monthHv.setIntervalPercent(0.7f);
         Log.d("TAG", "Color.RED=" + Color.RED);
         monthHv.setStartColor(Color.parseColor("#6B289B"));
         monthHv.setEndColor(Color.parseColor("#D0B3EB"));
+
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        timeSlotTv.setText(c.get(Calendar.YEAR) + "-" + (c.get(Calendar.MONTH) + 1));
 
         new Thread(){
             @Override
@@ -319,7 +336,7 @@ public class SleepMonthPageItem {
                     cal.setTime(sdf.parse(date));//month 为指定月份任意日期
                     int year = cal.get(Calendar.YEAR);
                     int m = cal.get(Calendar.MONTH) + 1;
-                    sleepModelList = SqlHelper.instance().getMonthSleepListByMonth(MyApplication.account, year + "-" + m);
+                    sleepModelList = SqlHelper.instance().getMonthSleepListByMonth(MyApplication.account, year + "-" + (m < 10 ? "0" + m : m));
 
                     mHandler.sendEmptyMessage(0);
                 }catch (Exception e){

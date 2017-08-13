@@ -94,7 +94,7 @@ public class HistogramView extends View {
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
         leftX = mWidth * 0.05f;
-        rightX = mWidth * 0.95f;
+        rightX = mWidth * 0.96f;
     }
 
     @Override
@@ -131,7 +131,9 @@ public class HistogramView extends View {
                 for (int i = 0; i < xLables.length; i++) {
                     if (i % xDisplayInterval == 0 || i == xLables.length - 1) {
                         String text = String.valueOf((xLables[i]));
-                        canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+                        if(!((int)(xLables.length / xDisplayInterval) == (int)(i / xDisplayInterval) && i != xLables.length - 1)) {
+                            canvas.drawText(text, leftX + interval * i, mHeight, textPaint);
+                        }
                     }
                 }
 

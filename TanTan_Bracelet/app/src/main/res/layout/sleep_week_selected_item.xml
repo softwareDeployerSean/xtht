@@ -34,7 +34,7 @@
             android:layout_marginTop="40px">
 
             <com.zhy.autolayout.AutoLinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="left">
@@ -47,6 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="@string/sleep_deep"
                     android:textColor="@color/black_444444"
@@ -56,6 +57,7 @@
                     android:id="@+id/sleep_deep_per_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="50%"
                     android:textColor="@color/black_444444"
@@ -64,7 +66,7 @@
             </com.zhy.autolayout.AutoLinearLayout>
 
             <com.zhy.autolayout.AutoLinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center">
@@ -77,6 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="@string/sleep_simple"
                     android:textColor="@color/black_444444"
@@ -86,6 +89,7 @@
                     android:id="@+id/sleep_simple_per_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="35%"
                     android:textColor="@color/black_444444"
@@ -94,7 +98,7 @@
             </com.zhy.autolayout.AutoLinearLayout>
 
             <com.zhy.autolayout.AutoLinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right">
@@ -107,6 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="@string/sleep_aweak"
                     android:textColor="@color/black_444444"
@@ -116,6 +121,7 @@
                     android:id="@+id/sleep_aweak_per_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_marginLeft="5px"
                     android:text="15%"
                     android:textColor="@color/black_444444"
@@ -134,8 +140,9 @@
 
             <TextView
                 android:id="@+id/sleep_deep_value_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:paddingLeft="5px"
                 android:layout_weight="1"
                 android:text="3h30min"
                 android:textColor="@color/black_444444"
@@ -143,23 +150,22 @@
 
             <TextView
                 android:id="@+id/sleep_simple_value_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingLeft="5px"
                 android:text="2h30min"
                 android:textColor="@color/black_444444"
                 android:textSize="12px" />
 
             <TextView
                 android:id="@+id/sleep_aweak_value_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:paddingLeft="5px"
-                android:paddingRight="10px"
+                android:paddingRight="15px"
                 android:text="30min"
                 android:textColor="@color/black_444444"
                 android:textSize="12px" />
@@ -197,12 +203,12 @@
                     <TextView
                         android:id="@+id/sleep_h_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="5px"
                         android:layout_toRightOf="@id/sleep_all_time_tv"
-                        android:paddingTop="20px"
                         android:text="h"
-                        android:textSize="12px" />
+                        android:textColor="@color/black_444444"
+                        android:textSize="36px" />
 
                 </com.zhy.autolayout.AutoRelativeLayout>
 

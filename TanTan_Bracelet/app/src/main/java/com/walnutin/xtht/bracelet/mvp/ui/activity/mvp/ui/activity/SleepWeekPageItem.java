@@ -16,6 +16,7 @@ import com.walnutin.xtht.bracelet.R;
 import com.walnutin.xtht.bracelet.app.MyApplication;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.HistogramView;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -183,24 +184,31 @@ public class SleepWeekPageItem {
                         int[] duraionTimeArray = sleepModel.getDuraionTimeArray();
                         int[] timePointArray = sleepModel.getTimePointArray();
                         int[] sleepStatusArray = sleepModel.getSleepStatusArray();
+//                        if(sleepStatusArray != null) {
+//                            for (int j = 0; j < sleepStatusArray.length; j++) {
+//                                if (sleepStatusArray[i] == 2) {
+//                                    awakeSleepTotal += duraionTimeArray[i];
+//                                } else if (sleepStatusArray[i] == 1) {
+//                                    deepSleepTotal += duraionTimeArray[i];
+//                                } else if (sleepStatusArray[i] == 0) {
+//                                    simpleSleepTotal += duraionTimeArray[i];
+//                                }
+//                            }
+//                        }
+                        deepSleepTotal += sleepModel.getDeepTime();
+                        simpleSleepTotal += sleepModel.getLightTime();
+                        awakeSleepTotal += sleepModel.getSoberTime();
 
-                        for (int j = 0; j < sleepStatusArray.length; j++) {
-                            if (sleepStatusArray[i] == 2) {
-                                awakeSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 1) {
-                                deepSleepTotal += duraionTimeArray[i];
-                            } else if (sleepStatusArray[i] == 0) {
-                                simpleSleepTotal += duraionTimeArray[i];
-                            }
-                        }
                     }
                 }
 
                 if ((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
-                    int a1 = (int) ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    int b1 = (int) ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
-                    String a = a1 + "%";
-                    String b = b1 + "%";
+                    float a1 = ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+                    float b1 = ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
+                    String a2 = new BigDecimal(a1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+                    String a = a2 + "%";
+                    String b = b2 + "%";
                     String c = (100 - a1 - b1) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
@@ -247,7 +255,7 @@ public class SleepWeekPageItem {
                 awakeSleepPerTv.setText("");
                 deepSleepValueTv.setText("-h-m");
                 simpleSleepValueTv.setText("-h-m");
-                aweakSleepValueTv.setText("-m");
+                aweakSleepValueTv.setText("--m");
                 sleepAllTimeTv.setText("   "+ "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));

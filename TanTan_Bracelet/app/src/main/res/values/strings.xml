@@ -172,5 +172,6 @@
     <string name="blood_low">低压</string>
     <string name="blood_hight">高压</string>
     <string name="no_data">暂无</string>
+    <string name="no_sleep_data">暂无睡眠数据</string>
 
 </resources>
