@@ -67,9 +67,9 @@ public class BasicSettingActivity extends Activity implements View.OnClickListen
 
     @OnClick(R.id.unBind)
     public void unBind() {
-        if (MyApplication.isDevConnected == false) {
-            return;
-        }
+//        if (MyApplication.isDevConnected == false) {
+//            return;
+//        }
 
         MyApplication.isManualOff = true;
         HardSdk.getInstance().disconnect();

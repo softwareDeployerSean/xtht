@@ -180,6 +180,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
 
     public void setdata() {
 
+        UserBean userBean = DataHelper.getDeviceData(MyApplication.getContext(), "UserBean");
+        int dairy = userBean.getDailyGoals();
+        if (dairy == 0) {
+            dairy = 7000;
+        }
+        dairy = dairy * 7;
+        tvDayWeek.setText(0 + "/" + dairy);
+
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String tody = sdf.format(d);
@@ -199,17 +207,17 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
         continuous = SqlHelper.instance().getMaxContinuousNumber();
         int active = dbHepler.getweek_active();
         sum_stepbyweek = SqlHelper.instance().getweekstep(begin_end[0], begin_end[1]);
-        if (!TextUtils.isEmpty(stepInfosday.getDates())) {
+        if (stepInfosday.getStep() > 0) {
             tvBestDay.setText(stepInfosday.getDates());
             tvBestDayStep.setText(stepInfosday.getStep() + "");
         }
-        if (!TextUtils.isEmpty(stepInfosweek.getDates())) {
+        if (stepInfosweek.getStep() > 0) {
             String data[] = stepInfosweek.getDates().split("-");
             tvBestWeekBegin.setText(ConmonUtils.getFirstDayOfWeek(Integer.parseInt(data[0]), Integer.parseInt(data[1])));
             tvBestWeekEnd.setText(ConmonUtils.getLastDayOfWeek(Integer.parseInt(data[0]), Integer.parseInt(data[1])));
             tvBestweekStep.setText(stepInfosweek.getStep() + "");
         }
-        if (!TextUtils.isEmpty(stepInfosmonth.getDates())) {
+        if (stepInfosmonth.getStep() > 0) {
             tvBestMonth.setText(stepInfosmonth.getDates());
             tvBestMonthStep.setText(stepInfosmonth.getStep() + "");
         }
@@ -218,13 +226,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             tvRateBegin.setText(continuous.get(0).getDates());
             tvRateEnd.setText(continuous.get(continuous.size() - 1).getDates());
         }
+
         if (sum_stepbyweek != 0) {
-            UserBean userBean = DataHelper.getDeviceData(MyApplication.getContext(), "UserBean");
-            int dairy = userBean.getDailyGoals();
-            if (dairy == 0) {
-                dairy = 7000;
-            }
-            dairy = dairy * 7;
             tvDayWeek.setText(sum_stepbyweek + "/" + dairy);
         }
         if (all_day != 0 && standard != 0) {

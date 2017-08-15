@@ -123,6 +123,17 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        deviceName = mySharedPf.getString("device_name");
+        if (TextUtils.isEmpty(deviceName)) {
+            //  topTitleLableView.getTitleView().setText("未连接设备");
+            showUnBindView();
+            return;
+        }
+    }
+
     private void setadatper() {
         epMenue.setLayoutManager(new CustomGridLayoutManager(getActivity(), 3, false));
 //        EpConnectedMenueAdapter adapter = new EpConnectedMenueAdapter(getMenues(), getContext());
@@ -218,10 +229,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     @OnClick(R.id.ep_connected_rl)
     public void clickLinkoper() {
-        if (MyApplication.isDevConnected == false) {
-            ToastUtils.showToast(getActivity().getResources().getString(R.string.pre_connecte), getActivity());
-            return;
-        }
+//        if (MyApplication.isDevConnected == false) {
+//            ToastUtils.showToast(getActivity().getResources().getString(R.string.pre_connecte), getActivity());
+//            return;
+//        }
         Intent basicSettingsIntent = new Intent(getActivity(), BasicSettingActivity.class);
         startActivity(basicSettingsIntent);
 

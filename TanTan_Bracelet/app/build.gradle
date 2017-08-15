@@ -92,9 +92,11 @@ dependencies {
     compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.github.hzw1199:AndroidGpsStatus:1.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+
     compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
-    compile files('libs/ute_sdk_v2.5.0.jar')
     compile files('libs/vpprotocol_1.0.6.jar')
+    compile files('libs/ute_sdk_v2.5.3.jar')
 
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3-alpha-6'
     compile 'org.greenrobot:eventbus:3.0.0'

@@ -111,7 +111,7 @@ public class BindEndbyphoneActivity extends BaseActivity<BindEndbyphonePresenter
             if (TextUtils.isEmpty(pwd) || pwd.length() < 6 || pwd.length() > 16) {
                 ToastUtils.showToast(getString(R.string.pwd), this);
             } else {
-                mPresenter.bind(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)));
+                mPresenter.bind(phone, ConmonUtils.EncoderByMd5(ConmonUtils.EncoderByMd5(pwd)).trim());
             }
         }
     }

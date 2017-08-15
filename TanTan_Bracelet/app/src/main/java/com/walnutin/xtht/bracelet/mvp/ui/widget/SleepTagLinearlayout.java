@@ -29,6 +29,7 @@ public class SleepTagLinearlayout extends AutoLinearLayout {
     SleepModel sleepModel = new SleepModel();
 
     int[] sleep_during;
+    Context context;
 
     public SleepTagLinearlayout(Context context) {
         this(context, null);
@@ -40,7 +41,12 @@ public class SleepTagLinearlayout extends AutoLinearLayout {
 
     public SleepTagLinearlayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
+        this.context=context;
+    }
+
+    public void setdatas(String date) {
+
+        sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
         if (sleepModel != null) {
             sleep_during = sleepModel.getDuraionTimeArray();
             int during_all = 0;
@@ -75,6 +81,7 @@ public class SleepTagLinearlayout extends AutoLinearLayout {
                 }
             }
         }
+
 
     }
 

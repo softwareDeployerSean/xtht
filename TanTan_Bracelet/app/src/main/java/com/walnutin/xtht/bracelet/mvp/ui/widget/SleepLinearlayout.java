@@ -32,7 +32,7 @@ public class SleepLinearlayout extends AutoLinearLayout {
     int[] sleep_status;
 
     SleepModel sleepModel = new SleepModel();
-
+    Context context;
     public SleepLinearlayout(Context context) {
         this(context, null);
     }
@@ -43,7 +43,13 @@ public class SleepLinearlayout extends AutoLinearLayout {
 
     public SleepLinearlayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, TimeUtil.getCurrentDate());
+        this.context=context;
+
+    }
+
+    public void setdatas(String date) {
+        removeAllViews();
+        sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
         if (sleepModel != null) {
             sleep_during = sleepModel.getDuraionTimeArray();
             sleep_status = sleepModel.getSleepStatusArray();
@@ -83,5 +89,6 @@ public class SleepLinearlayout extends AutoLinearLayout {
 
 
     }
+
 
 }

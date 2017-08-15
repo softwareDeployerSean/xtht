@@ -63,6 +63,7 @@ public class ResetpwdPresenter extends BasePresenter<ResetpwdContract.Model, Res
                         DataHelper.saveDeviceData(MyApplication.getAppContext(), "UserBean", users);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "username", username);
                         DataHelper.setStringSF(MyApplication.getAppContext(), "userpassword", password);
+                        DataHelper.setStringSF(MyApplication.getAppContext(), "token", users.getToken());
                         mRootView.check_success();
                         //mRootView.hideLoading();
                     }

@@ -130,13 +130,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.radiogroup)
+
     RadioGroup radiogroup;
     @BindView(R.id.iv_back)
     ImageView ivBack;
 
     VPOperateManager mVpoperateManager;
 
-    EpConnecteService epConnecteService;
+    //EpConnecteService epConnecteService;
 
     private static final String TAG = "[TAN][" + MainActivity.class.getSimpleName() + "]";
 

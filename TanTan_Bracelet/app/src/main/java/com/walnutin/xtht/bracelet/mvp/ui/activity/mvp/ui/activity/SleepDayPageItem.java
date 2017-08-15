@@ -135,6 +135,8 @@ public class SleepDayPageItem {
         this.date = date;
         showOrDismissLayout();
         loadDatas();
+        sleepLinearlayout.setdatas(date);
+        sleepTagLinearlayout.setdatas(date);
     }
 
     Handler mHandler = new Handler() {
@@ -145,7 +147,7 @@ public class SleepDayPageItem {
 //            sleepModel.setDuraionTimeArray(new int[] {30,15,45,30,30,30,45,30,30,15,15,15,45,15,15});
 //            sleepModel.setTimePointArray(new int[] {1438,13,58,88,118,148,193,223,253,268,283,298,343,373,388});
 //            sleepModel.setSleepStatusArray(new int[] {1,0,1,0,2,0,1,2,1,0,1,0,1,1,2});
-            if(sleepModel != null) {
+            if (sleepModel != null) {
                 sleepHTv.setText("h");
                 sleepLinearlayout.setVisibility(View.VISIBLE);
                 sleepTagLinearlayout.setVisibility(View.VISIBLE);
@@ -185,42 +187,42 @@ public class SleepDayPageItem {
                 deepSleepTotal = sleepModel.getDeepTime();
                 simpleSleepTotal = sleepModel.getLightTime();
                 awakeSleepTotal = sleepModel.getSoberTime();
-                if((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
+                if ((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
                     float a1 = ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
                     float b1 = ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
                     String a2 = new BigDecimal(a1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
                     String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
                     String a = a2 + "%";
                     String b = b2 + "%";
-                    String c = (100 -  a1 - b1) + "%";
+                    String c = (100 - a1 - b1) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
                     awakeSleepPerTv.setText(c);
-                }else {
+                } else {
                     deepSleepPerTv.setText("");
                     simpleSleepPerTv.setText("");
                     awakeSleepPerTv.setText("");
                 }
 
-                deepSleepValueTv.setText(deepSleepTotal > 60 ?  (deepSleepTotal / 60 + "h" + (deepSleepTotal % 60 > 0 ? deepSleepTotal % 60 + "min" : "")) : deepSleepTotal + "min");
-                simpleSleepValueTv.setText(simpleSleepTotal > 60 ?  (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
+                deepSleepValueTv.setText(deepSleepTotal > 60 ? (deepSleepTotal / 60 + "h" + (deepSleepTotal % 60 > 0 ? deepSleepTotal % 60 + "min" : "")) : deepSleepTotal + "min");
+                simpleSleepValueTv.setText(simpleSleepTotal > 60 ? (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
                 aweakSleepValueTv.setText(awakeSleepTotal + "min");
 
-                DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                String p=decimalFormat.format(totalSleepTime / (float) 60);
+                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                String p = decimalFormat.format(totalSleepTime / (float) 60);
                 sleepAllTimeTv.setText(p);
 
                 float t = Float.parseFloat(p);
                 String level = "";
-                if(t <= 10 && t >- 7) {
+                if (t <= 10 && t > -7) {
                     level = "优秀";
-                }else if(t < 7 && t >= 5){
+                } else if (t < 7 && t >= 5) {
                     level = "良好";
-                }else {
+                } else {
                     level = "较差";
                 }
                 sleepLevelTv.setText(level);
-            }else {
+            } else {
                 sleepLinearlayout.setVisibility(View.GONE);
                 sleepTagLinearlayout.setVisibility(View.GONE);
                 noDataLinearLayout.setVisibility(View.VISIBLE);
@@ -236,7 +238,7 @@ public class SleepDayPageItem {
                 deepSleepValueTv.setText("-h-m");
                 simpleSleepValueTv.setText("-h-m");
                 aweakSleepValueTv.setText("--m");
-                sleepAllTimeTv.setText("   "+ "--");
+                sleepAllTimeTv.setText("   " + "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
             }
@@ -244,7 +246,7 @@ public class SleepDayPageItem {
     };
 
     private void loadDatas() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
@@ -254,7 +256,7 @@ public class SleepDayPageItem {
     }
 
     private void showOrDismissLayout() {
-        if(isNow()) {
+        if (isNow()) {
             clockRelativeLayout.setVisibility(View.VISIBLE);
             dayTimeRelativeLayout.setVisibility(View.VISIBLE);
             dayTimeRelativeLayout2.setVisibility(View.VISIBLE);
@@ -262,7 +264,7 @@ public class SleepDayPageItem {
             dayTimeRelativeLayout4.setVisibility(View.VISIBLE);
             sleepAnilayLinearlayout.setVisibility(View.VISIBLE);
             otherCode.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             clockRelativeLayout.setVisibility(View.GONE);
             dayTimeRelativeLayout.setVisibility(View.GONE);
             dayTimeRelativeLayout2.setVisibility(View.GONE);

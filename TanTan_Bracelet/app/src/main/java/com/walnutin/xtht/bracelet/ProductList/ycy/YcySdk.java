@@ -301,7 +301,7 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
 
     @Override
     public void syncAllHeartRateData() {
-        Log.i(TAG,"syncAllHeartRateData");
+        Log.i(TAG, "syncAllHeartRateData");
         mWriteCommand.syncAllRateData();
         isSupportHeartValue = false;
         isSupportDownTimer.cancel();
@@ -317,7 +317,7 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
 
     @Override
     public void syncAllBloodData() {
-        Log.i(TAG,"syncAllBloodData");
+        Log.i(TAG, "syncAllBloodData");
         mWriteCommand.syncAllBloodPressureData();
         isSupportBlood = false;
         isSupportBloodDownTimer.cancel();
@@ -353,8 +353,8 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
                 String day = date.split("-")[2];
                 date = year + month + day;
             }
-            List<StepOneHourInfo> oneHourInfos = mySQLOperate.queryOneHourStepSQL(date);
-
+            StepOneDayAllInfo stepOneDayAllInfo = mySQLOperate.queryRunWalkInfo(date);
+            List<StepOneHourInfo> oneHourInfos = stepOneDayAllInfo.getStepOneHourArrayInfo();
             for (StepOneHourInfo oneHourInfo : oneHourInfos) {
                 if (oneHourInfo.getStep() > 0) {
                     maps.put(oneHourInfo.getTime(), oneHourInfo.getStep());
@@ -648,7 +648,7 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
                     Log.i(TAG, "onCallbackResult: 发送支持消息推送命令");
 
                 }
-                Log.i(TAG," 支持心率："+isSupportHeartValue);
+                Log.i(TAG, " 支持心率：" + isSupportHeartValue);
                 mIDataCallBack.onResult(null, true, GlobalValue.HEART_FINISH);
             }
         }
@@ -665,7 +665,7 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
             if (isSupportBlood == false) {
                 mIDataCallBack.onResult(null, true, GlobalValue.BLOOD_FINISH);
             }
-            Log.i(TAG," 支持血压："+isSupportBlood);
+            Log.i(TAG, " 支持血压：" + isSupportBlood);
 
         }
     };
@@ -695,10 +695,16 @@ public class YcySdk extends ThirdBaseSdk implements ICallback, ServiceStatusCall
 
     }
 
+    @Override
+    public void onSportsTimeCallback(boolean b, String s, int i, int i1) {
+
+    }
+
     private StepChangeListener mOnStepChangeListener = new StepChangeListener() {
 
         @Override
         public void onStepChange(StepOneDayAllInfo stepOneDayAllInfo) {
+            Log.i(TAG, "onStepChange: " + stepOneDayAllInfo.getStep());
             mIRealDataSubject.stepChanged(stepOneDayAllInfo.getStep(),
                     stepOneDayAllInfo.getDistance(), stepOneDayAllInfo.getCalories(), false);
 
