@@ -43,7 +43,36 @@ public class CanotSlidingVerticalViewpager extends VerticalViewPager {
         if (isCanScrollButton && isCanScrollTop) {
             return super.dispatchTouchEvent(ev);
         } else if(!isCanScrollButton && !isCanScrollTop) {
-            return false;
+            switch (ev.getAction()) {
+                //按下如果‘仅’作为‘上次坐标’，不妥，因为可能存在左滑，motionValue大于0的情况（来回滑，只要停止坐标在按下坐标的右边，左滑仍然能滑过去）
+                case MotionEvent.ACTION_DOWN:
+                    beforeX = ev.getX();
+                    beforeY = ev.getY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float motionXValue = ev.getX() - beforeX;
+
+                    float motionYValue = ev.getY() - beforeY;
+
+                    Log.d("TAG", "motionValue=" + motionXValue);
+                    if(!isCanScrollButton) {
+                        if (motionYValue < 0) {//禁止左滑
+                            return false;
+                        }
+                    }
+
+                    if(!isCanScrollTop) {
+                        if (motionYValue > 0) {//禁止左滑
+                            return false;
+                        }
+                    }
+                    beforeX = ev.getX();//手指移动时，再把当前的坐标作为下一次的‘上次坐标’，解决上述问题
+                    beforeY = ev.getY();
+                    break;
+                default:
+                    break;
+            }
+            return super.dispatchTouchEvent(ev);
         }else {
             switch (ev.getAction()) {
                 //按下如果‘仅’作为‘上次坐标’，不妥，因为可能存在左滑，motionValue大于0的情况（来回滑，只要停止坐标在按下坐标的右边，左滑仍然能滑过去）

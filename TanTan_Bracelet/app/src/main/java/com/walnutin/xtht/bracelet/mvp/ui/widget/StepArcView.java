@@ -223,7 +223,7 @@ public class StepArcView extends View {
         /**换算成弧度最后要到达的角度的长度-->弧长*/
         float currentAngleLength = scale * angleLength;
         /**开始执行动画*/
-//        setAnimation(0, currentAngleLength, animationLength);
+        setAnimation(0, currentAngleLength, animationLength);
         invalidate();
     }
 
