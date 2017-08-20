@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -30,6 +31,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 
+import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -107,7 +109,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
     private Path ripplePath;
     private RippleInfo rippleInfo;
     private MaskView maskView;
-    private Blur blur;
+    //private Blur blur;
     private ImageView blurImageView;
     private ObjectAnimator blurAnimator;
     private Animator.AnimatorListener blurListener;
@@ -119,6 +121,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     private QuickClickChecker checker;
     private int checkThreshold;
+    Context context;
 
     private static class RippleInfo {
         float pressX;
@@ -138,11 +141,13 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     public SectorMenuButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         init(context, attrs);
     }
 
     /**
      * 初始化
+     *
      * @param context
      * @param attrs
      */
@@ -179,8 +184,12 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
         //模糊处理
         if (blurBackground) {
-            blur = new Blur();
+            //blur = new Blur();
+            if (bitmap_tmp == null) {
+                bitmap_tmp = readBitMap(context, R.mipmap.ceshi);
+            }
             blurImageView = new ImageView(getContext());
+            blurImageView.setImageBitmap(bitmap_tmp);
         }
 
         if (mainButtonRotateDegree != 0) {
@@ -389,7 +398,8 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
     }
 
     /**
-     *  更新按钮位置
+     * 更新按钮位置
+     *
      * @param buttonIndex
      * @param rectF
      */
@@ -504,8 +514,12 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
         }
     }
 
+    ViewGroup root;
+    Bitmap bitmap_tmp;
+
     /**
      * 模糊处理
+     *
      * @return
      */
     private boolean showBlur() {
@@ -514,16 +528,38 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
         }
 
         setVisibility(INVISIBLE);
+        if (root == null) {
+            root = (ViewGroup) getRootView();
+        }
 
-        final ViewGroup root = (ViewGroup) getRootView();
-        root.setDrawingCacheEnabled(true);
+
+       /* root.setDrawingCacheEnabled(true);
         Bitmap bitmap = root.getDrawingCache();
-        checkBlurRadius();
+        //checkBlurRadius();
+        blurImageView.setImageResource(R.mipmap.zhuye);
+        root.setDrawingCacheEnabled(false);*/
+        blurImageView.setVisibility(VISIBLE);
 
-        blur.setParams(new Blur.Callback() {
+
+        root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT-50));
+
+        blurAnimator = ObjectAnimator.ofFloat(blurImageView, "alpha", 0.0f, 1.0f).setDuration(expandAnimDuration);
+        if (blurListener != null) {
+            blurAnimator.removeListener(blurListener);
+        }
+        blurAnimator.start();
+
+        root.addView(maskView);
+        maskAttached = true;
+        maskView.reset();
+        maskView.initButtonRect();
+        maskView.onClickMainButton();
+
+       /* blur.setParams(new Blur.Callback() {
             @Override
-            public void onBlurred(Bitmap blurredBitmap) {
-                blurImageView.setImageBitmap(blurredBitmap);
+            public void onBlurred() {
+                //blurImageView.setImageBitmap(blurredBitmap);
+                blurImageView.setImageResource(R.mipmap.zhuye);
                 root.setDrawingCacheEnabled(false);
                 root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -541,9 +577,27 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
             }
         }, getContext(), bitmap, blurRadius);
         blur.execute();
-
+*/
         return true;
     }
+
+    /**
+     * 以最省内存的方式读取本地资源的图片
+     *
+     * @param context
+     * @param resId
+     * @return
+     */
+    public static Bitmap readBitMap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+// 获取资源图片
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
+    }
+
 
     /**
      * 检查模糊处理的Radius，必须在0~25之间
@@ -563,7 +617,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
         }
 
         setVisibility(VISIBLE);
-
+        blurImageView.setVisibility(GONE);
         final ViewGroup root = (ViewGroup) getRootView();
         blurAnimator.setFloatValues(1.0f, 0.0f);
         if (blurListener == null) {
@@ -608,6 +662,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制主菜单
+     *
      * @param canvas
      */
     private void drawButton(Canvas canvas) {
@@ -621,6 +676,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制指定按钮
+     *
      * @param canvas
      */
     private void drawButton(Canvas canvas, Paint paint, ButtonData buttonData) {
@@ -631,6 +687,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制阴影效果
+     *
      * @param canvas
      * @param paint
      * @param buttonData
@@ -668,6 +725,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制菜单按钮的内容（icon 文字）
+     *
      * @param canvas
      * @param paint
      * @param buttonData
@@ -702,6 +760,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制文字
+     *
      * @param strings
      * @param canvas
      * @param x
@@ -722,6 +781,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 绘制水波纹效果
+     *
      * @param canvas
      * @param paint
      * @param buttonData
@@ -749,6 +809,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
 
     /**
      * 获取按钮阴影效果Bitmap
+     *
      * @param buttonData
      * @return
      */

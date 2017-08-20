@@ -11,6 +11,9 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
+import android.util.Log;
+
+import java.util.logging.Logger;
 
 /**
  * 作者：Rance on 2016/11/10 16:41
@@ -25,27 +28,33 @@ public class Blur {
     private Context context;
     private Bitmap inBitmap;
     private Callback callback;
+    Bitmap blurred;
 
     public Blur() {
         initThread();
     }
 
     private void initThread() {
-        blurThread = new Thread(new Runnable() {
+        if (callback != null) {
+            callback.onBlurred();
+        }
+      /*  blurThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final Bitmap blurred = getBlurBitmap(context, inBitmap, radius);
+                *//*if (blurred == null) {
+                    blurred = getBlurBitmap(context, inBitmap, radius);
+                }*//*
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (callback != null) {
-                            callback.onBlurred(blurred);
+                            callback.onBlurred();
                         }
                     }
                 });
             }
-        });
+        });*/
     }
 
     public void setParams(Callback callback, Context context, Bitmap inBitmap, float radius) {
@@ -65,7 +74,7 @@ public class Blur {
         if (context == null || inBitmap == null) {
             throw new IllegalArgumentException("have not called setParams() before call execute()");
         }
-
+        Log.d("测试", "执行");
         int width = Math.round(inBitmap.getWidth() * SCALE);
         int height = Math.round(inBitmap.getHeight() * SCALE);
 
@@ -88,10 +97,15 @@ public class Blur {
         blurScript.destroy();
         rs.destroy();
 
+        if (in != null & !in.isRecycled()) {
+            in = null;
+        }
+        System.gc();
+
         return out;
     }
 
     public interface Callback {
-        void onBlurred(Bitmap blurredBitmap);
+        void onBlurred();
     }
 }

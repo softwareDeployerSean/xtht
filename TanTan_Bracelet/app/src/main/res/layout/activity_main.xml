@@ -54,8 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             app:aebAnimDurationMillis="150"
-            app:aebBlurBackground="true"
-            app:aebBlurRadius="10"
             app:aebButtonElevation="0dp"
             app:aebButtonGapDp="80dp"
             app:aebEndAngleDegree="155"
