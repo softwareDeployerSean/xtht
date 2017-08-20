@@ -77,6 +77,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
             holder.rightTopTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
             holder.rightIconTv.setTextColor(mContext.getResources().getColor(R.color.red_FF6466));
+
+            holder.timeIconTv.setText("");
         } else if (data.getType() == 2) {
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xueya);
             /// 这一步必须要做,否则不会显示.

@@ -263,9 +263,9 @@ public class SleepMonthPageItem {
                 deepSleepPerTv.setText("");
                 simpleSleepPerTv.setText("");
                 awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("-h-m");
-                simpleSleepValueTv.setText("-h-m");
-                aweakSleepValueTv.setText("--m");
+                deepSleepValueTv.setText("- -h- -m");
+                simpleSleepValueTv.setText("- -h- -m");
+                aweakSleepValueTv.setText("- -m");
                 sleepAllTimeTv.setText("   "+ "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));

@@ -25,6 +25,7 @@ import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarCard;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CalendarViewAdapter;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.CustomDate;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.date.DatePageImte;
+import com.walnutin.xtht.bracelet.mvp.ui.widget.date.DateUtil;
 import com.walnutin.xtht.bracelet.mvp.ui.widget.defineddialog.CanotSlidingVerticalViewpager;
 
 
@@ -202,6 +203,31 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         }
     }
 
+
+    private boolean isNow(String dateTime) {
+        //当前时间
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取今天的日期
+        String nowDay = sf.format(now);
+        Date d = null;
+        try {
+            d = sf.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String comDate = sf.format(d);
+        //对比的时间
+        String day = sf.format(d);
+
+        LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + comDate);
+        LogUtils.debugInfo("day.equals(nowDay)=" + day.equals(nowDay));
+
+        return comDate.equals(nowDay);
+
+    }
+
     @Override
     public void clickDate(CustomDate date) {
         boolean canClick = false;
@@ -217,9 +243,17 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
             if(currentMonthRateMap != null && currentMonthRateMap.containsKey(date.getDay()) && currentMonthRateMap.get(date.day) > 0) {
                 canClick = true;
             }
+
+            if(isNow(currentCalendarCard.getShowDate().toString())) {
+                canClick = true;
+            }
+
         }else if(date.getYear() == nextCalendarCard.getShowDate().getYear()
                 && date.getMonth() == nextCalendarCard.getShowDate().getMonth()) {
             if(nextMonthRateMap != null && nextMonthRateMap.containsKey(date.day) && nextMonthRateMap.get(date.day) > 0) {
+                canClick = true;
+            }
+            if(isNow(nextCalendarCard.getShowDate().toString())) {
                 canClick = true;
             }
         }

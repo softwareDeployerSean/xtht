@@ -113,6 +113,9 @@ public class HomePageItem implements IHardSdkCallback {
 
     private HeartRateModel todayHeartRateModel;
 
+    private String bloodTime;
+    private String bloodOTime;
+
     private int count = 0;
 
     private int minRateSP = -1;
@@ -200,14 +203,14 @@ public class HomePageItem implements IHardSdkCallback {
         }
         healthDatas.clear();
         //模拟从数据库查询当天对应的数据
-        HealthPageData data1 = new HealthPageData(1, "14:25", "心率", "", "62-78", "78", "", true, 1, "");
-        HealthPageData data2 = new HealthPageData(2, "14:25", "血压", "", "90", "110", "", true, 2, "");
-        HealthPageData data3 = new HealthPageData(3, "14:25", "血氧", "", "90%", "", "", false, 3, "");
-        HealthPageData data4 = new HealthPageData(4, "14:25", "低运动量", "12", "48", "42", "100", false, 4, "");
-        HealthPageData data5 = new HealthPageData(5, "14:25", "散步", "12", "12", "42", "100", false, 5, "");
-        HealthPageData data6 = new HealthPageData(6, "14:25", "跑步", "12", "48", "42", "100", false, 6, "");
-        HealthPageData data7 = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7, "");
-        HealthPageData data8 = new HealthPageData(8, "14:25", "摘下", "", "5h42min", "", "", false, 8, "");
+        HealthPageData data1 = new HealthPageData(1, "", "心率", "", "62-78", "78", "", true, 1, "");
+        HealthPageData data2 = new HealthPageData(2, "", "血压", "", "90", "110", "", true, 2, "");
+        HealthPageData data3 = new HealthPageData(3, "", "血氧", "", "90%", "", "", false, 3, "");
+        HealthPageData data4 = new HealthPageData(4, "", "低运动量", "12", "48", "42", "100", false, 4, "");
+        HealthPageData data5 = new HealthPageData(5, "", "散步", "12", "12", "42", "100", false, 5, "");
+        HealthPageData data6 = new HealthPageData(6, "", "跑步", "12", "48", "42", "100", false, 6, "");
+        HealthPageData data7 = new HealthPageData(7, "", "睡眠", "", "5h 42min", "良好", "", false, 7, "");
+        HealthPageData data8 = new HealthPageData(8, "", "摘下", "", "5h42min", "", "", false, 8, "");
 
         healthDatas.add(data1);
         healthDatas.add(data2);
@@ -393,12 +396,20 @@ public class HomePageItem implements IHardSdkCallback {
                         } else {
                             displayHight = todayHeartRateModel.getHighRate();
                         }
+
+                        if(displayLow <= 0 && displayHight > 0) {
+                            displayLow = displayHight;
+                        }
+
                         healthDatas.get(0).setRightTop(displayLow + "-" + displayHight);
                         healthDatas.get(0).setDate(date);
 
                         minDisPlayRate = displayLow;
                         maxDisplayRate = displayHight;
                     } else if (minRateSP != -1 && maxRateSP != -1) {
+                        if(minRateSP <= 0 && maxRateSP > 0) {
+                            minRateSP = maxRateSP;
+                        }
                         healthDatas.get(0).setRightTop(minRateSP + "-" + maxRateSP);
                         healthDatas.get(0).setDate(date);
                         minDisPlayRate = minRateSP;
@@ -411,6 +422,7 @@ public class HomePageItem implements IHardSdkCallback {
                     //设置血压数据
                     healthDatas.get(1).setRightTop(minBlood == -1 ? "--" : minBlood + "");
                     healthDatas.get(1).setRightButtom(maxBlood == -1 ? "--" : maxBlood + "");
+                    healthDatas.get(1).setTime(bloodTime);
                     healthDatas.get(1).setDate(date);
 
                     //设置血氧数据
@@ -446,6 +458,9 @@ public class HomePageItem implements IHardSdkCallback {
                 calorieTv.setText(calories == 0 ? "--" : String.valueOf(calories));
             }else if(what == 2) {
                 RateSP rateSPTemp = DataHelper.getDeviceData(mContext, "rateSP");
+
+                heartRateTv.setText(rateSPTemp.getRate());
+
                 int minNow = 0;
                 int maxNow = 0;
                 if (rateSPTemp != null) {
@@ -463,10 +478,13 @@ public class HomePageItem implements IHardSdkCallback {
                         }
                     }
                 }
-
                 if(minNow < minDisPlayRate || maxNow > maxDisplayRate) {
-                    healthDatas.get(0).setRightTop(minNow + "-" + maxDisplayRate);
+                    if(minNow <= 0 && maxNow > 0) {
+                        minNow = maxNow;
+                    }
+                    healthDatas.get(0).setRightTop(minNow + "-" + maxNow);
                     healthDatas.get(0).setDate(date);
+                    healthDatas.get(0).setTime(bloodTime);
                     minDisPlayRate = minNow;
                     maxDisplayRate = maxNow;
 
@@ -477,6 +495,7 @@ public class HomePageItem implements IHardSdkCallback {
                     if(minBloodTemp < minBlood || maxBloodTemp > maxBlood)  {
                         healthDatas.get(1).setRightTop(minBloodTemp == -1 ? "--" : minBloodTemp + "");
                         healthDatas.get(1).setRightButtom(maxBloodTemp == -1 ? "--" : maxBloodTemp + "");
+                        healthDatas.get(1).setTime(bloodTime);
                         healthDatas.get(1).setDate(date);
                     }
                 }
@@ -536,6 +555,8 @@ public class HomePageItem implements IHardSdkCallback {
         maxDisplayRate = -1;
         minBloodTemp = -1;
         maxBloodTemp = -1;
+        bloodTime = "";
+        bloodOTime = "";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
@@ -744,6 +765,15 @@ public class HomePageItem implements IHardSdkCallback {
                     if(bloodPressureList != null && bloodPressureList.size() > 0) {
                         maxBlood = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getDiastolicPressure();
                         minBlood = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getSystolicPressure();
+                        String dateTime = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getTestMomentTime();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Calendar c = Calendar.getInstance();
+                        try {
+                            c.setTime(sdf.parse(dateTime));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" +  c.get(Calendar.MINUTE);
                     }
 
                     sleepModel = sqlHelper.getOneDaySleepListTime(MyApplication.account, date);
@@ -847,6 +877,17 @@ public class HomePageItem implements IHardSdkCallback {
         DataHelper.saveDeviceData(mContext, "bloodSP", bloodSP);
         minBloodTemp = lowPressure;
         maxBloodTemp = hightPressure;
+
+        String dateTime = bloodSP.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" +  c.get(Calendar.MINUTE);
+
         mHandler.sendEmptyMessage(3);
     }
 

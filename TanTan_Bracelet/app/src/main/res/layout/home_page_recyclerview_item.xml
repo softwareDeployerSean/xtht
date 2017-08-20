@@ -12,6 +12,7 @@
         android:id="@+id/left_est_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5px"
         android:paddingBottom="0px">
 
         <TextView
@@ -21,7 +22,6 @@
             android:drawablePadding="5px"
             android:drawableTop="@mipmap/run"
             android:gravity="center"
-            android:text="00:00"
             android:textColor="@color/black_444444"
             android:textSize="9px" />
     </com.zhy.autolayout.AutoRelativeLayout>

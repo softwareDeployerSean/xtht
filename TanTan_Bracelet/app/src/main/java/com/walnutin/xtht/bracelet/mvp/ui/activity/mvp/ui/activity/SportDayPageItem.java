@@ -136,7 +136,7 @@ public class SportDayPageItem {
                     for (Integer in : set) {
                         allStep += step4Hours.get(in);
                         count++;
-                        datas[in] = step4Hours.get(in);
+                        datas[(in / 60) -1] = step4Hours.get(in);
                     }
                 }
                 if (count > 0) {
