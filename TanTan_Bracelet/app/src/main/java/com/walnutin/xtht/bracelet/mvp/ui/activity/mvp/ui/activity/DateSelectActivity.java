@@ -218,11 +218,8 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
         }
 
         String comDate = sf.format(d);
-        //对比的时间
-        String day = sf.format(d);
 
         LogUtils.debugInfo("nowDay=" + nowDay + ", comDate=" + comDate);
-        LogUtils.debugInfo("day.equals(nowDay)=" + day.equals(nowDay));
 
         return comDate.equals(nowDay);
 
@@ -243,19 +240,15 @@ public class DateSelectActivity extends BaseActivity<DateSelectPresenter> implem
             if(currentMonthRateMap != null && currentMonthRateMap.containsKey(date.getDay()) && currentMonthRateMap.get(date.day) > 0) {
                 canClick = true;
             }
-
-            if(isNow(currentCalendarCard.getShowDate().toString())) {
-                canClick = true;
-            }
-
         }else if(date.getYear() == nextCalendarCard.getShowDate().getYear()
                 && date.getMonth() == nextCalendarCard.getShowDate().getMonth()) {
             if(nextMonthRateMap != null && nextMonthRateMap.containsKey(date.day) && nextMonthRateMap.get(date.day) > 0) {
                 canClick = true;
             }
-            if(isNow(nextCalendarCard.getShowDate().toString())) {
-                canClick = true;
-            }
+        }
+
+        if(isNow(date.toString())) {
+            canClick = true;
         }
 
         if(canClick) {
