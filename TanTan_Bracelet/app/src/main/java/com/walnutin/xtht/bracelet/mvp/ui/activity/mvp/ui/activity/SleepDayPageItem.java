@@ -43,6 +43,8 @@ public class SleepDayPageItem {
 
     public SwitchView clockSwitchView;
 
+    public TextView dayTv;
+
     public TextView sleepStartTime;
 
     public TextView sleepEndTime;
@@ -116,6 +118,7 @@ public class SleepDayPageItem {
         sleepAllTimeTv = (TextView) view.findViewById(R.id.sleep_all_time_tv);
         sleepLevelTv = (TextView) view.findViewById(R.id.sleep_level_tv);
         sleepHTv = (TextView) view.findViewById(R.id.sleep_h_tv);
+        dayTv = (TextView) view.findViewById(R.id.day_tv);
 
         clockRelativeLayout = (RelativeLayout) view.findViewById(R.id.clock_relativelayout);
         dayTimeRelativeLayout = (RelativeLayout) view.findViewById(R.id.day_time_relativelayout);
@@ -235,9 +238,9 @@ public class SleepDayPageItem {
                 deepSleepPerTv.setText("");
                 simpleSleepPerTv.setText("");
                 awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("- -h- -m");
-                simpleSleepValueTv.setText("- -h- -m");
-                aweakSleepValueTv.setText("- -m");
+                deepSleepValueTv.setText("--h--m");
+                simpleSleepValueTv.setText("--h--m");
+                aweakSleepValueTv.setText("--m");
                 sleepAllTimeTv.setText("   " + "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));
@@ -246,6 +249,17 @@ public class SleepDayPageItem {
     };
 
     private void loadDatas() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = sdf.parse(date);
+            Calendar c = Calendar.getInstance();
+            c.setTime(d);
+            dayTv.setText((c.get(Calendar.MONTH) + 1) + "月" + c.get(Calendar.DAY_OF_MONTH) + "日");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         new Thread() {
             @Override
             public void run() {

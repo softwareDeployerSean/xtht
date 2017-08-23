@@ -209,7 +209,7 @@ public class SleepWeekPageItem {
                     String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
                     String a = a2 + "%";
                     String b = b2 + "%";
-                    String c = (100 - a1 - b1) + "%";
+                    String c = (100 - Integer.parseInt(a2) - Integer.parseInt(a2)) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
                     awakeSleepPerTv.setText(c);
@@ -223,8 +223,8 @@ public class SleepWeekPageItem {
                 simpleSleepValueTv.setText(simpleSleepTotal > 60 ? (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
                 aweakSleepValueTv.setText(awakeSleepTotal + "min");
 
-                DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                String p=decimalFormat.format(totalSleepTime / (float) 60);
+                DecimalFormat decimalFormat=new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                String p=decimalFormat.format(totalSleepTime / (float) 60 / 7);
                 sleepAllTimeTv.setText(p);
 
                 float t = Float.parseFloat(p);
@@ -253,9 +253,9 @@ public class SleepWeekPageItem {
                 deepSleepPerTv.setText("");
                 simpleSleepPerTv.setText("");
                 awakeSleepPerTv.setText("");
-                deepSleepValueTv.setText("- -h- -m");
-                simpleSleepValueTv.setText("- -h- -m");
-                aweakSleepValueTv.setText("- -m");
+                deepSleepValueTv.setText("--h--m");
+                simpleSleepValueTv.setText("--h--m");
+                aweakSleepValueTv.setText("--m");
                 sleepAllTimeTv.setText("   "+ "--");
                 sleepHTv.setText("h" + "  ");
                 sleepLevelTv.setText(mContext.getResources().getString(R.string.no_data));

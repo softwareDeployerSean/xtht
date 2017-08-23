@@ -289,6 +289,18 @@
                 android:textSize="12px" />
         </com.zhy.autolayout.AutoRelativeLayout>
 
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/day_tv"
+                android:layout_centerInParent="true"
+                android:textColor="@color/black_444444"
+                android:textSize="12px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </com.zhy.autolayout.AutoRelativeLayout>
+
         <com.walnutin.xtht.bracelet.mvp.ui.widget.SleepLinearlayout
             android:id="@+id/sleep_data_linearlayout"
             android:layout_width="match_parent"
@@ -494,7 +506,7 @@
                     android:layout_marginTop="20px">
 
                     <com.zhy.autolayout.AutoRelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="45px"
                         android:layout_weight="1"
                         android:gravity="center_horizontal">
@@ -521,7 +533,7 @@
 
                     <TextView
                         android:id="@+id/sleep_level_tv"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="45px"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
@@ -536,7 +548,7 @@
                     android:layout_height="20px">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
@@ -545,7 +557,7 @@
                         android:textSize="12px" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"

@@ -459,7 +459,17 @@ public class HomePageItem implements IHardSdkCallback {
             }else if(what == 2) {
                 RateSP rateSPTemp = DataHelper.getDeviceData(mContext, "rateSP");
 
-                heartRateTv.setText(rateSPTemp.getRate());
+                String rateStr = rateSPTemp.getRate();
+                if(rateStr != null && rateStr.length() > 0) {
+                    String[] rates = rateStr.split(",");
+                    if(rates != null && rates.length > 0) {
+                        heartRateTv.setText(rates[rates.length - 1]);
+                    }else {
+                        heartRateTv.setText("--");
+                    }
+                }else {
+                    heartRateTv.setText("--");
+                }
 
                 int minNow = 0;
                 int maxNow = 0;
@@ -575,9 +585,6 @@ public class HomePageItem implements IHardSdkCallback {
                     StepInfo stepInfoHardSDK = null;
                     if (MyApplication.isDevConnected) {
                         stepInfoHardSDK = hardSdk.queryOneDayStepInfo(date);
-
-
-                        sleepModel = hardSdk.querySleepInfo(date, date);
                     }
 
                     //DataHelper.saveDeviceData()
@@ -746,6 +753,8 @@ public class HomePageItem implements IHardSdkCallback {
                         }
                     }
 
+                    sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
+
                     mHandler.sendEmptyMessage(0);
                 }
             }.start();
@@ -776,7 +785,7 @@ public class HomePageItem implements IHardSdkCallback {
                         bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" +  c.get(Calendar.MINUTE);
                     }
 
-                    sleepModel = sqlHelper.getOneDaySleepListTime(MyApplication.account, date);
+                    sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
 
                     mHandler.sendEmptyMessage(0);
                 }
@@ -809,13 +818,14 @@ public class HomePageItem implements IHardSdkCallback {
             sfs.setCalories(calories);
             sfs.setDates(date);
         } else {
-            int stepTemp = sfs.getStep();
-            float distanceTemp = sfs.getDistance();
-            int caloriesTemp = sfs.getCalories();
+//            int stepTemp = sfs.getStep();
+//            float distanceTemp = sfs.getDistance();
+//            int caloriesTemp = sfs.getCalories();
 
-            sfs.setStep(stepTemp + step);
-            sfs.setDistance(distanceTemp + distance);
-            sfs.setCalories(caloriesTemp + calories);
+            sfs.setStep(step);
+            sfs.setDistance(distance);
+            sfs.setCalories(calories);
+            sfs.setDates(date);
         }
 
         DataHelper.saveDeviceData(mContext, key, sfs);

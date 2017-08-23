@@ -89,6 +89,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+            holder.timeIconTv.setText("");
         } else if (data.getType() == 4) {
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.jiuzuo);
             /// 这一步必须要做,否则不会显示.
@@ -146,7 +147,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
                 holder.leftButtomTv.setVisibility(View.GONE);
             }
         } else if(data.getType() == 3) {
+            holder.rightTopTv.setText(data.getRightTop());
+
+            holder.rightIconTv.setText("");
+
             holder.leftButtomTv.setVisibility(View.GONE);
+            holder.rightButtomTv.setVisibility(View.GONE);
         }else {
             holder.rightTopTv.setText(data.getRightTop());
             holder.rightButtomTv.setText(data.getRightButtom());

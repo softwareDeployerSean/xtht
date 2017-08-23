@@ -152,24 +152,29 @@ public class SportDayPageItem {
                     Set<Integer> set = step4HoursLast.keySet();
                     for (Integer in : set) {
                         allStepLast += step4HoursLast.get(in);
-                        allStepLast++;
+                        countLast++;
                     }
                     if (allStepLast > 0) {
-                        averageStepHourLast = allStepLast / allStepLast;
+                        averageStepHourLast = allStepLast / countLast;
                     }
                 }
                 DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 float upOrDownRate = 0;
                 boolean upOrDown = false;
-                if((averageStepHour - averageStepHourLast) > 0) {
-                    upOrDown = true;
-                }
-                if(averageStepHour > 0 && averageStepHourLast > 0) {
-                    upOrDownRate = (averageStepHour - averageStepHourLast) / averageStepHourLast;
-                }
                 String rate = "0%";
-                if(upOrDownRate != 0) {
-                    rate =decimalFormat.format(upOrDownRate * 100) + "%";
+                if(averageStepHourLast > 0) {
+                    if ((averageStepHour - averageStepHourLast) > 0) {
+                        upOrDown = true;
+                    }
+                    if (averageStepHour > 0 && averageStepHourLast > 0) {
+                        upOrDownRate = (averageStepHour - averageStepHourLast) / averageStepHourLast;
+                    }
+
+                    if (upOrDownRate != 0) {
+                        rate = decimalFormat.format(upOrDownRate * 100) + "%";
+                    }
+                }else if(averageStepHourLast == 0 && averageStepHour != 0) {
+                    rate = "100%";
                 }
                 contrastTv.setText(rate);
                 statusIv.setVisibility(View.VISIBLE);

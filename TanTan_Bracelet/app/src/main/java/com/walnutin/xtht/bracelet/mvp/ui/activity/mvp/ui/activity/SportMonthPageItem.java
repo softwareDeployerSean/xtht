@@ -121,6 +121,9 @@ public class SportMonthPageItem {
             int totalDistance = 0;
             int totalGol = 0;
             int totalCal = 0;
+
+            int standardDays = 0;
+
             if (stepInfosList != null && stepInfosList.size() > 0) {
                 StepInfos stepInfos = null;
                 int[] datas = new int[months.size()];
@@ -141,11 +144,15 @@ public class SportMonthPageItem {
                     totalSteps += stepInfos.getStep();
                     totalDistance += stepInfos.getDistance();
                     int tempGoal = stepInfos.getStepGoal();
-                    if(tempGoal <= 0) {
+                    if (tempGoal <= 0) {
                         tempGoal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
                     }
                     totalGol += tempGoal;
                     totalCal += stepInfos.getCalories();
+
+                    if (stepInfos.getStep() >= tempGoal) {
+                        standardDays++;
+                    }
                 }
 
                 DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
@@ -153,12 +160,8 @@ public class SportMonthPageItem {
                 calTv.setText(String.valueOf(totalCal / months.size()));
                 distanceTv.setText(String.valueOf(decimalFormat.format((float) totalDistance / months.size())));
 
-                if (totalGol != 0) {
-                    float standard = (float) totalSteps / totalGol;
-                    standardTv.setText(decimalFormat.format(standard * 100) + "%");
-                } else {
-                    standardTv.setText("0");
-                }
+                float standard = (float) standardDays / months.size();
+                standardTv.setText(decimalFormat.format(standard * 100) + "%");
 
                 if (totalSteps != 0) {
                     stepByHour.setText(String.valueOf(totalSteps / months.size()));

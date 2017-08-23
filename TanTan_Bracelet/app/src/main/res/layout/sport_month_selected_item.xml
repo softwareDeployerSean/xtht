@@ -218,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="每小时平均步数"
+                    android:text="每天平均步数"
                     android:textColor="@color/black_444444"
                     android:textSize="12px" />
 

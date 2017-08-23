@@ -113,6 +113,9 @@ public class SportWeekPageItem {
             int totalGol = 0;
             int totalCal = 0;
             int totalDistance = 0;
+
+            int standardDays = 0;
+
             if (stepInfosList != null && stepInfosList.size() > 0) {
                 StepInfos stepInfos = null;
                 for (int i = 0; i < stepInfosList.size(); i++) {
@@ -131,10 +134,13 @@ public class SportWeekPageItem {
                         totalDistance += stepInfos.getDistance();
                         totalStep += stepInfos.getStep();
                         int tempGoal = stepInfos.getStepGoal();
-                        if(tempGoal <= 0) {
+                        if (tempGoal <= 0) {
                             tempGoal = ((UserBean) DataHelper.getDeviceData(mContext, "UserBean")).getDailyGoals();
                         }
                         totalGol += tempGoal;
+                        if (stepInfos.getStepGoal() >= tempGoal) {
+                            standardDays++;
+                        }
                     }
                 }
                 histogramView.setDatas(datas);
@@ -144,13 +150,9 @@ public class SportWeekPageItem {
                 distanceTv.setText(totalDistance > 0 ? String.valueOf(decimalFormat.format((float) totalDistance / 7)) : "0");
                 stepTv.setText(String.valueOf(totalStep));
 
+                float standard = (float) standardDays / 7;
+                standardTv.setText(decimalFormat.format(standard * 100) + "%");
 
-                if (totalGol != 0) {
-                    float standard = (float) totalStep / totalGol;
-                    standardTv.setText(decimalFormat.format(standard * 100) + "%");
-                } else {
-                    standardTv.setText("0");
-                }
                 if (totalStep != 0) {
                     stepByHour.setText(String.valueOf(totalStep / 7));
                 } else {
@@ -184,7 +186,7 @@ public class SportWeekPageItem {
                     statusIv.setVisibility(View.GONE);
                 }
                 contrastTv.setText(rate);
-            }else {
+            } else {
                 stepTv.setText("0");
                 calTv.setText("0");
                 distanceTv.setText("0");

@@ -132,10 +132,10 @@ public class CylinderView extends View {
         for (int i = 0; i < 5; i++) {
             if (i != 4) {
                 String hour = String.valueOf((i * 6) % 24);
-                canvas.drawText(hour, leftX + interval * i, mHeight, textPaint);
+                canvas.drawText(String.valueOf(Integer.parseInt(hour) + 1), leftX + interval * i, mHeight, textPaint);
             } else {
                 String hour = "23";
-                canvas.drawText(hour, leftX + interval * i, mHeight, textPaint);
+                canvas.drawText(String.valueOf(Integer.parseInt(hour) + 1), leftX + interval * i, mHeight, textPaint);
             }
         }
 
@@ -161,12 +161,15 @@ public class CylinderView extends View {
             for (int i = 0; i < 24; i++) {
                 startX += intervalX;
                 endY = startY - datas[i] * intervalY;//向上画y轴变小
-                canvas.drawLine(startX, startY, startX, endY, cylinderPaint);
+                if(datas[i] > 0) {
+                    canvas.drawLine(startX, startY, startX, endY, cylinderPaint);
+                }
             }
         }
     }
 
     public void setDatas(int[] datas) {
+        totalStep = 0;
         this.datas = datas;
         for (int i = 0; i < 24; i++) {
             int r = datas[i];
