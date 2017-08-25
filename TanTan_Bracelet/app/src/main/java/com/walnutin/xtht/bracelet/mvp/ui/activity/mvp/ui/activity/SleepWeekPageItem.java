@@ -197,7 +197,8 @@ public class SleepWeekPageItem {
 //                        }
                         deepSleepTotal += sleepModel.getDeepTime();
                         simpleSleepTotal += sleepModel.getLightTime();
-                        awakeSleepTotal += sleepModel.getSoberTime();
+                        //awakeSleepTotal = sleepModel.getTotalTime() - deepSleepTotal - simpleSleepTotal;
+                        awakeSleepTotal += sleepModel.getTotalTime() - deepSleepTotal - simpleSleepTotal;
 
                     }
                 }
@@ -209,7 +210,7 @@ public class SleepWeekPageItem {
                     String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
                     String a = a2 + "%";
                     String b = b2 + "%";
-                    String c = (100 - Integer.parseInt(a2) - Integer.parseInt(a2)) + "%";
+                    String c = (100 - Integer.parseInt(a2) - Integer.parseInt(b2)) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
                     awakeSleepPerTv.setText(c);

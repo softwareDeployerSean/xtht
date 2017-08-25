@@ -50,7 +50,11 @@ public class StepArcView extends View {
      */
     private int animationLength = 100;
 
-    private int[] gradientColorArray = new int[]{Color.parseColor("#32CD32"), Color.parseColor("#7FFF00"), Color.parseColor("#FFD700")};
+    private int[] gradientColorArray = new int[]{
+            Color.parseColor("#FFD700"),
+            Color.parseColor("#32CD32"),
+            Color.parseColor("#7FFF00"),
+            Color.parseColor("#FFD700")};
 
     public StepArcView(Context context) {
         super(context);
@@ -138,9 +142,12 @@ public class StepArcView extends View {
 
 //        LinearGradient linearGradient = new LinearGradient();
         //环形颜色填充
+        float[] points = { 0f, 0.38f, 0.85f, 1f };
         SweepGradient sweepGradient =
-                new SweepGradient(getWidth() / 2 - borderWidth, getHeight() / 2 + borderWidth, gradientColorArray, null);
+                new SweepGradient(getWidth() / 2 - borderWidth, getHeight() / 2 + borderWidth, gradientColorArray, points);
         paintCurrent.setShader(sweepGradient);
+
+
         canvas.drawArc(rectF, startAngle, currentAngleLength, false, paintCurrent);
     }
 

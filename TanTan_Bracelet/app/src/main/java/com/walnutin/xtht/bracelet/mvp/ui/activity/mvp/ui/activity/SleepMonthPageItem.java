@@ -190,7 +190,8 @@ public class SleepMonthPageItem {
 //                        }
                         deepSleepTotal += sleepModel.getDeepTime();
                         simpleSleepTotal += sleepModel.getLightTime();
-                        awakeSleepTotal += sleepModel.getSoberTime();
+//                        awakeSleepTotal += sleepModel.getSoberTime();
+                        awakeSleepTotal += sleepModel.getTotalTime() - deepSleepTotal - simpleSleepTotal;
                     }
                 }
 
@@ -218,7 +219,7 @@ public class SleepMonthPageItem {
                 simpleSleepValueTv.setText(simpleSleepTotal > 60 ? (simpleSleepTotal / 60 + "h" + (simpleSleepTotal % 60 > 0 ? simpleSleepTotal % 60 + "min" : "")) : simpleSleepTotal + "min");
                 aweakSleepValueTv.setText(awakeSleepTotal + "min");
 
-                DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                DecimalFormat decimalFormat=new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                 String p=decimalFormat.format(totalSleepTime / (float) 60 / months.size());
                 sleepAllTimeTv.setText(p);
 

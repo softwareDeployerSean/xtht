@@ -84,6 +84,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+            holder.timeIconTv.setText("");
         } else if (data.getType() == 3) {
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.xueyang);
             /// 这一步必须要做,否则不会显示.
@@ -110,6 +111,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             holder.timeIconTv.setCompoundDrawables(null, drawable, null, null);
+            holder.timeIconTv.setText("");
         } else if (data.getType() == 8) {
             Drawable drawable = mContext.getResources().getDrawable(R.mipmap.zhaixia);
             /// 这一步必须要做,否则不会显示.
@@ -153,6 +155,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
             holder.leftButtomTv.setVisibility(View.GONE);
             holder.rightButtomTv.setVisibility(View.GONE);
+        }else if(data.getType() == 7) {
+            holder.rightTopTv.setText(data.getRightTop());
+            holder.rightButtomTv.setText(data.getRightButtom());
+
+            holder.rightIconTv.setText("");
+            holder.leftButtomTv.setVisibility(View.GONE);
+            holder.timeIconTv.setText("");
         }else {
             holder.rightTopTv.setText(data.getRightTop());
             holder.rightButtomTv.setText(data.getRightButtom());

@@ -128,6 +128,9 @@ public class HomePageItem implements IHardSdkCallback {
     private int minBloodTemp = -1;
     private int maxBloodTemp = -1;
 
+    private int minBloodDisplay = -1;
+    private int maxBloodDisplay = -1;
+
     //手环交互
     HardSdk hardSdk;
     private int todayStep = 0;
@@ -296,10 +299,6 @@ public class HomePageItem implements IHardSdkCallback {
                     }
                     int actualStep = stepInfos.getStep();
                     LogUtils.debugInfo("TAG", "stepGoal=" + stepGoal + ", actualStep=" + actualStep);
-//            if (stepGoal == 0) {
-//                stepGoal = 7000;
-//                actualStep = new Random().nextInt(6000);
-//            }
                     stepArcView.setCurrentCount(stepGoal, actualStep);
 
                     Map<Integer, Integer> stepOneHourInfo = stepInfos.getStepOneHourInfo();
@@ -329,108 +328,103 @@ public class HomePageItem implements IHardSdkCallback {
                     distanceTv.setText(distance == 0 ? "--" : distanceStr);
 
                     int rate = 0;
-//                    if (heartRateList != null && heartRateList.size() > 0) {
-//                        int totalRate = 0;
-//                        HeartRateModel heartRateModel = null;
-//                        for (int i = 0; i < heartRateList.size(); i++) {
-//                            heartRateModel = (HeartRateModel) heartRateList.get(i);
-//                            totalRate += heartRateModel.getCurrentRate();
-//                        }
-//                        rate = totalRate / heartRateList.size();
-//
-//                        latelyHeartRateModel = (HeartRateModel) heartRateList.get(heartRateList.size() - 1);
-//                    } else {
-//                        rate = 0;
-//                    }
+
                     if (todayHeartRateModel != null) {
                         rate = todayHeartRateModel.getCurrentRate();
                     }
                     heartRateTv.setText(rate == 0 ? "--" : String.valueOf(rate));
-
-                    if (bloodPressureList != null && bloodPressureList.size() > 0) {
-                        latelyBloodPressure = (BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1);
-                    }
-
-                    //清除除心率，血压，血氧之外其它的数据，后面再动态添加
-                    if (healthDatas != null && healthDatas.size() > 3) {
-                        for (int i = 3; i < healthDatas.size(); i++) {
-                            healthDatas.remove(i);
-                        }
-                    }
-
-                    if (sleepModel != null) {
-                        HealthPageData sleepPageData = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7, date);
-                        String topText = "";
-                        int allDurationTime = sleepModel.getAllDurationTime();
-                        if (allDurationTime > 1 * 60 * 60) {
-                            topText = (allDurationTime / 1 * 60 * 60) + "h " + ((allDurationTime % (1 * 60 * 60)) / 60) + "min";
-                        } else {
-                            topText = (allDurationTime / 60) + "min";
-                        }
-                        sleepPageData.setRightTop(topText);
-                        String sleepStatusText = "";
-                        if (allDurationTime >= 7 * 60 * 60 && allDurationTime <= 10 * 60 * 60) {
-                            sleepStatusText = "优秀";
-                        } else if (allDurationTime >= 5 * 60 * 60 && allDurationTime < 7 * 60 * 60) {
-                            sleepStatusText = "良好";
-                        } else {
-                            sleepStatusText = "一般";
-                        }
-
-                        sleepPageData.setRightButtom(sleepStatusText);
-                        healthDatas.add(sleepPageData);
-                    }
-
-                    //设置心率数据
-                    if (todayHeartRateModel != null) {
-                        int displayLow = 0;
-                        int displayHight = 0;
-                        if (minRateSP != -1 && minRateSP < todayHeartRateModel.getLowRate()) {
-                            displayLow = minRateSP;
-                        } else {
-                            displayLow = todayHeartRateModel.getLowRate();
-                        }
-
-                        if (maxRateSP != -1 && maxRateSP > todayHeartRateModel.getHighRate()) {
-                            displayHight = maxRateSP;
-                        } else {
-                            displayHight = todayHeartRateModel.getHighRate();
-                        }
-
-                        if(displayLow <= 0 && displayHight > 0) {
-                            displayLow = displayHight;
-                        }
-
-                        healthDatas.get(0).setRightTop(displayLow + "-" + displayHight);
-                        healthDatas.get(0).setDate(date);
-
-                        minDisPlayRate = displayLow;
-                        maxDisplayRate = displayHight;
-                    } else if (minRateSP != -1 && maxRateSP != -1) {
-                        if(minRateSP <= 0 && maxRateSP > 0) {
-                            minRateSP = maxRateSP;
-                        }
-                        healthDatas.get(0).setRightTop(minRateSP + "-" + maxRateSP);
-                        healthDatas.get(0).setDate(date);
-                        minDisPlayRate = minRateSP;
-                        maxDisplayRate = maxRateSP;
-                    } else {
-                        healthDatas.get(0).setRightTop("-- ");
-                        healthDatas.get(0).setDate(date);
-                    }
-
-                    //设置血压数据
-                    healthDatas.get(1).setRightTop(minBlood == -1 ? "--" : minBlood + "");
-                    healthDatas.get(1).setRightButtom(maxBlood == -1 ? "--" : maxBlood + "");
-                    healthDatas.get(1).setTime(bloodTime);
-                    healthDatas.get(1).setDate(date);
-
-                    //设置血氧数据
-                    healthDatas.get(2).setRightTop("--");
-                    healthDatas.get(2).setDate(date);
-
-                    homePagerAdapter.notifyDataSetChanged();
                 }
+
+                if (bloodPressureList != null && bloodPressureList.size() > 0) {
+                    latelyBloodPressure = (BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1);
+                }
+
+                //清除除心率，血压，血氧之外其它的数据，后面再动态添加
+                if (healthDatas != null && healthDatas.size() > 3) {
+                    for (int i = 3; i < healthDatas.size(); i++) {
+                        healthDatas.remove(i);
+                    }
+                }
+
+                if (sleepModel != null) {
+                    HealthPageData sleepPageData = new HealthPageData(7, "14:25", "睡眠", "", "5h 42min", "良好", "", false, 7, date);
+                    String topText = "";
+                    int totalTIme = sleepModel.getTotalTime();
+                    if (totalTIme > 1 * 60) {
+                        topText = (totalTIme / (1 * 60)) + "h " + ((totalTIme % (1 * 60 ))) + "min";
+                    } else {
+                        topText = (totalTIme) + "min";
+                    }
+                    sleepPageData.setRightTop(topText);
+                    String sleepStatusText = "";
+                    if (totalTIme >= 7 * 60 && totalTIme <= 10 * 60) {
+                        sleepStatusText = "优秀";
+                    } else if (totalTIme >= 5 * 60 && totalTIme < 7 * 60) {
+                        sleepStatusText = "良好";
+                    } else {
+                        sleepStatusText = "一般";
+                    }
+
+                    sleepPageData.setRightButtom(sleepStatusText);
+                    healthDatas.add(sleepPageData);
+                }
+
+                if(minBloodDisplay == -1 && maxBloodDisplay != -1) {
+                    minBloodDisplay = maxBloodDisplay;
+                }
+                if(minBloodDisplay != -1 && maxBloodDisplay == -1) {
+                    maxBloodDisplay = minBloodDisplay;
+                }
+
+                //设置心率数据
+                if (minBloodDisplay != -1 && maxBloodDisplay != -1) {
+//                    int displayLow = 0;
+//                    int displayHight = 0;
+//                    if (minRateSP != -1 && minRateSP < todayHeartRateModel.getCurrentRate()) {
+//                        displayLow = minRateSP;
+//                    } else {
+//                        displayLow = todayHeartRateModel.getLowRate();
+//                    }
+//
+//                    if (maxRateSP != -1 && maxRateSP > todayHeartRateModel.getCurrentRate()) {
+//                        displayHight = maxRateSP;
+//                    } else {
+//                        displayHight = todayHeartRateModel.getHighRate();
+//                    }
+//
+//                    if (displayLow <= 0 && displayHight > 0) {
+//                        displayLow = displayHight;
+//                    }
+//
+                    healthDatas.get(0).setRightTop(minBloodDisplay + "-" + maxBloodDisplay);
+                    healthDatas.get(0).setDate(date);
+
+                    minDisPlayRate = minBloodDisplay;
+                    maxDisplayRate = maxBloodDisplay;
+//                } else if (minRateSP != -1 && maxRateSP != -1) {
+//                    if (minRateSP <= 0 && maxRateSP > 0) {
+//                        minRateSP = maxRateSP;
+//                    }
+//                    healthDatas.get(0).setRightTop(minRateSP + "-" + maxRateSP);
+//                    healthDatas.get(0).setDate(date);
+//                    minDisPlayRate = minRateSP;
+//                    maxDisplayRate = maxRateSP;
+                } else {
+                    healthDatas.get(0).setRightTop("-- ");
+                    healthDatas.get(0).setDate(date);
+                }
+
+                //设置血压数据
+                healthDatas.get(1).setRightTop(minBlood == -1 ? "--" : minBlood + "");
+                healthDatas.get(1).setRightButtom(maxBlood == -1 ? "--" : maxBlood + "");
+                healthDatas.get(1).setTime(bloodTime);
+                healthDatas.get(1).setDate(date);
+
+                //设置血氧数据
+                healthDatas.get(2).setRightTop("--");
+                healthDatas.get(2).setDate(date);
+
+                homePagerAdapter.notifyDataSetChanged();
 
             } else if (what == 1) {
                 int stepGoal = stepInfos.getStepGoal();
@@ -456,18 +450,18 @@ public class HomePageItem implements IHardSdkCallback {
                 String distanceStr = decimalFormat.format(distance);
                 distanceTv.setText(distance == 0 ? "--" : distanceStr);
                 calorieTv.setText(calories == 0 ? "--" : String.valueOf(calories));
-            }else if(what == 2) {
+            } else if (what == 2) {
                 RateSP rateSPTemp = DataHelper.getDeviceData(mContext, "rateSP");
 
                 String rateStr = rateSPTemp.getRate();
-                if(rateStr != null && rateStr.length() > 0) {
+                if (rateStr != null && rateStr.length() > 0) {
                     String[] rates = rateStr.split(",");
-                    if(rates != null && rates.length > 0) {
+                    if (rates != null && rates.length > 0) {
                         heartRateTv.setText(rates[rates.length - 1]);
-                    }else {
+                    } else {
                         heartRateTv.setText("--");
                     }
-                }else {
+                } else {
                     heartRateTv.setText("--");
                 }
 
@@ -488,8 +482,8 @@ public class HomePageItem implements IHardSdkCallback {
                         }
                     }
                 }
-                if(minNow < minDisPlayRate || maxNow > maxDisplayRate) {
-                    if(minNow <= 0 && maxNow > 0) {
+                if (minNow < minDisPlayRate || maxNow > maxDisplayRate) {
+                    if (minNow <= 0 && maxNow > 0) {
                         minNow = maxNow;
                     }
                     healthDatas.get(0).setRightTop(minNow + "-" + maxNow);
@@ -500,9 +494,9 @@ public class HomePageItem implements IHardSdkCallback {
 
                     homePagerAdapter.notifyDataSetChanged();
                 }
-            }else if(what == 3) {
-                if(minBloodTemp != -1 && maxBloodTemp != -1) {
-                    if(minBloodTemp < minBlood || maxBloodTemp > maxBlood)  {
+            } else if (what == 3) {
+                if (minBloodTemp != -1 && maxBloodTemp != -1) {
+                    if (minBloodTemp < minBlood || maxBloodTemp > maxBlood) {
                         healthDatas.get(1).setRightTop(minBloodTemp == -1 ? "--" : minBloodTemp + "");
                         healthDatas.get(1).setRightButtom(maxBloodTemp == -1 ? "--" : maxBloodTemp + "");
                         healthDatas.get(1).setTime(bloodTime);
@@ -567,6 +561,9 @@ public class HomePageItem implements IHardSdkCallback {
         maxBloodTemp = -1;
         bloodTime = "";
         bloodOTime = "";
+
+        minBloodDisplay = -1;
+        maxBloodDisplay = -1;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
@@ -642,6 +639,14 @@ public class HomePageItem implements IHardSdkCallback {
 
                     if (heartRateListHistory != null && heartRateListHistory.size() > 0) {
                         todayHeartRateModel = (HeartRateModel) heartRateListHistory.get(heartRateListHistory.size() - 1);
+
+                        minBloodDisplay = maxBloodDisplay = ((HeartRateModel) heartRateListHistory.get(0)).getCurrentRate();
+                        for (int i = 0; i < heartRateListHistory.size(); i++) {
+                            if (((HeartRateModel) heartRateListHistory.get(i)).getCurrentRate() > maxBloodDisplay)   // 判断最大值
+                                maxBloodDisplay = ((HeartRateModel) heartRateListHistory.get(i)).getCurrentRate();
+                            if (((HeartRateModel) heartRateListHistory.get(i)).getCurrentRate() < minBloodDisplay)   // 判断最小值
+                                minBloodDisplay = ((HeartRateModel) heartRateListHistory.get(i)).getCurrentRate();
+                        }
                     }
 
                     List heartRateListHardSDK = null;
@@ -659,43 +664,66 @@ public class HomePageItem implements IHardSdkCallback {
                                 todayHeartRateModel = heartRateModelTemp;
                             }
                         }
+                        if (minBloodDisplay == -1) {
+                            minBloodDisplay = ((HeartRateModel) heartRateListHardSDK.get(0)).getCurrentRate();
+                        }
+                        if (maxBloodDisplay == -1) {
+                            maxBloodDisplay = ((HeartRateModel) heartRateListHardSDK.get(0)).getCurrentRate();
+                        }
+                        for (int i = 0; i < heartRateListHardSDK.size(); i++) {
+                            if (((HeartRateModel) heartRateListHardSDK.get(i)).getCurrentRate() > maxBloodDisplay)   // 判断最大值
+                                maxBloodDisplay = ((HeartRateModel) heartRateListHardSDK.get(i)).getCurrentRate();
+                            if (((HeartRateModel) heartRateList.get(i)).getCurrentRate() < minBloodDisplay)   // 判断最小值
+                                minBloodDisplay = ((HeartRateModel) heartRateListHardSDK.get(i)).getCurrentRate();
+                        }
                     }
 
                     RateSP rateSPTemp = DataHelper.getDeviceData(mContext, "rateSP");
-                    if (rateSPTemp != null && todayHeartRateModel == null) {
-                        String rateString = rateSPTemp.getRate();
-                        if (rateString != null && rateString.length() > 0) {
-                            String[] rates = rateString.split(",");
-                            if (rates != null && rates.length > 0) {
-                                todayHeartRateModel = new HeartRateModel();
-                                todayHeartRateModel.setCurrentRate(Integer.parseInt(rates[rates.length - 1]));
-                                todayHeartRateModel.setTestMomentTime(rateSPTemp.getDate());
-                                todayHeartRateModel.setAccount(MyApplication.account);
-                            }
-                        }
-                    } else if (rateSPTemp != null && todayHeartRateModel != null) {
-                        if (compare_date(rateSPTemp.getDate(), todayHeartRateModel.getTestMomentTime()) > 0) {
+                    if(rateSPTemp != null && rateSPTemp.getDate().equals(date)) {
+                        if (rateSPTemp != null && todayHeartRateModel == null) {
                             String rateString = rateSPTemp.getRate();
                             if (rateString != null && rateString.length() > 0) {
                                 String[] rates = rateString.split(",");
                                 if (rates != null && rates.length > 0) {
+                                    todayHeartRateModel = new HeartRateModel();
                                     todayHeartRateModel.setCurrentRate(Integer.parseInt(rates[rates.length - 1]));
+                                    todayHeartRateModel.setTestMomentTime(rateSPTemp.getDate());
+                                    todayHeartRateModel.setAccount(MyApplication.account);
+                                }
+                            }
+                        } else if (rateSPTemp != null && todayHeartRateModel != null) {
+                            if (compare_date(rateSPTemp.getDate(), todayHeartRateModel.getTestMomentTime()) > 0) {
+                                String rateString = rateSPTemp.getRate();
+                                if (rateString != null && rateString.length() > 0) {
+                                    String[] rates = rateString.split(",");
+                                    if (rates != null && rates.length > 0) {
+                                        todayHeartRateModel.setCurrentRate(Integer.parseInt(rates[rates.length - 1]));
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (rateSPTemp != null) {
-                        String rateString = rateSPTemp.getRate();
-                        if (rateString != null && rateString.length() > 0) {
-                            String[] rates = rateString.split(",");
-                            if (rates != null && rates.length > 0) {
-                                minRateSP = maxRateSP = Integer.parseInt(rates[0]);
-                                for (int i = 0; i < rates.length; i++) {
-                                    if (Integer.parseInt(rates[i]) > maxRateSP)   // 判断最大值
-                                        maxRateSP = Integer.parseInt(rates[i]);
-                                    if (Integer.parseInt(rates[i]) < minRateSP)   // 判断最小值
-                                        minRateSP = Integer.parseInt(rates[i]);
+                        if (rateSPTemp != null) {
+                            String rateString = rateSPTemp.getRate();
+                            if (rateString != null && rateString.length() > 0) {
+                                String[] rates = rateString.split(",");
+                                if (rates != null && rates.length > 0) {
+
+                                    if (minBloodDisplay == -1) {
+                                        minBloodDisplay = Integer.parseInt(rates[0]);
+                                    }
+
+                                    if (maxBloodDisplay == -1) {
+                                        maxBloodDisplay = Integer.parseInt(rates[0]);
+                                    }
+
+                                    minRateSP = maxRateSP = Integer.parseInt(rates[0]);
+                                    for (int i = 0; i < rates.length; i++) {
+                                        if (Integer.parseInt(rates[i]) > maxBloodDisplay)   // 判断最大值
+                                            maxBloodDisplay = Integer.parseInt(rates[i]);
+                                        if (Integer.parseInt(rates[i]) < minBloodDisplay)   // 判断最小值
+                                            minBloodDisplay = Integer.parseInt(rates[i]);
+                                    }
                                 }
                             }
                         }
@@ -768,13 +796,21 @@ public class HomePageItem implements IHardSdkCallback {
                     heartRateList = sqlHelper.getOneDayHeartRateInfo(MyApplication.account, date);
                     if (heartRateList != null && heartRateList.size() > 0) {
                         todayHeartRateModel = (HeartRateModel) heartRateList.get(heartRateList.size() - 1);
+
+                        minBloodDisplay = maxBloodDisplay = ((HeartRateModel) heartRateList.get(0)).getCurrentRate();
+                        for (int i = 0; i < heartRateList.size(); i++) {
+                            if (((HeartRateModel) heartRateList.get(i)).getCurrentRate() > maxBloodDisplay)   // 判断最大值
+                                maxBloodDisplay = ((HeartRateModel) heartRateList.get(i)).getCurrentRate();
+                            if (((HeartRateModel) heartRateList.get(i)).getCurrentRate() < minBloodDisplay)   // 判断最小值
+                                minBloodDisplay = ((HeartRateModel) heartRateList.get(i)).getCurrentRate();
+                        }
                     }
 
                     bloodPressureList = sqlHelper.getOneDayBloodPressureInfo(MyApplication.account, date);
-                    if(bloodPressureList != null && bloodPressureList.size() > 0) {
-                        maxBlood = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getDiastolicPressure();
-                        minBlood = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getSystolicPressure();
-                        String dateTime = ((BloodPressure)bloodPressureList.get(bloodPressureList.size() - 1)).getTestMomentTime();
+                    if (bloodPressureList != null && bloodPressureList.size() > 0) {
+                        maxBlood = ((BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1)).getDiastolicPressure();
+                        minBlood = ((BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1)).getSystolicPressure();
+                        String dateTime = ((BloodPressure) bloodPressureList.get(bloodPressureList.size() - 1)).getTestMomentTime();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Calendar c = Calendar.getInstance();
                         try {
@@ -782,7 +818,7 @@ public class HomePageItem implements IHardSdkCallback {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" +  c.get(Calendar.MINUTE);
+                        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
                     }
 
                     sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
@@ -804,6 +840,9 @@ public class HomePageItem implements IHardSdkCallback {
 
     @Override
     public void onStepChanged(int step, float distance, int calories, boolean finish_status) {
+
+        LogUtils.debugInfo("------------------onStepChanged------------------------");
+
         todayStep += step;
         todayDistance += distance;
         todayCalories += calories;
@@ -840,6 +879,9 @@ public class HomePageItem implements IHardSdkCallback {
 
     @Override
     public void onHeartRateChanged(int rate, int status) {
+
+        LogUtils.debugInfo("------------------onHeartRateChanged------------------------");
+
         RateSP rateSp = DataHelper.getDeviceData(mContext, "rateSP");
         if (rateSp != null) {
             String rateStr = rateSp.getRate();
@@ -863,6 +905,9 @@ public class HomePageItem implements IHardSdkCallback {
 
     @Override
     public void bloodPressureChange(int hightPressure, int lowPressure, int status) {
+
+        LogUtils.debugInfo("------------------bloodPressureChange------------------------");
+
         BloodSP bloodSP = DataHelper.getDeviceData(mContext, "bloodSP");
         if (bloodSP != null) {
             String diastolicStr = bloodSP.getDiastolicStr();
@@ -896,7 +941,7 @@ public class HomePageItem implements IHardSdkCallback {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" +  c.get(Calendar.MINUTE);
+        bloodTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
 
         mHandler.sendEmptyMessage(3);
     }

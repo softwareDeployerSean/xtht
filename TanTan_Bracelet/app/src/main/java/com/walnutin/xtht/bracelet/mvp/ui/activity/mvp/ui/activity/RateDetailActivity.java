@@ -145,14 +145,14 @@ public class RateDetailActivity extends BaseActivity<RateDetailPresenter> implem
                         HeartRateModel heartRateModel = (HeartRateModel) heartRateList.get(i);
                         totalRate += heartRateModel.getCurrentRate();
                         if (i == 0) {
-                            lowestRate = heartRateModel.getLowRate();
-                            highestRate = heartRateModel.getHighRate();
+                            lowestRate = heartRateModel.getCurrentRate();
+                            highestRate = heartRateModel.getCurrentRate();
                         } else {
-                            if (heartRateModel.getLowRate() < lowestRate) {
-                                lowestRate = heartRateModel.getLowRate();
+                            if (heartRateModel.getCurrentRate() < lowestRate) {
+                                lowestRate = heartRateModel.getCurrentRate();
                             }
-                            if (heartRateModel.getHighRate() > highestRate) {
-                                highestRate = heartRateModel.getHighRate();
+                            if (heartRateModel.getCurrentRate() > highestRate) {
+                                highestRate = heartRateModel.getCurrentRate();
                             }
                         }
                     }

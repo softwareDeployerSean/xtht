@@ -189,7 +189,8 @@ public class SleepDayPageItem {
 //                }
                 deepSleepTotal = sleepModel.getDeepTime();
                 simpleSleepTotal = sleepModel.getLightTime();
-                awakeSleepTotal = sleepModel.getSoberTime();
+                awakeSleepTotal = sleepModel.getTotalTime() - deepSleepTotal - simpleSleepTotal;
+//                awakeSleepTotal = sleepModel.getSoberTime();
                 if ((deepSleepTotal + simpleSleepTotal + awakeSleepTotal) > 0) {
                     float a1 = ((((float) deepSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
                     float b1 = ((((float) simpleSleepTotal / (deepSleepTotal + simpleSleepTotal + awakeSleepTotal))) * 100);
@@ -197,7 +198,7 @@ public class SleepDayPageItem {
                     String b2 = new BigDecimal(b1).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
                     String a = a2 + "%";
                     String b = b2 + "%";
-                    String c = (100 - a1 - b1) + "%";
+                    String c = (100 - Integer.parseInt(a2) - Integer.parseInt(b2)) + "%";
                     deepSleepPerTv.setText(a);
                     simpleSleepPerTv.setText(b);
                     awakeSleepPerTv.setText(c);
