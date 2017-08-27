@@ -119,5 +119,4 @@
         android:layout_marginRight="10px">
     </android.support.v7.widget.RecyclerView>
 
-
 </com.zhy.autolayout.AutoLinearLayout>

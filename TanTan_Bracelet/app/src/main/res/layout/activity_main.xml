@@ -11,11 +11,27 @@
         android:id="@+id/in_toolbar"
         layout="@layout/include_title" />
 
-    <com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager
-        android:id="@+id/viewpager"
+
+    <com.zhy.autolayout.AutoRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <com.walnutin.xtht.bracelet.mvp.ui.widget.ContainerViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/frame_out"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:background="#000000"
+            android:visibility="gone"></FrameLayout>
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+
 
     <View
         android:layout_width="match_parent"
@@ -53,7 +69,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            app:aebAnimDurationMillis="150"
             app:aebButtonElevation="0dp"
             app:aebButtonGapDp="80dp"
             app:aebEndAngleDegree="155"

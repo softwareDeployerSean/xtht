@@ -186,7 +186,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
         if (blurBackground) {
             //blur = new Blur();
             if (bitmap_tmp == null) {
-                bitmap_tmp = readBitMap(context, R.mipmap.ceshi);
+                bitmap_tmp = readBitMap(context, R.mipmap.juxing);
             }
             blurImageView = new ImageView(getContext());
             blurImageView.setImageBitmap(bitmap_tmp);
@@ -541,7 +541,7 @@ public class SectorMenuButton extends View implements ValueAnimator.AnimatorUpda
         blurImageView.setVisibility(VISIBLE);
 
 
-        root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT-50));
+        root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         blurAnimator = ObjectAnimator.ofFloat(blurImageView, "alpha", 0.0f, 1.0f).setDuration(expandAnimDuration);
         if (blurListener != null) {

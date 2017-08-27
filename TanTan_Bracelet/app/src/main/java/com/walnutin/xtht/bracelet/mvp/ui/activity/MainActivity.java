@@ -25,6 +25,7 @@ import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -106,6 +107,8 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
     RadioButton radioMine;
     @BindView(R.id.in_toolbar)
     View in_toolbar;
+    @BindView(R.id.frame_out)
+    FrameLayout frame_out;
     @BindView(R.id.bottom_sector_menu)
     SectorMenuButton bottom_sector_menu;
     //菜单
@@ -296,12 +299,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
             @Override
             public void onExpand() {
-
+                LogUtils.debugInfo("展开");
+                frame_out.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onCollapse() {
-
+                frame_out.setVisibility(View.GONE);
+                LogUtils.debugInfo("闭合");
             }
         });
     }

@@ -33,6 +33,7 @@ public class SleepLinearlayout extends AutoLinearLayout {
 
     SleepModel sleepModel = new SleepModel();
     Context context;
+
     public SleepLinearlayout(Context context) {
         this(context, null);
     }
@@ -43,7 +44,7 @@ public class SleepLinearlayout extends AutoLinearLayout {
 
     public SleepLinearlayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context=context;
+        this.context = context;
 
     }
 

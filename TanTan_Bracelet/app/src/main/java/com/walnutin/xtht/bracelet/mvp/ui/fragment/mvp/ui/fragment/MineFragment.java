@@ -226,15 +226,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineCon
             tvRateBegin.setText(continuous.get(0).getDates());
             tvRateEnd.setText(continuous.get(continuous.size() - 1).getDates());
         }
-
-        if (sum_stepbyweek != 0) {
+        if (sum_stepbyweek > 0) {
             tvDayWeek.setText(sum_stepbyweek + "/" + dairy);
+            progress.setMax(dairy);
+            progress.setProgress(sum_stepbyweek);
         }
-        if (all_day != 0 && standard != 0) {
+        if (all_day > 0 && standard > 0) {
             String rate = (standard / all_day * 100) + "%";
             tvRate.setText("达标率" + rate);
-            progress.setMax(all_day);
-            progress.setProgress(standard);
         }
         if (active > 0) {
             tvActiveDay.setText("活跃天数" + active);

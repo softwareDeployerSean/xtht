@@ -41,11 +41,11 @@ public class SleepTagLinearlayout extends AutoLinearLayout {
 
     public SleepTagLinearlayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context=context;
+        this.context = context;
     }
 
     public void setdatas(String date) {
-
+        removeAllViews();
         sleepModel = SqlHelper.instance().getOneDaySleepListTime(MyApplication.account, date);
         if (sleepModel != null) {
             sleep_during = sleepModel.getDuraionTimeArray();
